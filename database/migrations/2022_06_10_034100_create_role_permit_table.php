@@ -14,11 +14,11 @@ class CreateRolePermitTable extends Migration
     public function up()
     {
         Schema::create('role_permit', function (Blueprint $table) {
-            $table->primary(['id_role','id_permit']);
-            $table->integer('id_role')->unsigned();
-            $table->integer('id_permit')->unsigned();
-            $table->foreign('id_role')->references('id_role')->on('roles');
-            $table->foreign('id_permit')->references('id_permit')->on('permits');
+            $table->primary(['id_role','id_permit']);      
+            $table->bigInteger('id_role')->unsigned();
+            $table->foreign('id_role')->references('id')->on('roles');
+            $table->bigInteger('id_permit')->unsigned();
+            $table->foreign('id_permit')->references('id')->on('permits');
         });
     }
 
@@ -29,6 +29,8 @@ class CreateRolePermitTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('role_permit');
+        Schema::enableForeignKeyConstraints();
     }
 }

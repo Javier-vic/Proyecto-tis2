@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class permit extends Model
 {
     use HasFactory;
+    public function role(){
+        return $this->belongsToMany('App\role');
+    }
 }
