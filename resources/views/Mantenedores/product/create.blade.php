@@ -19,6 +19,12 @@
         <input type="file" class="form-control" id="image_product" name="image_product"
             aria-describedby="name_product_help">
     </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Categoria del producto (Acá se debe desplegar una lista con los nombres de
+            la tabla de la q vienen) : </label>
+        <input type="text" class="form-control" id="id_category_product" name="id_category_product" value="1"
+            aria-describedby="name_product_help">
+    </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
