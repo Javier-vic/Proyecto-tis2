@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\role;
+use App\Models\permit;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -15,7 +16,7 @@ class RoleController extends Controller
     public function index()
     {
         //
-
+        return view('Mantenedores.Role.index');
     }
 
     /**
@@ -26,6 +27,8 @@ class RoleController extends Controller
     public function create()
     {
         //
+        $permits = permit::all();
+        return view('Mantenedores.Role.create',['permits'=>$permits]);
     }
 
     /**
