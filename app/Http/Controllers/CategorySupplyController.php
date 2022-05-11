@@ -15,6 +15,7 @@ class CategorySupplyController extends Controller
     public function index()
     {
         //
+        return view('Mantenedores.category_supply.index');
     }
 
     /**
@@ -25,6 +26,7 @@ class CategorySupplyController extends Controller
     public function create()
     {
         //
+        return view('Mantenedores.category_supply.create');
     }
 
     /**
@@ -35,7 +37,13 @@ class CategorySupplyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category_supplyData = request()->except('_token');
+        // $category_supply = new CategorySupplyController;
+        // $category_supply->name_category = $category_supplyData['name_category'];
+        CategorySupply::insert($category_supplyData);
+        // $category_supply->save();
+
+        return redirect()->route('Mantenedores.category_supply.create');
     }
 
     /**

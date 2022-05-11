@@ -18,10 +18,10 @@ class CreateSuppliesTable extends Migration
             $table->string('name_supply');
             $table->string('unit_meassurement');
             $table->float('quantity');
-            $table->unsignedBigInteger('id_category_supply');
+            $table->BigInteger('id_category_supplies')->unsigned();
             $table->softDeletes();            
             $table->timestamps();
-            $table->foreign('id_category_supply')->references('id')->on('category_supply');
+            $table->foreign('id_category_supplies')->references('id')->on('category_supplies');
         });
     }
 
