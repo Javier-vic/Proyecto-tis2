@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\role;
 use App\Models\permit;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Laravel\Ui\Presets\React;
@@ -52,6 +53,7 @@ class RoleController extends Controller
         }
         $role->save();
         $role->permit()->attach($permits);
+        return redirect()->route('roles.index');
         //
     }
 
@@ -95,16 +97,35 @@ class RoleController extends Controller
      * @param  \App\Models\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(role $role)
+    public function destroy($id)
     {
         //
+        $role = role::find($id);
+        $role->delete();
+        return response('',200);
     }
-
+    public function getPermits(Request $request){
+        $data = permit::all();
+        $value = $data['id'];
+        return $data;
+    }
     public function dataTable(Request $request){
         if($request->ajax()){
             $data = role::all();
             return DataTables::of($data)
-                ->addIndexColumn()
+                ->addColumn('viewPermits', function($row){
+                    $button = "<button onclick='viewPermits({$row->id})' class='btn btn-success'>Ver permisos</button>"; 
+                    return $button;
+                })
+                ->addColumn('action',function($row){
+                    $actionBtn = "
+                                <a href='#' class='btn btn-primary btn-sm'>Mostrar</a>
+                                <a href='#' class='edit btn btn-success btn-sm'>Editar</a> 
+                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'>Borrar</button>
+                                ";  
+                    return $actionBtn;
+                })
+                ->rawColumns(['viewPermits','action'])
                 ->make(true);
 
         }
