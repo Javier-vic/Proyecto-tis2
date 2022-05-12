@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('product', ProductController::class);
+Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 
 Route::get('/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
