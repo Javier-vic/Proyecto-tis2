@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\role;
 use App\Models\permit;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Arr;
+use Laravel\Ui\Presets\React;
+use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\Facades\DataTables;
 class RoleController extends Controller
 {
     /**
@@ -28,7 +31,8 @@ class RoleController extends Controller
     {
         //
         $permits = permit::all();
-        return view('Mantenedores.Role.create',['permits'=>$permits]);
+        $role = new role();
+        return view('Mantenedores.Role.create',['permits'=>$permits, 'role'=>$role]);
     }
 
     /**
@@ -39,6 +43,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $values = request()->except('_token');
+        $role = new role();
+        $role->name_role = $values['name_role'];
+        $permits = array();
+        foreach($values['permits'] as $item => $value){
+            $permits[] = (int)$value;
+        }
+        $role->save();
+        $role->permit()->attach($permits);
         //
     }
 
@@ -85,5 +98,15 @@ class RoleController extends Controller
     public function destroy(role $role)
     {
         //
+    }
+
+    public function dataTable(Request $request){
+        if($request->ajax()){
+            $data = role::all();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->make(true);
+
+        }
     }
 }
