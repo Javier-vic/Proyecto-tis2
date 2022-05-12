@@ -1,1 +1,2 @@
-require('./bootstrap');
+require("./bootstrap");
+require("jquery/dist/jquery.min.js");
