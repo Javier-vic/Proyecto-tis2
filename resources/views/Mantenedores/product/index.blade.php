@@ -3,15 +3,19 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
-    <a role="button" class="btn btn-success mr-auto" href="{{ route('product.create') }}">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
+        Agregar producto
+    </button>
+    {{-- <a role="button" class="btn btn-success mr-auto" href="{{ route('product.create') }}">
         <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
-    </a>
+    </a> --}}
     <div id="number"></div>
+    @include('Mantenedores.product.modal.create')
 
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
-    <table id="myTable" class="display">
+    <table id="myTable" class="display" style="width: 100%;">
         <thead class="bg-primary text-white">
             <tr class="text-center">
                 <th class="py-2">ID</th>
