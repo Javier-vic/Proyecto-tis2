@@ -15,7 +15,8 @@ class CategorySupplyController extends Controller
     public function index()
     {
         //
-        return view('Mantenedores.category_supply.index');
+        $datos['category_supplies'] = category_supply::paginate(5);
+        return view('Mantenedores.category_supply.index', $datos);
     }
 
     /**
@@ -62,9 +63,10 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function edit(category_supply $category_supply)
+    public function edit($id)
     {
-        //
+        $category_supply = category_supply::findOrFAil($id);
+        return view('Mantenedores.category_supply.edit', compact('category_supply'));
     }
 
     /**
@@ -74,9 +76,15 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, category_supply $category_supply)
+    public function update(Request $request, $id)
     {
-        //
+        // $category_supplyData = request()->except(['_token','_method']);
+        // category_supply::where('id', '=','$id')->update ($category_supplyData);
+        $category_supply = category_supply::findOrFAil($id);
+        $category_supply->name_category = $request->input('name_category');
+        $category_supply->update();
+
+        return redirect()->route('category_supply.index');
     }
 
     /**
@@ -85,8 +93,9 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function destroy(category_supply $category_supply)
+    public function destroy($id)
     {
-        //
+        category_supply::destroy($id);
+        return redirect()->route('category_supply.index');
     }
 }
