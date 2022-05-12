@@ -38,12 +38,11 @@ class CategorySupplyController extends Controller
     public function store(Request $request)
     {
         $category_supplyData = request()->except('_token');
-        // $category_supply = new CategorySupplyController;
-        // $category_supply->name_category = $category_supplyData['name_category'];
-        CategorySupply::insert($category_supplyData);
-        // $category_supply->save();
+        $category_supply = new category_supply;
+        $category_supply->name_category = $category_supplyData['name_category'];
+        $category_supply->save();
 
-        return redirect()->route('Mantenedores.category_supply.create');
+        return redirect()->route('category_supply.index');
     }
 
     /**
