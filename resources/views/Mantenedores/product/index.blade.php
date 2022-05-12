@@ -39,6 +39,9 @@
                 responsive: true,
                 processing: true,
                 searching: true,
+                language :{
+                    url: "{{asset('js/language.json')}}"
+                },
 
                 ajax: {
                     url: "{{ route('product.index') }}",
