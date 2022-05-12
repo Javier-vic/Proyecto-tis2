@@ -78,8 +78,6 @@ class CategorySupplyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $category_supplyData = request()->except(['_token','_method']);
-        // category_supply::where('id', '=','$id')->update ($category_supplyData);
         $category_supply = category_supply::findOrFAil($id);
         $category_supply->name_category = $request->input('name_category');
         $category_supply->update();

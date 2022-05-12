@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategorySupplyController; 
+use App\Http\Controllers\SupplyController; 
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,7 @@ Route::get('/', function () {
 });
 
 
+Route::resource('supply', SupplyController::class);
 Route::resource('category_supply', CategorySupplyController::class);
 Auth::routes();
 

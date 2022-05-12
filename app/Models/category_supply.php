@@ -9,4 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class category_supply extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public function supplies() {
+        return $this->hasMany(supply::class);
+    }
 }

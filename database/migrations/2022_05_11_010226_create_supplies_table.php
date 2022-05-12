@@ -21,7 +21,7 @@ class CreateSuppliesTable extends Migration
             $table->BigInteger('id_category_supplies')->unsigned();
             $table->softDeletes();            
             $table->timestamps();
-            $table->foreign('id_category_supplies')->references('id')->on('category_supplies');
+            $table->foreign('id_category_supplies')->references('id')->on('category_supplies')->onDelete('cascade');
         });
     }
 

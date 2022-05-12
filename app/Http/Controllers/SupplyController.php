@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\supply;
+use App\Models\category_supply;
 use Illuminate\Http\Request;
 
 class SupplyController extends Controller
@@ -14,7 +15,8 @@ class SupplyController extends Controller
      */
     public function index()
     {
-        //
+        $datos['supplies'] = supply::paginate(5);
+        return view('Mantenedores.supply.index', $datos);
     }
 
     /**
@@ -24,7 +26,8 @@ class SupplyController extends Controller
      */
     public function create()
     {
-        //
+        $category_supplies = category_supply::all();
+        return view('Mantenedores.supply.create', compact('category_supplies'));
     }
 
     /**
@@ -35,7 +38,16 @@ class SupplyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $supplyData = request()->except('_token');
+        $supply = new supply;
+        $supply->name_supply = $supplyData['name_supply'];
+        $supply->unit_meassurement = $supplyData['unit_meassurement'];
+        $supply->quantity = $supplyData['quantity'];
+        // $category_supply->supplies()->save($supply);
+        $supply->id_category_supplies = $supplyData['id_category_supply'];
+        $supply->save();
+
+        return redirect()->route('supply.index');
     }
 
     /**
@@ -55,9 +67,11 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function edit(supply $supply)
+    public function edit($id)
     {
-        //
+        $supply = supply::findOrFAil($id);
+        $category_supplies = category_supply::all();
+        return view('Mantenedores.supply.edit', compact('supply', 'category_supplies'));
     }
 
     /**
@@ -67,9 +81,16 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, supply $supply)
+    public function update(Request $request, $id)
     {
-        //
+        $supply = supply::findOrFAil($id);
+        $supply->name_supply = $request->input('name_supply');
+        $supply->unit_meassurement = $request->input('unit_meassurement');
+        $supply->quantity = $request->input('quantity');
+        $supply->id_category_supplies = $request->input('id_category_supplies');
+        $supply->update();
+
+        return redirect()->route('category_supply.index');
     }
 
     /**
@@ -78,8 +99,9 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function destroy(supply $supply)
+    public function destroy($id)
     {
-        //
+        supply::destroy($id);
+        return redirect()->route('supply.index');
     }
 }
