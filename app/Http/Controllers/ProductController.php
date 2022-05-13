@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\product;
 use Illuminate\Http\Request;
@@ -38,8 +39,9 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
+        $category_products = category_product::all();
 
-        return view('mantenedores.product.index');
+        return view('mantenedores.product.index', compact('category_products'));
     }
 
     /**
@@ -96,8 +98,7 @@ class ProductController extends Controller
     public function edit(product $product)
     {
         $productSelected = product::find($product->id);
-
-        return view('mantenedores.product.edit', $productSelected);
+        return view('mantenedores.product.edit', compact('productSelected'));
     }
 
     /**
@@ -107,9 +108,14 @@ class ProductController extends Controller
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, product $product)
+    public function update(request $request, product $product)
     {
-        //
+        $producto = product::find($product->id);
+        $producto->stock         = $request->stock;
+        $producto->name_product   = $request->name_product;
+        $producto->description    = $request->description;
+        $producto->save();
+        return redirect()->route('product.index');
     }
 
     /**

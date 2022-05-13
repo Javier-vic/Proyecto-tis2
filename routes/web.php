@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
@@ -24,8 +25,14 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::resource('roles', RoleController::class);
 Route::resource('product', ProductController::class);
 Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 
 Route::get('/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
+
+//
+Route::get('/permitsofrole',[\App\Http\Controllers\RoleController::class,'dataTable'])->name('permits.roles');
+//DataTables
+Route::get('/dataTableRole',[\App\Http\Controllers\RoleController::class,'dataTable'])->name('dataTable.Roles');
