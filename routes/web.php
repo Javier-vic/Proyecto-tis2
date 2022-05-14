@@ -31,6 +31,6 @@ Route::resource('category_product', CategoryProductController::class);
 Route::get('/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
 
 //
-Route::get('/permitsofrole',[\App\Http\Controllers\RoleController::class,'dataTable'])->name('permits.roles');
+Route::get('/permitsofrole',[\App\Http\Controllers\RoleController::class,'getPermits'])->name('permits.roles');
 //DataTables
 Route::get('/dataTableRole',[\App\Http\Controllers\RoleController::class,'dataTable'])->name('dataTable.Roles');

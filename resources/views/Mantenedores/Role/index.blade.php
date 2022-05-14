@@ -4,9 +4,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     
 @endsection
-
 @section('content')
-    <a name="" id="" class="btn btn-primary" href="{{ route('roles.create')}}" role="button">Agregar un nuevo rol</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarRol"> Agregar nuevo rol</button>
     <table class="table" id="myTable" style="width: 100%">
         {!! Form::token() !!}
         <thead class="thead">
@@ -18,6 +17,12 @@
             </tr>
         </thead>
     </table>
+    <div class="">
+        @include('Mantenedores.Role.modal')
+    </div>
+    <div class="">
+        @include('Mantenedores.Role.modalViewPermits')
+    </div>
 @endsection
 
 @section('js_after')
@@ -38,17 +43,33 @@
                 {data:'action',name:'action',orderable:false,searchable:true},
             ]
         });
+        const capitalize = (s) => {
+            if (typeof s !== 'string') return ''
+            return s.charAt(0).toUpperCase() + s.slice(1)
+        }
         const viewPermits = (id) => {
             $.ajax({
                 type: "GET",
                 url: "{{route('permits.roles')}}",
-                data: {'id': id},
+                data: {'id': id,"_token": "{{ csrf_token() }}"},
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
+                    console.log(response[1]);
+                    $('#viewPermits').modal('show')
+                    $('#nombreRol').empty();
+                    $('#nombreRol').html(`Permisos del Rol: ${response[0][0].name_role}`)
+                    $('#ListPermits').empty();
+                    response[1].map(e=>{
+                        $('#ListPermits').append($('<li>',{
+                            text:`${capitalize(e.tipe_permit)}`,
+                            class:'list-group-item'
+                        }));
+                    })
                 }
             });
-            
+        }
+        const editRole = (idRole) => {
+
         }
         const deleteRole = (idRole) =>{
             Swal.fire({
