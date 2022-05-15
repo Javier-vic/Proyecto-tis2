@@ -22,6 +22,7 @@
                 <th class="py-2">Stock</th>
                 <th class="py-2">Nombre producto</th>
                 <th class="py-2">Descripción</th>
+                <th class="py-2">Imagen</th>
                 <th class="py-2" style="width: 50px;">Acciones</th>
             </tr>
         </thead>
@@ -39,8 +40,8 @@
                 responsive: true,
                 processing: true,
                 searching: true,
-                language :{
-                    url: "{{asset('js/language.json')}}"
+                language: {
+                    url: "{{ asset('js/language.json') }}"
                 },
 
                 ajax: {
@@ -73,16 +74,16 @@
                         name: 'description'
                     },
                     {
+                        data: 'image',
+                        name: 'image'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
 
                     },
-
-
-
-
                 ],
                 initComplete: function(settings, json) {
 

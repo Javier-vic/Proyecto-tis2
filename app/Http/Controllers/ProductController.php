@@ -30,12 +30,14 @@ class ProductController extends Controller
                     'products.stock',
                     'products.name_product',
                     'products.description',
+                    'products.image_product'
 
                 )
                 ->orderBy('products.id')
                 ->get())
                 ->addColumn('action', 'mantenedores.product.datatable.action')
-                ->rawColumns(['action'])
+                ->addColumn('image', 'mantenedores.product.datatable.image')
+                ->rawColumns(['action', 'image'])
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -67,7 +69,9 @@ class ProductController extends Controller
         $producto->stock = $productData['stock'];
         $producto->name_product = $productData['name_product'];
         $producto->description = $productData['description'];
-        $producto->image_product = $productData['image_product'];
+        if ($request->hasFile('image_product')) {
+            $producto->image_product = $request->file('image_product')->store('uploads', 'public');
+        }
         $producto->id_category_product = $productData['id_category_product'];
         $producto->save();
 
