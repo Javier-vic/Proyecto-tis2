@@ -20,7 +20,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        //      
         $role = new role();
         $permits = permit::all();
         return view('Mantenedores.Role.index',['role'=>$role,'permits'=>$permits]);
@@ -117,7 +117,7 @@ class RoleController extends Controller
                      ->where('roles.id','=',$id)
                      ->join('role_permit','roles.id','=','role_permit.id_role')
                      ->join('permits','role_permit.id_permit','=','permits.id')
-                     ->select('permits.tipe_permit')
+                     ->select('permits.tipe_permit','permits.id')
                      ->get();
         return json_encode([$name,$permits]);
     }
@@ -131,7 +131,7 @@ class RoleController extends Controller
                 })
                 ->addColumn('action',function($row){
                     $actionBtn = "
-                                <a href='#' class='edit btn btn-success btn-sm'>Editar</a> 
+                                <button onclick='editRole({$row->id})' class='edit btn btn-success btn-sm'>Editar</button> 
                                 <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'>Borrar</button>
                                 ";  
                     return $actionBtn;

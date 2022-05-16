@@ -23,18 +23,15 @@
     <div class="">
         @include('Mantenedores.Role.modalViewPermits')
     </div>
+    <div class="">
+        @include('Mantenedores.Role.ModalEditRole')
+    </div>
 @endsection
 
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script>
-        $("#postForm").submit(function (e) { 
-            Values = $("#postForm").serializeArray();
-            
-            console.log($("#postForm").serializeArray());
-            e.preventDefault();
-        });
         const Table = $("#myTable").DataTable({
             processing: true,
             serverSide: true,
@@ -74,9 +71,47 @@
                 }
             });
         }
-        const editRole = (idRole) => {
-
+        const editRole = (id) => {
+            $.ajax({
+                type: "GET",
+                url: "{{route('permits.roles')}}",
+                data: {'id': id,"_token": "{{ csrf_token() }}"},
+                dataType: "json",
+                success: (res) =>{
+                    console.log(@json($permits));
+                    console.log(res);
+                    $("#editName").val('');
+                    $("#editName").val(`${res[0][0].name_role}`);
+                    $("#editPermits").empty();
+                    @json($permits).map(e=>{
+                        var check = false;
+                        res[1].map(el=>{
+                            (el.id==e.id) ? check=true: null;
+                        })
+                        $("#editPermits").append(
+                        $($('<div>',{
+                            class: 'form-check form-switch'
+                        })).append(
+                        $('<input>',{
+                            class:'form-check-input',
+                            name:'permits[]',
+                            value:`${e.id}`,
+                            type:'checkbox',
+                            id:`${e.id}`,
+                            checked: check
+                        }))
+                        .append($('<label>',{
+                            class:'form-check-label',
+                            for:'flexSwitchCheckDefault',
+                            text:`${capitalize(e.tipe_permit)}`
+                        }))
+                        )
+                    })
+                    $('#editRole').modal('show');
+                }
+            })
         }
+
         const deleteRole = (idRole) =>{
             Swal.fire({
             title: '¿Estas seguro?',
