@@ -8,6 +8,7 @@ use App\Models\product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -18,6 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+
 
         if (request()->ajax()) {
 
@@ -42,8 +44,10 @@ class ProductController extends Controller
                 ->make(true);
         }
         $category_products = category_product::all();
+        $idActual = 1;
+        $productSelected = new product();
 
-        return view('mantenedores.product.index', compact('category_products'));
+        return view('mantenedores.product.index', compact('category_products', 'productSelected', 'idActual'));
     }
 
     /**
@@ -92,7 +96,27 @@ class ProductController extends Controller
     {
         //
     }
+    public function productView(request $request)
+    {
+        $id = request()->id;
+        $productSelected = DB::table('products')
+            ->whereNull('products.deleted_at')
+            ->where('products.id', '=', $id)
+            ->join('category_products', 'category_products.id', '=', 'products.id_category_product')
+            ->select(
+                'products.id as _id',
+                'products.id',
+                'products.stock',
+                'products.name_product',
+                'products.description',
+                'products.image_product',
+                'category_products.name as category'
 
+            )
+            ->orderBy('products.id')
+            ->get();
+        return json_encode([$productSelected]);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -102,7 +126,49 @@ class ProductController extends Controller
     public function edit(product $product)
     {
         $productSelected = product::find($product->id);
+
         return view('mantenedores.product.edit', compact('productSelected'));
+    }
+    public function productModalEdit(request $request)
+    {
+        $id = request()->id;
+        $productSelected = DB::table('products')
+            ->whereNull('products.deleted_at')
+            ->where('products.id', '=', $id)
+            ->join('category_products', 'category_products.id', '=', 'products.id_category_product')
+            ->select(
+                'products.id as _id',
+                'products.id',
+                'products.stock',
+                'products.name_product',
+                'products.description',
+                'products.image_product',
+                'category_products.name as category'
+
+            )
+            ->orderBy('products.id')
+            ->get();
+        return json_encode([$productSelected]);
+
+        // return view('mantenedores.product.edit', compact('productSelected'));
+    }
+    public function productModalEditStore(request $request)
+    {
+        dd($request->product);
+        $datosProducto = request()->except(['_token', '_method']);
+        $producto = product::find($request->id);
+        $producto->stock         = $request->stock;
+        $producto->name_product   = $request->name_product;
+        $producto->description    = $request->description;
+        if ($request->image_product != null) {
+            Storage::delete('public/' . $request->urlImagen);
+            $producto->image_product = $request->file('image_product')->store('uploads', 'public');
+        }
+        $producto->save();
+        return redirect()->route('product.index');
+
+
+        // return view('mantenedores.product.edit', compact('productSelected'));
     }
 
     /**
@@ -114,10 +180,15 @@ class ProductController extends Controller
      */
     public function update(request $request, product $product)
     {
+        $datosProducto = request()->except(['_token', '_method']);
         $producto = product::find($product->id);
         $producto->stock         = $request->stock;
         $producto->name_product   = $request->name_product;
         $producto->description    = $request->description;
+        if ($request->hasFile('image_product')) {
+            Storage::delete('public/' . $product->image_product);
+            $producto->image_product = $request->file('image_product')->store('uploads', 'public');
+        }
         $producto->save();
         return redirect()->route('product.index');
     }

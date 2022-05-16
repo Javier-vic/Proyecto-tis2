@@ -8,6 +8,8 @@
             <div class="modal-body">
                 <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    {{ Form::label('Nombre del producto', '', ['class' => 'form-label']) }}
+                    {{ Form::text('name_product', $productSelected->name_product, ['class' => 'form-control']) }}
                     <div class="mb-3">
                         <label for="" class="form-label">Nombre </label>
                         <input type="text" class="form-control" id="name_product" name="name_product"
@@ -19,17 +21,17 @@
                             aria-describedby="stock_help">
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Descripción  </label>
+                        <label for="" class="form-label">Descripción </label>
                         <input type="text" class="form-control" id="description" name="description"
                             aria-describedby="description_help">
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Imagen  </label>
+                        <label for="" class="form-label">Imagen </label>
                         <input type="file" class="form-control" id="image_product" name="image_product"
                             aria-describedby="name_product_help">
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Categoria  </label>
+                        <label for="" class="form-label">Categoria </label>
 
                         <select name="id_category_product" id="" name="id_category_product">
                             @foreach ($category_products as $category_product)

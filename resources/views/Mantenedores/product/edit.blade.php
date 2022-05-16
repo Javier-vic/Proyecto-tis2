@@ -25,6 +25,8 @@
             <label for="" class="form-label">Imagen : </label>
             <input type="file" class="form-control" id="image_product" name="image_product"
                 aria-describedby="name_product_help">
+            <img src="{{ asset('storage') . '/' . $productSelected->image_product }}" class="img-fluid " alt="">
+
         </div>
         <div class="mb-3">
             <label for="" class="form-label">Categoria del producto (Acá se debe desplegar una lista con los nombres de
