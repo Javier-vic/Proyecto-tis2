@@ -1,7 +1,7 @@
-<form action="{{route('roles.store')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('roles.store')}}" method="POST" id="postForm" enctype="multipart/form-data">
     <div class="form-group">
         {{ Form::label('Nombre del rol','',['class'=>'form-label']) }}
-        {{ Form::text('name_role',$role->name_role,['class'=>'form-control'])}}
+        {{ Form::text('name_role',$role->name_role,['class'=>'form-control','id'=>'idName'])}}
     </div>
     {!! Form::token() !!}
     <div class="form-group mt-2 mb-2">
