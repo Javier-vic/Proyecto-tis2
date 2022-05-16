@@ -10,7 +10,6 @@
         <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
     </a> --}}
     <div id="number"></div>
-    <div id="valorIdPrueba" value="{{ $idActual }}">ID ACTUAL : {{ $idActual }}</div>
     @include('Mantenedores.product.modal.create')
     @include('Mantenedores.product.modal.show')
     @include('Mantenedores.product.modal.edit')
@@ -18,19 +17,19 @@
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
-    <table id="myTable" class="display" style="width: 100%;">
+    <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-primary text-white">
             <tr class="text-center">
-                <th class="py-2">ID</th>
-                <th class="py-2">Stock</th>
-                <th class="py-2">Nombre producto</th>
-                <th class="py-2" style="width: 50px;">Acciones</th>
+                <th class="py-2" style="width:10%">Nombre producto</th>
+                <th class="py-2" style="width:10%">Stock</th>
+                <th class="py-2" style="width:10%">Acciones</th>
             </tr>
         </thead>
     </table>
 @endsection
 @section('js_after')
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -56,24 +55,20 @@
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
 
-                columns: [{
-                        data: 'id',
-                        name: 'id',
-                        visible: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'stock',
-                        name: 'stock'
-                    },
+                columns: [
                     {
                         data: 'name_product',
                         name: 'name_product'
                     },
                     {
+                        data: 'stock',
+                        name: 'stock'
+                    },
+                   
+                    {
                         data: 'action',
                         name: 'action',
-                        orderable: false,
+                        orderable: false, 
                         searchable: false
 
                     },
@@ -84,11 +79,10 @@
                 },
                 select: true
             });
+
             $('#search').on('keyup', function() {
                 table.search(this.value).draw();
             });
-            console.log(@json($idActual))
-
 
             //RELLENA EL MODAL DE VER DETALLES
             $(document).on("click", ".btn-view-producto", function() {
@@ -127,14 +121,11 @@
             $(document).on("click", ".btn-edit-producto", function() {
                 valor_IDproducto = $(this).val();
 
-
-                console.log(valor_IDproducto);
                 $.ajax({
                     type: "GET",
                     url: "{{ route('product.modal.edit') }}",
                     data: {
                         'id': valor_IDproducto,
-
                     },
                     dataType: "json",
                     success: function(response) {
@@ -157,14 +148,11 @@
                         $('#descriptionEDITMODAL').val(resultado.description)
                         $('#categoryEDITMODAL').val(resultado.category)
                         $('#idEDITMODAL').val(valor_IDproducto)
-                        $('#urlImagen').val(resultado.image_product)
-                        $('#valorIdPrueba').html(valor_IDproducto);
-                        $('#valorIdPrueba').val(valor_IDproducto);
 
                     }
                 });
             });
-            // ****************************************************************************************************************
+           // ****************************************************************************************************************
 
         })
     </script>

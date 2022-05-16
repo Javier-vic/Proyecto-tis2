@@ -20,7 +20,6 @@ class ProductController extends Controller
     public function index()
     {
 
-
         if (request()->ajax()) {
 
             return datatables(DB::connection(session()->get('database'))
@@ -44,10 +43,10 @@ class ProductController extends Controller
                 ->make(true);
         }
         $category_products = category_product::all();
-        $idActual = 1;
         $productSelected = new product();
 
-        return view('mantenedores.product.index', compact('category_products', 'productSelected', 'idActual'));
+
+        return view('mantenedores.product.index', compact('category_products', 'productSelected'));
     }
 
     /**
@@ -126,8 +125,10 @@ class ProductController extends Controller
     public function edit(product $product)
     {
         $productSelected = product::find($product->id);
+        $category_products = category_product::all();
 
-        return view('mantenedores.product.edit', compact('productSelected'));
+        // dd($productSelected->id_category_product);
+        return view('mantenedores.product.edit', compact('productSelected', 'category_products'));
     }
     public function productModalEdit(request $request)
     {
@@ -152,20 +153,20 @@ class ProductController extends Controller
 
         // return view('mantenedores.product.edit', compact('productSelected'));
     }
-    public function productModalEditStore(request $request)
+    public function productModalEditStore(request $request, product $product)
     {
-        dd($request->product);
-        $datosProducto = request()->except(['_token', '_method']);
-        $producto = product::find($request->id);
-        $producto->stock         = $request->stock;
-        $producto->name_product   = $request->name_product;
-        $producto->description    = $request->description;
-        if ($request->image_product != null) {
-            Storage::delete('public/' . $request->urlImagen);
-            $producto->image_product = $request->file('image_product')->store('uploads', 'public');
-        }
-        $producto->save();
-        return redirect()->route('product.index');
+        // $datosProducto = request()->except(['_token', '_method']);
+        // $producto = product::find($request->id);
+        // $producto->stock         = $request->stock;
+        // $producto->name_product   = $request->name_product;
+        // $producto->description    = $request->description;
+        // if ($request->image_product != null) {
+        //     Storage::delete('public/' . $request->urlImagen);
+        //     $producto->image_product = $request->file('image_product')->store('uploads', 'public');
+        // }
+        // $producto->save();
+        // return redirect()->route('product.index');
+        return json_encode(['HOL']);
 
 
         // return view('mantenedores.product.edit', compact('productSelected'));
@@ -185,6 +186,7 @@ class ProductController extends Controller
         $producto->stock         = $request->stock;
         $producto->name_product   = $request->name_product;
         $producto->description    = $request->description;
+        $producto->id_category_product = $request->id_category_product;
         if ($request->hasFile('image_product')) {
             Storage::delete('public/' . $product->image_product);
             $producto->image_product = $request->file('image_product')->store('uploads', 'public');
