@@ -92,6 +92,15 @@ class RoleController extends Controller
     public function update(Request $request, role $role)
     {
         //
+        $role->update(['name_role'=>$request->name_role]);
+        $role->permit()->detach();
+        $permits = array();
+        foreach($request->permits as $item => $value){
+            $permits[] = (int)$value;
+        }
+        $role->permit()->attach($permits);
+        //$role->permit()->attach();
+        return $permits;
     }
 
     /**

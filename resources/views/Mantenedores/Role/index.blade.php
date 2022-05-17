@@ -78,8 +78,8 @@
                 data: {'id': id,"_token": "{{ csrf_token() }}"},
                 dataType: "json",
                 success: (res) =>{
-                    console.log(@json($permits));
-                    console.log(res);
+                    //console.log(@json($permits));
+                    //console.log(res);
                     $("#editName").val('');
                     $("#editName").val(`${res[0][0].name_role}`);
                     $("#editPermits").empty();
@@ -107,11 +107,28 @@
                         }))
                         )
                     })
+                    $("#editForm").attr('onSubmit', `submitEdit(${id},event)`);
                     $('#editRole').modal('show');
                 }
             })
         }
-
+        const submitEdit = (id,e) => {
+            e.preventDefault();
+            var url = '{{ route("roles.update", ":id") }}';
+            url = url.replace(':id', id);
+            var data = $("#editForm").serializeArray();
+            console.log(data)
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)        
+                }
+            });
+            $('#editRole').modal('hide');
+        }
         const deleteRole = (idRole) =>{
             Swal.fire({
             title: '¿Estas seguro?',
