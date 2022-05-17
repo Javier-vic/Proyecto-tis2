@@ -56,7 +56,7 @@ class RoleController extends Controller
         }
         $role->save();
         $role->permit()->attach($permits);
-        return redirect()->route('roles.index');
+        return response('',200);
         //
     }
 
@@ -140,8 +140,8 @@ class RoleController extends Controller
                 })
                 ->addColumn('action',function($row){
                     $actionBtn = "
-                                <button onclick='editRole({$row->id})' class='edit btn btn-success btn-sm'>Editar</button> 
-                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'>Borrar</button>
+                                <button onclick='editRole({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
+                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
                                 ";  
                     return $actionBtn;
                 })

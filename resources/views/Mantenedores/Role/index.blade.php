@@ -35,6 +35,9 @@
         const Table = $("#myTable").DataTable({
             processing: true,
             serverSide: true,
+            language: {
+                    url: "{{ asset('js/language.json') }}"
+                },
             ajax:{
                     url: "{{ route('dataTable.Roles') }}",
                     type: 'GET',
@@ -49,6 +52,20 @@
         const capitalize = (s) => {
             if (typeof s !== 'string') return ''
             return s.charAt(0).toUpperCase() + s.slice(1)
+        }
+        const addRole = (e) =>{
+            e.preventDefault();
+            var data = $("#postForm").serializeArray();
+            $.ajax({
+                type: "POST",
+                url: "{{route('roles.store')}}",
+                data: data,
+                dataType: "text",
+                success: function (response) {
+                    Table.ajax.reload();
+                    $("#agregarRol").modal("hide");
+                }
+            });
         }
         const viewPermits = (id) => {
             $.ajax({
@@ -137,7 +154,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Si, Borrar!',
+            cancelButtonText: 'Cancelar',
             }).then((result)=>{
                 var url = '{{ route("roles.destroy", ":id") }}';
                 url = url.replace(':id', idRole);
@@ -150,8 +168,8 @@
                         success: function (response) {
                             console.log('asd');
                             Swal.fire(
-                                'Deleted!',
-                                'Your file has been deleted.',
+                                'Borrado!',
+                                'El rol ha sido borrado.',
                                 'success'
                             )
                             Table.ajax.reload();   

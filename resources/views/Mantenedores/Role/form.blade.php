@@ -1,4 +1,4 @@
-<form action="{{route('roles.store')}}" method="POST" id="postForm" enctype="multipart/form-data">
+<form onsubmit="addRole(event)" method="POST" id="postForm" enctype="multipart/form-data">
     <div class="form-group">
         {{ Form::label('Nombre del rol','',['class'=>'form-label']) }}
         {{ Form::text('name_role',$role->name_role,['class'=>'form-control','id'=>'idName'])}}
