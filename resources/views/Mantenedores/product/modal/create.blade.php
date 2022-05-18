@@ -8,8 +8,6 @@
             <div class="modal-body">
                 <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    {{ Form::label('Nombre del producto', '', ['class' => 'form-label']) }}
-                    {{ Form::text('name_product', $productSelected->name_product, ['class' => 'form-control']) }}
                     <div class="mb-3">
                         <label for="" class="form-label">Nombre </label>
                         <input type="text" class="form-control" id="name_product" name="name_product"
