@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\order;
+use App\Models\product;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
 use DataTables;
@@ -50,8 +51,9 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('mantenedores.order.create');
+    {   
+        $product = product::all();
+        return view('mantenedores.order.create',compact('product'));
     }
 
     /**
@@ -94,7 +96,7 @@ class OrderController extends Controller
      */
     public function edit(order $order)
     {
-        //dd(order::findOrFail($order->id))
+      
         $order = order::findOrFail($order->id);
         return view('Mantenedores.order.edit', compact('order'));
     }
