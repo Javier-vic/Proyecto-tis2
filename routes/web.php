@@ -31,8 +31,11 @@ Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 
 Route::get('/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
-
+// RUTAS DE PRODUCTOS
+Route::get('/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
+Route::post('/productModalEditStore/{product}', [\App\Http\Controllers\ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
+Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
 //
-Route::get('/permitsofrole',[\App\Http\Controllers\RoleController::class,'dataTable'])->name('permits.roles');
+Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getPermits'])->name('permits.roles');
 //DataTables
-Route::get('/dataTableRole',[\App\Http\Controllers\RoleController::class,'dataTable'])->name('dataTable.Roles');
+Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'dataTable'])->name('dataTable.Roles');

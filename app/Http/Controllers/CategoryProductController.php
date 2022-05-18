@@ -38,9 +38,6 @@ class CategoryProductController extends Controller
     }
     public function store_category_product(Request $request)
     {
-        $producto = new category_product;
-        $producto->name = 'Ramen';
-        $producto->save();
     }
 
 
