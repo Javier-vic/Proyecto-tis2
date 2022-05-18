@@ -35,6 +35,9 @@ class OrderController extends Controller
                 )
                 ->orderBy('orders.id')
                 ->get())
+                ->addColumn('action', 'mantenedores.order.datatable.action')
+                ->rawColumns(['action'])
+                ->addIndexColumn()
                 ->make(true);
         }
         
@@ -48,7 +51,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        return view('order.create');
+        return view('mantenedores.order.create');
     }
 
     /**
@@ -60,14 +63,16 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $datosOrder = request()->except('_token');
-        $productos = new Product;
+        $productos = new order;
         $productos->name_order = $datosOrder['name_order'];
         $productos->order_status = $datosOrder['order_status'];
         $productos->payment_method = $datosOrder['payment_method'];
+        $productos->total = $datosOrder['total'];
         $productos->pick_up = $datosOrder['pick_up'];
         $productos->comment = $datosOrder['comment'];
+        $productos->save();
     
-        return redirect()->route('Mantenedores.order.index');
+        return redirect()->route('order.index');
     }
 
     /**
@@ -87,11 +92,11 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(order $order)
     {
-        //
-        $order = order::findOrFail($id);
-        return view('order.edit', compact('order'));
+        //dd(order::findOrFail($order->id))
+        $order = order::findOrFail($order->id);
+        return view('Mantenedores.order.edit', compact('order'));
     }
 
     /**
@@ -101,13 +106,19 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, order $order)
     {
-        $datosOrder = request()->except(['_token', '_method']);
-        order::where('id','=',$id)->update($datosOrder);
-
-        $order= order::findOrFail($id);
-        return view('order.edit', compact('order'));
+        $productos = order::find($order->id);
+        $productos->name_order = $request->name_order;
+        $productos->order_status = $request->order_status;
+        $productos->payment_method = $request-> payment_method;
+        $productos->total = $request->total;
+        $productos->pick_up = $request->pick_up;
+        $productos->comment = $request->comment;
+        $productos->save();
+        
+     
+        return redirect()->route('order.index');
         
     
     }

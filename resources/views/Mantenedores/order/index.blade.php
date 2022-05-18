@@ -3,6 +3,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
+
+    <a role="button" class="btn btn-success mr-auto" href="{{ url('/order/create') }}">
+        <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
+    </a>
+
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
  
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
@@ -17,6 +22,7 @@
             <th>Retiro</th>
             <th>Metodo de pago</th>
             <th>comentario</th>
+            <th>acciones</th>
             
         </tr>
     </thead>
@@ -61,6 +67,10 @@
                         name: 'total'
                     },
                     {
+                        data: 'order_status',
+                        name: 'order_status'
+                    },
+                    {
                         data: 'payment_method',
                         name: 'payment_method'
                     },
@@ -71,6 +81,13 @@
                     {
                         data: 'comment',
                         name: 'comment'
+                    },
+                
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
                     },
                   
 
