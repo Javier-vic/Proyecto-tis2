@@ -36,7 +36,7 @@
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                 </li>
                 <li>
-                    <a href="#" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
+                    <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
                 </li>
                 <li>
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
