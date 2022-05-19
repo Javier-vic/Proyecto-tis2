@@ -15,7 +15,7 @@ class CategorySupplyController extends Controller
     public function index()
     {
         //
-        $datos['category_supplies'] = category_supply::paginate(5);
+        $datos['category_supplies'] = category_supply::paginate(20);
         return view('Mantenedores.category_supply.index', $datos);
     }
 
@@ -42,8 +42,7 @@ class CategorySupplyController extends Controller
         $category_supply = new category_supply;
         $category_supply->name_category = $category_supplyData['name_category'];
         $category_supply->save();
-
-        return redirect()->route('category_supply.index');
+        return response('',200);
     }
 
     /**
@@ -96,4 +95,26 @@ class CategorySupplyController extends Controller
         category_supply::destroy($id);
         return redirect()->route('category_supply.index');
     }
+
+    public function dataTable(Request $request){
+        if($request->ajax()){
+            $data = category_supply::all();
+            return DataTables::of($data)
+                ->addColumn('viewPermits', function($row){
+                    $button = "<button onclick='viewPermits({$row->id})' class='btn btn-success'>Ver permisos</button>"; 
+                    return $button;
+                })
+                ->addColumn('action',function($row){
+                    $actionBtn = "
+                                <button onclick='editRole({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
+                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
+                                ";  
+                    return $actionBtn;
+                })
+                ->rawColumns(['viewPermits','action'])
+                ->make(true);
+
+        }
+    }
+
 }

@@ -5,9 +5,10 @@
 @endsection
 
 @section('content')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarRol"> Agregar nueva categoria</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
     <table class="table" id="myTable" style="width: 100%">
-        
+    {!! Form::token() !!}
+
         <thead class="thead">
             <tr>
                 <th>#</th>
@@ -33,6 +34,16 @@
         </tbody>
 
     </table>
+
+    <div class="">
+        @include('Mantenedores.category_supply.modal')
+    </div>
+    <div class="">
+        <!-- include('Mantenedores.category_supply.modalViewPermits') -->
+    </div>
+    <div class="">
+        <!-- include('Mantenedores.category_supply.ModalEditRole') -->
+    </div>
 @endsection
 
 @section('js_after')
@@ -47,7 +58,7 @@
                     url: "{{ asset('js/language.json') }}"
                 },
             ajax:{
-                    url: "{{ route('dataTable.Category_supplies') }}",
+                    url: "{{ route('dataTable.CategorySupply') }}",
                     type: 'GET',
             },
             columns:[
@@ -56,5 +67,25 @@
                 {data:'action',name:'action',orderable:false,searchable:true},
             ]
         });
+
+        const capitalize = (s) => {
+            if (typeof s !== 'string') return ''
+            return s.charAt(0).toUpperCase() + s.slice(1)
+        }
+
+        const addCategorySupply = (e) =>{
+            e.preventDefault();
+            var data = $("#postForm").serializeArray();
+            $.ajax({
+                type: "POST",
+                url: "{{route('category_supply.store')}}",
+                data: data,
+                dataType: "text",
+                success: function (response) {
+                    Table.ajax.reload();
+                    $("#agregarCategoriaInsumo").modal("hide");
+                }
+            });
+        }
 
 @endsection

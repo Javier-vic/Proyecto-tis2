@@ -26,6 +26,7 @@ Route::get('/', function () {
 
 Route::resource('supply', SupplyController::class);
 Route::resource('category_supply', CategorySupplyController::class);
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -44,3 +45,4 @@ Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class,
 Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getPermits'])->name('permits.roles');
 //DataTables
 Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'dataTable'])->name('dataTable.Roles');
+Route::get('/dataTableCategorySupply', [\App\Http\Controllers\CategorySupplyController::class, 'dataTable'])->name('dataTable.CategorySupply');

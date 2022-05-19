@@ -27,7 +27,7 @@
 
             <ul class="list-unstyled ">
                 <li class="">
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-box-open"></i>Insumos</a>
+                    <a href="{{route('category_supply.index')}}" class="my-3"><i class="me-3 fa-solid fa-box-open"></i>Insumos</a>
                 </li>
                 <li>
                     <a href="#" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
