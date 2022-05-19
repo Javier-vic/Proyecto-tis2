@@ -11,6 +11,7 @@
                 <input type="text" class="form-control" id="nameEDITMODAL" name="name"
                     aria-describedby="name_product_help">
             </div>
+            <button id="btnEDITMODAL" class="btn-edit-categoria-enviar">Editar</button>
         </div>
     </div>
 </div>

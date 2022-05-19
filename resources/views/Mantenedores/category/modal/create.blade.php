@@ -13,7 +13,6 @@
                         <input type="text" class="form-control" id="name" name="name"
                             aria-describedby="name_product_help">
                     </div>
-                 
                     <button type="submit" class="btn btn-primary">Agregar</button>
                 </form>
             </div>

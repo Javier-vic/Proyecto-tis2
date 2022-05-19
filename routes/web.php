@@ -32,9 +32,9 @@ Route::get('/category_product/store/category', [CategoryProductController::class
 // RUTAS DE PRODUCTOS
 Route::get('/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
 Route::post('/productModalEditStore/{product}', [\App\Http\Controllers\ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
+Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit'); 
 // RUTAS DE CATEGORÍAS
-Route::get('/category_product/modal/edit', [\App\Http\Controllers\CategoryProductController::class, 'categoryProductModalEdit'])->name('category.product.modal.edit');
+Route::get('/categoryProduct/modal/edit', [\App\Http\Controllers\CategoryProductController::class, 'categoryProductModalEdit'])->name('category.product.modal.edit');
 
 // RUTA DE ROLES
 Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getPermits'])->name('permits.roles');

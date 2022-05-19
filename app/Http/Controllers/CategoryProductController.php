@@ -16,7 +16,6 @@ class CategoryProductController extends Controller
      */
     public function index()
     {
-        
         if (request()->ajax()) {
 
             return datatables(DB::connection(session()->get('database'))
@@ -100,14 +99,19 @@ class CategoryProductController extends Controller
      */
     public function update(Request $request, category_product $category_product)
     {
-        //
+        $datosProducto = request()->except(['_token', '_method']);
+        $category_product = category_product::find($category_product->id);
+        $category_product->name         = $request->name;
+        $category_product->save();
+        return response('',200);
+
     }
     public function categoryProductModalEdit(request $request)
-    {
+    {   
         $id = request()->id;
         $categoryProductSelected = DB::table('category_products')
             ->whereNull('category_products.deleted_at')
-            ->where('category_products.id', '=', 1)
+            ->where('category_products.id', '=', $id)
             ->select(
                 'category_products.id as id',
                 'category_products.name'

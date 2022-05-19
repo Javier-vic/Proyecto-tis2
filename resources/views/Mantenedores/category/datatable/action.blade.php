@@ -3,11 +3,15 @@
         aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-fw fa-bars text-primary"></i>
     </a>
-
+ 
     <div class="dropdown-menu dropdown-menu-right d-flex" aria-labelledby="dropdown-default-primary">
            
-            <button type="submit" class="dropdown-item btn-edit-categoria" value="{{$_id}}" ><i class="fa-solid fa-pen-to-square p-1"></i>Editar</button>
-        
+            <!-- <button type="submit" class="dropdown-item btn-edit-categoria" value="{{$_id}}" ><i class="fa-solid fa-pen-to-square p-1"></i>Editar</button> -->
+            <button type="button" class="btn btn-primary btn-edit-categoria" value="{{$_id}}" >
+            <i class="fa-solid fa-pen-to-square"></i> Editar categoría
+    </button>
+   
+
             <form action="{{ route('category_product.destroy', ['category_product' => $_id]) }}" method="post">
                 @csrf
                 {{ method_field('DELETE') }}

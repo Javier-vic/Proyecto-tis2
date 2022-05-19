@@ -10,6 +10,7 @@
 
     <div id="number"></div>
     @include('Mantenedores.category.modal.create')
+    @include('Mantenedores.category.modal.edit')
 
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
@@ -79,26 +80,54 @@
 
            // ****************************************************************************************************************
                 //RELLENA EL MODAL DE EDITAR
-                $(document).on("click", ".btn-edit-categoria", function() {
-                valor_IDproducto = $(this).val();
+            $(document).on("click", ".btn-edit-categoria", function() {
+            valor_IDproducto = $(this).val();
+            console.log(valor_IDproducto)
                 $.ajax({
-                    type: "GET",
-                    url: "{{ route('category.product.modal.edit') }}",
-                    data: {
-                        'id': valor_IDproducto,
-                    },
-                    dataType: "json",
+                type: "GET",
+                url: "{{ route('category.product.modal.edit') }}",
+                data: {
+                    'id': valor_IDproducto,
+                    "_token": "{{ csrf_token() }}"
+                },
+                dataType: "json",
                     success: function(response) {
-                        $('#editCategoria').modal('show');
-
-                        console.log(response);
-
-                        // $('#stockEDITMODAL').val(resultado.stock)
+                    console.log(response);
+                        let resultado = response[0][0];
+                 
+                    $('#nameEDITMODAL').val(resultado.name);
+                    $('#btnEDITMODAL').val(resultado.id);
+                    $('#editCategoria').modal('show');
+                    // $('#stockEDITMODAL').val(resultado.stock)
 
                     }
                 });
             });
            // ****************************************************************************************************************
+           //ENVÍA EL MODAL DE EDITAR
+           $(document).on("click", ".btn-edit-categoria-enviar", function() {
+            console.log('Valor del edit:',$(this).val())
+            url = '{{ route("category_product.update", ":category_product") }}';
+            url = url.replace(':category_product', $(this).val());
+                $.ajax({
+                type: "PUT",
+                url: url,
+                data: {
+                    "_token": "{{ csrf_token() }}"
+                },
+                dataType: "json",
+                    success: function(response) {
+                    console.log('SE ACTUALIZÓ');
+                    console.log(response);
+                    let resultado = response[0][0];
+                    // $('#editCategoria').modal('hide');
+  
+                    
+                    // $('#stockEDITMODAL').val(resultado.stock)
+
+                    }
+                });
+            });
 
         });
         
