@@ -6,9 +6,7 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
         Agregar producto
     </button>
-    {{-- <a role="button" class="btn btn-success mr-auto" href="{{ route('product.create') }}">
-        <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
-    </a> --}}
+
     <div id="number"></div>
     @include('Mantenedores.product.modal.create')
     @include('Mantenedores.product.modal.show')
@@ -114,6 +112,7 @@
                         $('#stockVIEWMODAL').val(resultado.stock)
                         $('#descriptionVIEWMODAL').val(resultado.description)
                         $('#category').val(resultado.category)
+                        $('#priceVIEWMODAL').val(resultado.price)
                     }
                 });
             });

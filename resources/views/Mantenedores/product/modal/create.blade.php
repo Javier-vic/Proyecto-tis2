@@ -24,6 +24,11 @@
                             aria-describedby="description_help">
                     </div>
                     <div class="mb-3">
+                        <label for="" class="form-label">Precio </label>
+                        <input type="number" class="form-control" id="price" name="price"
+                            aria-describedby="description_help">
+                    </div>
+                    <div class="mb-3">
                         <label for="" class="form-label">Categoria </label><br>
 
                         <select name="id_category_product" id="" name="id_category_product">

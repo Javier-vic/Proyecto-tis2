@@ -7,11 +7,11 @@
             </div>
             <div class="modal-body">
                 @csrf
-                {{-- <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="" class="form-label">Nombre </label>
                     <input type="text" class="form-control" id="name_productVIEWMODAL" name="name_product"
                         aria-describedby="name_product_help">
-                </div> --}}
+                </div>  -->
                 <div class="mb-3">
                     <label for="" class="form-label">Cantidad </label>
                     <input readonly type="number" class="form-control" id="stockVIEWMODAL" name="stock"
@@ -20,6 +20,11 @@
                 <div class="mb-3">
                     <label for="" class="form-label">Descripción </label>
                     <input readonly type="text" class="form-control" id="descriptionVIEWMODAL" name="description"
+                        aria-describedby="description_help">
+                </div>
+                <div class="mb-3">
+                    <label for="" class="form-label">Precio </label>
+                    <input readonly type="text" class="form-control" id="priceVIEWMODAL" name="price"
                         aria-describedby="description_help">
                 </div>
                 {{-- <div class="mb-3">
