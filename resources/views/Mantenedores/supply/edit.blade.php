@@ -14,7 +14,7 @@
     <br>
 
     <label class="id_category_supply">Selecciona una categoria</label>
-    <select name="id_category_supply">
+    <select name="id_category_supplies">
     @foreach ($category_supplies as $category_supply)
         <option value="{{ $category_supply->id }}">{{ $category_supply->name_category }}</option>
     @endforeach

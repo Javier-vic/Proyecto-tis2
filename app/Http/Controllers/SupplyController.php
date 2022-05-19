@@ -84,13 +84,15 @@ class SupplyController extends Controller
     public function update(Request $request, $id)
     {
         $supply = supply::findOrFAil($id);
+        $supply->category_supply()->dissociate();
         $supply->name_supply = $request->input('name_supply');
         $supply->unit_meassurement = $request->input('unit_meassurement');
         $supply->quantity = $request->input('quantity');
-        $supply->id_category_supplies = $request->input('id_category_supplies');
+        $id_category_supplies = $request->input('id_category_supplies');
+        $supply->category_supply()->associate($id_category_supplies);
         $supply->update();
 
-        return redirect()->route('category_supply.index');
+        return redirect()->route('supply.index');
     }
 
     /**

@@ -11,6 +11,6 @@ class supply extends Model
     use HasFactory, SoftDeletes;
 
     public function category_supply() {
-        return $this->belongsTo(category_supply::class);
+        return $this->belongsTo(category_supply::class, 'id_category_supplies');
     }
 }
