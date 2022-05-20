@@ -23,6 +23,9 @@
     <div class="">
         @include('Mantenedores.Role.modalViewPermits')
     </div>
+    <div class="">
+        @include('Mantenedores.Role.ModalEditRole')
+    </div>
 @endsection
 
 @section('js_after')
@@ -32,6 +35,9 @@
         const Table = $("#myTable").DataTable({
             processing: true,
             serverSide: true,
+            language: {
+                    url: "{{ asset('js/language.json') }}"
+                },
             ajax:{
                     url: "{{ route('dataTable.Roles') }}",
                     type: 'GET',
@@ -46,6 +52,20 @@
         const capitalize = (s) => {
             if (typeof s !== 'string') return ''
             return s.charAt(0).toUpperCase() + s.slice(1)
+        }
+        const addRole = (e) =>{
+            e.preventDefault();
+            var data = $("#postForm").serializeArray();
+            $.ajax({
+                type: "POST",
+                url: "{{route('roles.store')}}",
+                data: data,
+                dataType: "text",
+                success: function (response) {
+                    Table.ajax.reload();
+                    $("#agregarRol").modal("hide");
+                }
+            });
         }
         const viewPermits = (id) => {
             $.ajax({
@@ -68,8 +88,63 @@
                 }
             });
         }
-        const editRole = (idRole) => {
-
+        const editRole = (id) => {
+            $.ajax({
+                type: "GET",
+                url: "{{route('permits.roles')}}",
+                data: {'id': id,"_token": "{{ csrf_token() }}"},
+                dataType: "json",
+                success: (res) =>{
+                    //console.log(@json($permits));
+                    //console.log(res);
+                    $("#editName").val('');
+                    $("#editName").val(`${res[0][0].name_role}`);
+                    $("#editPermits").empty();
+                    @json($permits).map(e=>{
+                        var check = false;
+                        res[1].map(el=>{
+                            (el.id==e.id) ? check=true: null;
+                        })
+                        $("#editPermits").append(
+                        $($('<div>',{
+                            class: 'form-check form-switch'
+                        })).append(
+                        $('<input>',{
+                            class:'form-check-input',
+                            name:'permits[]',
+                            value:`${e.id}`,
+                            type:'checkbox',
+                            id:`${e.id}`,
+                            checked: check
+                        }))
+                        .append($('<label>',{
+                            class:'form-check-label',
+                            for:'flexSwitchCheckDefault',
+                            text:`${capitalize(e.tipe_permit)}`
+                        }))
+                        )
+                    })
+                    $("#editForm").attr('onSubmit', `submitEdit(${id},event)`);
+                    $('#editRole').modal('show');
+                }
+            })
+        }
+        const submitEdit = (id,e) => {
+            e.preventDefault();
+            var url = '{{ route("roles.update", ":id") }}';
+            url = url.replace(':id', id);
+            var data = $("#editForm").serializeArray();
+            console.log(data)
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)        
+                }
+            });
+            $('#editRole').modal('hide');
         }
         const deleteRole = (idRole) =>{
             Swal.fire({
@@ -79,7 +154,8 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Si, Borrar!',
+            cancelButtonText: 'Cancelar',
             }).then((result)=>{
                 var url = '{{ route("roles.destroy", ":id") }}';
                 url = url.replace(':id', idRole);
@@ -92,8 +168,8 @@
                         success: function (response) {
                             console.log('asd');
                             Swal.fire(
-                                'Deleted!',
-                                'Your file has been deleted.',
+                                'Borrado!',
+                                'El rol ha sido borrado.',
                                 'success'
                             )
                             Table.ajax.reload();   

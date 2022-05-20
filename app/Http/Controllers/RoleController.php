@@ -20,7 +20,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        //      
         $role = new role();
         $permits = permit::all();
         return view('Mantenedores.Role.index',['role'=>$role,'permits'=>$permits]);
@@ -56,7 +56,7 @@ class RoleController extends Controller
         }
         $role->save();
         $role->permit()->attach($permits);
-        return redirect()->route('roles.index');
+        return response('',200);
         //
     }
 
@@ -92,6 +92,15 @@ class RoleController extends Controller
     public function update(Request $request, role $role)
     {
         //
+        $role->update(['name_role'=>$request->name_role]);
+        $role->permit()->detach();
+        $permits = array();
+        foreach($request->permits as $item => $value){
+            $permits[] = (int)$value;
+        }
+        $role->permit()->attach($permits);
+        //$role->permit()->attach();
+        return $permits;
     }
 
     /**
@@ -117,7 +126,7 @@ class RoleController extends Controller
                      ->where('roles.id','=',$id)
                      ->join('role_permit','roles.id','=','role_permit.id_role')
                      ->join('permits','role_permit.id_permit','=','permits.id')
-                     ->select('permits.tipe_permit')
+                     ->select('permits.tipe_permit','permits.id')
                      ->get();
         return json_encode([$name,$permits]);
     }
@@ -131,8 +140,8 @@ class RoleController extends Controller
                 })
                 ->addColumn('action',function($row){
                     $actionBtn = "
-                                <a href='#' class='edit btn btn-success btn-sm'>Editar</a> 
-                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'>Borrar</button>
+                                <button onclick='editRole({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
+                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
                                 ";  
                     return $actionBtn;
                 })

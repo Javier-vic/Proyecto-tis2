@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\VerifyRoles;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,8 +25,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('roles', RoleController::class);
+Route::resource('roles', RoleController::class)->middleware([]);
 Route::resource('product', ProductController::class);
+Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 
 Route::get('/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
