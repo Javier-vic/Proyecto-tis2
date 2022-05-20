@@ -25,7 +25,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('roles', RoleController::class)->middleware(['auth','verifyrole']);
+Route::resource('roles', RoleController::class)->middleware([]);
 Route::resource('product', ProductController::class);
 Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
