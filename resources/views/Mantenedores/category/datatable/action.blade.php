@@ -5,19 +5,9 @@
     </a>
  
     <div class="dropdown-menu dropdown-menu-right d-flex" aria-labelledby="dropdown-default-primary">
-           
-            <!-- <button type="submit" class="dropdown-item btn-edit-categoria" value="{{$_id}}" ><i class="fa-solid fa-pen-to-square p-1"></i>Editar</button> -->
-            <button type="button" class="btn btn-primary btn-edit-categoria" value="{{$_id}}" >
-            <i class="fa-solid fa-pen-to-square"></i> Editar categoría
-    </button>
-   
-
-            <form action="{{ route('category_product.destroy', ['category_product' => $_id]) }}" method="post">
-                @csrf
-                {{ method_field('DELETE') }}
-                <button type="submit" class="dropdown-item text-danger" id="" value="Eliminar"><i
-                    class="fas fa-trash-alt | text-danger | p-1"></i>Eliminar</button>
-            </form>
+            <button type="button" onclick="editCategory({{$_id}})"class="btn btn-primary " ><i class="fa-solid fa-pen-to-square"></i> Editar categoría</button>
+            <button type="submit" onclick="deleteCategory({{$_id}})" class="dropdown-item text-danger" ><i class="fas fa-trash-alt | text-danger | p-1"></i>Eliminar</button>
 
     </div>
 </div>
+

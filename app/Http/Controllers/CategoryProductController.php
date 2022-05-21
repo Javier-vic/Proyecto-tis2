@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\category_product;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
+use RealRashid\SweetAlert\Facades\Alert;
+
+
 
 
 class CategoryProductController extends Controller
@@ -35,7 +41,6 @@ class CategoryProductController extends Controller
         }
 
         return view('Mantenedores.category.index');
-        
     }
 
     /**
@@ -56,13 +61,39 @@ class CategoryProductController extends Controller
      */
     public function store(Request $request)
     {
-        $categoryProductData = request()->except('_token');
-        $category_product = new category_product;
-        $category_product->name = $categoryProductData['name'];
-        $category_product->save();
 
-        return redirect()->route('category_product.index');
+
+        $rules = [
+            'name'          => 'required|string',
+        ];
+
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $values = request()->except('_token');
+
+                $category_product = new category_product;
+                $category_product->name = $values['name'];
+                $category_product->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se ingresó la categoría con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo realizar el ingreso de la categoría.', 400);
+            }
+            return response('No se pudo realizar el ingreso de la categoría.', 400);
+            // alert()->success('Categoría creada correctamente!');
+        }
+
+        return response('No se pudo realizar el ingreso de la categoría.', 400);
     }
+
     public function store_category_product(Request $request)
     {
     }
@@ -99,15 +130,40 @@ class CategoryProductController extends Controller
      */
     public function update(Request $request, category_product $category_product)
     {
-        $datosProducto = request()->except(['_token', '_method']);
-        $category_product = category_product::find($category_product->id);
-        $category_product->name         = $request->name;
-        $category_product->save();
-        return response('',200);
+        $rules = [
+            'name'          => 'required|string',
 
+        ];
+
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+
+                $datosProducto = request()->except(['_token', '_method']);
+                $category_product = category_product::find($category_product->id);
+                $category_product->name         = $request->name;
+                $category_product->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se editó la categoría con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo editar la categoría.', 400);
+            }
+            return response('No se pudo editar la categoría.', 400);
+            // alert()->success('Categoría creada correctamente!');
+        }
+
+        return response('No se pudo editar la categoría.', 400);
     }
     public function categoryProductModalEdit(request $request)
-    {   
+    {
         $id = request()->id;
         $categoryProductSelected = DB::table('category_products')
             ->whereNull('category_products.deleted_at')
@@ -131,7 +187,24 @@ class CategoryProductController extends Controller
      */
     public function destroy(category_product $category_product)
     {
-        dd('DESTRUIR');
-        //
+
+        // try {
+        //     $equipment = Equipment::on(session()->get('database'))->find($id);
+        //     $equipment->delete();
+
+        //     DB::connection(session()->get('database'))->commit();
+        // } catch (\Illuminate\Database\QueryException $e) {
+
+        //     DB::connection(session()->get('database'))->rollBack();
+
+        //     return  response()->json(['success' => false, 'error' => $e]);
+        // }
+
+
+        $categoryProduct = category_product::on(session()->get('database'))->find($category_product->id);
+        $categoryProduct->delete();
+
+
+        return response('success', 200);
     }
 }
