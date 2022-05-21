@@ -20,8 +20,7 @@ class permitSeeder extends Seeder
             'ventas',
             'delivery',
             'trabajadores',
-            'asistencia',
-            'roles'
+            'asistencia'
         ];
         $tipe_permit = array_map( function($permit){
             return[
