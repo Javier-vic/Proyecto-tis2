@@ -36,7 +36,7 @@
                     <input type="text" class="form-control" id="categoryEDITMODAL" name="category"
                         aria-describedby="name_product_help">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Editar</button>
 
 
                 {{-- <div class="modal-footer">

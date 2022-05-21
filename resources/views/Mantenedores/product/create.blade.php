@@ -3,7 +3,7 @@
     <a role="button" class="btn btn-dark mr-2" href="{{ route('product.index') }}">
         <i class="fa fa-fw fa-arrow-left mr-2"></i> Volver
     </a>
-    <form action="{{ url('/product') }}" method="POST" enctype="multipart/form-data">
+    <form  method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="" class="form-label">Nombre :</label>

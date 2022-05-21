@@ -31,6 +31,7 @@ class ProductController extends Controller
                     'products.stock',
                     'products.name_product',
                     'products.description',
+                    'products.price',
                     'products.image_product'
 
                 )
@@ -72,6 +73,7 @@ class ProductController extends Controller
         $producto->stock = $productData['stock'];
         $producto->name_product = $productData['name_product'];
         $producto->description = $productData['description'];
+        $producto->price = $productData['price'];
         if ($request->hasFile('image_product')) {
             $producto->image_product = $request->file('image_product')->store('uploads', 'public');
         }
@@ -109,7 +111,8 @@ class ProductController extends Controller
                 'products.name_product',
                 'products.description',
                 'products.image_product',
-                'category_products.name as category'
+                'category_products.name as category',
+                'products.price'
 
             )
             ->orderBy('products.id')
@@ -187,6 +190,7 @@ class ProductController extends Controller
         $producto->name_product   = $request->name_product;
         $producto->description    = $request->description;
         $producto->id_category_product = $request->id_category_product;
+        $producto->price = $request->price;
         if ($request->hasFile('image_product')) {
             Storage::delete('public/' . $product->image_product);
             $producto->image_product = $request->file('image_product')->store('uploads', 'public');
