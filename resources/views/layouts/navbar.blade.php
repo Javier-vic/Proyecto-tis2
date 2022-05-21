@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
+@php
+    use App\Http\Controllers\RoleController;    
+@endphp
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,42 +13,55 @@
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css">
     @yield('css_extra')
-
-
-
-
 </head>
-
+@if (RoleController::havePermits(auth()->user()->id_role,1))
+    
+@endif
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <h3>Nombre admin</h3>
+                <h3>{{auth()->user()->name}}</h3>
             </div>
 
             <ul class="list-unstyled ">
-                <li class="">
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-box-open"></i>Insumos</a>
-                </li>
-                <li>
-                    <a href="#" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
-                </li>
-                <li>
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
-                </li>
-                <li>
-                    <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
-                </li>
-                <li>
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
-                </li>
-                <li>
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
-                </li>
+                @if (RoleController::havePermits(auth()->user()->id_role,2))
+                    <li class="">
+                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-box-open"></i>Insumos</a>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,1))
+                    <li>
+                        <a href="#" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,3))
+                    <li>
+                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,1))    
+                    <li>
+                        <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,4))
+                    <li>
+                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,5))
+                    <li>
+                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,7))
+                    <li>
+                        <a href="{{route('roles.index')}}" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Roles</a>
+                    </li>
+                @endif
             </ul>
-
-
         </nav>
 
         <!-- Page Content  -->

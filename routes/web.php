@@ -24,9 +24,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//DataTables
+Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
 
-Route::resource('roles', RoleController::class)->middleware([]);
-Route::resource('product', ProductController::class);
+Route::resource('roles', RoleController::class);
+Route::resource('product', ProductController::class)->middleware(['auth','verifyrole']);
 Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 
@@ -37,5 +39,3 @@ Route::post('/productModalEditStore/{product}', [\App\Http\Controllers\ProductCo
 Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
 //
 Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getPermits'])->name('permits.roles');
-//DataTables
-Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'dataTable'])->name('dataTable.Roles');

@@ -150,4 +150,15 @@ class RoleController extends Controller
 
         }
     }
+
+    public function havePermits($idrole,$permit){
+        $flag = DB::table('roles')
+                    ->select(DB::raw('count(*)'))
+                    ->join('role_permit','roles.id','=','role_permit.id_role')
+                    ->where('roles.id','=',$idrole)
+                    ->where('role_permit.id_permit','=',$permit)
+                    ->count();
+
+        return $flag;
+    }
 }
