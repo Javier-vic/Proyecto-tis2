@@ -132,6 +132,8 @@ class CategoryProductController extends Controller
     {
         $rules = [
             'name'          => 'required|string',
+            'lastname'          => 'required|string',
+            'age'          => 'required|string',
 
         ];
 
@@ -159,7 +161,6 @@ class CategoryProductController extends Controller
             return response('No se pudo editar la categoría.', 400);
             // alert()->success('Categoría creada correctamente!');
         }
-
         return response('No se pudo editar la categoría.', 400);
     }
     public function categoryProductModalEdit(request $request)
