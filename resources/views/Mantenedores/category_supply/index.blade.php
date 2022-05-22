@@ -82,8 +82,35 @@
             $.ajax({
                 type: "POST",
                 url: "{{route('category_supply.store')}}",
+                error: function( jqXHR, textStatus, errorThrown ){                 
+                    var text = jqXHR.responseText;
+                    console.log(text)
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: text,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                },
                 data: data,
                 dataType: "text",
+                success: function(response, jqXHR) {
+                        Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: response,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,                       
+                        heightAuto:false,
+                    })
+                    $('#idname').val('');
+                    Table.ajax.reload();
+                    $("#agregarCategoriaInsumo").modal("hide");                   
+                    // $('#editCategoria').modal('hide');
+                }
                 success: function (response) {
                     Swal.fire({
                         position: 'bottom-end',
@@ -158,5 +185,41 @@
             });
             $('#editRole').modal('hide');
         }
+
+        const deleteCategorySupply = (id) =>{
+            Swal.fire({
+            title: '¿Estás seguro de eliminar esta categoría?',
+            text: "No se puede revertir.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Borrar!',
+            cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+                url = '{{ route("category_supply.destroy", ":category_supply") }}';
+                url = url.replace(':category_supply', id);
+                if(result.isConfirmed){
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            console.log(response)
+                            Swal.fire(
+                                'Borrado!',
+                                'La categoría ha sido borrada.',
+                                'success'
+                            )
+                            document.getElementById("number").innerHTML = table.data().count()-1;
+                            table.ajax.reload();
+                            // $('#editCategoria').modal('hide');
+                        }
+                    });
+                }         
+            })
+        } 
 
 @endsection

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\category_supply;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategorySupplyController extends Controller
 {
@@ -38,11 +41,37 @@ class CategorySupplyController extends Controller
      */
     public function store(Request $request)
     {
-        $category_supplyData = request()->except('_token');
-        $category_supply = new category_supply;
-        $category_supply->name_category = $category_supplyData['name_category'];
-        $category_supply->save();
-        return response('',200);
+        $rules = [
+            'name_category'          => 'required|string',
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $category_supplyData = request()->except('_token');
+                $category_supply = new category_supply;
+                $category_supply->name_category = $category_supplyData['name_category'];
+                $category_supply->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se ingresó la categoría con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo realizar el ingreso de la categoría.', 400);
+            }
+            return response('No se pudo realizar el ingreso de la categoría.', 400);
+            // alert()->success('Categoría creada correctamente!');
+        }
+        return response('No se pudo realizar el ingreso de la categoría.', 400);
+
+        // $category_supplyData = request()->except('_token');
+        // $category_supply = new category_supply;
+        // $category_supply->name_category = $category_supplyData['name_category'];
+        // $category_supply->save();
+        // return response('',200);
     }
 
     /**
@@ -90,10 +119,12 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($category_supply)
     {
-        category_supply::destroy($id);
-        return redirect()->route('category_supply.index');
+
+        $categorySupply = category_supply::on(session()->get('database'))->find($category_supply->id);
+        $categorySupply->delete();
+        return response('success', 200);
     }
 
     public function dataTable(Request $request){
