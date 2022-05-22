@@ -3,14 +3,15 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}" />
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
         Agregar producto
     </button>
 
     <div id="number"></div>
-    @include('Mantenedores.product.modal.create')
-    @include('Mantenedores.product.modal.show')
-    @include('Mantenedores.product.modal.edit')
+    <div>@include('Mantenedores.product.modal.create')</div>
+    <div>@include('Mantenedores.product.modal.show')</div>
+    <div>@include('Mantenedores.product.modal.edit')</div>
 
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
@@ -26,11 +27,17 @@
     </table>
 @endsection
 @section('js_after')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
-
     <script type="text/javascript">
-        $(document).ready(function() {
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+    <script type="text/javascript">
             var table = $("#myTable").DataTable({
                 bProcessing: true,
                 bStateSave: true,
@@ -82,6 +89,96 @@
                 table.search(this.value).draw();
             });
 
+           // ****************************************************************************************************************
+           //MODAL DE CREAR
+           // ****************************************************************************************************************
+           const createProduct = (e) =>{
+            e.preventDefault();
+            var formData = new FormData(e.currentTarget);
+            var  url = '{{ route("product.store") }}';
+                $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                    success: function(response, jqXHR) {
+                        Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: response,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto:false,
+                    })
+                    table.ajax.reload();
+                    document.getElementById("number").innerHTML = table.data().count()+1;
+ 
+                    }
+                
+                });
+            }
+              // ****************************************************************************************************************
+           //RELLENA MODAL DE EDITAR
+           // ****************************************************************************************************************
+            const editProduct = (id) =>{
+            var  url = '{{ route("product.modal.edit") }}';
+                $.ajax({
+                type: "GET",
+                url: url,
+                data:{
+                    'id': id,
+                    "_token": "{{ csrf_token() }}"                    
+                },
+                dataType: "json",
+                    success: function(response) {
+                    let resultado = response[0][0];
+                    $('#name_productEDIT').val(resultado.name_product);
+                    $('#stockEDIT').val(resultado.stock);
+                    $('#descriptionEDIT').val(resultado.description);
+                    $('#priceEDIT').val(resultado.price);
+                    $('#categoryEdit').val(resultado.category);
+
+                    $("#formEdit").attr('onSubmit', `editProductSubmit(${id},event)`);
+                    $('#editProducto').modal('show');
+                        
+                    }
+                
+                });
+            }
+            // ****************************************************************************************************************
+           //ENVÍA MODAL DE EDITAR
+           // ****************************************************************************************************************
+           const editProductSubmit = (id,e)=>{
+            e.preventDefault();
+            var formData = new FormData(e.currentTarget);
+            formData.append('_method', 'put');
+            var  url = '{{ route("product.update" , ":product") }}';
+            url = url.replace(':product', id);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData ,
+                cache: false,
+                contentType: false,
+                processData: false,
+                    success: function(response) {
+                    table.ajax.reload();
+                    Swal.fire(
+                            'Editado!',
+                            'El producto ha sido editado.',
+                            'success'
+                    )
+                    $('#editCategoria').modal('hide');
+            }
+         
+            })
+           } 
+           // ****************************************************************************************************************
+           // ****************************************************************************************************************
+           
             //RELLENA EL MODAL DE VER DETALLES
             $(document).on("click", ".btn-view-producto", function() {
                 valor_IDproducto = $(this).val();
@@ -153,6 +250,6 @@
             });
            // ****************************************************************************************************************
 
-        })
+    
     </script>
 @endsection

@@ -68,9 +68,10 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $values = request()->except('_token');
         $productData = request()->except('_token');
         $producto = new Product;
-        $producto->stock = $productData['stock'];
+        $producto->stock = $values['stock'];
         $producto->name_product = $productData['name_product'];
         $producto->description = $productData['description'];
         $producto->price = $productData['price'];
@@ -84,7 +85,7 @@ class ProductController extends Controller
             $productData['image_product'] = $request->file('image_product')->store('uploads', 'public');
         }
 
-        return redirect()->route('product.index');
+        return response('Se agregó el producto con exito.', 200);
     }
 
     /**
@@ -147,6 +148,7 @@ class ProductController extends Controller
                 'products.name_product',
                 'products.description',
                 'products.image_product',
+                'products.price',
                 'category_products.name as category'
 
             )
@@ -184,6 +186,8 @@ class ProductController extends Controller
      */
     public function update(request $request, product $product)
     {
+        $values = request()->except('_token');
+        dd($values);
         $datosProducto = request()->except(['_token', '_method']);
         $producto = product::find($product->id);
         $producto->stock         = $request->stock;

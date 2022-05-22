@@ -77,7 +77,6 @@ class CategoryProductController extends Controller
             DB::beginTransaction();
             try {
                 $values = request()->except('_token');
-
                 $category_product = new category_product;
                 $category_product->name = $values['name'];
                 $category_product->save();

@@ -98,13 +98,11 @@
            const createCategory = (e) =>{
             e.preventDefault();
             var data = $("#formCreate").serializeArray();
-            console.log(data);
                 var  url = '{{ route("category_product.store") }}';
                 $.ajax({
                 type: "POST",
                 url: url,
                 error: function( jqXHR, textStatus, errorThrown ) {
-                   
                     var text = jqXHR.responseText;
                     console.log(text)
                     Swal.fire({
@@ -132,9 +130,6 @@
                     table.ajax.reload();
                     $('#agregarCategoria').modal('hide');
                     document.getElementById("number").innerHTML = table.data().count()+1;
-                    
-
-
                     // $('#editCategoria').modal('hide');
                     // $('#stockEDITMODAL').val(resultado.stock)
                     }
@@ -164,7 +159,6 @@
                 type: "PUT",
                 url: url,
                 error: function( jqXHR, textStatus, errorThrown ) {
-                   
                    var text = jqXHR.responseText;
                    console.log(text)
                    Swal.fire({
@@ -217,13 +211,11 @@
                 },
                 dataType: "json",
                     success: function(response) {
-                        let resultado = response[0][0];
-                 
+                    let resultado = response[0][0];
                     $('#nameEDITMODAL').val(resultado.name);
                     $("#formEdit").attr('onSubmit', `editCategorySubmit(${id},event)`);
                     $('#editCategoria').modal('show');
                     // $('#stockEDITMODAL').val(resultado.stock)
-
                     }
                  
                 });
