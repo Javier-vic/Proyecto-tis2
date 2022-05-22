@@ -107,7 +107,7 @@
             console.log(id);
             $.ajax({
                 type: "GET",
-                url: "{{ route('categorySupply.edit') }}",
+                url: "{{ route('categorySupply.modal.edit') }}",
                 data: {
                     'id': id,
                     "_token": "{{ csrf_token() }}"
