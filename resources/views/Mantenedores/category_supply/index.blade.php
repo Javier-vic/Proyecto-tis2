@@ -20,21 +20,7 @@
             </tr>
         </thead>
         
-        <tbody>
-            @foreach($category_supplies as $category_supply)
-            <tr>
-                <td>{{ $category_supply->id }}</td>
-                <td>{{ $category_supply->name_category }}</td>
-                <td><a href="{{ url( '/category_supply/'.$category_supply->id.'/edit' ) }}">Editar</a> |             
-                <form action="{{ url( '/category_supply/'.$category_supply->id ) }}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <input type="submit" onclick="return confirm('¿Quieres borrar?')" value="borrar">
-                </form>
-                </td>          
-            </tr>
-            @endforeach
-        </tbody>
+        
 
     </table>
 
@@ -78,24 +64,15 @@
 
         const addCategorySupply = (e) =>{
             e.preventDefault();
-            var data = $("#postForm").serializeArray();
+            var formData = new FormData(e.currentTarget);
+            // var data = $("#postForm").serializeArray();
             $.ajax({
                 type: "POST",
                 url: "{{route('category_supply.store')}}",
-                error: function( jqXHR, textStatus, errorThrown ){                 
-                    var text = jqXHR.responseText;
-                    console.log(text)
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'error',
-                        title: text,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false
-                    })
-                },
-                data: data,
-                dataType: "text",
+                data: formData, 
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function(response, jqXHR) {
                         Swal.fire({
                         position: 'bottom-end',
@@ -110,19 +87,18 @@
                     Table.ajax.reload();
                     $("#agregarCategoriaInsumo").modal("hide");                   
                     // $('#editCategoria').modal('hide');
-                }
-                success: function (response) {
+                },
+                error: function( jqXHR, textStatus, errorThrown ){                 
+                    var text = jqXHR.responseText;
+                    console.log(text)
                     Swal.fire({
                         position: 'bottom-end',
-                        icon: 'success',
-                        title: response,
+                        icon: 'error',
+                        title: text,
                         showConfirmButton: false,
                         timer: 2000,
-                        backdrop: false,               
-                        heightAuto:false,
+                        backdrop: false
                     })
-                    Table.ajax.reload();
-                    $("#agregarCategoriaInsumo").modal("hide");
                 }
             });
         }
@@ -220,6 +196,7 @@
                     });
                 }         
             })
-        } 
+        }
+    </script> 
 
 @endsection
