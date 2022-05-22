@@ -5,7 +5,6 @@
 @endsection
 @section('content')
 <div>
-    @include('sweetalert::alert')
 </div>
     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#agregarCategoria">
         Agregar categoría

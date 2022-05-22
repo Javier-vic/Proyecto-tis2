@@ -6,8 +6,6 @@ use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
