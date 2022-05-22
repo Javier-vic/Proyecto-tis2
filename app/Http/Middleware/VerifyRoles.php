@@ -18,14 +18,14 @@ class VerifyRoles extends Middleware
     public function __construct()
     {
         $this->routes = array(
-            1 => 'publicidad',
-            2 => 'insumos',
-            3 => 'ventas',
-            4 => 'delivery',
-            5 => 'trabajdores',
-            6 => 'asistencia',
-            7 => 'roles',
-            8 => 'product'
+            1 => ['publicidad'],
+            2 => ['insumos'],
+            3 => ['ventas'],
+            4 => ['delivery'],
+            5 => ['trabajdores'],
+            6 => ['asistencia'],
+            7 => ['product'],
+            8 => ['roles']
         );
     }
     /**
@@ -45,7 +45,7 @@ class VerifyRoles extends Middleware
             ->select('role_permit.id_permit')
             ->get();
         foreach($permits as $permit){
-            if($this->routes[(int)$permit->id_permit] == $ruta){
+            if(in_array($ruta,$this->routes[(int)$permit->id_permit])){
                 return $next($request);
             }  
         }

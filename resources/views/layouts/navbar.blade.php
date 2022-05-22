@@ -41,7 +41,7 @@
                         <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                     </li>
                 @endif
-                @if (RoleController::havePermits(auth()->user()->id_role,1))    
+                @if (RoleController::havePermits(auth()->user()->id_role,7))    
                     <li>
                         <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
                     </li>
@@ -56,7 +56,7 @@
                         <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
                     </li>
                 @endif
-                @if (RoleController::havePermits(auth()->user()->id_role,7))
+                @if (RoleController::havePermits(auth()->user()->id_role,8))
                     <li>
                         <a href="{{route('roles.index')}}" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Roles</a>
                     </li>

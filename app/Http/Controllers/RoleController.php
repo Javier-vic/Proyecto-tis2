@@ -132,7 +132,7 @@ class RoleController extends Controller
     }
     public function dataTable(Request $request){
         if($request->ajax()){
-            $data = role::all();
+            $data = role::where('id','!=',1)->where('id','!=',2)->get();
             return DataTables::of($data)
                 ->addColumn('viewPermits', function($row){
                     $button = "<button onclick='viewPermits({$row->id})' class='btn btn-success'>Ver permisos</button>"; 

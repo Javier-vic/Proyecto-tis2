@@ -20,5 +20,7 @@ class RoleSeeder extends Seeder
         for($i = 1; $i < 9 ; $i++){
             $role->permit()->attach($i);
         }
+        $role = new role(['name_role'=>'User']);
+        $role->save();
     }
 }
