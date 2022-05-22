@@ -95,8 +95,36 @@ class CategorySupplyController extends Controller
      */
     public function edit($id)
     {
+        $id = request()->id;
+        $categoryProductSelected = DB::table('category_products')
+            ->whereNull('category_products.deleted_at')
+            ->where('category_products.id', '=', $id)
+            ->select(
+                'category_products.id as id',
+                'category_products.name'
+            )
+            ->orderBy('category_products.id')
+            ->get();
+        return json_encode([$categoryProductSelected]);
+
         $category_supply = category_supply::findOrFAil($id);
         return view('Mantenedores.category_supply.edit', compact('category_supply'));
+    }
+
+    public function modalEdit($id)
+    {
+        $id = request()->id;
+        console.log('dentro de modalEdit');
+        $categorySupplySelected = DB::table('category_supplies')
+            ->whereNull('category_supplies.deleted_at')
+            ->where('category_supplies.id', '=', $id)
+            ->select(
+                'category_supplies.id as id',
+                'category_supplies.name'
+            )
+            ->orderBy('category_supplies.id')
+            ->get();
+        return json_encode([$categorySupplySelected]);
     }
 
     /**

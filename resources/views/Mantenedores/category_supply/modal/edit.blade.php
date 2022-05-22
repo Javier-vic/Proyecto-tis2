@@ -7,11 +7,11 @@
             </div>
             <div class="modal-body">
                 
-            <form onsubmit="addCategorySupply(event)" method="POST" id="postForm" enctype="multipart/form-data">
+            <form onsubmit="" method="POST" id="EditForm" enctype="multipart/form-data">
                 <div class="form-group">
                     @csrf
                     <label for="category" class="form-label"></label>
-                    <input type="text" name="name_category" class="form-nombre" id="idName">
+                    <input type="text" name="name_category" class="form-nombre" id="EditName" name="name">
                 </div>
                 <div class="form-group mt-2 mb-2">
 

@@ -43,6 +43,7 @@ Route::post('/productModalEditStore/{product}', [\App\Http\Controllers\ProductCo
 Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit'); 
 // RUTAS DE CATEGORÍAS
 Route::get('/categoryProduct/modal/edit', [\App\Http\Controllers\CategoryProductController::class, 'categoryProductModalEdit'])->name('category.product.modal.edit');
+Route::get('/categorySupply/edit', [\App\Http\Controllers\CategorySupplyController::class, 'modalEdit'])->name('categorySupply.edit');
 
 // RUTA DE ROLES
 Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getPermits'])->name('permits.roles');

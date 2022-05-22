@@ -25,13 +25,13 @@
     </table>
 
     <div class="">
-        @include('Mantenedores.category_supply.Modal.ModalCreate')
+        @include('Mantenedores.category_supply.modal.create')
     </div>
     <div class="">
         <!-- include('Mantenedores.category_supply.modalViewPermits') -->
     </div>
     <div class="">
-        @include('Mantenedores.category_supply.Modal.ModalEdit')
+        @include('Mantenedores.category_supply.modal.edit')
     </div>
 @endsection
 
@@ -65,7 +65,6 @@
         const addCategorySupply = (e) =>{
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
-            // var data = $("#postForm").serializeArray();
             $.ajax({
                 type: "POST",
                 url: "{{route('category_supply.store')}}",
@@ -103,47 +102,28 @@
             });
         }
 
-        const editCategorySupply = (id) => {
+        const editCategorySupply = (id) => {          
+
+            console.log(id);
             $.ajax({
                 type: "GET",
-                url: "{{route('permits.roles')}}",
-                data: {'id': id,"_token": "{{ csrf_token() }}"},
+                url: "{{ route('categorySupply.edit') }}",
+                data: {
+                    'id': id,
+                    "_token": "{{ csrf_token() }}"
+                },
                 dataType: "json",
-                success: (res) =>{
-                    //console.log(json($permits));
-                    //console.log(res);
-                    $("#editName").val('');
-                    $("#editName").val(`${res[0][0].name_role}`);
-                    $("#editPermits").empty();
-                    json($permits).map(e=>{
-                        var check = false;
-                        res[1].map(el=>{
-                            (el.id==e.id) ? check=true: null;
-                        })
-                        $("#editPermits").append(
-                        $($('<div>',{
-                            class: 'form-check form-switch'
-                        })).append(
-                        $('<input>',{
-                            class:'form-check-input',
-                            name:'permits[]',
-                            value:`${e.id}`,
-                            type:'checkbox',
-                            id:`${e.id}`,
-                            checked: check
-                        }))
-                        .append($('<label>',{
-                            class:'form-check-label',
-                            for:'flexSwitchCheckDefault',
-                            text:`${capitalize(e.tipe_permit)}`
-                        }))
-                        )
-                    })
-                    $("#editForm").attr('onSubmit', `submitEdit(${id},event)`);
-                    $('#editRole').modal('show');
-                }
-            })
+                success: function(response) {
+                        console.log(id);
+                        let resultado = response[0][0];
+                        console.log(resultado);                
+                        $('#EditName').val(resultado.name);
+                        $("#EditForm").attr('onSubmit', `submitEdit(${id},event)`);
+                        $('#editCategorySupply').modal('show');
+                }                
+            });
         }
+
         const submitEdit = (id,e) => {
             e.preventDefault();
             var url = '{{ route("roles.update", ":id") }}';
