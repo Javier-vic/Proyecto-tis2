@@ -7,7 +7,7 @@ use App\Models\category_product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Response;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -86,8 +86,13 @@ class CategoryProductController extends Controller
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo realizar el ingreso de la categoría.', 400);
             }
-            return response('No se pudo realizar el ingreso de la categoría.', 400);
             // alert()->success('Categoría creada correctamente!');
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
 
         return response('No se pudo realizar el ingreso de la categoría.', 400);
@@ -155,8 +160,13 @@ class CategoryProductController extends Controller
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo editar la categoría.', 400);
             }
-            return response('No se pudo editar la categoría.', 400);
             // alert()->success('Categoría creada correctamente!');
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
         return response('No se pudo editar la categoría.', 400);
     }
