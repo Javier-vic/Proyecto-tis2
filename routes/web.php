@@ -27,15 +27,17 @@ Auth::routes();
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
     //GET
+    Route::get('/product/productView', [ProductController::class, 'productView'])->name('product.view');
+    Route::get('/product/productModalEdit', [ProductController::class, 'productModalEdit'])->name('product.modal.edit');
+    Route::get('/product/productView', [ProductController::class, 'productView'])->name('product.view');
+    Route::get('/product/productModalEdit', [ProductController::class, 'productModalEdit'])->name('product.modal.edit');
+    Route::get('/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
+    Route::get('/category_product/modal/edit', [CategoryProductController::class, 'categoryProductModalEdit'])->name('category.product.modal.edit');
+    Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles');
     Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
-    Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles')->middleware(['auth']);
-    Route::get('/product/category_product/store/category', [CategoryProductController::class, 'store_category_product'])->name('categoryProduct');
-    Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
-    Route::get('/product/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     
     //POST
-    Route::post('/product/productModalEditStore/{product}', [\App\Http\Controllers\ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
+    Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     
     //RESOURCE
     Route::resource('order', OrderController::class);
@@ -43,3 +45,9 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::resource('category_product', CategoryProductController::class);
 });
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// RUTAS DE PRODUCTOS
+// RUTAS DE CATEGORÍAS
+

@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>RamenDashi</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}" />
@@ -61,6 +61,19 @@
                         <a href="{{route('roles.index')}}" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Roles</a>
                     </li>
                 @endif
+                <li>
+                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>    
+                    <ul class="collapse list-unstyled" id="submenuCategoryProducts">
+                        <li>
+                            <a href="{{route('product.index')}}" >Listado productos</a>
+
+                        </li>
+                        <li>
+                            <a href="{{route('category_product.index')}}">Categorías</a>
+                        </li>
+     
+                    </ul>
+                </li>
             </ul>
         </nav>
 
@@ -69,7 +82,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
-                        <i class="fas fa-align-left"></i>
+                        <i class="fas fa-align-left text-white"></i>
                     </button>
                  
 

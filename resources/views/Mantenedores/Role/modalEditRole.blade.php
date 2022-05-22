@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" id="editForm" onsubmit="" enctype="multipart/form-data">
+                <form method="POST" id="editForm"  enctype="multipart/form-data">
                     <div class="form-group">
                         {{ Form::label('Nombre del rol','',['class'=>'form-label']) }}
                         {{ Form::text('name_role',$role->name_role,['class'=>'form-control','id'=>'editName'])}}
