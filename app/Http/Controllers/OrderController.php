@@ -17,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-      
+        $product = product::all();
         if (request()->ajax()) {
 
             return datatables(DB::connection(session()->get('database'))
@@ -42,19 +42,9 @@ class OrderController extends Controller
                 ->make(true);
         }
         
-        return view('Mantenedores.order.index');
+        return view('Mantenedores.order.index', compact('product'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {   
-        $product = product::all();
-        return view('mantenedores.order.create',compact('product'));
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,19 +52,64 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $datosOrder = request()->except('_token');
-        $productos = new order;
-        $productos->name_order = $datosOrder['name_order'];
-        $productos->order_status = $datosOrder['order_status'];
-        $productos->payment_method = $datosOrder['payment_method'];
-        $productos->total = $datosOrder['total'];
-        $productos->pick_up = $datosOrder['pick_up'];
-        $productos->comment = $datosOrder['comment'];
-        $productos->save();
+
+    public function create()
+    {   
+        $product = product::all();
     
-        return redirect()->route('order.index');
+        return view('Mantenedores.order.create', compact('product'));
+    }
+
+    
+    public function store(Request $request)
+    {   
+       
+        $datosOrder = request()->except('_token');
+        $order = new order;
+        $order->name_order = $datosOrder['name_order'];
+        $order->order_status = $datosOrder['order_status'];
+        $order->payment_method = $datosOrder['payment_method'];
+        
+        $order->pick_up = $datosOrder['pick_up'];
+        $order->comment = $datosOrder['comment'];
+        
+        $permits = array();
+        $cantidad = array();
+ 
+        foreach($datosOrder['permits'] as $item => $value){
+            $permits[] = (int)$value;
+        }
+
+     
+
+        foreach($datosOrder['cantidad'] as $item => $value){
+            if($value > 0){
+                $cantidad[] = (int)$value;
+            }
+
+            
+        }
+
+
+
+        $order->total = 0;
+        $order->save();
+
+        for ($i=0; $i < count($permits) ; $i++) { 
+            $id = $permits[$i];
+            $cont = $cantidad[$i];
+            
+            for ($j=0; $j < $cont ; $j++) { 
+
+                $order->products()->attach($id);
+            }
+        }
+
+
+        
+
+        
+        return view('Mantenedores.order.index');
     }
 
     /**
@@ -122,18 +157,52 @@ class OrderController extends Controller
      
         return redirect()->route('order.index');
         
-    
+        
     }
 
+    public function addproduct(Request $request)
+ 
+    {   
+   
+
+
+        return view('Mantenedores.order.index');
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
+
+    public function getselectproducts(Response $response){
+        
+    $id = request()->id;
+    $name = DB::table('products')
+            ->where('products_orders.order_id','=',$id)
+            ->select('product.name_product', 'pr')
+            ->get();
+            $permits = DB::table('products_oreders')
+                        ->select('products.name_product', 'produts_order.product_id', )
+                         ->join('products','products_orders.product_id','=','products.id')
+                         ->groupBy('produts_order.order_id')
+                         ->groupBy('produts_order.product_id')
+                         ->get();
+
+
+
+            return json_encode([$name,$permits]);
+        
+
+    }
+
+
+    
     public function destroy($id)
     {
-        order::destroy($id);
+        $order = order::findOrFail($id);
+        $order->delete($id);
         return redirect('order');
+
     }
 }

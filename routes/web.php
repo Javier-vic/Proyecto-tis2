@@ -39,3 +39,6 @@ Route::get('/productModalEdit', [\App\Http\Controllers\ProductController::class,
 Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getPermits'])->name('permits.roles');
 //DataTables
 Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'dataTable'])->name('dataTable.Roles');
+
+Route::post('/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
+Route::post('/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');

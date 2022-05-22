@@ -4,13 +4,13 @@
 @endsection
 @section('content')
 
-    <a role="button" class="btn btn-success mr-auto" href="{{ url('/order/create') }}">
-        <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
-    </a>
+   
+<a type="button" class="btn btn-primary" href="{{route('order.create')}}" href="">Agregar Orden</a>
+
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
  
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-W1.11.5/datatables.min.js"></script>
 
 <table class="table table-light" id="myTable" width = 100%>
     <thead class="thead-light">
@@ -107,5 +107,21 @@
             // ****************************************************************************************************************
 
         })
+
+        const addorder = (e) =>{
+            e.preventDefault();
+            var data = $("#postForm").serializeArray();
+            $.ajax({
+                type: "POST",
+                url: "{{route('order.store')}}",
+                data: data,
+                dataType: "text",
+                success: function (response) {
+                    alert(response);
+                   
+                }
+            });
+        }
+
     </script>
 @endsection

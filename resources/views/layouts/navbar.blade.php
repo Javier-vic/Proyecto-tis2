@@ -33,7 +33,7 @@
                     <a href="#" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
                 </li>
                 <li>
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                    <a href="{{route('order.index')}}" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                 </li>
                 <li>
                     <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
