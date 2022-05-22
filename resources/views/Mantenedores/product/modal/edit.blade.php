@@ -10,24 +10,28 @@
                     @csrf
                     <div class="mb-3">
                         <label for="" class="form-label">Nombre </label>
-                        <input type="text" class="form-control" id="name_productEDIT" name="name_product" 
+                        <input type="text" class="form-control input-modal" id="name_productEDIT" name="name_product" 
                             aria-describedby="name_product_help">
-                    </div>
+                    <span class="text-danger editmodal_error" id="name_product_errorEDITMODAL"></span>
+                </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Cantidad </label>
-                        <input type="number" class="form-control" id="stockEDIT" name="stock" 
+                        <input type="number" class="form-control input-modal" id="stockEDIT" name="stock" 
                             aria-describedby="stock_help">
-                    </div>
+                    <span class="text-danger editmodal_error" id="stock_errorEDITMODAL"></span>
+                </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Descripción </label>
-                        <input type="text" class="form-control" id="descriptionEDIT" name="description" 
+                        <input type="text" class="form-control input-modal" id="descriptionEDIT" name="description" 
                             aria-describedby="description_help">
-                    </div>
+                    <span class="text-danger editmodal_error" id="description_errorEDITMODAL"></span>
+                </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Precio </label>
-                        <input type="number" class="form-control" id="priceEDIT" name="price" 
+                        <input type="number" class="form-control input-modal" id="priceEDIT" name="price" 
                             aria-describedby="description_help">
-                    </div>
+                    <span class="text-danger editmodal_error" id="price_errorEDITMODAL"></span>
+                </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Categoria </label><br>
 
@@ -41,7 +45,8 @@
                     <div class="mb-3">
                         <input type="file" class="form-control" id="image_productEDIT" name="image_product"
                             aria-describedby="name_product_help">
-                    </div>
+                    <span class="text-danger editmodal_error" id="image_product_errorEDITMODAL"></span>
+                </div>
                  
 
                     <button class="btn btn-primary">Agregar</button>

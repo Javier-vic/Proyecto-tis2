@@ -107,29 +107,43 @@
                         Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
-                        title: response,
+                        title: 'Se ingresó el producto correctamente.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false,
                         heightAuto:false,
                     })
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    $("input-modal").removeClass('is-invalid');
+                    $("input-modal").removeClass('is-valid');
+                    $(".createmodal_error").empty()
+                    //
                     table.ajax.reload();
                     $('#agregarProducto').modal('hide');  
                     document.getElementById("number").innerHTML = table.data().count()+1;
  
                     },
-                    error: function( jqXHR, textStatus, errorThrown ) {
-                console.log('entré')
-                   var text = jqXHR.responseText;
-                   console.log(text)
-                   Swal.fire({
-                       position: 'bottom-end',
-                       icon: 'error',
-                       title: text,
-                       showConfirmButton: false,
-                       timer: 2000,
-                       backdrop: false
-                   })
+                   error: function( jqXHR, textStatus, errorThrown ) {
+                    var text = jqXHR.responseJSON;
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: "No se pudo realizar el ingreso del producto.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if(text){
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}`).addClass('is-invalid');
+                    });
+                    }
+                    //
                }
                 
                 });
@@ -138,18 +152,16 @@
            //RELLENA MODAL DE EDITAR
            // ****************************************************************************************************************
             const editProduct = (id) =>{
-            var  url = '{{ route("product.modal.edit") }}';
+            var  url = '{{ route("product.edit", ":product") }}';
+            url = url.replace(':product',id)
                 $.ajax({
                 type: "GET",
                 url: url,
-                data:{
-                    'id': id,
-                    "_token": "{{ csrf_token() }}"                    
-                },
+ 
                 dataType: "json",
                     success: function(response) {
+                        console.log(response)
                     let resultado = response[0][0];
-                    console.log(resultado)
                     $('#image_productEDITVIEW').empty();
                     $('#name_productEDIT').val(resultado.name_product);
                     $('#stockEDIT').val(resultado.stock);
@@ -196,7 +208,6 @@
                     $.ajax({
                 type: "POST",
                 url: url,
-              
                 data: formData ,
                 cache: false,
                 contentType: false,
@@ -211,17 +222,26 @@
                     $('#editProducto').modal('hide');
             },
             error: function( jqXHR, textStatus, errorThrown ) {
-                console.log('entré')
-                   var text = jqXHR.responseText;
-                   console.log(text)
+                   var text = jqXHR.responseJSON;
+                   $(".editmodal_error").empty()
+                   $(".input-modal").addClass('is-valid')
+                   $(".input-modal").removeClass('is-invalid')
                    Swal.fire({
                        position: 'bottom-end',
                        icon: 'error',
-                       title: text,
+                       title: 'No se pudo editar el producto.',
                        showConfirmButton: false,
                        timer: 2000,
                        backdrop: false
                    })
+                    //AGREGA CLASES Y ELEMENTOS INVALID  
+                   if(text){
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}EDIT`).addClass('is-invalid');
+                    });
+                   }
+                  //
                }
          
             })
@@ -252,7 +272,6 @@
                 url: url,
                 error: function( jqXHR, textStatus, errorThrown ) {
                    var text = jqXHR.responseText;
-                   console.log(text)
                    Swal.fire({
                        position: 'bottom-end',
                        icon: 'error',
@@ -266,7 +285,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                     success: function(response) {
-                        console.log(response)
                         Swal.fire(
                                 'Borrado!',
                                 'El producto ha sido eliminado.',
@@ -320,7 +338,25 @@
             });
         
            // ****************************************************************************************************************
+           // ****************************************************************************************************************
+           //LIMPIA LOS ERRORES DE LOS INPUTS EN LOS MODALES
+           // ****************************************************************************************************************
+           $('#agregarProducto').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".createmodal_error").empty()
+           })
 
+           $('#editProducto').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".editmodal_error").empty()
+           })
+           //
+           // ****************************************************************************************************************
+        
     
     </script>
 @endsection

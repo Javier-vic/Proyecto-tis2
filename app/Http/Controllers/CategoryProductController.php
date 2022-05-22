@@ -98,9 +98,7 @@ class CategoryProductController extends Controller
         return response('No se pudo realizar el ingreso de la categoría.', 400);
     }
 
-    public function store_category_product(Request $request)
-    {
-    }
+
 
 
     /**
