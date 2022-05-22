@@ -189,9 +189,7 @@
                                 'La categoría ha sido borrada.',
                                 'success'
                             )
-                            document.getElementById("number").innerHTML = table.data().count()-1;
-                            table.ajax.reload();
-                            // $('#editCategoria').modal('hide');
+                            Table.ajax.reload();
                         }
                     });
                 }         

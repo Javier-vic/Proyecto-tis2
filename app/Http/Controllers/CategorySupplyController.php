@@ -121,9 +121,8 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function destroy($category_supply)
+    public function destroy(category_supply $category_supply)
     {
-
         $categorySupply = category_supply::on(session()->get('database'))->find($category_supply->id);
         $categorySupply->delete();
         return response('success', 200);
