@@ -1,10 +1,13 @@
-@extends('layouts.navbar');
+@extends('layouts.navbar')
 
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 
 @section('content')
+    <div>
+        @include('sweetalert::alert')
+    </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
     <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}
@@ -36,13 +39,13 @@
     </table>
 
     <div class="">
-        @include('Mantenedores.category_supply.modal')
+        @include('Mantenedores.category_supply.Modal.ModalCreate')
     </div>
     <div class="">
         <!-- include('Mantenedores.category_supply.modalViewPermits') -->
     </div>
     <div class="">
-        <!-- include('Mantenedores.category_supply.ModalEditRole') -->
+        @include('Mantenedores.category_supply.Modal.ModalEdit')
     </div>
 @endsection
 
@@ -82,10 +85,78 @@
                 data: data,
                 dataType: "text",
                 success: function (response) {
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: response,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,               
+                        heightAuto:false,
+                    })
                     Table.ajax.reload();
                     $("#agregarCategoriaInsumo").modal("hide");
                 }
             });
+        }
+
+        const editCategorySupply = (id) => {
+            $.ajax({
+                type: "GET",
+                url: "{{route('permits.roles')}}",
+                data: {'id': id,"_token": "{{ csrf_token() }}"},
+                dataType: "json",
+                success: (res) =>{
+                    //console.log(json($permits));
+                    //console.log(res);
+                    $("#editName").val('');
+                    $("#editName").val(`${res[0][0].name_role}`);
+                    $("#editPermits").empty();
+                    json($permits).map(e=>{
+                        var check = false;
+                        res[1].map(el=>{
+                            (el.id==e.id) ? check=true: null;
+                        })
+                        $("#editPermits").append(
+                        $($('<div>',{
+                            class: 'form-check form-switch'
+                        })).append(
+                        $('<input>',{
+                            class:'form-check-input',
+                            name:'permits[]',
+                            value:`${e.id}`,
+                            type:'checkbox',
+                            id:`${e.id}`,
+                            checked: check
+                        }))
+                        .append($('<label>',{
+                            class:'form-check-label',
+                            for:'flexSwitchCheckDefault',
+                            text:`${capitalize(e.tipe_permit)}`
+                        }))
+                        )
+                    })
+                    $("#editForm").attr('onSubmit', `submitEdit(${id},event)`);
+                    $('#editRole').modal('show');
+                }
+            })
+        }
+        const submitEdit = (id,e) => {
+            e.preventDefault();
+            var url = '{{ route("roles.update", ":id") }}';
+            url = url.replace(':id', id);
+            var data = $("#editForm").serializeArray();
+            console.log(data)
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)        
+                }
+            });
+            $('#editRole').modal('hide');
         }
 
 @endsection

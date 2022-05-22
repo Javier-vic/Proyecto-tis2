@@ -100,18 +100,14 @@ class CategorySupplyController extends Controller
         if($request->ajax()){
             $data = category_supply::all();
             return DataTables::of($data)
-                ->addColumn('viewPermits', function($row){
-                    $button = "<button onclick='viewPermits({$row->id})' class='btn btn-success'>Ver permisos</button>"; 
-                    return $button;
-                })
                 ->addColumn('action',function($row){
                     $actionBtn = "
-                                <button onclick='editRole({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
-                                <button onclick='deleteRole({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
+                                <button onclick='editCategorySupply({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
+                                <button onclick='deleteCategorySupply({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
                                 ";  
                     return $actionBtn;
                 })
-                ->rawColumns(['viewPermits','action'])
+                ->rawColumns(['action'])
                 ->make(true);
 
         }
