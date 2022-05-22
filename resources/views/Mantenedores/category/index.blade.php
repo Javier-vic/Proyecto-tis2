@@ -98,23 +98,30 @@
            const createCategory = (e) =>{
             e.preventDefault();
             var data = $("#formCreate").serializeArray();
-            console.log(data);
                 var  url = '{{ route("category_product.store") }}';
                 $.ajax({
                 type: "POST",
                 url: url,
                 error: function( jqXHR, textStatus, errorThrown ) {
-                   
-                    var text = jqXHR.responseText;
-                    console.log(text)
+                    var text = jqXHR.responseJSON;
+                    $(".createmodal_error").empty()
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: text,
+                        title: 'No se pudo realizar el ingreso de la categoría.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
                     })
+                
+                    //AGREGA CLASES Y ELEMENTOS INVALID  
+                    if(text){
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}CREATEMODAL`).addClass('is-invalid');
+                    });
+                    }
+                    //
                 },
                 data: data,
                     success: function(response, jqXHR) {
@@ -128,15 +135,14 @@
                        
                         heightAuto:false,
                     })
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(`#nameCREATEMODAL`).removeClass('is-invalid');
+                    $(".createmodal_error").empty()
+                    //
                     $('#nameCREATEMODAL').val('');
                     table.ajax.reload();
                     $('#agregarCategoria').modal('hide');
                     document.getElementById("number").innerHTML = table.data().count()+1;
-                    
-
-
-                    // $('#editCategoria').modal('hide');
-                    // $('#stockEDITMODAL').val(resultado.stock)
                     }
                 
                 });
@@ -164,17 +170,26 @@
                 type: "PUT",
                 url: url,
                 error: function( jqXHR, textStatus, errorThrown ) {
-                   
-                   var text = jqXHR.responseText;
-                   console.log(text)
+                    var text = jqXHR.responseJSON;
+                    $(".editmodal_error").empty()
                    Swal.fire({
                        position: 'bottom-end',
                        icon: 'error',
-                       title: text,
+                       title: 'No se pudo editar la categoría.',
                        showConfirmButton: false,
                        timer: 2000,
                        backdrop: false
                    })
+                   if(text){
+                    //AGREGA CLASES Y ELEMENTOS INVALID  
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}EDITMODAL`).addClass('is-invalid');
+
+                    });
+                    //
+                   }
+              
                },
                 data: {
                     "_token": "{{ csrf_token() }}",
@@ -182,6 +197,10 @@
                 },
                     success: function(response) {
                     table.ajax.reload();
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(`#nameEDITMODAL`).removeClass('is-invalid');
+                    $(".editmodal_error").empty()
+                    //
                     Swal.fire(
                             'Editado!',
                             'La categoría ha sido editada.',
@@ -217,13 +236,11 @@
                 },
                 dataType: "json",
                     success: function(response) {
-                        let resultado = response[0][0];
-                 
+                    let resultado = response[0][0];
                     $('#nameEDITMODAL').val(resultado.name);
                     $("#formEdit").attr('onSubmit', `editCategorySubmit(${id},event)`);
                     $('#editCategoria').modal('show');
                     // $('#stockEDITMODAL').val(resultado.stock)
-
                     }
                  
                 });
@@ -253,7 +270,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                     success: function(response) {
-                        console.log(response)
                         Swal.fire(
                                 'Borrado!',
                                 'La categoría ha sido borrada.',
@@ -271,7 +287,20 @@
             })
            } 
 
-           
+           // ****************************************************************************************************************
+           //LIMPIA LOS ERRORES DE LOS INPUTS EN LOS MODALES
+           // ****************************************************************************************************************
+           $('#agregarCategoria').on('hidden.bs.modal', function () {
+            $(`#nameCREATEMODAL`).removeClass('is-invalid');
+            $(".createmodal_error").empty()
+           })
+
+           $('#editCategoria').on('hidden.bs.modal', function () {
+            $(`#nameEDITMODAL`).removeClass('is-invalid');
+            $(".editmodal_error").empty()
+           })
+           //
+           // ****************************************************************************************************************
         
         
     </script>

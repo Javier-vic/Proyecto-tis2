@@ -10,8 +10,8 @@
                     @csrf
                     <div class="mb-3">
                         <label for="" class="form-label">Nombre </label>
-                        <input type="text" class="form-control" id="nameCREATEMODAL" name="name"
-                            aria-describedby="name_product_help">
+                        <input type="text" class="form-control" id="nameCREATEMODAL" name="name" aria-describedby="name_product_help">
+                        <span class="text-danger createmodal_error" id="name_errorCREATEMODAL"></span>
                     </div>
                     <button type="submit" class="btn btn-primary">Agregar</button>
                 </form>

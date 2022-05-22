@@ -7,7 +7,7 @@ use App\Models\category_product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Response;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -77,7 +77,6 @@ class CategoryProductController extends Controller
             DB::beginTransaction();
             try {
                 $values = request()->except('_token');
-
                 $category_product = new category_product;
                 $category_product->name = $values['name'];
                 $category_product->save();
@@ -87,16 +86,19 @@ class CategoryProductController extends Controller
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo realizar el ingreso de la categoría.', 400);
             }
-            return response('No se pudo realizar el ingreso de la categoría.', 400);
             // alert()->success('Categoría creada correctamente!');
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
 
         return response('No se pudo realizar el ingreso de la categoría.', 400);
     }
 
-    public function store_category_product(Request $request)
-    {
-    }
+
 
 
     /**
@@ -132,8 +134,6 @@ class CategoryProductController extends Controller
     {
         $rules = [
             'name'          => 'required|string',
-            'lastname'          => 'required|string',
-            'age'          => 'required|string',
 
         ];
 
@@ -158,8 +158,13 @@ class CategoryProductController extends Controller
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo editar la categoría.', 400);
             }
-            return response('No se pudo editar la categoría.', 400);
             // alert()->success('Categoría creada correctamente!');
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
         return response('No se pudo editar la categoría.', 400);
     }

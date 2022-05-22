@@ -13,6 +13,7 @@
                     <label for="" class="form-label">Nombre</label>
                     <input type="text" class="form-control" id="nameEDITMODAL" name="name"
                         aria-describedby="name_product_help">
+                    <span class="text-danger editmodal_error" id="name_errorEDITMODAL"></span>
                 </div>
             <button id="btnEDITMODAL" class="btn btn-primary">Editar</button>
 
