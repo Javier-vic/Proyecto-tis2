@@ -245,7 +245,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                     success: function(response) {
-                        console.log(response)
                         Swal.fire(
                                 'Borrado!',
                                 'La categoría ha sido borrada.',

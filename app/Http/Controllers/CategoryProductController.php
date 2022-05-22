@@ -131,8 +131,6 @@ class CategoryProductController extends Controller
     {
         $rules = [
             'name'          => 'required|string',
-            'lastname'          => 'required|string',
-            'age'          => 'required|string',
 
         ];
 

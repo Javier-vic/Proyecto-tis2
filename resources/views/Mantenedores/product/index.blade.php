@@ -114,13 +114,27 @@
                         heightAuto:false,
                     })
                     table.ajax.reload();
+                    $('#agregarProducto').modal('hide');  
                     document.getElementById("number").innerHTML = table.data().count()+1;
  
-                    }
+                    },
+                    error: function( jqXHR, textStatus, errorThrown ) {
+                console.log('entré')
+                   var text = jqXHR.responseText;
+                   console.log(text)
+                   Swal.fire({
+                       position: 'bottom-end',
+                       icon: 'error',
+                       title: text,
+                       showConfirmButton: false,
+                       timer: 2000,
+                       backdrop: false
+                   })
+               }
                 
                 });
             }
-              // ****************************************************************************************************************
+            //****************************************************************************************************************
            //RELLENA MODAL DE EDITAR
            // ****************************************************************************************************************
             const editProduct = (id) =>{
@@ -135,15 +149,26 @@
                 dataType: "json",
                     success: function(response) {
                     let resultado = response[0][0];
+                    console.log(resultado)
+                    $('#image_productEDITVIEW').empty();
                     $('#name_productEDIT').val(resultado.name_product);
                     $('#stockEDIT').val(resultado.stock);
                     $('#descriptionEDIT').val(resultado.description);
                     $('#priceEDIT').val(resultado.price);
                     $('#categoryEdit').val(resultado.category);
+                    
+                    var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
+                        url = url.replace(':urlImagen', resultado.image_product);
+
+                        $('#verProductoLabel').html(`${resultado.name_product}`)
+
+                        $('#image_productEDITVIEW').append($('<img>', {
+                            src: url,
+                            class: 'img-fluid'
+                        }))
 
                     $("#formEdit").attr('onSubmit', `editProductSubmit(${id},event)`);
-                    $('#editProducto').modal('show');
-                        
+                    $('#editProducto').modal('show');  
                     }
                 
                 });
@@ -157,9 +182,21 @@
             formData.append('_method', 'put');
             var  url = '{{ route("product.update" , ":product") }}';
             url = url.replace(':product', id);
-            $.ajax({
+            Swal.fire({
+            title: '¿Estás seguro de editar este producto',
+            text: "No se puede revertir.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, editar!',
+            cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    $.ajax({
                 type: "POST",
                 url: url,
+              
                 data: formData ,
                 cache: false,
                 contentType: false,
@@ -171,15 +208,83 @@
                             'El producto ha sido editado.',
                             'success'
                     )
-                    $('#editCategoria').modal('hide');
+                    $('#editProducto').modal('hide');
+            },
+            error: function( jqXHR, textStatus, errorThrown ) {
+                console.log('entré')
+                   var text = jqXHR.responseText;
+                   console.log(text)
+                   Swal.fire({
+                       position: 'bottom-end',
+                       icon: 'error',
+                       title: text,
+                       showConfirmButton: false,
+                       timer: 2000,
+                       backdrop: false
+                   })
+               }
+         
+            })
+                }
+            })
+           
+           } 
+
+             // ****************************************************************************************************************
+           //ELIMINAR UN PRODUCTO
+           // ****************************************************************************************************************
+           const deleteProduct = (id) =>{
+            Swal.fire({
+            title: '¿Estás seguro de eliminar este producto?',
+            text: "No se puede revertir.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Borrar!',
+            cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+            url = '{{ route("product.destroy", ":product") }}';
+            url = url.replace(':product', id);
+            if(result.isConfirmed){
+                $.ajax({
+                type: "DELETE",
+                url: url,
+                error: function( jqXHR, textStatus, errorThrown ) {
+                   var text = jqXHR.responseText;
+                   console.log(text)
+                   Swal.fire({
+                       position: 'bottom-end',
+                       icon: 'error',
+                       title: text,
+                       showConfirmButton: false,
+                       timer: 2000,
+                       backdrop: false
+                   })
+               },
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                    success: function(response) {
+                        console.log(response)
+                        Swal.fire(
+                                'Borrado!',
+                                'El producto ha sido eliminado.',
+                                'success'
+                            )
+                    document.getElementById("number").innerHTML = table.data().count()-1;
+                    table.ajax.reload();
+         
+
+                    }
+                });
             }
          
             })
            } 
            // ****************************************************************************************************************
-           // ****************************************************************************************************************
-           
             //RELLENA EL MODAL DE VER DETALLES
+           // ****************************************************************************************************************
             $(document).on("click", ".btn-view-producto", function() {
                 valor_IDproducto = $(this).val();
 
@@ -213,41 +318,7 @@
                     }
                 });
             });
-            //RELLENA EL MODAL DE EDITAR
-            $(document).on("click", ".btn-edit-producto", function() {
-                valor_IDproducto = $(this).val();
-
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('product.modal.edit') }}",
-                    data: {
-                        'id': valor_IDproducto,
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        var resultado = response[0][0];
-                        $('#mostrarImagenEDITMODAL').empty();
-                        console.log(resultado.category)
-                        var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
-                        url = url.replace(':urlImagen', resultado.image_product);
-
-                        $('#editProducto').modal('show');
-                        $('#editProductoLabel').html(`${resultado.name_product}`)
-
-                        $('#mostrarImagenEDITMODAL').append($('<img>', {
-                            src: url,
-                            class: 'img-fluid'
-                        }))
-
-                        $('#name_productEDITMODAL').val(resultado.name_product)
-                        $('#stockEDITMODAL').val(resultado.stock)
-                        $('#descriptionEDITMODAL').val(resultado.description)
-                        $('#categoryEDITMODAL').val(resultado.category)
-                        $('#idEDITMODAL').val(valor_IDproducto)
-
-                    }
-                });
-            });
+        
            // ****************************************************************************************************************
 
     

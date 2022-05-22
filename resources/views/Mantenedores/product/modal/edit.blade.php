@@ -37,8 +37,8 @@
                             @endforeach
                         </select>
                     </div>
+                    <div id="image_productEDITVIEW"></div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Imagen </label>
                         <input type="file" class="form-control" id="image_productEDIT" name="image_product"
                             aria-describedby="name_product_help">
                     </div>
