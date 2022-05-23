@@ -36,7 +36,17 @@
                     <a href="{{route('order.index')}}" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                 </li>
                 <li>
-                    <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
+                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>    
+                    <ul class="collapse list-unstyled" id="submenuCategoryProducts">
+                        <li>
+                            <a href="{{route('product.index')}}" >Listado productos</a>
+
+                        </li>
+                        <li>
+                            <a href="{{route('category_product.index')}}">Categorías</a>
+                        </li>
+     
+                    </ul>
                 </li>
                 <li>
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
@@ -44,6 +54,10 @@
                 <li>
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
                 </li>
+              
+       
+        
+     
             </ul>
 
 

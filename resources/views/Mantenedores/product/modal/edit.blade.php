@@ -1,48 +1,60 @@
-<div class="modal fade" id="editProducto" tabindex="-1" aria-labelledby="verProductoLabel" aria-hidden="true">
+<div class="modal fade" id="editProducto" tabindex="-1" aria-labelledby="editProductoLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editProductoLabel">Información de NOMBRE PRODUCTO</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Editar producto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" class="form-control" id="idEDITMODAL" name="id" class="mb-3">
-                <label for="" class="form-label">Nombre </label>
-                <input type="text" class="form-control" id="name_productEDITMODAL" name="name_product"
-                    aria-describedby="name_product_help">
-             
-                <div class="mb-3">
-                    <label for="" class="form-label">Cantidad </label>
-                    <input type="number" class="form-control" id="stockEDITMODAL" name="stock"
-                        aria-describedby="stock_help">
+                <form method="POST" enctype="multipart/form-data" id="formEdit">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="" class="form-label">Nombre </label>
+                        <input type="text" class="form-control input-modal" id="name_productEDIT" name="name_product" 
+                            aria-describedby="name_product_help">
+                    <span class="text-danger editmodal_error" id="name_product_errorEDITMODAL"></span>
                 </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Descripción </label>
-                    <input type="text" class="form-control" id="descriptionEDITMODAL" name="description"
-                        aria-describedby="description_help">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Cantidad </label>
+                        <input type="number" class="form-control input-modal" id="stockEDIT" name="stock" 
+                            aria-describedby="stock_help">
+                    <span class="text-danger editmodal_error" id="stock_errorEDITMODAL"></span>
                 </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Imagen </label>
-                    <input type="file" class="form-control" id="image_productEDITMODAL" name="image_product"
-                        aria-describedby="name_product_help">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Descripción </label>
+                        <input type="text" class="form-control input-modal" id="descriptionEDIT" name="description" 
+                            aria-describedby="description_help">
+                    <span class="text-danger editmodal_error" id="description_errorEDITMODAL"></span>
                 </div>
-                <div id="mostrarImagenEDITMODAL"></div>
-                <div>
-                    <input type="hidden" class="form-control" id="urlImagen" name="urlImagen">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Precio </label>
+                        <input type="number" class="form-control input-modal" id="priceEDIT" name="price" 
+                            aria-describedby="description_help">
+                    <span class="text-danger editmodal_error" id="price_errorEDITMODAL"></span>
+                </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Categoria </label><br>
 
+                        <select id="categoryEDIT" name="id_category_product" class="form-select">
+                            @foreach ($category_products as $category_product)
+                                <option value={{ $category_product->id }} id="">{{ $category_product->name }}</opti>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div id="image_productEDITVIEW"></div>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="image_productEDIT" name="image_product"
+                            aria-describedby="name_product_help">
+                    <span class="text-danger editmodal_error" id="image_product_errorEDITMODAL"></span>
                 </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Categoría </label>
-                    <input type="text" class="form-control" id="categoryEDITMODAL" name="category"
-                        aria-describedby="name_product_help">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                 
 
-
-                {{-- <div class="modal-footer">
+                    <button class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+            {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div> --}}
-            </div>
         </div>
     </div>
 </div>

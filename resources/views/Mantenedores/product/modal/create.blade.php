@@ -6,29 +6,36 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
+                <form onsubmit="createProduct(event)" method="POST" enctype="multipart/form-data" id="formCreate">
                     @csrf
-                    {{ Form::label('Nombre del producto', '', ['class' => 'form-label']) }}
-                    {{ Form::text('name_product', $productSelected->name_product, ['class' => 'form-control']) }}
                     <div class="mb-3">
                         <label for="" class="form-label">Nombre </label>
-                        <input type="text" class="form-control" id="name_product" name="name_product"
+                        <input type="text" class="form-control input-modal" id="name_product" name="name_product" 
                             aria-describedby="name_product_help">
+                        <span class="text-danger createmodal_error" id="name_product_errorCREATEMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Cantidad </label>
-                        <input type="number" class="form-control" id="stock" name="stock"
+                        <input type="number" class="form-control input-modal" id="stock" name="stock" 
                             aria-describedby="stock_help">
+                        <span class="text-danger createmodal_error" id="stock_errorCREATEMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Descripción </label>
-                        <input type="text" class="form-control" id="description" name="description"
+                        <input type="text" class="form-control input-modal" id="description" name="description" 
                             aria-describedby="description_help">
+                        <span class="text-danger createmodal_error" id="description_errorCREATEMODAL"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="form-label">Precio </label>
+                        <input type="number" class="form-control input-modal" id="price" name="price" 
+                            aria-describedby="description_help">
+                        <span class="text-danger createmodal_error" id="price_errorCREATEMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Categoria </label><br>
 
-                        <select name="id_category_product" id="" name="id_category_product">
+                        <select name="id_category_product" id="" name="id_category_product" class="form-select">
                             @foreach ($category_products as $category_product)
                                 <option value={{ $category_product->id }} id="">{{ $category_product->name }}</opti>
                             @endforeach
@@ -36,8 +43,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Imagen </label>
-                        <input type="file" class="form-control" id="image_product" name="image_product"
+                        <input type="file" class="form-control input-modal" id="image_product" name="image_product"
                             aria-describedby="name_product_help">
+                        <span class="text-danger createmodal_error" id="image_product_errorCREATEMODAL"></span>
                     </div>
                  
 
