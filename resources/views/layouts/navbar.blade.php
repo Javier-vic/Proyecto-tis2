@@ -27,7 +27,15 @@
 
             <ul class="list-unstyled ">
                 <li class="">
-                    <a href="{{route('category_supply.index')}}" class="my-3"><i class="me-3 fa-solid fa-box-open"></i>Insumos</a>
+                    <a href="#submenuCategorySupplies" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class=" me-3 fa-solid fa-box-open"></i>Insumos</a>
+                    <ul class="collapse list-unstyled" id="submenuCategorySupplies">
+                        <li>
+                            <a href="{{route('supply.index')}}" >Listado de insumos</a>
+                        </li>
+                        <li>
+                            <a href="{{route('category_supply.index')}}">Categorías</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="#" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
