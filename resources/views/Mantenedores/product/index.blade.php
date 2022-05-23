@@ -117,7 +117,7 @@
                     $("input-modal").removeClass('is-invalid');
                     $("input-modal").removeClass('is-valid');
                     $(".createmodal_error").empty()
-                    //
+                    //////////////////////////////////////
                     table.ajax.reload();
                     $('#agregarProducto').modal('hide');  
                     document.getElementById("number").innerHTML = table.data().count()+1;
@@ -125,6 +125,7 @@
                     },
                    error: function( jqXHR, textStatus, errorThrown ) {
                     var text = jqXHR.responseJSON;
+                    console.log(text)
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
                     $(".input-modal").removeClass('is-invalid')
@@ -143,7 +144,8 @@
                     $(`#${key}`).addClass('is-invalid');
                     });
                     }
-                    //
+                    //////////////////////////////////////
+
                }
                 
                 });
@@ -241,7 +243,7 @@
                     $(`#${key}EDIT`).addClass('is-invalid');
                     });
                    }
-                  //
+                  //////////////////////////////////////////////
                }
          
             })
@@ -325,21 +327,21 @@
 
                         $('#mostrarImagen').append($('<img>', {
                             src: url,
-                            class: 'img-fluid'
+                            class: 'img-fluid rounded-start'
                         }))
 
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
-                        $('#stockVIEWMODAL').val(resultado.stock)
-                        $('#descriptionVIEWMODAL').val(resultado.description)
-                        $('#category').val(resultado.category)
-                        $('#priceVIEWMODAL').val(resultado.price)
+                        $('#stockVIEWMODAL').html(resultado.stock)
+                        $('#descriptionVIEWMODAL').html(resultado.description)
+                        $('#category').html(resultado.category)
+                        $('#priceVIEWMODAL').html(resultado.price)
                     }
                 });
             });
         
            // ****************************************************************************************************************
            // ****************************************************************************************************************
-           //LIMPIA LOS ERRORES DE LOS INPUTS EN LOS MODALES
+           //LIMPIA LOS INPUTS AL CERRAR UN MODAL
            // ****************************************************************************************************************
            $('#agregarProducto').on('hidden.bs.modal', function () {
             $(".input-modal").removeClass('is-invalid');

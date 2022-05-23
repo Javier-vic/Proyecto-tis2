@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
@@ -23,12 +24,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//RUTAS DE CUPONES
+Route::get('/coupon/refresh/coupon', [\App\Http\Controllers\CouponController::class, 'refreshCoupons'])->name('coupon.refresh.coupon');
 
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('roles', RoleController::class)->middleware([]);
 Route::resource('product', ProductController::class);
 Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
+Route::resource('coupon', CouponController::class);
 
 // RUTAS DE PRODUCTOS
 Route::get('/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');

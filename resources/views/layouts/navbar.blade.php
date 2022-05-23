@@ -54,6 +54,9 @@
                 <li>
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
                 </li>
+                <li>
+                    <a href="{{route('coupon.index')}}" class="my-3"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
+                </li>
               
        
         

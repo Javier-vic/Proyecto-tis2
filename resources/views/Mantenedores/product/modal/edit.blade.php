@@ -42,9 +42,9 @@
                         </select>
                     </div>
                     <div id="image_productEDITVIEW"></div>
-                    <div class="mb-3">
-                        <input type="file" class="form-control" id="image_productEDIT" name="image_product"
-                            aria-describedby="name_product_help">
+                    <div class="mb-3 mt-2">
+                        <input type="file" class="form-control input-modal" id="image_productEDIT" name="image_product"
+                            aria-describedby="name_product_help" accept="image/*">
                     <span class="text-danger editmodal_error" id="image_product_errorEDITMODAL"></span>
                 </div>
                  
