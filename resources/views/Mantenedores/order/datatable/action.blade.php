@@ -6,7 +6,7 @@
 
         <div class="col">
             
-            <button type="button" value="{{ $_id }}"  class="btn btn-primary btn-view-product" data-bs-toggle="modal" data-bs-target="#addorder"> Detalles </button>
+            <button type="button" onclick="showOrder({{ $_id }})"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOrder"> Detalles </button>
               
         </div>
             <div class="col">

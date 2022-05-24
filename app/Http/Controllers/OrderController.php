@@ -19,7 +19,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-      
+
         if (request()->ajax()) {
 
             return datatables(DB::connection(session()->get('database'))
@@ -42,7 +42,7 @@ class OrderController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        
+
         return view('Mantenedores.order.index');
     }
 
@@ -53,9 +53,9 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {   
+    {
         $product = product::all();
-    
+
         return view('Mantenedores.order.create', compact('product'));
     }
 
@@ -72,56 +72,55 @@ class OrderController extends Controller
         $order->name_order = $datosOrder['name_order'];
         $order->order_status = $datosOrder['order_status'];
         $order->payment_method = $datosOrder['payment_method'];
-        
+
         $order->pick_up = $datosOrder['pick_up'];
         $order->comment = $datosOrder['comment'];
-        
+
         $permits = array();
         $cantidad = array();
         $valores = array();
         $price = array();
-        foreach($datosOrder['permits'] as $item => $value){
+        foreach ($datosOrder['permits'] as $item => $value) {
             $permits[] = (int)$value;
         }
 
         $valores = DB::table('products')
-                    ->select('products.price')
-                    ->whereIn('id', $permits )
-                    ->get();
-        
-        
+            ->select('products.price')
+            ->whereIn('id', $permits)
+            ->get();
 
 
-        foreach($datosOrder['cantidad'] as $item => $value){
-            if($value > 0){
+
+
+        foreach ($datosOrder['cantidad'] as $item => $value) {
+            if ($value > 0) {
                 $cantidad[] = (int)$value;
-               
             }
         }
 
-        for ($i=0; $i < count($cantidad) ; $i++) { 
-            $price[$i] = $cantidad[$i]*$valores[$i]->price;
+        for ($i = 0; $i < count($cantidad); $i++) {
+            $price[$i] = $cantidad[$i] * $valores[$i]->price;
         }
         $x = array_sum($price);
-        
+
 
         $order->total = $x;
         $order->save();
 
-        for ($i=0; $i < count($permits) ; $i++) { 
+        for ($i = 0; $i < count($permits); $i++) {
             $id = $permits[$i];
             $cont = $cantidad[$i];
-            
-            for ($j=0; $j < $cont ; $j++) { 
+
+            for ($j = 0; $j < $cont; $j++) {
 
                 $order->products()->attach($id);
             }
         }
 
 
-        
 
-        
+
+
         return view('Mantenedores.order.index');
     }
 
@@ -148,12 +147,12 @@ class OrderController extends Controller
         $product = product::all();
         $order = order::findOrFail($order->id);
         $name = DB::table('products_orders')
-        ->select('products_orders.product_id')
-                ->where('products_orders.order_id','=',$order->id)
-                ->groupby('products_orders.product_id')
-                ->get();
-        
-        return view('Mantenedores.order.edit', compact('order','name','product'));
+            ->select('products_orders.product_id')
+            ->where('products_orders.order_id', '=', $order->id)
+            ->groupby('products_orders.product_id')
+            ->get();
+
+        return view('Mantenedores.order.edit', compact('order', 'name', 'product'));
     }
 
     /**
@@ -166,24 +165,22 @@ class OrderController extends Controller
     public function update(Request $request, order $order)
     {
         $productos = order::find($order->id);
-        
+
         $product = DB::table('products_orders')
-        ->select('products_orders.product_id')
-                ->where('products_orders.order_id','=',$id)
-                ->get();
+            ->select('products_orders.product_id')
+            ->where('products_orders.order_id', '=', $id)
+            ->get();
 
         $productos->name_order = $request->name_order;
         $productos->order_status = $request->order_status;
-        $productos->payment_method = $request-> payment_method;
+        $productos->payment_method = $request->payment_method;
         $productos->total = $request->total;
         $productos->pick_up = $request->pick_up;
         $productos->comment = $request->comment;
         $productos->save();
-        
-     
+
+
         return redirect()->route('order.index');
-        
-    
     }
 
     /**
@@ -193,28 +190,25 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getview(Response $response){
-        
-        $id = request()->_id;
-        $name = DB::table('products_orders')
-        ->select('products_orders.product_id')
-                ->where('products_orders.order_id','=',$id)
-                ->get();
+    public function getview(request $request)
+    {
+        $values = request()->except('_token');
+        $id = $values['id'];
+        $productOrders = DB::table('orders')
+            ->select('orders.name_order')
+            ->where('orders.id', '=', $id)
+            ->get();
 
-        
-
-        return json_encode([$name]);
-        
-
+        return response($productOrders, 200);
     }
 
 
-    
+
     public function destroy($id)
-    {   
+    {
         $order = order::findOrFail($id);
         $order->delete($id);
-    
+
         return redirect('order');
     }
 }
