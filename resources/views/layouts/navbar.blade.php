@@ -72,7 +72,7 @@
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                 </li>
                 <li>
-                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" onfocus="switchIcon(event)" onfocusout="deswitchIcon(event)"><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-right "></i></a>    
+                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" ><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-down "></i></a>    
                     <ul class="collapse list-unstyled" id="submenuCategoryProducts">
                         <li>
                             <a href="{{route('product.index')}}" >Listado productos</a>
@@ -129,13 +129,6 @@
         $("#sidebarCollapse").on("click", function() {
             $("#sidebar").toggleClass("active");
         });
-       const switchIcon = (e) =>{
-           e.target.lastChild.className = 'rotatePositive fa-solid fa-caret-right ';
-       }
-       const deswitchIcon = (e) =>{
-           e.target.lastChild.className = 'rotateNegative fa-solid fa-caret-right ';
-           
-       }
 
 
 </script>
