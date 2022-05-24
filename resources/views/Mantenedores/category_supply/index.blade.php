@@ -100,20 +100,17 @@
         }
 
         const editCategorySupply = (id) => {          
-
             console.log(id);
             $.ajax({
                 type: "GET",
-                url: "{{ route('categorySupply.modal.edit') }}",
+                url: "{{ route('category.supply.modal.edit') }}",
                 data: {
                     'id': id,
                     "_token": "{{ csrf_token() }}"
                 },
                 dataType: "json",
                 success: function(response) {
-                        console.log(id);
-                        let resultado = response[0][0];
-                        console.log(resultado);                
+                        let resultado = response[0][0];             
                         $('#EditName').val(resultado.name);
                         $("#EditForm").attr('onSubmit', `submitEdit(${id},event)`);
                         $('#editCategorySupply').modal('show');
