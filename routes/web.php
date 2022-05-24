@@ -48,3 +48,4 @@ Route::get('/permitsofrole', [\App\Http\Controllers\RoleController::class, 'getP
 //DataTables
 Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'dataTable'])->name('dataTable.Roles');
 Route::get('/dataTableCategorySupply', [\App\Http\Controllers\CategorySupplyController::class, 'dataTable'])->name('dataTable.CategorySupply');
+Route::get('/dataTableSupply', [\App\Http\Controllers\SupplyController::class, 'dataTable'])->name('dataTable.Supply');

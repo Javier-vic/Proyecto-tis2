@@ -38,16 +38,38 @@ class SupplyController extends Controller
      */
     public function store(Request $request)
     {
-        $supplyData = request()->except('_token');
-        $supply = new supply;
-        $supply->name_supply = $supplyData['name_supply'];
-        $supply->unit_meassurement = $supplyData['unit_meassurement'];
-        $supply->quantity = $supplyData['quantity'];
-        // $category_supply->supplies()->save($supply);
-        $supply->id_category_supplies = $supplyData['id_category_supply'];
-        $supply->save();
+        $rules = [
+            'name_supply'          => 'required|string',           
+            'unit_meassurement'          => 'required|string',           
+            'quantity'          => 'required|string',           
+            'id_category_supplies'          => 'required|string',           
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+        ];
 
-        return redirect()->route('supply.index');
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $supplyData = request()->except('_token');
+                $supply = new supply;
+                $supply->name_supply = $supplyData['name_supply'];
+                $supply->unit_meassurement = $supplyData['unit_meassurement'];
+                $supply->quantity = $supplyData['quantity'];
+                $supply->id_category_supplies = $supplyData['id_category_supply'];
+                $supply->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se ingresó el insumo con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo realizar el ingreso del insumo.', 400);
+            }
+            return response('No se pudo realizar el ingreso del insumo.', 400);
+            // alert()->success('Categoría creada correctamente!');
+        }
+        return response('No se pudo realizar el ingreso del insumo.', 400);
+
     }
 
     /**
@@ -105,5 +127,22 @@ class SupplyController extends Controller
     {
         supply::destroy($id);
         return redirect()->route('supply.index');
+    }
+
+    public function dataTable(Request $request){
+        if($request->ajax()){
+            $data = supply::all();
+            return DataTables::of($data)
+                ->addColumn('action',function($row){
+                    $actionBtn = "
+                                <button onclick='editSupply({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
+                                <button onclick='deleteSupply({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
+                                ";  
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+        }
     }
 }
