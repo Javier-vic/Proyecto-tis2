@@ -16,7 +16,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-      
+
         if (request()->ajax()) {
 
             return datatables(DB::connection(session()->get('database'))
@@ -40,7 +40,7 @@ class OrderController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        
+
         return view('Mantenedores.order.index');
     }
 
@@ -71,7 +71,7 @@ class OrderController extends Controller
         $productos->pick_up = $datosOrder['pick_up'];
         $productos->comment = $datosOrder['comment'];
         $productos->save();
-    
+
         return redirect()->route('order.index');
     }
 
@@ -111,16 +111,14 @@ class OrderController extends Controller
         $productos = order::find($order->id);
         $productos->name_order = $request->name_order;
         $productos->order_status = $request->order_status;
-        $productos->payment_method = $request-> payment_method;
+        $productos->payment_method = $request->payment_method;
         $productos->total = $request->total;
         $productos->pick_up = $request->pick_up;
         $productos->comment = $request->comment;
         $productos->save();
-        
-     
+
+
         return redirect()->route('order.index');
-        
-    
     }
 
     /**
