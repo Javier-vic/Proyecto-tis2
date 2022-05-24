@@ -28,7 +28,7 @@ input[type=number] {
 </button>
     <div>@include('Mantenedores.coupon.modal.create')</div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Descuento</th>
                 <th class="py-2" style="width:10%">Caduca</th>

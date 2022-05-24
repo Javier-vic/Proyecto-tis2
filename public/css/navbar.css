@@ -93,11 +93,14 @@ a:focus {
     color: #516270;
     background: #fff;
 }
-
+.active {
+    color: #ffffff;
+    background: #272d31;
+}
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
-    color: #fff;
-    background: #272d31;
+    color: #516270;
+    background: #ffffff;
     opacity: 0.9;
 }
 
