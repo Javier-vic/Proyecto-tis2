@@ -62,6 +62,30 @@
         <input type="text"  class="form-control" value="{{ isset($order->comment)?$order->comment:'' }}" class="form-control" id="comment" name="comment" >
     </div>
 
+    <div class="row">
+        
+        @foreach ($product as $item)
+
+        <div class="card col-2 mx-2" style="width: 15rem;">
+            <img src="{{ asset('storage') . '/' . $item->image_product }}" class="card-img-top" alt="...">
+            <div class="card-body">
+    
+                <h5 class="card-title">{{$item->name_product}}</h5>
+                <p class="card-text">{{$item->description}}</p>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" name="permits[]" value="{{$item->id}}" type="checkbox" id="{{$item->id}}">
+                    <input type="number" id="typeNumber" name="cantidad[]" class="form-control" />
+                    
+                </div>
+                <h4 class="pt-2 ms-0">${{$item->price}}</h4>
+            </div>
+        </div> 
+    
+    @endforeach
+
+
+    </div>
+   
 
 
 

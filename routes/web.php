@@ -43,3 +43,5 @@ Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'data
 
 Route::post('/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
 Route::post('/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
+
+Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');

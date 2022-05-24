@@ -4,6 +4,7 @@
 @endsection
 @section('content')
 
+<div>@include('Mantenedores.order.modal.show')</div>
    
 <a type="button" class="btn btn-primary" href="{{route('order.create')}}" href="">Agregar Orden</a>
 
@@ -106,7 +107,7 @@
             });
             // ****************************************************************************************************************
 
-        })
+        });
 
         const addorder = (e) =>{
             e.preventDefault();
@@ -122,6 +123,40 @@
                 }
             });
         }
+        
+        // ****************************************************************************************************************
+            //RELLENA EL MODAL DE VER DETALLES
+           // ****************************************************************************************************************
+           $(document).on("click", ".btn-view-product", function() {
+                valor_IDproducto = $(this).val();
+                console.log(valor_IDproducto);
 
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('order.view') }}",
+                    data: {
+                        'id': valor_IDproducto,
+
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        var resultado = response[0][0];
+                       
+
+                        $('#addorder').modal('show');
+                        $('#addorderLabel').html(`${resultado.product_id}`)
+
+                        $('#mostrarImagen').append($('<img>', {
+                            src: url,
+                            class: 'img-fluid'
+                        }))
+
+                        // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
+                        $('#stockVIEWMODAL').val(resultado.name_product)
+                      
+                    }
+                });
+            });
+        
     </script>
 @endsection

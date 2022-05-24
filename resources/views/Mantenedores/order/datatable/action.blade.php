@@ -1,7 +1,14 @@
 
     <div class="container">
         
+        
        <div  class="row">
+
+        <div class="col">
+            
+            <button type="button" value="{{ $_id }}"  class="btn btn-primary btn-view-product" data-bs-toggle="modal" data-bs-target="#addorder"> Detalles </button>
+              
+        </div>
             <div class="col">
             <form action="{{ route('order.edit', ['order' => $_id]) }}">
                     @csrf
