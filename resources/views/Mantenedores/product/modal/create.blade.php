@@ -44,7 +44,7 @@
                     <div class="mb-3">
                         <label for="" class="form-label">Imagen </label>
                         <input type="file" class="form-control input-modal" id="image_product" name="image_product"
-                            aria-describedby="name_product_help">
+                            aria-describedby="name_product_help" accept="image/*">
                         <span class="text-danger createmodal_error" id="image_product_errorCREATEMODAL"></span>
                     </div>
                  

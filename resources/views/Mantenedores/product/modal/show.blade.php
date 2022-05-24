@@ -1,40 +1,28 @@
-<div class="modal fade" id="verProducto" tabindex="-1" aria-labelledby="verProductoLabel" aria-hidden="true">
+<div class="modal fade modal-xl" id="verProducto" tabindex="-1" aria-labelledby="verProductoLabel" aria-hidden="true" >
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" >
             <div class="modal-header">
-                <h5 class="modal-title" id="verProductoLabel">Información de NOMBRE PRODUCTO</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 @csrf
-                {{-- <div class="mb-3">
-                    <label for="" class="form-label">Nombre </label>
-                    <input type="text" class="form-control" id="name_productVIEWMODAL" name="name_product"
-                        aria-describedby="name_product_help">
-                </div> --}}
-                <div class="mb-3">
-                    <label for="" class="form-label">Cantidad </label>
-                    <input readonly type="number" class="form-control" id="stockVIEWMODAL" name="stock"
-                        aria-describedby="stock_help">
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Descripción </label>
-                    <input readonly type="text" class="form-control" id="descriptionVIEWMODAL" name="description"
-                        aria-describedby="description_help">
-                </div>
-                {{-- <div class="mb-3">
-                    <label for="" class="form-label">Imagen </label>
-                    <input type="file" class="form-control" id="image_productVIEWMODAL" name="image_product"
-                        aria-describedby="name_product_he
-                        lp">
-                </div> --}}
-                <div id="mostrarImagen"></div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Categoría </label>
-                    <input readonly type="text" class="form-control" id="category" name="category"
-                        aria-describedby="name_product_help">
-                </div>
-
+                {{--  --}}
+                <div class="card mb-3">
+                    <div class="row g-0">
+                      <div class="col-md-4">
+                            <div id="mostrarImagen"></div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title" id="verProductoLabel"></h5>
+                          <p class="card-text" id="descriptionVIEWMODAL"></p>
+                          <p class="card-text" id="stockVIEWMODAL"></p>
+                          <p class="card-text" id="priceVIEWMODAL"></p>
+                          <p class="card-text" id="category"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
             </div>
             {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
