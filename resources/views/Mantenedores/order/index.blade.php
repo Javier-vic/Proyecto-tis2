@@ -3,7 +3,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
-
+<div id="number"></div>
 <div>@include('Mantenedores.order.modal.show')</div>
    
 <a type="button" class="btn btn-primary" href="{{route('order.create')}}" href="">Agregar Orden</a>
@@ -11,7 +11,6 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
  
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-W1.11.5/datatables.min.js"></script>
 
 <table class="table table-light" id="myTable" width = 100%>
     <thead class="thead-light">
@@ -30,6 +29,7 @@
 
 @endsection
 @section('js_after')
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <script type="text/javascript">
@@ -123,40 +123,33 @@
                 }
             });
         }
-        
         // ****************************************************************************************************************
-            //RELLENA EL MODAL DE VER DETALLES
-           // ****************************************************************************************************************
-           $(document).on("click", ".btn-view-product", function() {
-                valor_IDproducto = $(this).val();
-                console.log(valor_IDproducto);
+        //RELLENA EL MODAL DE VER DETALLES
+        // ****************************************************************************************************************
+       
+        const showOrder = (id) =>{
 
                 $.ajax({
                     type: "GET",
                     url: "{{ route('order.view') }}",
                     data: {
-                        'id': valor_IDproducto,
-
+                        'id': id,
                     },
                     dataType: "json",
                     success: function(response) {
-                        var resultado = response[0][0];
-                       
+                    resultado = response[0];
+                       console.log(resultado)
+                        $('#nameOrderVIEWMODAL').val(resultado.name_order)
+                        // $('#addorderLabel').html(`${resultado.product_id}`)
 
-                        $('#addorder').modal('show');
-                        $('#addorderLabel').html(`${resultado.product_id}`)
-
-                        $('#mostrarImagen').append($('<img>', {
-                            src: url,
-                            class: 'img-fluid'
-                        }))
-
-                        // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
-                        $('#stockVIEWMODAL').val(resultado.name_product)
                       
                     }
                 });
-            });
+        }
+        
+        // ****************************************************************************************************************
+        // ****************************************************************************************************************
+    
         
     </script>
 @endsection

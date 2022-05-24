@@ -24,8 +24,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//RUTAS DE CUPONES
-Route::get('/coupon/refresh/coupon', [\App\Http\Controllers\CouponController::class, 'refreshCoupons'])->name('coupon.refresh.coupon');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// RUTAS DE ORDENES
+Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -48,5 +49,3 @@ Route::get('/dataTableRole', [\App\Http\Controllers\RoleController::class, 'data
 
 Route::post('/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
 Route::post('/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
-
-Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
