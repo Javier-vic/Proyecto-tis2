@@ -116,7 +116,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #757c98;
+    background: #47525a;
 }
 
 ul.CTAs {
@@ -133,7 +133,7 @@ ul.CTAs a {
 
 a.download {
     background: #fff;
-    color: #7386d5;
+    color: #516270;
 }
 
 a.article,

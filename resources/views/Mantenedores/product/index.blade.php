@@ -17,7 +17,7 @@
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre producto</th>
                 <th class="py-2" style="width:10%">Stock</th>
@@ -57,8 +57,8 @@
                 //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
                 // },
                 dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
+                    "<'row '<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
 
                 columns: [
                     {
