@@ -5,6 +5,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyRoles;
 /*
@@ -34,6 +35,7 @@ Route::resource('product', ProductController::class);
 Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 Route::resource('coupon', CouponController::class);
+Route::resource('user', UserController::class);
 
 // RUTAS DE PRODUCTOS
 Route::get('/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
