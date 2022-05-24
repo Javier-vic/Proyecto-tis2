@@ -69,11 +69,7 @@ class CategorySupplyController extends Controller
         }
         return response('No se pudo realizar el ingreso de la categoría.', 400);
 
-        // $category_supplyData = request()->except('_token');
-        // $category_supply = new category_supply;
-        // $category_supply->name_category = $category_supplyData['name_category'];
-        // $category_supply->save();
-        // return response('',200);
+
     }
 
     /**

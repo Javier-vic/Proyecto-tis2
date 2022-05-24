@@ -28,9 +28,6 @@
         @include('Mantenedores.category_supply.modal.create')
     </div>
     <div class="">
-        <!-- include('Mantenedores.category_supply.modalViewPermits') -->
-    </div>
-    <div class="">
         @include('Mantenedores.category_supply.modal.edit')
     </div>
 @endsection
