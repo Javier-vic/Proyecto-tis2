@@ -18,8 +18,28 @@ class CouponController extends Controller
      */
     public function index()
     {
-        $coupons = coupon::paginate(10);
-        return view('mantenedores.coupon.index', compact('coupons'));
+        if (request()->ajax()) {
+
+            return datatables(DB::connection(session()->get('database'))
+                ->table('coupons')
+                ->whereNull('coupons.deleted_at')
+                ->select(
+                    'coupons.id as _id',
+                    'coupons.id',
+                    'coupons.percentage',
+                    'coupons.caducity',
+                    'coupons.emited',
+                    'coupons.quantity',
+
+                )
+                ->orderBy('coupons.id')
+                ->get())
+                ->addColumn('action', 'mantenedores.coupon.datatable.action')
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+        return view('mantenedores.coupon.index');
     }
 
     /**

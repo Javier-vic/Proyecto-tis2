@@ -9,4 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class coupon extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\user');
+    }
 }

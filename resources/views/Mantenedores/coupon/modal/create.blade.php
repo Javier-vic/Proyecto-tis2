@@ -25,7 +25,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Fecha de emisión </label>
-                        <input type="date" class="form-control input-modal" id="emited" name="emited" 
+                        <input type="date" class="form-control input-modal emited" id="emited" name="emited" 
                             aria-describedby="description_help">
                         <span class="text-danger createmodal_error" id="emited_errorCREATEMODAL"></span>
                     </div>

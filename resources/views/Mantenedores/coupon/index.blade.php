@@ -1,78 +1,122 @@
 @extends('layouts.navbar')
 @section('css_extra')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+{{-- OCULTA LAS FLECHAS DE LOS INPUT NUMBER --}}
 <style>
-    
-.coupon {
-  position: relative;
-  width: 400px;
-  height: 160px;
-  margin: 15px auto;
-  background-image: 
-    radial-gradient(circle at 1px 8px, transparent 6px, #ff9e6d 6px, #ff9e6d 0px), 
-    radial-gradient(circle at 199px 8px, transparent 6px, #ff9e6d 6px, #ff9e6d 0px);
-  background-size: 500px 18px;
-  background-position: 0 0, 200px 0;
-  background-repeat-x: no-repeat;
-  font-size: 60px;
-  color: #fff;
-  font-weight: bold;
-  line-height: 160px;
-  padding-left: 60px;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-.coupon::before {
-  position: absolute;
-  content: "";
-  left: 400px;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  border-left: 1px dashed #fff;
-}
-.coupon::after {
-  position: absolute;
-  font-size: 26px;
-  width: 70px;
-  top: 50%;
-  right: 2%;
-  transform: translate(-50%, -50%);
-  line-height: 40px;
-  letter-spacing: 5px;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 </style>
+{{--  --}}
 @endsection
 
 @section('content')
 <div id="number">0</div>
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCupon">
+<button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCupon">
     Crear cupón
 </button>
-<button type="button" class="btn btn-primary" onclick="refreshCoupons()">
-    Actualizar cupones
-</button>
     <div>@include('Mantenedores.coupon.modal.create')</div>
-    <div class="row col-8 mx-auto" id="cuponContainer">
-        @foreach ($coupons as $coupon )
-        <div class="coupon col-12 " onclick="deleteCoupon({{$coupon->id}})" id="{{$coupon->id}}">
-            <h3>{{$coupon->code}}</h3>
-            <h5>Descuento del {{$coupon->percentage}}%</h5>
-            <h5>Comienzo {{$coupon->caducity}}</h5>
-            <h5>Caduca {{$coupon->emited}}</h5>
-            <h5>Cantidad {{$coupon->quantity}}</h5>
-        </div>
-        @endforeach 
+    <div class="block-content block-content-full block-content-sm bg-body-dark mb-2">
+        <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
+    <table id="myTable" class="responsive display nowrap" style="width: 100%;">
+        <thead class="bg-secondary text-white">
+            <tr class="text-center">
+                <th class="py-2" style="width:10%">Descuento</th>
+                <th class="py-2" style="width:10%">Caduca</th>
+                <th class="py-2" style="width:10%">Emitido</th>
+                <th class="py-2" style="width:10%">Cantidad</th>
+                <th class="py-2" style="width:10%">Acciones</th>
+            </tr>
+        </thead>
+    </table>
       
 @endsection
 
 @section('js_after')
+    <script   script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    
 <script type="text/javascript">
+            //CREACIÓN DATATABLE
+            var table = $("#myTable").DataTable({
+                bProcessing: true,
+                bStateSave: true,
+                deferRender: true,
+                responsive: true,
+                processing: true,
+                searching: true,
+                language: {
+                    url: "{{ asset('js/language.json') }}"
+                },
+
+                ajax: {
+                    url: "{{ route('coupon.index') }}",
+                    type: 'GET',
+                },
+                // language: {
+                //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
+                // },
+                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
+
+                columns: [
+                    {
+                        data: 'percentage',
+                        name: 'percentage'
+                    },
+                    {
+                        data: 'caducity',
+                        name: 'caducity',
+                        render(data, type, row, meta) {
+                            return moment(data).locale('es').format('LL');
+                        }
+                    },
+                    {
+                        data: 'emited',
+                        name: 'emited',
+                        render(data, type, row, meta) {
+                            return moment(data).locale('es').format('LL');
+                        }
+                    },
+                    {
+                        data: 'quantity',
+                        name: 'quantity'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false, 
+                        searchable: false
+
+                    },
+                ],
+                initComplete: function(settings, json) {
+
+                    document.getElementById("number").innerHTML = table.data().count();
+                },
+                select: true
+            });
+
+    //FUNCIÓN PARA LA BARRA DE BUSQUEDA
+    $('#search').on('keyup', function() {
+                table.search(this.value).draw();
+            });
 
     //FUNCIÓN PARA CREAR CUPÓN
     const createCoupon = (e) => {
@@ -87,8 +131,6 @@
                 contentType: false,
                 processData: false,
                     success: function(response, jqXHR) {
-                        console.log(response)
-                        console.log(response[1])
                         Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
@@ -98,15 +140,7 @@
                         backdrop: false,
                         heightAuto:false,
                     })
-                    $('#cuponContainer').append(`
-                        <div class="coupon col-12" onclick="deleteCoupon(${response[1]})" id="${response[1]}">
-                            <h3>${response[0].code}</h3>
-                            <h5>Descuento del ${response[0].percentage}%</h5>
-                            <h5>Comienzo ${response[0].emited}</h5>
-                            <h5>Caduca ${response[0].caducity}</h5>
-                            <h5>Cantidad ${response[0].quantity}</h5>
-                        </div>
-                    `);
+                    table.ajax.reload();
                     $('#agregarCupon').modal('hide');  
  
                     },
@@ -176,7 +210,8 @@
                                 'El cupón ha sido eliminado.',
                                 'success'
                             )
-                        $(`#${id}`).remove();
+                        table.ajax.reload();
+
          
 
                     }
@@ -187,36 +222,6 @@
 
      } 
      ////////////////////////////////////
-
-     const refreshCoupons = () =>{
-        var  url = '{{ route("coupon.refresh.coupon") }}';
-                $.ajax({
-                type: "GET",
-                url: url,
-                    success: function(response, jqXHR) {
-                        console.log(response);
-                        $('#cuponContainer').empty();
-                    $('#agregarCupon').modal('hide');  
- 
-                    },
-                   error: function( jqXHR, textStatus, errorThrown ) {
-                    var text = jqXHR.responseJSON;
-                    console.log(text)
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'error',
-                        title: "No se pudieron actualizar los cupones, revise su conexión internet.",
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false
-                    })
-            
-
-               }
-            });
-
-     }
-    //////////////////////////////////////
     //FLATPICKR//////////////////////////////////////
    let emited = $("#emited").flatpickr({
         altInput: true,
@@ -233,8 +238,7 @@
     }
         
     );
-    //////////////////////////////////////
-    //////////////////////////////////////
+
    let caducity= $("#caducity").flatpickr({
         altInput: true,
         altFormat: 'j F, Y',
@@ -261,5 +265,17 @@
         }};
     }
     //
+
+    // ****************************************************************************************************************
+    //LIMPIA LOS INPUTS AL CERRAR UN MODAL
+    // ****************************************************************************************************************
+        $('#agregarCupon').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".createmodal_error").empty()
+        })
 </script>
+
+
 @endsection

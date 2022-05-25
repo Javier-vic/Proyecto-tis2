@@ -7,9 +7,6 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
         Agregar producto
     </button>
-    {{-- <a role="button" class="btn btn-success mr-auto" href="{{ route('product.create') }}">
-        <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
-    </a> --}}
     <div id="number"></div>
     <div>@include('Mantenedores.product.modal.create')</div>
     <div>@include('Mantenedores.product.modal.show')</div>
@@ -18,8 +15,9 @@
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
+        
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre producto</th>
                 <th class="py-2" style="width:10%">Stock</th>
@@ -39,6 +37,7 @@
         }
     });
 </script>
+
     <script type="text/javascript">
             var table = $("#myTable").DataTable({
                 bProcessing: true,
@@ -59,8 +58,8 @@
                 //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
                 // },
                 dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
+                    "<'row '<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
 
                 columns: [
                     {
