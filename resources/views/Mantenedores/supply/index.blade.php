@@ -75,8 +75,6 @@
                 select: true
         });
 
-        
-
         const addSupply = (e) =>{
             e.preventDefault();
             var formData = new FormData(e.currentTarget);

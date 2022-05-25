@@ -21,11 +21,12 @@
                         <input type="float" name="quantity">
                     </div>
                     <div class="form-group">
-                        <label class="id_category_supply">Selecciona una categoria</label>
-                        <select name="id_category_supply">
-                        $result = category_supply::with('supply')->get();
-                        console.log('$result')
-
+                        <label class="form-label">Selecciona una categoria</label>
+                        <select name="id_category_supplies" class="form-select">
+                            @foreach ($category_supplies as $category_supply)
+                                <option value={{ $category_supply->id }} id="">{{ $category_supply->name }}</opti>
+                            @endforeach
+                        
                         </select>
                     </div>
                     <div class="form-group mt-2 mb-2">
