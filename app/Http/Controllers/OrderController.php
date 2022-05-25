@@ -28,15 +28,17 @@ class OrderController extends Controller
                     'orders.id as _id',
                     'orders.id',
                     'orders.name_order',
-                    'orders.total',
+                    'orders.address',
                     'orders.order_status',
                     'orders.payment_method',
                     'orders.pick_up',
-                    'orders.comment'
+                    'orders.total'
 
                 )
-                ->orderBy('orders.id')
+                ->orderBy('orders.id', 'DESC')
                 ->get())
+                ->addColumn('viewOrder', 'mantenedores.order.datatable.view')
+                ->rawColumns(['viewOrder'])
                 ->addColumn('action', 'mantenedores.order.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
@@ -72,6 +74,8 @@ class OrderController extends Controller
         $order->name_order = $datosOrder['name_order'];
         $order->order_status = $datosOrder['order_status'];
         $order->payment_method = $datosOrder['payment_method'];
+        $order->address = $datosOrder['address'];
+
 
         $order->pick_up = $datosOrder['pick_up'];
         $order->comment = $datosOrder['comment'];
@@ -146,12 +150,19 @@ class OrderController extends Controller
         //dd(order::findOrFail($order->id))
         $product = product::all();
         $order = order::findOrFail($order->id);
+        
+
+
+        
         $name = DB::table('products_orders')
             ->select('products_orders.product_id')
             ->where('products_orders.order_id', '=', $order->id)
-            ->groupby('products_orders.product_id')
+            ->groupby('products_orders.product_id') 
             ->get();
-
+        
+        $name = $name->pluck('product_id')->all();
+        
+             
         return view('Mantenedores.order.edit', compact('order', 'name', 'product'));
     }
 
@@ -163,24 +174,74 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, order $order)
-    {
-        $productos = order::find($order->id);
+    {   
+
+        
+        $productos = order::find($request->id);
 
         $product = DB::table('products_orders')
             ->select('products_orders.product_id')
-            ->where('products_orders.order_id', '=', $id)
+            ->where('products_orders.order_id', '=', $request->id)
+            ->get();
+        
+            $datosOrder = request()->except('_token');
+            $productos = new order;
+            $productos->name_order = $datosOrder['name_order'];
+            $productos->order_status = $datosOrder['order_status'];
+            $productos->payment_method = $datosOrder['payment_method'];
+            $productos->address = $datosOrder['address'];
+    
+    
+            $productos->pick_up = $datosOrder['pick_up'];
+            $productos->comment = $datosOrder['comment'];
+
+        
+        
+
+        $permits = array();
+        $cantidad = array();
+        $valores = array();
+        $price = array();
+        foreach ($datosOrder['permits'] as $item => $value) {
+            $permits[] = (int)$value;
+        }
+
+        $valores = DB::table('products')
+            ->select('products.price')
+            ->whereIn('id', $permits)
             ->get();
 
-        $productos->name_order = $request->name_order;
-        $productos->order_status = $request->order_status;
-        $productos->payment_method = $request->payment_method;
-        $productos->total = $request->total;
-        $productos->pick_up = $request->pick_up;
-        $productos->comment = $request->comment;
+
+
+
+        foreach ($datosOrder['cantidad'] as $item => $value) {
+            if ($value > 0) {
+                $cantidad[] = (int)$value;
+            }
+        }
+
+        for ($i = 0; $i < count($cantidad); $i++) {
+            $price[$i] = $cantidad[$i] * $valores[$i]->price;
+        }
+        $x = array_sum($price);
+
+
+        $productos->total = $x;
         $productos->save();
+
+        for ($i = 0; $i < count($permits); $i++) {
+            $id = $permits[$i];
+            $cont = $cantidad[$i];
+
+            for ($j = 0; $j < $cont; $j++) {
+
+                $order->products()->attach($id);
+            }
+        }
 
 
         return redirect()->route('order.index');
+
     }
 
     /**
@@ -194,12 +255,20 @@ class OrderController extends Controller
     {
         $values = request()->except('_token');
         $id = $values['id'];
-        $productOrders = DB::table('orders')
-            ->select('orders.name_order')
+        $order = DB::table('orders')
+            ->select('orders.*')
             ->where('orders.id', '=', $id)
             ->get();
 
-        return response($productOrders, 200);
+        $productOrders = DB::table('products_orders')
+            ->select('products_orders.product_id','products.name_product', 
+            DB::raw('count(products_orders.product_id) as cantidad'))
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->where('products_orders.order_id', '=', $id)
+            ->groupBy('products_orders.product_id','products.name_product','products.price')
+            ->get();
+            
+        return response(json_encode([$productOrders, $order]), 200);
     }
 
 

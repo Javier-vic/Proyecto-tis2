@@ -7,10 +7,49 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="" class="form-label">Orden </label>
-                    <input readonly type="text" class="form-control" id="nameOrderVIEWMODAL" name="name_order"
+                    <label for="" class="form-label">Nombre </label>
+                    <input readonly type="text" class="form-control" id="name_order" name="name_order"
                         aria-describedby="stock_help">
                 </div>
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Fecha </label>
+                    <input readonly type="text" class="form-control" id="date" name="name_order"
+                        aria-describedby="stock_help">
+                </div>
+                <div class="mb-3">
+                    <label for="" class="form-label">metodo de pago </label>
+                    <input readonly type="text" class="form-control" id="payment" name="name_order"
+                        aria-describedby="stock_help">
+                </div>
+
+                <div class="mb-3">
+                    <label for="" class="form-label">Delivery</label>
+                    <input readonly type="text" class="form-control" id="dely" name="name_order"
+                        aria-describedby="stock_help">
+                </div>
+                <table class="table table-light">
+                  <thead>
+                    <tr>
+
+                        <th>producto</th>
+                    
+                        <th>Cantidad</th>
+
+                        <th>subtotal</th>
+                    
+                        <th></th>
+                      </tr>
+                  </thead>
+                    <tbody id="pruebaProductos">
+
+                        
+                    </tbody>
+                </table>
+                <div class="" id="pruebaProductos">
+                
+                </div>
+                
             </div>
         </div>
     </div>

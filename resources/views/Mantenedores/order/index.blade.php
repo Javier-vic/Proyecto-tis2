@@ -17,11 +17,12 @@
         <tr>
             <th>#</th>
             <th>Nombre orden</th>
-            <th>Total</th>
+            <th>Direccion</th>
             <th>Estado</th>
             <th>Retiro</th>
             <th>Metodo de pago</th>
-            <th>comentario</th>
+            <th>Total</th>
+            <th>Vista</th>
             <th>acciones</th>
             
         </tr>
@@ -64,8 +65,8 @@
                         name: 'name_order'
                     },
                     {
-                        data: 'total',
-                        name: 'total'
+                        data: 'address',
+                        name: 'address'
                     },
                     {
                         data: 'order_status',
@@ -80,8 +81,15 @@
                         name: 'pick_up'
                     },
                     {
-                        data: 'comment',
-                        name: 'comment'
+                        data: 'total',
+                        name: 'total'
+                    },
+
+                    {
+                        data: 'viewOrder',
+                        name: 'viewOrder',
+                        orderable: false,
+                        searchable: false
                     },
                 
                     {
@@ -137,12 +145,33 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                    resultado = response[0];
-                       console.log(resultado)
-                        $('#nameOrderVIEWMODAL').val(resultado.name_order)
-                        // $('#addorderLabel').html(`${resultado.product_id}`)
+                    resultado = response;
+                   
+                       
+                        $('#nameOrderVIEWMODAL').val(resultado[1]);
+                        $('#name_order').val(resultado[1][0].name_order);
+                        $('#payment').val(resultado[1][0].payment_method);
+                        $('#total').val(resultado[1][0].total);
+                        $('#dely').val(resultado[1][0].pick_up);
+                        $('#date').val(resultado[1][0].created_at);
+                        
+                        // $('#addorderLabel').html(${resultado.product_id})
+                        $('#pruebaProductos').empty();
+                        resultado[0].map(product =>{
+                            $('#pruebaProductos').append(
+                                `
+                                <tr>
+                                    <td>${product.name_product}</td>
+                                    <td>${product.cantidad}</td>
+                                    <td>${product.valor}</td>
+                                </tr> 
+                                
+                                `
 
-                      
+                                
+                            )
+                        })
+
                     }
                 });
         }

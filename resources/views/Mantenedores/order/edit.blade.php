@@ -13,7 +13,7 @@
    
 <div class="mb-4">
     <label for="name_order" class="form-label">Nombre pedido :</label>
-    <input type="text" class="form-control" value="{{ isset($order->name_order)?$order->name_order:'' }}" id="name_order" name="name_order" aria-describedby="name_product_help">
+    <input type="text" class="form-control" value="{{ isset($order->name_order) ? $order->name_order:'' }}" id="name_order" name="name_order" aria-describedby="name_product_help">
 </div>
   
 
@@ -29,16 +29,21 @@
 </div>
 
 
+
 <div class="mb-4">
     <label for="pick_up" class="form-label">Despacho pedido :</label>
-    <select id="pick_up"  class="form-control" name="pick_up" value = "{{isset($order->pick_up)?$order->pick_up:'' }}">
+    <select id="mi-select"  class="form-control" name="pick_up" value = "{{isset($order->pick_up)?$order->pick_up:'' }}">
 
-        <option value="no" {{ $order->pick_up == 'si' ? 'selected' : '' }}>SI</option>
-        <option value="si" {{ $order->pick_up == 'no' ? 'selected' : '' }}>NO</option>
+        <option value="si" {{ $order->pick_up == 'si' ? 'selected' : '' }}>SI</option>
+        <option value="no" {{ $order->pick_up == 'no' ? 'selected' : '' }}>NO</option>
     
     </select>
 </div>
 
+<div class="mb-4 entradas">
+    <label for="comment" class="form-label">Direccion :</label>
+    <input type="text"  class="form-control " value="{{ isset($order->address)?$order->address:'' }}" class="form-control" id="address" name="address" >
+</div>
   
 <div class="mb-4">
     <label for="name_order" class="form-label">Metodo de pago :</label>
@@ -73,15 +78,15 @@
                 <h5 class="card-title">{{$item->name_product}}</h5>
                 <p class="card-text">{{$item->description}}</p>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" name="permits[]" value="{{$item->id}}" type="checkbox" id="{{$item->id}}">
+                    <input class="form-check-input" name="permits[]" value="{{isset($order->total)?$order->total:''}}" {{ in_array($item->id, $name) ? 'checked' : '' }} type="checkbox" id="{{$item->id}}">
                     <input type="number" id="typeNumber" name="cantidad[]" class="form-control" />
                     
                 </div>
-                <h4 class="pt-2 ms-0">${{$item->price}}</h4>
+                <h4 class="pt-2 ms-.">${{$item->price}}</h4>
             </div>
         </div> 
     
-    @endforeach
+         @endforeach
 
 
     </div>
@@ -98,6 +103,34 @@
 
 
 </form>
+
+
+@endsection
+
+@section('js_after')
+
+ <script type="text/javascript">
+    $(document).ready(function () {
+        $("#mi-select").change(function(){
+    if(this.value == 'si'){ 
+      
+        $(".entradas").show()
+       
+        
+    }else{
+        $(".entradas").hide();
+    
+    }
+    
+});
+    
+  })
+
+
+
+
+ </script>
+
 
 
 @endsection
