@@ -84,27 +84,41 @@ class OrderController extends Controller
         $cantidad = array();
         $valores = array();
         $price = array();
+
+        
+        
         foreach ($datosOrder['permits'] as $item => $value) {
             $permits[] = (int)$value;
         }
+        // consulta de precio y stock a productos seleccinados
 
         $valores = DB::table('products')
-            ->select('products.price')
-            ->whereIn('id', $permits)
-            ->get();
-
+        ->select('products.price' ,'products.stock')
+        ->whereIn('id', $permits)
+        ->get();
+         
+        // obtenemos las cantidades seleccionadas
 
         foreach ($datosOrder['cantidad'] as $item => $value) {
             if ($value > 0) {
                 $cantidad[] = (int)$value;
+                
             }
         }
        
         //      Calcular el total   ////
-        
         for ($i = 0; $i < sizeof($permits); $i++) {
+            $stock = $valores[$i]->stock;
+            if($stock <= $cantidad[$i]){
+
+                return response('No hay stock suficiente',400);
+
+            }
+
             $price[$i] = $cantidad[$i] * $valores[$i]->price;
+            
         }
+
         $x = array_sum($price);
 
 
@@ -148,21 +162,22 @@ class OrderController extends Controller
     {
         //dd(order::findOrFail($order->id))
         $product = product::all();
-        $order = order::findOrFail($order->id);
+        $selectOrder = order::findOrFail($order->id);
         
+    
+        
+        $query = DB::table('products_orders')
+        ->select('products_orders.product_id', 'products_orders.cantidad')
+        ->where('products_orders.order_id', '=', $order->id)
+        ->get();
+        
+       dd($query);
+        $name = $query->pluck('product_id')->all();
+        $cantidad = $query->pluck('cantidad')->all(); 
+        
+        dd($name);
+        return view('Mantenedores.order.edit', compact('selectOrder', 'name', 'product','query'));
 
-
-        
-        $name = DB::table('products_orders')
-            ->select('products_orders.product_id')
-            ->where('products_orders.order_id', '=', $order->id)
-            ->groupby('products_orders.product_id') 
-            ->get();
-        
-        $name = $name->pluck('product_id')->all();
-        
-             
-        return view('Mantenedores.order.edit', compact('order', 'name', 'product'));
     }
 
     /**
@@ -179,20 +194,20 @@ class OrderController extends Controller
         $productos = order::find($request->id);
 
         $product = DB::table('products_orders')
-            ->select('products_orders.product_id')
-            ->where('products_orders.order_id', '=', $request->id)
-            ->get();
+        ->select('products_orders.product_id')
+        ->where('products_orders.order_id', '=', $request->id)
+        ->get();
         
-            $datosOrder = request()->except('_token');
-            $productos = new order;
-            $productos->name_order = $datosOrder['name_order'];
-            $productos->order_status = $datosOrder['order_status'];
-            $productos->payment_method = $datosOrder['payment_method'];
-            $productos->address = $datosOrder['address'];
+        $datosOrder = request()->except('_token');
+        $productos = new order;
+        $productos->name_order = $datosOrder['name_order'];
+        $productos->order_status = $datosOrder['order_status'];
+        $productos->payment_method = $datosOrder['payment_method'];
+        $productos->address = $datosOrder['address'];
     
     
-            $productos->pick_up = $datosOrder['pick_up'];
-            $productos->comment = $datosOrder['comment'];
+        $productos->pick_up = $datosOrder['pick_up'];
+        $productos->comment = $datosOrder['comment'];
 
         
         
@@ -201,14 +216,15 @@ class OrderController extends Controller
         $cantidad = array();
         $valores = array();
         $price = array();
+
         foreach ($datosOrder['permits'] as $item => $value) {
             $permits[] = (int)$value;
         }
 
         $valores = DB::table('products')
-            ->select('products.price')
-            ->whereIn('id', $permits)
-            ->get();
+        ->select('products.price')
+        ->whereIn('id', $permits)
+        ->get();
 
 
 
@@ -234,7 +250,7 @@ class OrderController extends Controller
 
            
 
-                $order->products()->attach($id);
+            $order->products()->attach($id);
            
         }
 
