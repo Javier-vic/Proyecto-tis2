@@ -94,15 +94,15 @@ class OrderController extends Controller
             ->get();
 
 
-
-
         foreach ($datosOrder['cantidad'] as $item => $value) {
             if ($value > 0) {
                 $cantidad[] = (int)$value;
             }
         }
-
-        for ($i = 0; $i < count($cantidad); $i++) {
+       
+        //      Calcular el total   ////
+        
+        for ($i = 0; $i < sizeof($permits); $i++) {
             $price[$i] = $cantidad[$i] * $valores[$i]->price;
         }
         $x = array_sum($price);
@@ -112,13 +112,12 @@ class OrderController extends Controller
         $order->save();
 
         for ($i = 0; $i < count($permits); $i++) {
-            $id = $permits[$i];
-            $cont = $cantidad[$i];
+            $id = $permits[$i]; //id
+            $cont = $cantidad[$i]; //cantidad
 
-            for ($j = 0; $j < $cont; $j++) {
-
-                $order->products()->attach($id);
-            }
+            
+            $order->products()->attach($id,['cantidad'=>$cont]);
+            
         }
 
 
@@ -233,10 +232,10 @@ class OrderController extends Controller
             $id = $permits[$i];
             $cont = $cantidad[$i];
 
-            for ($j = 0; $j < $cont; $j++) {
+           
 
                 $order->products()->attach($id);
-            }
+           
         }
 
 

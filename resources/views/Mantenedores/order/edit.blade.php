@@ -111,23 +111,26 @@
 
  <script type="text/javascript">
     $(document).ready(function () {
-        $("#mi-select").change(function(){
-    if(this.value == 'si'){ 
-      
-        $(".entradas").show()
-       
+            $("#mi-select").change(function(){
+        if(this.value == 'si'){ 
         
-    }else{
-        $(".entradas").hide();
+            $(".entradas").show()
+        
+            
+        }else{
+            $(".entradas").hide();
+        
+            }
+        
+    });
     
-    }
     
-});
+        
+    })
+
     
-  })
 
-
-
+    
 
  </script>
 
