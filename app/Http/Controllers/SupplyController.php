@@ -6,6 +6,8 @@ use App\Models\supply;
 use App\Models\category_supply;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class SupplyController extends Controller
 {
     /**
@@ -15,8 +17,33 @@ class SupplyController extends Controller
      */
     public function index()
     {
-        $datos['supplies'] = supply::paginate(5);
-        return view('Mantenedores.supply.index', $datos);
+        
+        if (request()->ajax()) {
+
+            return datatables(DB::connection(session()->get('database'))
+                ->table('supplies')
+                ->whereNull('supplies.deleted_at')
+                ->select(
+                    'supplies.id as _id',
+                    'supplies.id',
+                    'supplies.name_supply',
+                    'supplies.unit_meassurement',
+                    'supplies.quantity',
+                    'supplies.id_category_supplies',
+                    
+                )
+                ->orderBy('supplies.id')
+                ->get())
+                ->addColumn('action', 'mantenedores.product.datatable.action')
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+        $category_supplies = category_supply::all();
+        $supplySelected = new supply();
+
+
+        return view('mantenedores.supply.index', compact('category_supplies', 'supplySelected'));
     }
 
     /**

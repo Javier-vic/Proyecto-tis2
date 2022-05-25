@@ -38,33 +38,44 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     <script>
 
-        const Table = $("#myTable").DataTable({
-            processing: true,
-            serverSide: true,
-            bProcessing: true,
-            bStateSave: true,
-            deferRender: true,
-            responsive: true,
-            searching: true,
-            language: {
+        var table = $("#myTable").DataTable({
+                bProcessing: true,
+                bStateSave: true,
+                deferRender: true,
+                responsive: true,
+                processing: true,
+                searching: true,
+                language: {
                     url: "{{ asset('js/language.json') }}"
                 },
-            ajax:{
-                    url: "{{ route('dataTable.Supply') }}",
-                    type: 'GET'
-            },
-
-            columns:[
-                {data:'id',name:'id'},
-                {data:'name_supply',name:'name_supply'},
-                {data:'unit_meassurement',name:'unit_meassurement'},
-                {data:'quantity',name:'quantity'},
-                {data:'id_category_supply',name:'id_category_supply'},
-                {data:'action',name:'action',orderable:false,searchable:true}
-            ]
+                ajax: {
+                    url: "{{ route('supply.index') }}",
+                    type: 'GET',
+                },
+                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
+                    "<'row '<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
+                columns:[
+                    {data:'id',name:'id'},
+                    {data:'name_supply',name:'name_supply'},
+                    {data:'unit_meassurement',name:'unit_meassurement'},
+                    {data:'quantity',name:'quantity'},
+                    {data:'id_category_supplies',name:'id_category_supplies'},
+                    {data:'action',name:'action',orderable:false,searchable:true}
+                ],
+                select: true
         });
+
+        
 
         const addSupply = (e) =>{
             e.preventDefault();
