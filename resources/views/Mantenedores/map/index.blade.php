@@ -12,8 +12,12 @@
 <div>
     @include('Mantenedores.map.modal.edit')
 </div>
-<span>Haz doble click sobre un lugar para cambiar la ubicación del local.</span>
-<div id="map" style="height: 500px;"></div>
+<span></span>
+<div class="container h-75">
+    <div class="row justify-content-center h-100">
+        <div class="col-8" id="map" style="height: 100%; border: solid 1px;"></div>
+    </div>
+</div>
 @endsection
 
 @section('js_after')
@@ -37,6 +41,7 @@
        map.doubleClickZoom.disable();
 
        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution:'Haz doble click sobre un lugar para cambiar la ubicación del local.',
         maxZoom: 18,
         id: 'mapbox/streets-v11',
         tileSize: 512,
@@ -48,7 +53,7 @@
         title : 'Tienda ramen dashi'
     }).addTo(map);
 
-    marker.bindPopup(`<b>Ramen Dashi</b><br> estamos ubicados en ${direccion}`).openPopup();
+    marker.bindPopup(`<b>Ramen Dashi</b><br> Estamos ubicados en ${direccion}`).openPopup();
     map.addEventListener('dblclick',function(e){
 
         let mapaLat=e.latlng.lat;
