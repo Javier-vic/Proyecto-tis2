@@ -3,6 +3,7 @@
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,7 @@ Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
 Route::resource('coupon', CouponController::class);
 Route::resource('user', UserController::class);
+Route::resource('map', MapController::class);
 
 // RUTAS DE PRODUCTOS
 Route::get('/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');

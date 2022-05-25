@@ -7,7 +7,6 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
         Agregar producto
     </button>
-
     <div id="number"></div>
     <div>@include('Mantenedores.product.modal.create')</div>
     <div>@include('Mantenedores.product.modal.show')</div>
@@ -15,12 +14,6 @@
 
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
-    </div>
-    {{-- SPARKLINES --}}
-    <div>
-        <p>
-            Inline Sparkline: <p class="inlinesparkline"></p>.
-        </p>
     </div>
         
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
@@ -45,20 +38,6 @@
     });
 </script>
 
-    <script type="text/javascript" src="{{ asset('js/jquery.sparkline.js') }}"></script>
-    <script type="text/javascript">
-        $(function() {
-            /** This code runs when everything has been loaded on the page */
-            /* Inline sparklines take their values from the contents of the tag */
-            $('.inlinesparkline').sparkline([100,200,300,400,500,650],{
-    type: "line",
-    lineWidth: 10,
-    width:500,
-    height:500,
- 
-}); 
-        });
-        </script>
     <script type="text/javascript">
             var table = $("#myTable").DataTable({
                 bProcessing: true,

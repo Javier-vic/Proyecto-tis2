@@ -70,20 +70,10 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name_product'          => 'required|string',
-            'stock'          => 'required|string',
-            'description'          => 'required|string',
-            'price'          => 'required|string',
-            'id_category_product'          => 'required|string',
-            'image_product' => 'required|file'
 
-        ];
 
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator = Validator::make($request->all(), product::$rules, product::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
@@ -201,21 +191,7 @@ class ProductController extends Controller
     public function update(request $request, product $product)
     {
 
-        $rules = [
-            'name_product'          => 'required|string',
-            'stock'          => 'required|string',
-            'description'          => 'required|string',
-            'price'          => 'required|string',
-            'id_category_product'          => 'required|string',
-
-        ];
-
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-
-
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), product::$rules, product::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {

@@ -27,6 +27,9 @@ input[type=number] {
     Crear cupón
 </button>
     <div>@include('Mantenedores.coupon.modal.create')</div>
+    <div class="block-content block-content-full block-content-sm bg-body-dark mb-2">
+        <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
+    </div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-secondary text-white">
             <tr class="text-center">
@@ -42,6 +45,7 @@ input[type=number] {
 @endsection
 
 @section('js_after')
+    <script   script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
@@ -78,11 +82,17 @@ input[type=number] {
                     },
                     {
                         data: 'caducity',
-                        name: 'caducity'
+                        name: 'caducity',
+                        render(data, type, row, meta) {
+                            return moment(data).locale('es').format('LL');
+                        }
                     },
                     {
                         data: 'emited',
-                        name: 'emited'
+                        name: 'emited',
+                        render(data, type, row, meta) {
+                            return moment(data).locale('es').format('LL');
+                        }
                     },
                     {
                         data: 'quantity',
@@ -101,6 +111,11 @@ input[type=number] {
                     document.getElementById("number").innerHTML = table.data().count();
                 },
                 select: true
+            });
+
+    //FUNCIÓN PARA LA BARRA DE BUSQUEDA
+    $('#search').on('keyup', function() {
+                table.search(this.value).draw();
             });
 
     //FUNCIÓN PARA CREAR CUPÓN
