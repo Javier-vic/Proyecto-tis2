@@ -1,24 +1,40 @@
-<form action="{{ url( '/supply/'.$supply->id ) }}" method="post">
-    @csrf
-    @method('PATCH')
-    <label for="name_supply">Nombre</label>
-    <input type="text" name="name_supply" value="{{ $supply->name_supply }}">
-    <br>
+<div class="modal fade" id="editSupply" tabindex="-1" aria-labelledby="agregarInsumoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ingrese los datos del insumo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="formEdit">
+                    @csrf
+                    <div class="form-group">
+                        <label for="" class="form-label">Nombre</label>
+                        <input type="text" name="name_supply" class="form-control input-modal" id="name_supplyEdit">
+                    </div>
+                    <div class="form-group">
+                        <label for="unit_meassurement">Unidad de medida</label>
+                        <input type="text" name="unit_meassurement" id="unit_meassurementEdit" class="input-modal">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Cantidad</label>
+                        <input type="float" name="quantity" id="quantityEdit" class="input-modal">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selecciona una categoria</label>
+                        <select name="id_category_supplies" class="form-select" id="id_category_suppliesEdit">
+                            @foreach ($category_supplies as $category_supply)
+                                <option value={{ $category_supply->id }} id="">{{ $category_supply->name_category }}</option>
+                            @endforeach                       
+                        </select>
+                    </div>
+                    <div class="form-group mt-2 mb-2">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Agregar">
+                    </div>
 
-    <label for="unit_meassurement">Unidad de medida</label>
-    <input type="text" name="unit_meassurement" value="{{ $supply->unit_meassurement }}">
-    <br>
-
-    <label for="quantity">Cantidad</label>
-    <input type="float" name="quantity" value="{{ $supply->quantity }}">
-    <br>
-
-    <label class="id_category_supply">Selecciona una categoria</label>
-    <select name="id_category_supplies">
-    @foreach ($category_supplies as $category_supply)
-        <option value="{{ $category_supply->id }}">{{ $category_supply->name_category }}</option>
-    @endforeach
-    </select>
-    <br>
-    <input type="submit" value="Guardar">
-</form>
+                </form>
+            </div>
+        </div>
+    </div>

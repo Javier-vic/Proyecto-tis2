@@ -37,7 +37,7 @@ class SupplyController extends Controller
                 )
                 ->orderBy('supplies.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.product.datatable.action')
+                ->addColumn('action', 'mantenedores.supply.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
@@ -118,11 +118,26 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(supply $supply )
     {
-        $supply = supply::findOrFAil($id);
-        $category_supplies = category_supply::all();
-        return view('Mantenedores.supply.edit', compact('supply', 'category_supplies'));
+        $id = $supply->id;
+        $supplySelected = DB::table('supplies')
+            ->whereNull('supplies.deleted_at')
+            ->where('supplies.id', '=', $id)
+            ->join('category_supplies', 'category_supplies.id', '=', 'supplies.id_category_supplies')
+            ->select(
+                'supplies.id as _id',
+                'supplies.id',
+                'supplies.name_supply',
+                'supplies.unit_meassurement',
+                'supplies.quantity',
+                'supplies.id_category_supplies',
+            )
+            ->orderBy('supplies.id')
+            ->get();
+        return json_encode([$supplySelected]);
+
+
     }
 
     /**
@@ -132,18 +147,40 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, supply $supply)
     {
-        $supply = supply::findOrFAil($id);
-        $supply->category_supply()->dissociate();
-        $supply->name_supply = $request->input('name_supply');
-        $supply->unit_meassurement = $request->input('unit_meassurement');
-        $supply->quantity = $request->input('quantity');
-        $id_category_supplies = $request->input('id_category_supplies');
-        $supply->category_supply()->associate($id_category_supplies);
-        $supply->update();
+        $validator = Validator::make($request->all(), supply::$rules, supply::$messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
 
-        return redirect()->route('supply.index');
+                $supply = supply::find($product->id);
+                $supply->category_supply()->dissociate();
+                $supply->name_supply         = $request->name_supply;
+                $supply->unit_meassurement   = $request->unit_meassurement;
+                $supply->quantity    = $request->quantity;
+                $supply->id_category_supply = $request->id_category_supply;
+                $supply->category_supply()->associate($id_category_supplies);
+                $supply->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se editó el insumo con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo editar el insumo.', 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
+        }
+
+
+        return response('No se pudo editar el insumo.', 400);
+
+
+
     }
 
     /**

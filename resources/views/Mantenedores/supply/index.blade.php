@@ -28,7 +28,7 @@
             @include('Mantenedores.supply.modal.create')
         </div>
         <div class="">
-            <!-- include('Mantenedores.supply.modal.edit') -->
+            @include('Mantenedores.supply.modal.edit')
         </div>
 
     </table>
@@ -114,9 +114,9 @@
             });
         }
 
-        const deleteProduct = (id) =>{
+        const deleteSupply = (id) =>{
             Swal.fire({
-                title: '¿Estás seguro de eliminar este producto?',
+                title: '¿Estás seguro de eliminar este insumo?',
                 text: "No se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -159,6 +159,90 @@
          
             })
         } 
+
+        const editSupply = (id) =>{
+            var  url = '{{ route("supply.edit", ":supply") }}';
+            url = url.replace(':supply',id)
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "json",
+                success: function(response) {
+                    console.log(response)
+                    let resultado = response[0][0];                  
+                    $('#name_supplyEdit').val(resultado.name_supply);
+                    $('#unit_meassurementEdit').val(resultado.unit_meassurement);
+                    $('#quantityEdit').val(resultado.quantity);
+                    $('#id_category_suppliesEdit').val(resultado.id_category_supplies);     
+
+                    $("#formEdit").attr('onSubmit', `editSupplySubmit(${id},event)`);
+                    $('#editSupply').modal('show');  
+                }
+                
+            });
+        }
+
+        const editSupplySubmit = (id,e)=>{
+            e.preventDefault();
+            var formData = new FormData(e.currentTarget);
+            formData.append('_method', 'put');
+            var  url = '{{ route("supply.update" , ":supply") }}';
+            url = url.replace(':supply', id);
+            Swal.fire({
+                title: '¿Estás seguro de editar este insumo',
+                text: "No se puede revertir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, editar!',
+                cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: formData ,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            table.ajax.reload();
+                            Swal.fire(
+                                'Editado!',
+                                'El producto ha sido editado.',
+                                'success'
+                            )
+                            $('#editSupply').modal('hide');
+                        },
+                        error: function( jqXHR, textStatus, errorThrown ) {
+                            var text = jqXHR.responseJSON;
+                            $(".editmodal_error").empty()
+                            $(".input-modal").addClass('is-valid')
+                            $(".input-modal").removeClass('is-invalid')
+                            Swal.fire({
+                                position: 'bottom-end',
+                                icon: 'error',
+                                title: 'No se pudo editar el producto.',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                backdrop: false
+                            })
+                            //AGREGA CLASES Y ELEMENTOS INVALID  
+                            if(text){
+                                $.each(text.errors, function(key,item){
+                                $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
+                                $(`#${key}EDIT`).addClass('is-invalid');
+                                });
+                            }
+                        }
+         
+                    })
+                }
+            })
+           
+        } 
+
 
     </script>
 
