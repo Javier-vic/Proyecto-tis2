@@ -24,7 +24,7 @@
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre</th>
                 <th class="py-2" style="width:10%">Acciones</th>

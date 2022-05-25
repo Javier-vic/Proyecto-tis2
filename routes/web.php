@@ -3,9 +3,12 @@
 use App\Http\Controllers\CategorySupplyController; 
 use App\Http\Controllers\SupplyController; 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyRoles;
 /*
@@ -29,12 +32,18 @@ Route::resource('category_supply', CategorySupplyController::class);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//RUTAS DE CUPONES
+Route::get('/coupon/refresh/coupon', [\App\Http\Controllers\CouponController::class, 'refreshCoupons'])->name('coupon.refresh.coupon');
 
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('roles', RoleController::class)->middleware([]);
 Route::resource('product', ProductController::class);
 Route::resource('order', OrderController::class);
 Route::resource('category_product', CategoryProductController::class);
+Route::resource('coupon', CouponController::class);
+Route::resource('user', UserController::class);
+Route::resource('map', MapController::class);
 
 // RUTAS DE PRODUCTOS
 Route::get('/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');

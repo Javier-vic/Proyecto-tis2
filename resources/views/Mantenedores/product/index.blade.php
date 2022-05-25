@@ -7,7 +7,6 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
         Agregar producto
     </button>
-
     <div id="number"></div>
     <div>@include('Mantenedores.product.modal.create')</div>
     <div>@include('Mantenedores.product.modal.show')</div>
@@ -16,8 +15,9 @@
     <div class="block-content block-content-full block-content-sm bg-body-dark">
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
+        
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre producto</th>
                 <th class="py-2" style="width:10%">Stock</th>
@@ -37,6 +37,7 @@
         }
     });
 </script>
+
     <script type="text/javascript">
             var table = $("#myTable").DataTable({
                 bProcessing: true,
@@ -57,8 +58,8 @@
                 //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
                 // },
                 dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
+                    "<'row '<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
 
                 columns: [
                     {
@@ -117,7 +118,7 @@
                     $("input-modal").removeClass('is-invalid');
                     $("input-modal").removeClass('is-valid');
                     $(".createmodal_error").empty()
-                    //
+                    //////////////////////////////////////
                     table.ajax.reload();
                     $('#agregarProducto').modal('hide');  
                     document.getElementById("number").innerHTML = table.data().count()+1;
@@ -125,6 +126,7 @@
                     },
                    error: function( jqXHR, textStatus, errorThrown ) {
                     var text = jqXHR.responseJSON;
+                    console.log(text)
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
                     $(".input-modal").removeClass('is-invalid')
@@ -143,7 +145,8 @@
                     $(`#${key}`).addClass('is-invalid');
                     });
                     }
-                    //
+                    //////////////////////////////////////
+
                }
                 
                 });
@@ -241,7 +244,7 @@
                     $(`#${key}EDIT`).addClass('is-invalid');
                     });
                    }
-                  //
+                  //////////////////////////////////////////////
                }
          
             })
@@ -325,21 +328,21 @@
 
                         $('#mostrarImagen').append($('<img>', {
                             src: url,
-                            class: 'img-fluid'
+                            class: 'img-fluid rounded-start'
                         }))
 
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
-                        $('#stockVIEWMODAL').val(resultado.stock)
-                        $('#descriptionVIEWMODAL').val(resultado.description)
-                        $('#category').val(resultado.category)
-                        $('#priceVIEWMODAL').val(resultado.price)
+                        $('#stockVIEWMODAL').html(resultado.stock)
+                        $('#descriptionVIEWMODAL').html(resultado.description)
+                        $('#category').html(resultado.category)
+                        $('#priceVIEWMODAL').html(resultado.price)
                     }
                 });
             });
         
            // ****************************************************************************************************************
            // ****************************************************************************************************************
-           //LIMPIA LOS ERRORES DE LOS INPUTS EN LOS MODALES
+           //LIMPIA LOS INPUTS AL CERRAR UN MODAL
            // ****************************************************************************************************************
            $('#agregarProducto').on('hidden.bs.modal', function () {
             $(".input-modal").removeClass('is-invalid');
