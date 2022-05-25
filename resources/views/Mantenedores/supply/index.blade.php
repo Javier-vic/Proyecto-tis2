@@ -11,9 +11,9 @@
     </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
     <table class="table" id="myTable" style="width: 100%">
+    {!! Form::token() !!}
 
-
-        <thead class="thead bg-secondary">
+        <thead class="thead bg-secondary text-white">
             <tr>
                 <th>#</th>
                 <th>name_supply</th>
@@ -24,7 +24,6 @@
             </tr>
         </thead>
 
- 
         <div class="">
             @include('Mantenedores.supply.modal.create')
         </div>
