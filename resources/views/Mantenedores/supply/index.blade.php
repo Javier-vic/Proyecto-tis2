@@ -96,7 +96,7 @@
                         heightAuto:false,
                     })
                     $('#idname').val('');
-                    Table.ajax.reload();
+                    table.ajax.reload();
                     $("#agregarCategoriaInsumo").modal("hide");                   
                 },
                 error: function( jqXHR, textStatus, errorThrown ){                 
@@ -113,6 +113,53 @@
                 }
             });
         }
+
+        const deleteProduct = (id) =>{
+            Swal.fire({
+                title: '¿Estás seguro de eliminar este producto?',
+                text: "No se puede revertir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Borrar!',
+                cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+                url = '{{ route("supply.destroy", ":supply") }}';
+                url = url.replace(':supply', id);
+                if(result.isConfirmed){
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        error: function( jqXHR, textStatus, errorThrown ) {
+                            var text = jqXHR.responseText;
+                            Swal.fire({
+                                position: 'bottom-end',
+                                icon: 'error',
+                                title: text,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                backdrop: false
+                            })
+                        },
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                'Borrado!',
+                                'El producto ha sido eliminado.',
+                                'success'
+                            )
+                            
+                            table.ajax.reload();           
+                        }
+                    });
+                }
+         
+            })
+        } 
+
     </script>
 
 @endsection

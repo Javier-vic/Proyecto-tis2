@@ -24,9 +24,8 @@
                         <label class="form-label">Selecciona una categoria</label>
                         <select name="id_category_supplies" class="form-select">
                             @foreach ($category_supplies as $category_supply)
-                                <option value={{ $category_supply->id }} id="">{{ $category_supply->name }}</opti>
-                            @endforeach
-                        
+                                <option value={{ $category_supply->id }} id="">{{ $category_supply->name_category }}</option>
+                            @endforeach                       
                         </select>
                     </div>
                     <div class="form-group mt-2 mb-2">

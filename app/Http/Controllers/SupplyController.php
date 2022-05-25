@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\supply;
 use App\Models\category_supply;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class SupplyController extends Controller
 {
@@ -64,17 +67,8 @@ class SupplyController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name_supply'          => 'required|string',           
-            'unit_meassurement'          => 'required|string',           
-            'quantity'          => 'required|string',           
-            'id_category_supplies'          => 'required|string',           
-        ];
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), supply::$rules, supply::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
@@ -83,19 +77,28 @@ class SupplyController extends Controller
                 $supply->name_supply = $supplyData['name_supply'];
                 $supply->unit_meassurement = $supplyData['unit_meassurement'];
                 $supply->quantity = $supplyData['quantity'];
-                $supply->id_category_supplies = $supplyData['id_category_supply'];
+                $supply->id_category_supplies = $supplyData['id_category_supplies'];
                 $supply->save();
                 DB::connection(session()->get('database'))->commit();
-                return response('Se ingresó el insumo con exito.', 200);
+                return response('Se ingresó el producto con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo realizar el ingreso del insumo.', 400);
+                return response('No se pudo realizar el ingreso del producto.', 400);
             }
-            return response('No se pudo realizar el ingreso del insumo.', 400);
-            // alert()->success('Categoría creada correctamente!');
-        }
-        return response('No se pudo realizar el ingreso del insumo.', 400);
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
 
+            ), 400);
+        }
+
+
+
+
+        return response('No se pudo realizar el ingreso del producto.', 400);
+
+        
     }
 
     /**
@@ -149,10 +152,18 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(supply $supply)
     {
-        supply::destroy($id);
-        return redirect()->route('supply.index');
+        $id = $supply->id;
+        try {
+            $supply = supply::on(session()->get('database'))->find($id);
+            $supply->delete();
+            DB::connection(session()->get('database'))->commit();
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::connection(session()->get('database'))->rollBack();
+            return response('Ocurrió un error. No se eliminó el producto.', 400);
+        }
+        return response('success', 200);
     }
 
     public function dataTable(Request $request){
