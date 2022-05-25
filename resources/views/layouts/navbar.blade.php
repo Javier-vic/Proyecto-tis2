@@ -58,12 +58,8 @@
                     <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
                 </li>
                 <li>
-                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Mapa</a>
+                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
                 </li>
-              
-       
-        
-     
             </ul>
 
 

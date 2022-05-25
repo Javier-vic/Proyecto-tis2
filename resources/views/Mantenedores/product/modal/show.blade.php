@@ -8,19 +8,39 @@
                 @csrf
                 {{--  --}}
                 <div class="card mb-3">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                            <div id="mostrarImagen"></div>
-                      </div>
-                      <div class="col-md-8">
+                    <div class="row">
                         <div class="card-body">
-                          <h5 class="card-title" id="verProductoLabel"></h5>
-                          <p class="card-text" id="descriptionVIEWMODAL"></p>
-                          <p class="card-text" id="stockVIEWMODAL"></p>
-                          <p class="card-text" id="priceVIEWMODAL"></p>
-                          <p class="card-text" id="category"></p>
+                          <div class="row p-2">
+                            <div class="col d-flex justify-content-center">
+                              <div id="mostrarImagen"></div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex justify-content-center">
+                              <h5 class="card-title" id="verProductoLabel"></h5>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex justify-content-center">
+                              <p class="card-text" id="descriptionVIEWMODAL"></p>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex justify-content-center">
+                              <p class="card-text" id="stockVIEWMODAL"></p>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex justify-content-center">
+                              <p class="card-text" id="priceVIEWMODAL"></p>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col d-flex justify-content-center">
+                              <p class="card-text" id="category"></p>
+                              </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
                   </div>
             </div>
