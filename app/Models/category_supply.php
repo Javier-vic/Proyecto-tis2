@@ -11,6 +11,6 @@ class category_supply extends Model
     use HasFactory, SoftDeletes;
 
     public function supplies() {
-        return $this->hasMany(supply::class);
+        return $this->hasMany(supply::class, 'id_category_supplies');
     }
 }

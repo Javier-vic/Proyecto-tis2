@@ -12,7 +12,7 @@
     <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}
 
-        <thead class="thead">
+        <thead class="thead bg-secondary">
             <tr>
                 <th>#</th>
                 <th>name_category</th>

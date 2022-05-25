@@ -5,14 +5,15 @@
 @endsection
 
 @section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div>
         @include('sweetalert::alert')
     </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
     <table class="table" id="myTable" style="width: 100%">
-        {!! Form::token() !!}
 
-        <thead class="thead">
+
+        <thead class="thead bg-secondary">
             <tr>
                 <th>#</th>
                 <th>name_supply</th>
@@ -23,25 +24,7 @@
             </tr>
         </thead>
 
-        <tbody>
-            @foreach($supplies as $supply)
-            <tr>
-                <td>{{ $supply->id }}</td>
-                <td>{{ $supply->name_supply }}</td>
-                <td>{{ $supply->unit_meassurement }}</td>
-                <td>{{ $supply->quantity }}</td>
-                <td>{{ $supply->id_category_supplies }}</td>
-                <td><a href="{{ url( '/supply/'.$supply->id.'/edit' ) }}">Editar</a> |             
-                    <form action="{{ url( '/supply/'.$supply->id ) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <input type="submit" onclick="return confirm('¿Quieres borrar?')" value="borrar">
-                    </form>
-                </td>          
-            </tr>
-            @endforeach
-        </tbody>
-
+ 
         <div class="">
             @include('Mantenedores.supply.modal.create')
         </div>
@@ -57,30 +40,32 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script>
+
         const Table = $("#myTable").DataTable({
             processing: true,
             serverSide: true,
+            bProcessing: true,
+            bStateSave: true,
+            deferRender: true,
+            responsive: true,
+            searching: true,
             language: {
                     url: "{{ asset('js/language.json') }}"
                 },
             ajax:{
                     url: "{{ route('dataTable.Supply') }}",
-                    type: 'GET',
+                    type: 'GET'
             },
+
             columns:[
                 {data:'id',name:'id'},
                 {data:'name_supply',name:'name_supply'},
                 {data:'unit_meassurement',name:'unit_meassurement'},
                 {data:'quantity',name:'quantity'},
-                {data:'id_category',name:'id_category'},
-                {data:'action',name:'action',orderable:false,searchable:true},
+                {data:'id_category_supply',name:'id_category_supply'},
+                {data:'action',name:'action',orderable:false,searchable:true}
             ]
         });
-
-        const capitalize = (s) => {
-            if (typeof s !== 'string') return ''
-            return s.charAt(0).toUpperCase() + s.slice(1)
-        }
 
         const addSupply = (e) =>{
             e.preventDefault();
