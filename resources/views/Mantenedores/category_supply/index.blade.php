@@ -95,7 +95,7 @@
                 },
                 error: function( jqXHR, textStatus, errorThrown ){                 
                     var text = jqXHR.responseText;
-                    console.log(text)
+                    console.log(text);
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',

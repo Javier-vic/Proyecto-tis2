@@ -96,7 +96,7 @@ class SupplyController extends Controller
 
 
 
-        return response('No se pudo realizar el ingreso del producto.', 400);
+        return response('No se pudo realizar el ingreso del insumo.', 400);
 
         
     }

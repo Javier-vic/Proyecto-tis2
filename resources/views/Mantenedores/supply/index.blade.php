@@ -97,7 +97,7 @@
                     })
                     $('#idname').val('');
                     table.ajax.reload();
-                    $("#agregarCategoriaInsumo").modal("hide");                   
+                    $("#agregarInsumo").modal("hide");                   
                 },
                 error: function( jqXHR, textStatus, errorThrown ){                 
                     var text = jqXHR.responseText;

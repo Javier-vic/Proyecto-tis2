@@ -37,8 +37,6 @@ class CategorySupplyController extends Controller
                 ->make(true);
         }
         $category_supplies = category_supply::all();
-        // $supplySelected = new supply();
-
         return view('mantenedores.category_supply.index', compact('category_supplies'));
     }
 
@@ -61,14 +59,8 @@ class CategorySupplyController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name_category'          => 'required|string',
-        ];
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
+        
+        $validator = Validator::make($request->all(), category_supply::$rules, category_supply::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
@@ -80,12 +72,23 @@ class CategorySupplyController extends Controller
                 return response('Se ingresó la categoría con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo realizar el ingreso de la categoría.', 400);
+                return response('No se pudo realizar el ingreso de la categoria.', 400);
             }
-            return response('No se pudo realizar el ingreso de la categoría.', 400);
-            // alert()->success('Categoría creada correctamente!');
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
-        return response('No se pudo realizar el ingreso de la categoría.', 400);
+
+        return response('No se pudo realizar el ingreso de la categoria.', 400);
+
+
+/////////////////////
+
+        
+
 
 
     }
