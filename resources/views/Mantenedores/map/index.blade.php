@@ -6,7 +6,9 @@
     crossorigin=""/>
 @endsection
 
-
+@section('titlePage')
+<h2 class="">Ubicación del local</h2>
+@endsection
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <div>

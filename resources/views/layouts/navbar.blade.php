@@ -12,9 +12,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css">
     @yield('css_extra')
 
-
-
-
 </head>
 
 <body>
@@ -71,7 +68,9 @@
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
                         <i class="fas fa-align-left text-white"></i>
-                    </button>                    
+                    </button>   
+                    @yield('titlePage')                
+                    <div style="visibility:hidden">.</div>                 
                 </div>
             </nav>
 

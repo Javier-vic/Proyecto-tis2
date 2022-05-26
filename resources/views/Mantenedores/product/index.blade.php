@@ -2,6 +2,11 @@
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
+
+@section('titlePage')
+<h3>Listado de productos</h3>
+
+@endsection
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div class="container ">
@@ -179,7 +184,8 @@
 
                         $('#image_productEDITVIEW').append($('<img>', {
                             src: url,
-                            class: 'img-fluid'
+                            class: 'img-fluid w-100'
+
                         }))
 
                     $("#formEdit").attr('onSubmit', `editProductSubmit(${id},event)`);
@@ -328,14 +334,15 @@
 
                         $('#mostrarImagen').append($('<img>', {
                             src: url,
-                            class: 'img-fluid rounded-start'
+                            class: 'img-fluid rounded-start w-100 p-2',
+                            style : 'height:400px; object-fit:cover;'
                         }))
 
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
-                        $('#stockVIEWMODAL').html(resultado.stock)
+                        $('#stockVIEWMODAL').html(resultado.stock + ' unidades')
                         $('#descriptionVIEWMODAL').html(resultado.description)
                         $('#category').html(resultado.category)
-                        $('#priceVIEWMODAL').html(resultado.price)
+                        $('#priceVIEWMODAL').html('$'+resultado.price)
                     }
                 });
             });

@@ -19,7 +19,9 @@ input[type=number] {
 </style>
 {{--  --}}
 @endsection
-
+@section('titlePage')
+<h2 class="">Listado de cupones</h2>
+@endsection
 @section('content')
 <div id="number">0</div>
 

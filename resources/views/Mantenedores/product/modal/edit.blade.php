@@ -22,9 +22,10 @@
                 </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Descripción </label>
-                        <input type="text" class="form-control input-modal" id="descriptionEDIT" name="description" 
-                            aria-describedby="description_help">
+                        <input type="text" onkeyup="countChar(this)" class="form-control input-modal text-limit" id="descriptionEDIT" name="description" 
+                            aria-describedby="description_help" minlength="1" maxlength="500">
                     <span class="text-danger editmodal_error" id="description_errorEDITMODAL"></span>
+                    <span class="text-danger d-none" id="text-limit_errorEDIT">Se ha alcanzado el limite de texto.</span>
                 </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Precio </label>
@@ -58,3 +59,18 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function countChar(val) {
+    var len = val.value.length;
+    if (len >= 500) {
+      val.value = val.value.substring(0, 500);
+      $(".text-limit").addClass('is-invalid')
+      $("#text-limit_errorEDIT").removeClass('d-none')
+    } else {
+      $("#description_errorEDITMODAL").empty();
+      $("#text-limit_errorEDIT").addClass('d-none')
+    $(".text-limit").removeClass('is-invalid')
+      $('#charNum').text(500 - len);
+    }
+  };
+  </script>
