@@ -17,7 +17,13 @@ class AsistController extends Controller
     public function index()
     {
         //
-        return view('Mantenedores.asist.index');
+        $currentAsist = DB::table('asists')
+                            ->where('asists.id_user','=',Request()->user()->id)
+                            ->where('asists.id_user','=','Date(now())')
+                            ->whereNull('asists.end')
+                            ->get();
+        dd($currentAsist);
+        return view('Mantenedores.asist.index',['currentAsist'=>$currentAsist]);
     }
 
     /**
@@ -89,6 +95,7 @@ class AsistController extends Controller
         if($request->ajax()){
             $data = DB::table('asists')
                     ->where('asists.id_user','=',Request()->user()->id)
+                    ->whereNull('asists.end')
                     ->get();
             return DataTables::of($data)       
                    ->make(true);
