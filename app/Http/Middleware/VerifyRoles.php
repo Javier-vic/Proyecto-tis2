@@ -23,7 +23,7 @@ class VerifyRoles extends Middleware
             3 => ['ventas'],
             4 => ['delivery'],
             5 => ['trabajdores'],
-            6 => ['asistencia'],
+            6 => ['asist'],
             7 => ['product','category_product'],
             8 => ['roles']
         );

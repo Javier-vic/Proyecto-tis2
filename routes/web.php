@@ -4,6 +4,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\AsistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyRoles;
 use GuzzleHttp\Middleware;
@@ -35,11 +36,12 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/category_product/modal/edit', [CategoryProductController::class, 'categoryProductModalEdit'])->name('category.product.modal.edit');
     Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles');
     Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
-    
+    Route::get('/asist/dataTable',[AsistController::class,'dataTable'])->name('dataTable.asist');
     //POST
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     
     //RESOURCE
+    Route::resource('asist',AsistController::class);
     Route::resource('order', OrderController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('product', ProductController::class);
