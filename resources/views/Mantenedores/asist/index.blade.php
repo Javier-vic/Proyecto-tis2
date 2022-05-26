@@ -5,6 +5,16 @@
 @endsection
 
 @section('content')
+<div class="container my-4">
+    <div class="row ">
+        <div class="col d-flex justify-content-center">
+            <button class="btn btn-success">Marcar asistencia</button>
+        </div>
+        <div class="col d-flex justify-content-center">
+            <button class="btn btn-danger">Terminar turno</button>
+        </div>
+    </div>
+</div>
 <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}
     <thead class="thead bg-secondary text-white">
