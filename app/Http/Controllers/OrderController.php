@@ -161,22 +161,27 @@ class OrderController extends Controller
     public function edit(order $order)
     {
         //dd(order::findOrFail($order->id))
-        $product = product::all();
-        $selectOrder = order::findOrFail($order->id);
-        
+        $orderData = order::findOrFail($order->id);
+
     
         
-        $query = DB::table('products_orders')
-        ->select('products_orders.product_id', 'products_orders.cantidad')
+        $productsSelected = DB::table('products_orders')
         ->where('products_orders.order_id', '=', $order->id)
+        ->join('products','products_orders.product_id','products.id')
+        ->select(
+        'products_orders.product_id', 
+        'products_orders.cantidad',
+        'products.*'
+
+        )
         ->get();
+
         
-     
-        $name = $query->pluck('product_id')->all();
-        $cantidad = $query->pluck('cantidad')->all(); 
+    $selectedIds = $productsSelected->pluck('product_id');
+    $products = DB::table('products')->select('*')->whereNotIn('id',$selectedIds)->get();
+
         
-        
-        return view('Mantenedores.order.edit', compact('selectOrder', 'name', 'product','query'));
+        return view('Mantenedores.order.edit', compact('orderData', 'products','productsSelected'));
 
     }
 
@@ -189,11 +194,10 @@ class OrderController extends Controller
      */
     public function update(Request $request, order $order)
     {   
-
-        dd($request);
-        $productos = order::find($request->id);
+        
         $datosOrder = request()->except('_token');
-        $productos = new order;
+        dd($datosOrder);
+        $productos = order::find($order->id);
         $productos->name_order = $datosOrder['name_order'];
         $productos->order_status = $datosOrder['order_status'];
         $productos->payment_method = $datosOrder['payment_method'];
