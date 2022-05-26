@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Response;
 
 class CategorySupplyController extends Controller
 {
@@ -85,12 +88,6 @@ class CategorySupplyController extends Controller
         return response('No se pudo realizar el ingreso de la categoria.', 400);
 
 
-/////////////////////
-
-        
-
-
-
     }
 
     /**
@@ -124,23 +121,6 @@ class CategorySupplyController extends Controller
             ->orderBy('category_supplies.id')
             ->get();
         return json_encode([$categorySupplySelected]);
-
-
-        /////////
-        // $id = request()->id;
-        // $categoryProductSelected = DB::table('category_products')
-        //     ->whereNull('category_products.deleted_at')
-        //     ->where('category_products.id', '=', $id)
-        //     ->select(
-        //         'category_products.id as id',
-        //         'category_products.name'
-        //     )
-        //     ->orderBy('category_products.id')
-        //     ->get();
-        // return json_encode([$categoryProductSelected]);
-
-        // $category_supply = category_supply::findOrFAil($id);
-        // return view('Mantenedores.category_supply.edit', compact('category_supply'));
     }
 
     /**
@@ -150,13 +130,29 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, category_supply  $category_supply)
     {
-        $category_supply = category_supply::findOrFAil($id);
-        $category_supply->name_category = $request->input('name_category');
-        $category_supply->update();
+        $validator = Validator::make($request->all(), category_supply::$rules, category_supply::$messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
 
-        return redirect()->route('category_supply.index');
+                $category_supply = category_supply::find($category_supply->id);
+                $category_supply->name_category         = $request->name_category;
+                $category_supply->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se editó el producto con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo editar el producto.', 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ), 400);
+        }
+        return response('No se pudo editar el producto.', 400);
     }
 
     /**

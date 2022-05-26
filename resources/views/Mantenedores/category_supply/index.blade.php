@@ -118,7 +118,7 @@
                 success: function(response) {
                     console.log(response)
                     let resultado = response[0][0];                  
-                    $('#name_categoryEdit').val(resultado.name_category);   
+                    $('#name_categorySupplyEdit').val(resultado.name_category);   
                     $("#formEdit").attr('onSubmit', `editCategorySupplySubmit(${id},event)`);
                     $('#editCategorySupply').modal('show');  
                 }
@@ -128,20 +128,60 @@
 
         const editCategorySupplySubmit = (id,e) => {
             e.preventDefault();
-            var url = '{{ route("roles.update", ":id") }}';
-            url = url.replace(':id', id);
-            var data = $("#editForm").serializeArray();
-            console.log(data)
-            $.ajax({
-                type: "PUT",
-                url: url,
-                data: data,
-                dataType: "json",
-                success: function (response) {
-                    console.log(response)        
+            var formData = new FormData(e.currentTarget);
+            formData.append('_method', 'put');
+            var  url = '{{ route("category_supply.update" , ":category_supply") }}';
+            url = url.replace(':category_supply', id);
+            Swal.fire({
+                title: '¿Estás seguro de editar esta categoria',
+                text: "No se puede revertir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, editar!',
+                cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: formData ,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            table.ajax.reload();
+                            Swal.fire(
+                                'Editado!',
+                                'La categoria ha sido editada.',
+                                'success'
+                            )
+                            $('#editCategorySupply').modal('hide');
+                        },
+                        error: function( jqXHR, textStatus, errorThrown ) {
+                            var text = jqXHR.responseJSON;
+                            $(".editmodal_error").empty()
+                            $(".input-modal").addClass('is-valid')
+                            $(".input-modal").removeClass('is-invalid')
+                            Swal.fire({
+                                position: 'bottom-end',
+                                icon: 'error',
+                                title: 'No se pudo editar la categoria.',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                backdrop: false
+                            })
+                            if(text){
+                                $.each(text.errors, function(key,item){
+                                $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
+                                $(`#${key}EDIT`).addClass('is-invalid');
+                                });
+                            }
+                        }         
+                    })
                 }
-            });
-            $('#editRole').modal('hide');
+            })
         }
 
         const deleteCategorySupply = (id) =>{

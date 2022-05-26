@@ -234,12 +234,10 @@
                                 $(`#${key}EDIT`).addClass('is-invalid');
                                 });
                             }
-                        }
-         
+                        }         
                     })
                 }
-            })
-           
+            })           
         } 
 
 
