@@ -246,5 +246,7 @@ class ProductController extends Controller
         }
 
         return response('success', 200);
+
+        
     }
 }

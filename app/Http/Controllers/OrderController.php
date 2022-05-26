@@ -171,11 +171,11 @@ class OrderController extends Controller
         ->where('products_orders.order_id', '=', $order->id)
         ->get();
         
-       dd($query);
+     
         $name = $query->pluck('product_id')->all();
         $cantidad = $query->pluck('cantidad')->all(); 
         
-        dd($name);
+        
         return view('Mantenedores.order.edit', compact('selectOrder', 'name', 'product','query'));
 
     }
@@ -190,14 +190,8 @@ class OrderController extends Controller
     public function update(Request $request, order $order)
     {   
 
-        
+        dd($request);
         $productos = order::find($request->id);
-
-        $product = DB::table('products_orders')
-        ->select('products_orders.product_id')
-        ->where('products_orders.order_id', '=', $request->id)
-        ->get();
-        
         $datosOrder = request()->except('_token');
         $productos = new order;
         $productos->name_order = $datosOrder['name_order'];
@@ -245,13 +239,12 @@ class OrderController extends Controller
         $productos->save();
 
         for ($i = 0; $i < count($permits); $i++) {
-            $id = $permits[$i];
-            $cont = $cantidad[$i];
+            $id = $permits[$i]; //id
+            $cont = $cantidad[$i]; //cantidad
 
-           
-
-            $order->products()->attach($id);
-           
+            
+            $order->products()->attach($id,['cantidad'=>$cont]);
+            
         }
 
 
@@ -289,7 +282,8 @@ class OrderController extends Controller
 
 
     public function destroy($id)
-    {
+    {   
+        
         $order = order::findOrFail($id);
         $order->delete($id);
 
