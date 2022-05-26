@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\AsistController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyRoles;
 use GuzzleHttp\Middleware;
@@ -28,6 +31,7 @@ Auth::routes();
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
     //GET
+    Route::get('/coupon/refresh/coupon', [\App\Http\Controllers\CouponController::class, 'refreshCoupons'])->name('coupon.refresh.coupon');
     Route::get('/product/productView', [ProductController::class, 'productView'])->name('product.view');
     Route::get('/product/productModalEdit', [ProductController::class, 'productModalEdit'])->name('product.modal.edit');
     Route::get('/product/productView', [ProductController::class, 'productView'])->name('product.view');
@@ -37,6 +41,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles');
     Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
     Route::get('/asist/dataTable',[AsistController::class,'dataTable'])->name('dataTable.asist');
+    Route::get('/product/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
+    Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
     //POST
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     
@@ -46,9 +52,22 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('product', ProductController::class);
     Route::resource('category_product', CategoryProductController::class);
+    Route::resource('coupon', CouponController::class);
+    Route::resource('user', UserController::class);
+    Route::resource('map', MapController::class);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// RUTAS DE PRODUCTOS
+//RUTAS DE CUPONES
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('roles', RoleController::class)->middleware([]);
+Route::resource('product', ProductController::class);
+Route::resource('order', OrderController::class);
+Route::resource('category_product', CategoryProductController::class);
 
 // RUTAS DE PRODUCTOS
 // RUTAS DE CATEGORÍAS

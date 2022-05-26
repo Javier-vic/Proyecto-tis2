@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css">
     @yield('css_extra')
+
 </head>
 @if (RoleController::havePermits(auth()->user()->id_role,1))
     
@@ -62,7 +63,7 @@
                     </li>
                 @endif
                 <li>
-                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>    
+                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle {{ request()->is('product','category_product') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-down "></i></a>    
                     <ul class="collapse list-unstyled" id="submenuCategoryProducts">
                         <li>
                             <a href="{{route('product.index')}}" >Listado productos</a>
@@ -74,6 +75,18 @@
      
                     </ul>
                 </li>
+                <li>
+                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
+                </li>
+                <li>
+                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
+                </li>
+                <li>
+                    <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
+                </li>
+                <li>
+                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
+                </li>
             </ul>
         </nav>
 
@@ -83,10 +96,9 @@
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
                         <i class="fas fa-align-left text-white"></i>
-                    </button>
-                 
-
-    
+                    </button>   
+                    @yield('titlePage')                
+                    <div style="visibility:hidden">.</div>                 
                 </div>
             </nav>
 
@@ -100,11 +112,12 @@
 @yield('js_after')
 
 <script>
-    $(document).ready(function() {
+    
         $("#sidebarCollapse").on("click", function() {
             $("#sidebar").toggleClass("active");
         });
-    });
+
+
 </script>
 
 </html>

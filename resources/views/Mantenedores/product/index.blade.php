@@ -2,22 +2,33 @@
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
+
+@section('titlePage')
+<h3>Listado de productos</h3>
+
+@endsection
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
-        Agregar producto
-    </button>
-
-    <div id="number"></div>
+    <div class="container ">
+        <div class="row">
+            <div class="col-md justify-content-md-end justify-content-center  d-flex align-self-center col-xs-12">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
+                Agregar producto
+                </button>
+            </div>
+            <div class="col-md justify-content-center justify-content-md-start d-flex align-self-center col-xs-12">
+                <div class="py-4 fs-5">Cantidad de productos: <span id=number></span></div>
+            </div>
+        </div>
+    </div>
     <div>@include('Mantenedores.product.modal.create')</div>
     <div>@include('Mantenedores.product.modal.show')</div>
     <div>@include('Mantenedores.product.modal.edit')</div>
 
-    <div class="block-content block-content-full block-content-sm bg-body-dark">
-        <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
-    </div>
+
+        
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre producto</th>
                 <th class="py-2" style="width:10%">Stock</th>
@@ -37,6 +48,7 @@
         }
     });
 </script>
+
     <script type="text/javascript">
             var table = $("#myTable").DataTable({
                 bProcessing: true,
@@ -56,9 +68,6 @@
                 // language: {
                 //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
                 // },
-                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
 
                 columns: [
                     {
@@ -85,9 +94,6 @@
                 select: true
             });
 
-            $('#search').on('keyup', function() {
-                table.search(this.value).draw();
-            });
 
            // ****************************************************************************************************************
            //MODAL DE CREAR
@@ -107,29 +113,45 @@
                         Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
-                        title: response,
+                        title: 'Se ingresó el producto correctamente.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false,
                         heightAuto:false,
                     })
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    $("input-modal").removeClass('is-invalid');
+                    $("input-modal").removeClass('is-valid');
+                    $(".createmodal_error").empty()
+                    //////////////////////////////////////
                     table.ajax.reload();
                     $('#agregarProducto').modal('hide');  
                     document.getElementById("number").innerHTML = table.data().count()+1;
  
                     },
-                    error: function( jqXHR, textStatus, errorThrown ) {
-                console.log('entré')
-                   var text = jqXHR.responseText;
-                   console.log(text)
-                   Swal.fire({
-                       position: 'bottom-end',
-                       icon: 'error',
-                       title: text,
-                       showConfirmButton: false,
-                       timer: 2000,
-                       backdrop: false
-                   })
+                   error: function( jqXHR, textStatus, errorThrown ) {
+                    var text = jqXHR.responseJSON;
+                    console.log(text)
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: "No se pudo realizar el ingreso del producto.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if(text){
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}`).addClass('is-invalid');
+                    });
+                    }
+                    //////////////////////////////////////
+
                }
                 
                 });
@@ -138,18 +160,16 @@
            //RELLENA MODAL DE EDITAR
            // ****************************************************************************************************************
             const editProduct = (id) =>{
-            var  url = '{{ route("product.modal.edit") }}';
+            var  url = '{{ route("product.edit", ":product") }}';
+            url = url.replace(':product',id)
                 $.ajax({
                 type: "GET",
                 url: url,
-                data:{
-                    'id': id,
-                    "_token": "{{ csrf_token() }}"                    
-                },
+ 
                 dataType: "json",
                     success: function(response) {
+                        console.log(response)
                     let resultado = response[0][0];
-                    console.log(resultado)
                     $('#image_productEDITVIEW').empty();
                     $('#name_productEDIT').val(resultado.name_product);
                     $('#stockEDIT').val(resultado.stock);
@@ -164,7 +184,8 @@
 
                         $('#image_productEDITVIEW').append($('<img>', {
                             src: url,
-                            class: 'img-fluid'
+                            class: 'img-fluid w-100'
+
                         }))
 
                     $("#formEdit").attr('onSubmit', `editProductSubmit(${id},event)`);
@@ -196,7 +217,6 @@
                     $.ajax({
                 type: "POST",
                 url: url,
-              
                 data: formData ,
                 cache: false,
                 contentType: false,
@@ -211,17 +231,26 @@
                     $('#editProducto').modal('hide');
             },
             error: function( jqXHR, textStatus, errorThrown ) {
-                console.log('entré')
-                   var text = jqXHR.responseText;
-                   console.log(text)
+                   var text = jqXHR.responseJSON;
+                   $(".editmodal_error").empty()
+                   $(".input-modal").addClass('is-valid')
+                   $(".input-modal").removeClass('is-invalid')
                    Swal.fire({
                        position: 'bottom-end',
                        icon: 'error',
-                       title: text,
+                       title: 'No se pudo editar el producto.',
                        showConfirmButton: false,
                        timer: 2000,
                        backdrop: false
                    })
+                    //AGREGA CLASES Y ELEMENTOS INVALID  
+                   if(text){
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}EDIT`).addClass('is-invalid');
+                    });
+                   }
+                  //////////////////////////////////////////////
                }
          
             })
@@ -252,7 +281,6 @@
                 url: url,
                 error: function( jqXHR, textStatus, errorThrown ) {
                    var text = jqXHR.responseText;
-                   console.log(text)
                    Swal.fire({
                        position: 'bottom-end',
                        icon: 'error',
@@ -266,7 +294,6 @@
                     "_token": "{{ csrf_token() }}",
                 },
                     success: function(response) {
-                        console.log(response)
                         Swal.fire(
                                 'Borrado!',
                                 'El producto ha sido eliminado.',
@@ -307,20 +334,39 @@
 
                         $('#mostrarImagen').append($('<img>', {
                             src: url,
-                            class: 'img-fluid'
+                            class: 'img-fluid rounded-start w-100 p-2',
+                            style : 'height:400px; object-fit:cover;'
                         }))
 
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
-                        $('#stockVIEWMODAL').val(resultado.stock)
-                        $('#descriptionVIEWMODAL').val(resultado.description)
-                        $('#category').val(resultado.category)
-                        $('#priceVIEWMODAL').val(resultado.price)
+                        $('#stockVIEWMODAL').html(resultado.stock + ' unidades')
+                        $('#descriptionVIEWMODAL').html(resultado.description)
+                        $('#category').html(resultado.category)
+                        $('#priceVIEWMODAL').html('$'+resultado.price)
                     }
                 });
             });
         
            // ****************************************************************************************************************
+           // ****************************************************************************************************************
+           //LIMPIA LOS INPUTS AL CERRAR UN MODAL
+           // ****************************************************************************************************************
+           $('#agregarProducto').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".createmodal_error").empty()
+           })
 
+           $('#editProducto').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".editmodal_error").empty()
+           })
+           //
+           // ****************************************************************************************************************
+        
     
     </script>
 @endsection

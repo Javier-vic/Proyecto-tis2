@@ -27,15 +27,10 @@ class CategoryProductSeeder extends Seeder
             'Postres',
         ];
 
-        $category_product = array_map(function($categoryProduct){
+        $category_product = array_map(function ($categoryProduct) {
             $producto = new category_product;
-            $producto ->name = $categoryProduct;
+            $producto->name = $categoryProduct;
             $producto->save();
-
-
-        },$category_product);
-        
-
-
+        }, $category_product);
     }
 }

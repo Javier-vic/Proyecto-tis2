@@ -8,6 +8,7 @@ use App\Models\product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
 
 class ProductController extends Controller
 {
@@ -67,20 +68,10 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name_product'          => 'required|string',
-            'stock'          => 'required|string',
-            'description'          => 'required|string',
-            'price'          => 'required|string',
-            'id_category_product'          => 'required|string',
-            'image_product' => 'required|file'
 
-        ];
 
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator = Validator::make($request->all(), product::$rules, product::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
@@ -102,6 +93,12 @@ class ProductController extends Controller
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo realizar el ingreso del producto.', 400);
             }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
 
 
@@ -148,17 +145,17 @@ class ProductController extends Controller
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(product $product)
-    {
-        $productSelected = product::find($product->id);
-        $category_products = category_product::all();
+    // public function edit(product $product)
+    // {
+    //     $productSelected = product::find($product->id);
+    //     $category_products = category_product::all();
 
-        // dd($productSelected->id_category_product);
-        return view('mantenedores.product.edit', compact('productSelected', 'category_products'));
-    }
-    public function productModalEdit(request $request)
+    //     // dd($productSelected->id_category_product);
+    //     return view('mantenedores.product.edit', compact('productSelected', 'category_products'));
+    // }
+    public function edit(request $request, product $product)
     {
-        $id = request()->id;
+        $id = $product->id;
         $productSelected = DB::table('products')
             ->whereNull('products.deleted_at')
             ->where('products.id', '=', $id)
@@ -192,21 +189,7 @@ class ProductController extends Controller
     public function update(request $request, product $product)
     {
 
-        $rules = [
-            'name_product'          => 'required|string',
-            'stock'          => 'required|string',
-            'description'          => 'required|string',
-            'price'          => 'required|string',
-            'id_category_product'          => 'required|string',
-
-        ];
-
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-
-
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), product::$rules, product::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
@@ -228,6 +211,12 @@ class ProductController extends Controller
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo editar el producto.', 400);
             }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
 
 

@@ -10,23 +10,29 @@
                     @csrf
                     <div class="mb-3">
                         <label for="" class="form-label">Nombre </label>
-                        <input type="text" class="form-control" id="name_product" name="name_product" value="FELIPE"
+                        <input type="text" class="form-control input-modal" id="name_product" name="name_product" 
                             aria-describedby="name_product_help">
+                        <span class="text-danger createmodal_error" id="name_product_errorCREATEMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Cantidad </label>
-                        <input type="number" class="form-control" id="stock" name="stock" value="100"
+                        <input type="number" class="form-control input-modal" id="stock" name="stock" 
                             aria-describedby="stock_help">
+                        <span class="text-danger createmodal_error" id="stock_errorCREATEMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Descripción </label>
-                        <input type="text" class="form-control" id="description" name="description" value="DECSRIPSION"
-                            aria-describedby="description_help">
+                        <input type="text" onkeyup="countChar(this)" class="form-control input-modal text-limit" id="description" name="description" 
+                            aria-describedby="description_help" minlength="1" maxlength="500" >
+                            <div id="charNum"></div>
+                        <span class="text-danger createmodal_error" id="description_errorCREATEMODAL"></span>
+                        <span class="text-danger d-none" id="text-limit_error">Se ha alcanzado el limite de texto.</span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Precio </label>
-                        <input type="number" class="form-control" id="price" name="price" value="25000"
+                        <input type="number" class="form-control input-modal" id="price" name="price" 
                             aria-describedby="description_help">
+                        <span class="text-danger createmodal_error" id="price_errorCREATEMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Categoria </label><br>
@@ -39,8 +45,9 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Imagen </label>
-                        <input type="file" class="form-control" id="image_product" name="image_product"
-                            aria-describedby="name_product_help">
+                        <input type="file" class="form-control input-modal" id="image_product" name="image_product"
+                            aria-describedby="name_product_help" accept="image/*">
+                        <span class="text-danger createmodal_error" id="image_product_errorCREATEMODAL"></span>
                     </div>
                  
 
@@ -53,3 +60,19 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function countChar(val) {
+    var len = val.value.length;
+    if (len >= 500) {
+      val.value = val.value.substring(0, 500);
+      $(".text-limit").addClass('is-invalid')
+      $("#text-limit_error").removeClass('d-none')
+    } else {
+      $("#description_errorCREATEMODAL").empty();
+      $("#text-limit_error").addClass('d-none')
+    $(".text-limit").removeClass('is-invalid')
+      $('#charNum').text(500 - len);
+    }
+  };
+  </script>

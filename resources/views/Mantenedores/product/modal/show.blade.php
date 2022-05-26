@@ -1,45 +1,45 @@
-<div class="modal fade" id="verProducto" tabindex="-1" aria-labelledby="verProductoLabel" aria-hidden="true">
+
+<style>
+  .pildora{
+    background:rgb(0, 76, 255);
+    border-radius: 100px;
+    padding: 5px 20px;
+    color: #FFF;
+    font-size: 1.2rem;
+  }
+
+  .cantidad{
+    background:rgb(197, 116, 34);
+    border-radius: 100px;
+    padding: 5px 20px;
+    color: #FFF;
+    font-size: 1.2rem;
+  }
+</style>
+<div class="modal fade " id="verProducto" tabindex="-1" aria-labelledby="verProductoLabel" aria-hidden="true" >
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" >
             <div class="modal-header">
-                <h5 class="modal-title" id="verProductoLabel">Información de NOMBRE PRODUCTO</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h3 class="card-title mb-0" id="verProductoLabel"></h3>
+              
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 @csrf
-                <!-- <div class="mb-3">
-                    <label for="" class="form-label">Nombre </label>
-                    <input type="text" class="form-control" id="name_productVIEWMODAL" name="name_product"
-                        aria-describedby="name_product_help">
-                </div>  -->
-                <div class="mb-3">
-                    <label for="" class="form-label">Cantidad </label>
-                    <input readonly type="number" class="form-control" id="stockVIEWMODAL" name="stock"
-                        aria-describedby="stock_help">
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Descripción </label>
-                    <input readonly type="text" class="form-control" id="descriptionVIEWMODAL" name="description"
-                        aria-describedby="description_help">
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Precio </label>
-                    <input readonly type="text" class="form-control" id="priceVIEWMODAL" name="price"
-                        aria-describedby="description_help">
-                </div>
-                {{-- <div class="mb-3">
-                    <label for="" class="form-label">Imagen </label>
-                    <input type="file" class="form-control" id="image_productVIEWMODAL" name="image_product"
-                        aria-describedby="name_product_he
-                        lp">
-                </div> --}}
-                <div id="mostrarImagen"></div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Categoría </label>
-                    <input readonly type="text" class="form-control" id="category" name="category"
-                        aria-describedby="name_product_help">
-                </div>
-
+                {{--  --}}
+           
+                  {{--  --}}
+                  <div class="card">
+                      
+                    <div id="mostrarImagen"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center px-2">
+                       <h6 class="pildora"  id="category"></h6>
+                       <h5 class="cantidad" id="stockVIEWMODAL"></h5>
+                        <p class="" style="color: rgb(1, 112, 1); font-size: 2rem;" id="priceVIEWMODAL"></p>
+                     </div>
+                     <hr>
+                      <h5 class="px-2" id="descriptionVIEWMODAL">
             </div>
             {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

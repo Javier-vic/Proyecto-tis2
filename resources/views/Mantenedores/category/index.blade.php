@@ -3,6 +3,9 @@
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
+@section('titlePage')
+<h2 class="">Categoría de los productos</h2>
+@endsection
 @section('content')
 <div>
 </div>
@@ -23,7 +26,7 @@
         <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
     </div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-primary text-white">
+        <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre</th>
                 <th class="py-2" style="width:10%">Acciones</th>
