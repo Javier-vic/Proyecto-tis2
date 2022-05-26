@@ -148,7 +148,7 @@
                         success: function(response) {
                             Swal.fire(
                                 'Borrado!',
-                                'El producto ha sido eliminado.',
+                                'El insumo ha sido eliminado.',
                                 'success'
                             )
                             
@@ -210,7 +210,7 @@
                             table.ajax.reload();
                             Swal.fire(
                                 'Editado!',
-                                'El producto ha sido editado.',
+                                'El insumo ha sido editado.',
                                 'success'
                             )
                             $('#editSupply').modal('hide');
@@ -223,12 +223,11 @@
                             Swal.fire({
                                 position: 'bottom-end',
                                 icon: 'error',
-                                title: 'No se pudo editar el producto.',
+                                title: 'No se pudo editar el insumo.',
                                 showConfirmButton: false,
                                 timer: 2000,
                                 backdrop: false
                             })
-                            //AGREGA CLASES Y ELEMENTOS INVALID  
                             if(text){
                                 $.each(text.errors, function(key,item){
                                 $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")

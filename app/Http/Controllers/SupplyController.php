@@ -80,10 +80,10 @@ class SupplyController extends Controller
                 $supply->id_category_supplies = $supplyData['id_category_supplies'];
                 $supply->save();
                 DB::connection(session()->get('database'))->commit();
-                return response('Se ingresó el producto con exito.', 200);
+                return response('Se ingresó el insumo con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo realizar el ingreso del producto.', 400);
+                return response('No se pudo realizar el ingreso del insumo.', 400);
             }
         } else {
             return Response::json(array(
@@ -147,21 +147,33 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, supply $supply)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), supply::$rules, supply::$messages);
+        $rules = [
+            'name_supply'          => 'required|string',           
+            'unit_meassurement'          => 'required|string',           
+            'quantity'          => 'required|string',           
+            'id_category_supplies'          => 'required|string',           
+        ];
+        
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+        ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
 
-                $supply = supply::find($product->id);
+                $supply = supply::findOrFAil($id);
                 $supply->category_supply()->dissociate();
-                $supply->name_supply         = $request->name_supply;
-                $supply->unit_meassurement   = $request->unit_meassurement;
-                $supply->quantity    = $request->quantity;
-                $supply->id_category_supply = $request->id_category_supply;
+                $supply->name_supply = $request->input('name_supply');
+                $supply->unit_meassurement = $request->input('unit_meassurement');
+                $supply->quantity = $request->input('quantity');
+                $id_category_supplies = $request->input('id_category_supplies');
                 $supply->category_supply()->associate($id_category_supplies);
-                $supply->save();
+                $supply->update();
+        
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó el insumo con exito.', 200);
             } catch (\Throwable $th) {
@@ -175,8 +187,6 @@ class SupplyController extends Controller
 
             ), 400);
         }
-
-
         return response('No se pudo editar el insumo.', 400);
 
 
@@ -198,7 +208,7 @@ class SupplyController extends Controller
             DB::connection(session()->get('database'))->commit();
         } catch (\Illuminate\Database\QueryException $e) {
             DB::connection(session()->get('database'))->rollBack();
-            return response('Ocurrió un error. No se eliminó el producto.', 400);
+            return response('Ocurrió un error. No se eliminó el insumo.', 400);
         }
         return response('success', 200);
     }
