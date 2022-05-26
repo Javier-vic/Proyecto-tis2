@@ -10,6 +10,18 @@ class category_supply extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'name_category'
+    ];
+
+    static $rules = [
+        'name_category'          => 'required|string'               
+    ];
+    
+    static  $messages = [
+        'required'      => 'Este campo es obligatorio',
+    ];
+
     public function supplies() {
         return $this->hasMany(supply::class, 'id_category_supplies');
     }

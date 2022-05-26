@@ -36,28 +36,38 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     <script>
-        const Table = $("#myTable").DataTable({
+        var table = $("#myTable").DataTable({
+            bProcessing: true,
+            bStateSave: true,
+            deferRender: true,
+            responsive: true,
             processing: true,
-            serverSide: true,
+            searching: true,
             language: {
-                    url: "{{ asset('js/language.json') }}"
-                },
-            ajax:{
-                    url: "{{ route('dataTable.CategorySupply') }}",
-                    type: 'GET',
+                url: "{{ asset('js/language.json') }}"
             },
+            ajax: {
+                url: "{{ route('category_supply.index') }}",
+                type: 'GET',
+            },
+            dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
+                "<'row '<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
             columns:[
                 {data:'id',name:'id'},
                 {data:'name_category',name:'name_category'},
                 {data:'action',name:'action',orderable:false,searchable:true},
-            ]
+            ],
+            select: true
         });
-
-        const capitalize = (s) => {
-            if (typeof s !== 'string') return ''
-            return s.charAt(0).toUpperCase() + s.slice(1)
-        }
 
         const addCategorySupply = (e) =>{
             e.preventDefault();
@@ -80,9 +90,8 @@
                         heightAuto:false,
                     })
                     $('#idname').val('');
-                    Table.ajax.reload();
+                    table.ajax.reload();
                     $("#agregarCategoriaInsumo").modal("hide");                   
-                    // $('#editCategoria').modal('hide');
                 },
                 error: function( jqXHR, textStatus, errorThrown ){                 
                     var text = jqXHR.responseText;

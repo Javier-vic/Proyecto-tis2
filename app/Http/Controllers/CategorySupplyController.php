@@ -19,9 +19,27 @@ class CategorySupplyController extends Controller
      */
     public function index()
     {
-        //
-        $datos['category_supplies'] = category_supply::paginate(20);
-        return view('Mantenedores.category_supply.index', $datos);
+        if (request()->ajax()) {
+
+            return datatables(DB::connection(session()->get('database'))
+                ->table('category_supplies')
+                ->whereNull('category_supplies.deleted_at')
+                ->select(
+                    'category_supplies.id as _id',
+                    'category_supplies.id',
+                    'category_supplies.name_category',
+                )
+                ->orderBy('category_supplies.id')
+                ->get())
+                ->addColumn('action', 'mantenedores.category_supply.datatable.action')
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+        $category_supplies = category_supply::all();
+        // $supplySelected = new supply();
+
+        return view('mantenedores.category_supply.index', compact('category_supplies'));
     }
 
     /**
