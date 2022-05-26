@@ -15,12 +15,11 @@
 
         <thead class="thead bg-secondary text-white">
             <tr>
-                <th>#</th>
-                <th>name_supply</th>
-                <th>unit_meassurement</th>
-                <th>quantity</th>
-                <th>name_category</th>
-                <th>acciones</th>
+                <th>Nombre de insumo</th>
+                <th>Unidad de medida</th>
+                <th>Cantidad</th>
+                <th>Categoria</th>
+                <th>Acciones</th>
             </tr>
         </thead>
 
@@ -65,11 +64,10 @@
                     "<'row '<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
                 columns:[
-                    {data:'id',name:'id'},
                     {data:'name_supply',name:'name_supply'},
                     {data:'unit_meassurement',name:'unit_meassurement'},
                     {data:'quantity',name:'quantity'},
-                    {data:'id_category_supplies',name:'id_category_supplies'},
+                    {data:'name_category',name:'name_category'},
                     {data:'action',name:'action',orderable:false,searchable:true}
                 ],
                 select: true

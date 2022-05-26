@@ -75,7 +75,7 @@ class CategorySupplyController extends Controller
                 return response('Se ingresó la categoría con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo realizar el ingreso de la categoria.', 400);
+                return response('No se pudo realizar el ingreso de la categoría.', 400);
             }
         } else {
             return Response::json(array(
@@ -85,7 +85,7 @@ class CategorySupplyController extends Controller
             ), 400);
         }
 
-        return response('No se pudo realizar el ingreso de la categoria.', 400);
+        return response('No se pudo realizar el ingreso de la categoría.', 400);
 
 
     }
@@ -141,10 +141,10 @@ class CategorySupplyController extends Controller
                 $category_supply->name_category         = $request->name_category;
                 $category_supply->save();
                 DB::connection(session()->get('database'))->commit();
-                return response('Se editó el producto con exito.', 200);
+                return response('Se editó la categoría con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo editar el producto.', 400);
+                return response('No se pudo editar la categoría.', 400);
             }
         } else {
             return Response::json(array(
@@ -152,7 +152,7 @@ class CategorySupplyController extends Controller
                 'errors' => $validator->getMessageBag()->toArray()
             ), 400);
         }
-        return response('No se pudo editar el producto.', 400);
+        return response('No se pudo editar la categoría.', 400);
     }
 
     /**
@@ -170,7 +170,7 @@ class CategorySupplyController extends Controller
             DB::connection(session()->get('database'))->commit();
         } catch (\Illuminate\Database\QueryException $e) {
             DB::connection(session()->get('database'))->rollBack();
-            return response('Ocurrió un error. No se eliminó la categoria.', 400);
+            return response('Ocurrió un error. No se eliminó la categoría.', 400);
         }
         return response('success', 200);
 

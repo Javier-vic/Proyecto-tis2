@@ -14,9 +14,8 @@
 
         <thead class="thead bg-secondary text-white">
             <tr>
-                <th>#</th>
-                <th>name_category</th>
-                <th>acciones</th>
+                <th>Nombre de categoría</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         
@@ -62,7 +61,6 @@
                 "<'row '<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
             columns:[
-                {data:'id',name:'id'},
                 {data:'name_category',name:'name_category'},
                 {data:'action',name:'action',orderable:false,searchable:true},
             ],
@@ -133,7 +131,7 @@
             var  url = '{{ route("category_supply.update" , ":category_supply") }}';
             url = url.replace(':category_supply', id);
             Swal.fire({
-                title: '¿Estás seguro de editar esta categoria',
+                title: '¿Estás seguro de editar esta categoría',
                 text: "No se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -154,7 +152,7 @@
                             table.ajax.reload();
                             Swal.fire(
                                 'Editado!',
-                                'La categoria ha sido editada.',
+                                'La categoría ha sido editada.',
                                 'success'
                             )
                             $('#editCategorySupply').modal('hide');
@@ -167,7 +165,7 @@
                             Swal.fire({
                                 position: 'bottom-end',
                                 icon: 'error',
-                                title: 'No se pudo editar la categoria.',
+                                title: 'No se pudo editar la categoría.',
                                 showConfirmButton: false,
                                 timer: 2000,
                                 backdrop: false
@@ -186,7 +184,7 @@
 
         const deleteCategorySupply = (id) =>{
             Swal.fire({
-                title: '¿Estás seguro de eliminar esta categoria?',
+                title: '¿Estás seguro de eliminar esta categoría?',
                 text: "No se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -218,7 +216,7 @@
                         success: function(response) {
                             Swal.fire(
                                 'Borrado!',
-                                'La categoria ha sido eliminada.',
+                                'La categoría ha sido eliminada.',
                                 'success'
                             )
                             

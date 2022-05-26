@@ -26,13 +26,14 @@ class SupplyController extends Controller
             return datatables(DB::connection(session()->get('database'))
                 ->table('supplies')
                 ->whereNull('supplies.deleted_at')
+                ->join('category_supplies', 'category_supplies.id', '=', 'supplies.id_category_supplies')
                 ->select(
                     'supplies.id as _id',
                     'supplies.id',
                     'supplies.name_supply',
                     'supplies.unit_meassurement',
                     'supplies.quantity',
-                    'supplies.id_category_supplies',
+                    'category_supplies.name_category',
                     
                 )
                 ->orderBy('supplies.id')
