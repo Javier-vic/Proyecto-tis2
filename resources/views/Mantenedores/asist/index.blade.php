@@ -19,7 +19,6 @@
     {!! Form::token() !!}
     <thead class="thead bg-secondary text-white">
         <tr>
-            <th>id</th>
             <th>Fecha</th>
             <th>Hora de entrada</th>
             <th>Hora de salida</th>
@@ -45,7 +44,6 @@
                     type: 'GET',
             },
             columns:[
-                {data:'id',name:'id'},
                 {data:'created_at',name:'crated_at', render(data){ return moment(data).locale('es').format('LL');}},
                 {data:'created_at',name:'created_at',render(data){ return moment(data).locale('es').format('LTS');},orderable:false,searchable:true},
                 {data:'end',name:'end',render(data){ return moment(data).locale('es').format('LTS');}    ,orderable:false,searchable:true},
