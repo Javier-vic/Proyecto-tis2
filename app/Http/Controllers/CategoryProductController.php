@@ -21,7 +21,7 @@ class CategoryProductController extends Controller
      */
     public function index()
     {
-        //
+        return view('mantenedores.category.index');
     }
 
     /**

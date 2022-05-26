@@ -120,7 +120,7 @@
         $('#total').val(selectproduct.total);
 
         productsSelected.map(productSelected =>{
-            
+            console.log(productSelected)
             var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
                             url = url.replace(':urlImagen', productSelected.image_product);
             
@@ -133,8 +133,8 @@
                         <h5 class="card-title">${productSelected.name_product}</h5>
                         <p class="card-text">${productSelected.description}</p>
                         <div>
-                            <input type="number" type="number" name="cantidad[]" class="form-control"  value = "${productSelected.cantidad}" max = "${productSelected.stock}" class="form-control" id="valor${productSelected.id}"  >
-                            <input class="form-check-input" name="permits[]"  value="5" type="checkbox" checked id="check${productSelected.id}">
+                            <input type="number" type="number" name="cantidad[]" class="form-control"  min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" class="form-control" id="valor${productSelected.id}"  >
+                            <input class="form-check-input" name="permits[]" type="checkbox" checked value="${productSelected.id}" id="check${productSelected.id}">
                         </div>
                         <h4 class="pt-2 ">${productSelected.price}</h4>
                 </div>
@@ -155,7 +155,6 @@
                 var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
                             url = url.replace(':urlImagen', productSelected.image_product);
             
-            // muestra productos
             $('#listaProductos').append(
             `
             <div class="card col-2 mx-2" style="width: 15rem;">
@@ -164,8 +163,8 @@
                         <h5 class="card-title">${productSelected.name_product}</h5>
                         <p class="card-text">${productSelected.description}</p>
                         <div>
-                            <input type="number" type="number" name="cantidad[]" class="form-control"  value = "${productSelected.cantidad}" max = "${productSelected.stock}" class="form-control" id="valor${productSelected.id}"  >
-                            <input class="form-check-input" name="permits[]"  type="checkbox"  id="check${productSelected.id}">
+                            <input type="number" type="number" name="cantidad[]" class="form-control" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" class="form-control" id="valor${productSelected.id}"  >
+                            <input class="form-check-input" name="permits[]"  type="checkbox"  value="${productSelected.id}" id="check${productSelected.id}">
                         </div>
                         <h4 class="pt-2 ">${productSelected.price}</h4>
                 </div>

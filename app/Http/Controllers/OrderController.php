@@ -202,13 +202,8 @@ class OrderController extends Controller
         $productos->order_status = $datosOrder['order_status'];
         $productos->payment_method = $datosOrder['payment_method'];
         $productos->address = $datosOrder['address'];
-    
-    
         $productos->pick_up = $datosOrder['pick_up'];
         $productos->comment = $datosOrder['comment'];
-
-        
-        
 
         $permits = array();
         $cantidad = array();
