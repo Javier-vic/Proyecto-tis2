@@ -110,38 +110,37 @@ class CategorySupplyController extends Controller
      * @param  \App\Models\category_supply  $category_supply
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(category_supply  $category_supply)
     {
-        $id = request()->id;
-        $categoryProductSelected = DB::table('category_products')
-            ->whereNull('category_products.deleted_at')
-            ->where('category_products.id', '=', $id)
-            ->select(
-                'category_products.id as id',
-                'category_products.name'
-            )
-            ->orderBy('category_products.id')
-            ->get();
-        return json_encode([$categoryProductSelected]);
-
-        $category_supply = category_supply::findOrFAil($id);
-        return view('Mantenedores.category_supply.edit', compact('category_supply'));
-    }
-
-    public function modalEdit($id)
-    {
-        $id = request()->id;
-        console.log('dentro de modalEdit');
+        $id = $category_supply->id;
         $categorySupplySelected = DB::table('category_supplies')
             ->whereNull('category_supplies.deleted_at')
             ->where('category_supplies.id', '=', $id)
             ->select(
-                'category_supplies.id as id',
-                'category_supplies.name'
+                'category_supplies.id as _id',
+                'category_supplies.id',
+                'category_supplies.name_category',
             )
             ->orderBy('category_supplies.id')
             ->get();
         return json_encode([$categorySupplySelected]);
+
+
+        /////////
+        // $id = request()->id;
+        // $categoryProductSelected = DB::table('category_products')
+        //     ->whereNull('category_products.deleted_at')
+        //     ->where('category_products.id', '=', $id)
+        //     ->select(
+        //         'category_products.id as id',
+        //         'category_products.name'
+        //     )
+        //     ->orderBy('category_products.id')
+        //     ->get();
+        // return json_encode([$categoryProductSelected]);
+
+        // $category_supply = category_supply::findOrFAil($id);
+        // return view('Mantenedores.category_supply.edit', compact('category_supply'));
     }
 
     /**

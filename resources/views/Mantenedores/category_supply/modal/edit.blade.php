@@ -7,11 +7,11 @@
             </div>
             <div class="modal-body">
                 
-            <form onsubmit="" method="POST" id="EditForm" enctype="multipart/form-data">
+            <form onsubmit="" method="POST" id="EditForm">
+                @csrf
                 <div class="form-group">
-                    @csrf
-                    <label for="category" class="form-label"></label>
-                    <input type="text" name="name_category" class="form-nombre" id="EditName" name="name">
+                    <label for="" class="form-label"></label>
+                    <input type="text" name="name_category" class="form-control input-modal" id="name_categoryEdit" name="name">
                 </div>
                 <div class="form-group mt-2 mb-2">
 

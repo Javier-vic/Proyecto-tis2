@@ -109,25 +109,24 @@
         }
 
         const editCategorySupply = (id) => {          
-            console.log(id);
+            var  url = '{{ route("category_supply.edit", ":category_supply") }}';
+            url = url.replace(':category_supply',id)
             $.ajax({
                 type: "GET",
-                url: "{{ route('category.supply.modal.edit') }}",
-                data: {
-                    'id': id,
-                    "_token": "{{ csrf_token() }}"
-                },
+                url: url,
                 dataType: "json",
                 success: function(response) {
-                        let resultado = response[0][0];             
-                        $('#EditName').val(resultado.name);
-                        $("#EditForm").attr('onSubmit', `submitEdit(${id},event)`);
-                        $('#editCategorySupply').modal('show');
-                }                
+                    console.log(response)
+                    let resultado = response[0][0];                  
+                    $('#name_categoryEdit').val(resultado.name_category);   
+                    $("#formEdit").attr('onSubmit', `editCategorySupplySubmit(${id},event)`);
+                    $('#editCategorySupply').modal('show');  
+                }
+                
             });
         }
 
-        const submitEdit = (id,e) => {
+        const editCategorySupplySubmit = (id,e) => {
             e.preventDefault();
             var url = '{{ route("roles.update", ":id") }}';
             url = url.replace(':id', id);
