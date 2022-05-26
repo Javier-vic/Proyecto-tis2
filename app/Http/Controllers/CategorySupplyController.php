@@ -168,9 +168,19 @@ class CategorySupplyController extends Controller
      */
     public function destroy(category_supply $category_supply)
     {
-        $categorySupply = category_supply::on(session()->get('database'))->find($category_supply->id);
-        $categorySupply->delete();
+        $id = $category_supply->id;
+        try {
+            $category_supply = category_supply::on(session()->get('database'))->find($id);
+            $category_supply->delete();
+            DB::connection(session()->get('database'))->commit();
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::connection(session()->get('database'))->rollBack();
+            return response('Ocurrió un error. No se eliminó la categoria.', 400);
+        }
         return response('success', 200);
+
+
+   
     }
 
     public function dataTable(Request $request){

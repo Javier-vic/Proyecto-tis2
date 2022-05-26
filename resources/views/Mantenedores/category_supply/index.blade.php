@@ -147,14 +147,14 @@
 
         const deleteCategorySupply = (id) =>{
             Swal.fire({
-            title: '¿Estás seguro de eliminar esta categoría?',
-            text: "No se puede revertir.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, Borrar!',
-            cancelButtonText: 'Cancelar',
+                title: '¿Estás seguro de eliminar esta categoria?',
+                text: "No se puede revertir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Borrar!',
+                cancelButtonText: 'Cancelar',
             }).then((result)=>{
                 url = '{{ route("category_supply.destroy", ":category_supply") }}';
                 url = url.replace(':category_supply', id);
@@ -162,20 +162,32 @@
                     $.ajax({
                         type: "DELETE",
                         url: url,
+                        error: function( jqXHR, textStatus, errorThrown ) {
+                            var text = jqXHR.responseText;
+                            Swal.fire({
+                                position: 'bottom-end',
+                                icon: 'error',
+                                title: text,
+                                showConfirmButton: false,
+                                timer: 2000,
+                                backdrop: false
+                            })
+                        },
                         data: {
                             "_token": "{{ csrf_token() }}",
                         },
                         success: function(response) {
-                            console.log(response)
                             Swal.fire(
                                 'Borrado!',
-                                'La categoría ha sido borrada.',
+                                'La categoria ha sido eliminada.',
                                 'success'
                             )
-                            Table.ajax.reload();
+                            
+                            table.ajax.reload();           
                         }
                     });
-                }         
+                }
+         
             })
         }
     </script> 
