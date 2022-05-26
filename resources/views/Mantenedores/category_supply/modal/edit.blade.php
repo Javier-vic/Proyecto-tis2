@@ -15,7 +15,7 @@
                     <div class="form-group mt-2 mb-2">
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Agregar">
+                        <button class = "btn btn-primary" type="submit" value="Agregar">Guardar</button>
                     </div>
 
                 </form>

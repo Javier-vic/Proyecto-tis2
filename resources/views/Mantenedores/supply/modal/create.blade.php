@@ -14,11 +14,11 @@
                     </div>
                     <div class="form-group">
                         <label for="unit_meassurement">Unidad de medida</label>
-                        <input type="text" name="unit_meassurement">
+                        <input type="text" name="unit_meassurement" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="quantity">Cantidad</label>
-                        <input type="float" name="quantity">
+                        <input type="float" name="quantity" class="form-control">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Selecciona una categoria</label>
@@ -31,7 +31,7 @@
                     <div class="form-group mt-2 mb-2">
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Agregar">
+                        <button class = "btn btn-primary" type="submit" value="Agregar">Guardar</button>
                     </div>
 
                 </form>
