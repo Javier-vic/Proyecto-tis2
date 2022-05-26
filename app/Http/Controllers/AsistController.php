@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\asist;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class AsistController extends Controller
 {
@@ -87,7 +87,9 @@ class AsistController extends Controller
     }
     public function dataTable(Request $request){
         if($request->ajax()){
-            $data = asist::all();
+            $data = DB::table('asists')
+                    ->where('asists.id_user','=',Request()->user()->id)
+                    ->get();
             return DataTables::of($data)       
                    ->make(true);
         }else{

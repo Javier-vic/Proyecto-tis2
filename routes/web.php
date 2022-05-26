@@ -59,16 +59,3 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// RUTAS DE PRODUCTOS
-//RUTAS DE CUPONES
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('roles', RoleController::class)->middleware([]);
-Route::resource('product', ProductController::class);
-Route::resource('order', OrderController::class);
-Route::resource('category_product', CategoryProductController::class);
-
-// RUTAS DE PRODUCTOS
-// RUTAS DE CATEGORÍAS
-

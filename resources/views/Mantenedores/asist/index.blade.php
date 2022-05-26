@@ -7,7 +7,7 @@
 @section('content')
 <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}
-    <thead class="thead">
+    <thead class="thead bg-secondary text-white">
         <tr>
             <th>id</th>
             <th>Fecha</th>
@@ -19,7 +19,8 @@
 @endsection
 
 @section('js_after')
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script   script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script>
@@ -35,9 +36,9 @@
             },
             columns:[
                 {data:'id',name:'id'},
-                {data:'created_at',name:'crated_at'},
-                {data:'created_at',name:'created_at',orderable:false,searchable:true},
-                {data:'end',name:'end',orderable:false,searchable:true},
+                {data:'created_at',name:'crated_at', render(data){ return moment(data).locale('es').format('LL');}},
+                {data:'created_at',name:'created_at',render(data){ return moment(data).locale('es').format('LTS');},orderable:false,searchable:true},
+                {data:'end',name:'end',render(data){ return moment(data).locale('es').format('LTS');}    ,orderable:false,searchable:true},
             ]
         });
     </script>

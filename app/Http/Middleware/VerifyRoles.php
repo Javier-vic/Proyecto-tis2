@@ -6,10 +6,8 @@ use Closure;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Models\permit;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use phpDocumentor\Reflection\Types\ArrayKey;
+
 
 class VerifyRoles extends Middleware
 {
