@@ -27,7 +27,7 @@
 
             <ul class="list-unstyled ">
                 <li class="">
-                    <a href="#submenuCategorySupplies" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class=" me-3 fa-solid fa-box-open"></i>Insumos</a>
+                    <a href="#submenuCategorySupplies" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class=" me-3 fa-solid fa-box-open "></i>Insumos <i class="fa-solid fa-caret-down"></i></a>
                     <ul class="collapse list-unstyled" id="submenuCategorySupplies">
                         <li>
                             <a href="{{route('supply.index')}}" >Listado de insumos</a>

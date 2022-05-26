@@ -185,7 +185,7 @@
         const deleteCategorySupply = (id) =>{
             Swal.fire({
                 title: '¿Estás seguro de eliminar esta categoría?',
-                text: "No se puede revertir.",
+                text: "Eliminar la categoría eliminara todo insumo dentro de ella y no se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

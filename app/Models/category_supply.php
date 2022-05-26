@@ -25,4 +25,17 @@ class category_supply extends Model
     public function supplies() {
         return $this->hasMany(supply::class, 'id_category_supplies');
     }
+
+    public static function boot ()
+    {
+        parent::boot();
+
+        self::deleting(function (category_supply $category_supply) {
+
+            foreach ($category_supply->supplies as $supply)
+            {
+                $supply->delete();
+            }
+        });
+    }
 }
