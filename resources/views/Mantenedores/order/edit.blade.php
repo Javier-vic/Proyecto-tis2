@@ -9,7 +9,7 @@
     @csrf
     {{method_field('PATCH') }}
 
-   
+    {{$orderData->id}}
     <div class="mb-4">
         <label for="name_order" class="form-label">Nombre pedido :</label>
         <input type="text" class="form-control" value="" id="name_order" name="name_order" aria-describedby="name_product_help">
@@ -87,23 +87,7 @@
 @section('js_after')
 
     <script type="text/javascript">
-        $(document).ready(function () {
-                $("#mi-select").change(function(){
-            if(this.value == 'si'){ 
-            
-                $(".entradas").show()
-            
-                
-            }else{
-                $(".address").prop('disabled', true);
-            
-                }
-            
-        });
-        
-        
-            
-        })
+   
 
         // mostrar productos y orden
         const selectproduct = @json($orderData); //datos orden
@@ -120,63 +104,148 @@
         $('#total').val(selectproduct.total);
 
         productsSelected.map(productSelected =>{
-            console.log(productSelected)
-            var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
-                            url = url.replace(':urlImagen', productSelected.image_product);
-            
-            //PRODUCTOS SELECCIONADOS
-            $('#listaProductos').append(
-            `
-            <div class="card col-2 mx-2" style="width: 15rem;">
-                <div id = "image_product${productSelected.id}EDITVIEW"></div>
-                    <div>
-                        <h5 class="card-title">${productSelected.name_product}</h5>
-                        <p class="card-text">${productSelected.description}</p>
+
+          
+                
+                $('#listaProductos').append(
+                `
+                <div class="card col-2 mx-2" style="width: 15rem;">
+                    <div id = "image_product${productSelected.id}EDITVIEW"></div>
+
+                        <div id = "datos-product${productSelected.id}">
+
+                            <h5 class="card-title">${productSelected.name_product}</h5>
+                            <p class="card-text">${productSelected.description}</p>
+                            <div>
+                                <h4 class="pt-2 ">${productSelected.price}</h4>
+                                <input type="number" type="number" name="cantidad[${productSelected.id}]" class="form-control" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
+                                
+                              
+                                
+                                <div class="d-grid gap-2 col-12 my-2">
+                                 
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button">Agregar producto</button>
+                               
+                                </div>
+
+                            </div>
+                            
                         <div>
-                            <input type="number" type="number" name="cantidad[]" class="form-control"  min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" class="form-control" id="valor${productSelected.id}"  >
-                            <input class="form-check-input" name="permits[]" type="checkbox" checked value="${productSelected.id}" id="check${productSelected.id}">
-                        </div>
-                        <h4 class="pt-2 ">${productSelected.price}</h4>
-                </div>
-            </div>  
+                    </div>
+                </div>  
+                
+                ` 
+                )
+                var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
+                                url = url.replace(':urlImagen', productSelected.image_product);
+                $(`#image_product${productSelected.id}EDITVIEW`).append($('<img>', {
+                    src: url,
+                    class: 'img-fluid mt-2'
+                    }))
 
-            ` 
-            )
+                //al hacer click cambia color botton y borra vista de input number
+                 
+                $(`#bottonproduct${productSelected.id}`).click(function (e) { 
+                   
+                    if ($(`#bottonproduct${productSelected.id}`).hasClass(`onselect`)) {
+                        
+                        $(`#valor${productSelected.id}`).removeClass(`d-none`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
+                        $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
+                        $(`#getId${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
+                        
 
-            $(`#image_product${productSelected.id}EDITVIEW`).append($('<img>', {
-                src: url,
-                class: 'img-fluid mt-2'
-                }))
+                        
+                        
+
+                        console.log('agregado')
+                    
+                    } else {
+                        $(`#valor${productSelected.id}`).addClass(`d-none`);
+                        $(`#bottonproduct${productSelected.id}`).addClass(`onselect`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
+                        $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
+                        $(`#getId${productSelected.id}`).removeAttr('name');
+
+                        
+                        console.log('eliminado')
+                    }
+                    
+                });
+
+                
+               
             })
 
             
             //PRODUCTOS NO SELECCIONADOS
             products.map(productSelected =>{
-                var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
-                            url = url.replace(':urlImagen', productSelected.image_product);
-            
-            $('#listaProductos').append(
-            `
-            <div class="card col-2 mx-2" style="width: 15rem;">
-                <div id = "image_product${productSelected.id}EDITVIEW"></div>
-                    <div>
-                        <h5 class="card-title">${productSelected.name_product}</h5>
-                        <p class="card-text">${productSelected.description}</p>
+                
+                    var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
+                                url = url.replace(':urlImagen', productSelected.image_product);
+                
+                $('#listaProductos').append(
+                    `
+                    <div class="card col-2 mx-2" style="width: 15rem;">
+                    <div id = "image_product${productSelected.id}EDITVIEW"></div>
                         <div>
-                            <input type="number" type="number" name="cantidad[]" class="form-control" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" class="form-control" id="valor${productSelected.id}"  >
-                            <input class="form-check-input" name="permits[]"  type="checkbox"  value="${productSelected.id}" id="check${productSelected.id}">
-                        </div>
-                        <h4 class="pt-2 ">${productSelected.price}</h4>
-                </div>
-            </div>  
-            
-            ` 
-            )
+                            <h5 class="card-title">${productSelected.name_product}</h5>
+                            <p class="card-text">${productSelected.description}</p>
+                            <div>
+                                <h4 class="pt-2 ">${productSelected.price}</h4>
+                                <input type="number" type="number" class="form-control d-none" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
+                                
+                                <div class="d-grid gap-2 col-12 my-2">
+                                 
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button">Agregar producto</button>
+                               
+                                </div>
 
-            $(`#image_product${productSelected.id}EDITVIEW`).append($('<img>', {
-                src: url,
-                class: 'img-fluid mt-2'
-                }))
+                            </div>
+                            
+                        <div>
+                    </div>
+                </div>  
+                    
+                    ` 
+                    )
+
+                $(`#image_product${productSelected.id}EDITVIEW`).append($('<img>', {
+                    src: url,
+                    class: 'img-fluid mt-2'
+                    }))
+
+
+                    $(`#bottonproduct${productSelected.id}`).click(function (e) { 
+                    console.long
+                    if ($(`#bottonproduct${productSelected.id}`).hasClass(`onselect`)) {
+                        
+                        $(`#valor${productSelected.id}`).removeClass(`d-none`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
+                        $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
+                        $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
+                        $(`#valor${productSelected.id}`).val(0);
+                        
+                        
+
+                        console.log('agregado')
+                    
+                    } else {
+                        $(`#valor${productSelected.id}`).addClass(`d-none`);
+                        $(`#bottonproduct${productSelected.id}`).addClass(`onselect`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
+                        $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
+                        $(`#getId${productSelected.id}`).removeAttr('name');
+                       
+                        
+                        console.log('eliminado')
+                    }
+                    
+                });
+
+
             })
             
          

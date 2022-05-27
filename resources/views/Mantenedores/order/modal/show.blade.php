@@ -46,9 +46,7 @@
                         
                     </tbody>
                 </table>
-                <div class="" id="pruebaProductos">
                 
-                </div>
                 
             </div>
         </div>

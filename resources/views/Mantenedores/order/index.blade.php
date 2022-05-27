@@ -150,6 +150,7 @@
                         $('#date').val(resultado[1][0].created_at);
                         
                         // $('#addorderLabel').html(${resultado.product_id})
+                        console.log(resultado)
                         $('#pruebaProductos').empty();
                         resultado[0].map(product =>{
                             $('#pruebaProductos').append(

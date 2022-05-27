@@ -167,6 +167,7 @@ class OrderController extends Controller
         
         $productsSelected = DB::table('products_orders')
         ->where('products_orders.order_id', '=', $order->id)
+        ->whereNull('products.deleted_at')
         ->join('products','products_orders.product_id','products.id')
         ->select(
         'products_orders.product_id', 
@@ -177,8 +178,13 @@ class OrderController extends Controller
         ->get();
 
         
-    $selectedIds = $productsSelected->pluck('product_id');
-    $products = DB::table('products')->select('*')->whereNotIn('id',$selectedIds)->get();
+        $selectedIds = $productsSelected->pluck('product_id');
+        
+        $products = DB::table('products')
+        ->select('*')
+        ->whereNotIn('id',$selectedIds)
+        ->whereNull('products.deleted_at')
+        ->get();
 
         
         return view('Mantenedores.order.edit', compact('orderData', 'products','productsSelected'));
@@ -196,23 +202,33 @@ class OrderController extends Controller
     {   
         
         $datosOrder = request()->except('_token');
-        dd($datosOrder);
         $productos = order::find($order->id);
+        
         $productos->name_order = $datosOrder['name_order'];
         $productos->order_status = $datosOrder['order_status'];
         $productos->payment_method = $datosOrder['payment_method'];
         $productos->address = $datosOrder['address'];
         $productos->pick_up = $datosOrder['pick_up'];
         $productos->comment = $datosOrder['comment'];
-
+        
         $permits = array();
         $cantidad = array();
         $valores = array();
         $price = array();
 
-        foreach ($datosOrder['permits'] as $item => $value) {
-            $permits[] = (int)$value;
+
+        dd($datosOrder['cantidad']);
+        foreach ($datosOrder['cantidad'] as $item => $value) {
+
+            if ($value > 0 && isset($value) ){
+
+                $cantidad[] = (int)$value;
+                $permits[] = $item;
+               
+            }
         }
+     
+   
 
         $valores = DB::table('products')
         ->select('products.price')
@@ -222,27 +238,23 @@ class OrderController extends Controller
 
 
 
-        foreach ($datosOrder['cantidad'] as $item => $value) {
-            if ($value > 0) {
-                $cantidad[] = (int)$value;
-            }
-        }
+    
 
         for ($i = 0; $i < count($cantidad); $i++) {
             $price[$i] = $cantidad[$i] * $valores[$i]->price;
         }
         $x = array_sum($price);
-
+        
 
         $productos->total = $x;
         $productos->save();
-
+        
         for ($i = 0; $i < count($permits); $i++) {
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
 
             
-            $order->products()->attach($id,['cantidad'=>$cont]);
+            $order->products()->sync($id,['cantidad'=>$cont]);
             
         }
 
@@ -268,11 +280,9 @@ class OrderController extends Controller
             ->get();
 
         $productOrders = DB::table('products_orders')
-            ->select('products_orders.product_id','products.name_product', 
-            DB::raw('count(products_orders.product_id) as cantidad'))
+            ->select('products_orders.product_id','products.name_product', 'products_orders.cantidad')
             ->join('products', 'products_orders.product_id', '=', 'products.id')
             ->where('products_orders.order_id', '=', $id)
-            ->groupBy('products_orders.product_id','products.name_product','products.price')
             ->get();
             
         return response(json_encode([$productOrders, $order]), 200);
@@ -284,6 +294,7 @@ class OrderController extends Controller
     {   
         
         $order = order::findOrFail($id);
+        dd($order);
         $order->delete($id);
 
         return redirect('order');
