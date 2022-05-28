@@ -124,7 +124,7 @@
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
-                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button">Agregar producto</button>
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button">Eliminar producto</button>
                                
                                 </div>
 
@@ -153,7 +153,8 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
-                        $(`#getId${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
+                        $(`#bottonproduct${productSelected.id}`).text('Eliminar Producto');
+                        $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
                         
 
                         
@@ -166,7 +167,8 @@
                         $(`#bottonproduct${productSelected.id}`).addClass(`onselect`);
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
-                        $(`#getId${productSelected.id}`).removeAttr('name');
+                        $(`#valor${productSelected.id}`).removeAttr('name');
+                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
 
                         
                         console.log('eliminado')
@@ -225,6 +227,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
+                        $(`#bottonproduct${productSelected.id}`).text('Eliminar Producto');
                         $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
                         $(`#valor${productSelected.id}`).val(0);
                         
@@ -237,7 +240,8 @@
                         $(`#bottonproduct${productSelected.id}`).addClass(`onselect`);
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
-                        $(`#getId${productSelected.id}`).removeAttr('name');
+                        $(`#valor${productSelected.id}`).removeAttr('name');
+                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
                        
                         
                         console.log('eliminado')

@@ -68,7 +68,9 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+
+        
         $datosOrder = request()->except('_token');
         $order = new order;
         $order->name_order = $datosOrder['name_order'];
@@ -87,8 +89,14 @@ class OrderController extends Controller
 
         
         
-        foreach ($datosOrder['permits'] as $item => $value) {
-            $permits[] = (int)$value;
+        foreach ($datosOrder['cantidad'] as $item => $value) {
+
+            if ($value > 0 && isset($value) ){
+
+                $cantidad[] = (int)$value;
+                $permits[] = (int)$item;
+               
+            }
         }
         // consulta de precio y stock a productos seleccinados
 
@@ -99,12 +107,7 @@ class OrderController extends Controller
          
         // obtenemos las cantidades seleccionadas
 
-        foreach ($datosOrder['cantidad'] as $item => $value) {
-            if ($value > 0) {
-                $cantidad[] = (int)$value;
-                
-            }
-        }
+    
        
         //      Calcular el total   ////
         for ($i = 0; $i < sizeof($permits); $i++) {
@@ -203,7 +206,7 @@ class OrderController extends Controller
         
         $datosOrder = request()->except('_token');
         $productos = order::find($order->id);
-        
+      
         $productos->name_order = $datosOrder['name_order'];
         $productos->order_status = $datosOrder['order_status'];
         $productos->payment_method = $datosOrder['payment_method'];
@@ -217,17 +220,17 @@ class OrderController extends Controller
         $price = array();
 
 
-        dd($datosOrder['cantidad']);
         foreach ($datosOrder['cantidad'] as $item => $value) {
 
             if ($value > 0 && isset($value) ){
 
                 $cantidad[] = (int)$value;
-                $permits[] = $item;
+                $permits[] = (int)$item;
                
             }
         }
-     
+        
+        
    
 
         $valores = DB::table('products')
@@ -245,6 +248,7 @@ class OrderController extends Controller
         }
         $x = array_sum($price);
         
+         
 
         $productos->total = $x;
         $productos->save();
@@ -252,12 +256,13 @@ class OrderController extends Controller
         for ($i = 0; $i < count($permits); $i++) {
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
-
+            
             
             $order->products()->sync($id,['cantidad'=>$cont]);
             
         }
 
+       
 
         return redirect()->route('order.index');
 
@@ -269,6 +274,8 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
+
+
 
     public function getview(request $request)
     {
@@ -289,14 +296,16 @@ class OrderController extends Controller
     }
 
 
+    ///eliminar
 
-    public function destroy($id)
+    public function destroy(order $order)
     {   
-        
-        $order = order::findOrFail($id);
-        dd($order);
-        $order->delete($id);
+       
 
-        return redirect('order');
+        $order = order::find($order->id);
+        $order->delete();
+       return view('Mantenedores.order.index');
+
+
     }
 }

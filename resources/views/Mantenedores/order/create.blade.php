@@ -6,7 +6,7 @@
 
 <div class="row">
         
-    <div class="col-8">
+    <div class="col">
         
         <form action="{{ url('/order')}}" method="POST" entype= "multipart/form-data">
             @csrf
@@ -65,35 +65,19 @@
              </div>
         
              
-            <div class="row">
+            <div id = "listaProductos" class="row">
         
-                @foreach ($product as $item)
-                    <div class="card col-2 mx-2" style="width: 15rem;">
-                        <img src="{{ asset('storage') . '/' . $item->image_product }}" class="card-img-top" alt="...">
-                        <div class="card-body">
-        
-                            <h5 class="card-title">{{$item->name_product}}</h5>
-                            <p class="card-text">{{$item->description}}</p>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" name="permits[]" value="{{$item->id}}" type="checkbox" id="{{$item->id}}">
-                                <input type="number" placeholder="0" value="0" id="typeNumber" name="cantidad[]" class="form-control " />
-                                
-                        </div>
-                            <h4 class="pt-2 ms-0">${{$item->price}}</h4>
-                        </div>
-                    </div> 
-              
-                @endforeach
+                
             </div>
             
-            <button type="submit" class=" mt-3 btn btn-primary">Realizar pedido</button>
+                <button type="submit" class=" mt-3 btn btn-primary">Realizar pedido</button>
         </form>
 
 
     </div>
 
 
-    <div class="col4"></div>
+   
 </div>
 
 
@@ -101,18 +85,94 @@
 
 @section('js_after')
  <script type="text/javascript">
+        $(document).ready(function () {
+            $("#mi-select").change(function(){
+            if ($(this).val() == 'si') {
 
-         $("#mi-select").change(function(){
-    if(this.value == 'si'){ 
-      
-        $(".entradas").show()
+                $('.entradas').removeClass('d-none');
+            } else {
+                $('.entradas').addClass('d-none');
+            }
+            
+	});
+        });
+
+         // mostrar productos y orden
+   
+        const productsSelected = @json($product);    // id y cantidad productos seleccionados
         
-    }else{
-      
-        $(".entradas").hide();
-      
-    }
-  })
+
+        productsSelected.map(productSelected =>{
+
+          
+                
+                 $('#listaProductos').append(
+                    `
+                    <div class="card col-2 mx-2" style="width: 15rem;">
+                    <div id = "image_product${productSelected.id}EDITVIEW"></div>
+                        <div>
+                            <h5 class="card-title">${productSelected.name_product}</h5>
+                            <p class="card-text">${productSelected.description}</p>
+                            <div>
+                                <h4 class="pt-2 ">${productSelected.price}</h4>
+                                <input type="number" type="number" class="form-control d-none" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
+                                
+                                <div class="d-grid gap-2 col-12 my-2">
+                                 
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button">Agregar producto</button>
+                               
+                                </div>
+
+                            </div>
+                            
+                        <div>
+                    </div>
+                </div>  
+                    
+                    ` 
+                    )
+                var url = '{{ asset('storage') . '/' . ':urlImagen' }}';
+                                url = url.replace(':urlImagen', productSelected.image_product);
+                $(`#image_product${productSelected.id}EDITVIEW`).append($('<img>', {
+                    src: url,
+                    class: 'img-fluid mt-2'
+                    }))
+
+                //al hacer click cambia color botton y borra vista de input number
+                 
+                $(`#bottonproduct${productSelected.id}`).click(function (e) { 
+                   
+                    if ($(`#bottonproduct${productSelected.id}`).hasClass(`onselect`)) {
+                        
+                        $(`#valor${productSelected.id}`).removeClass(`d-none`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
+                        $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
+                        $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
+                        $(`#bottonproduct${productSelected.id}`).text('Eliminar Producto');
+
+                        
+                        
+
+                        console.log('agregado')
+                    
+                    } else {
+                        $(`#valor${productSelected.id}`).addClass(`d-none`);
+                        $(`#bottonproduct${productSelected.id}`).addClass(`onselect`);
+                        $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
+                        $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
+                        $(`#valor${productSelected.id}`).removeAttr('name');
+                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
+
+                        
+                        console.log('eliminado')
+                    }
+                    
+                });
+
+                
+               
+            })
 
 
 

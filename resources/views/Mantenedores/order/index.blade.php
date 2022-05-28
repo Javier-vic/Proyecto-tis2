@@ -35,7 +35,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function() {
+        
             var table = $("#myTable").DataTable({
                 bProcessing: true,
                 bStateSave: true,
@@ -109,7 +109,7 @@
             });
             // ****************************************************************************************************************
 
-        });
+        
 
         const addorder = (e) =>{
             e.preventDefault();
@@ -176,7 +176,7 @@
         const deleteOrder = (id) =>{
 
             Swal.fire({
-            title: '¿Estás seguro de eliminar este producto?',
+            title: '¿Estás seguro de eliminar la orden?',
             text: "No se puede revertir.",
             icon: 'warning',
             showCancelButton: true,
@@ -208,7 +208,7 @@
                     success: function(response) {
                         Swal.fire(
                                 'Borrado!',
-                                'El producto ha sido eliminado.',
+                                'La order ha sido eliminado.',
                                 'success'
                             )
                     document.getElementById("number").innerHTML = table.data().count()-1;
@@ -223,6 +223,7 @@
            } 
 
         /////
+ 
 
     </script>
 @endsection
