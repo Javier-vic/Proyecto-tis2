@@ -189,7 +189,7 @@ class ProductController extends Controller
     public function update(request $request, product $product)
     {
 
-        $validator = Validator::make($request->all(), product::$rules, product::$messages);
+        $validator = Validator::make($request->all(), product::$rulesEdit, product::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
