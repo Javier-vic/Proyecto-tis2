@@ -67,7 +67,7 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, product $product )
     {   
 
         
@@ -105,16 +105,27 @@ class OrderController extends Controller
         ->whereIn('id', $permits)
         ->get();
          
-        // obtenemos las cantidades seleccionadas
+        // obtenemos las cantidades disponibles
 
-    
+      
+        $size = sizeof($permits);
        
         //      Calcular el total   ////
-        for ($i = 0; $i < sizeof($permits); $i++) {
+        for ($i = 0; $i < $size; $i++) {
+
             $stock = $valores[$i]->stock;
             if($stock <= $cantidad[$i]){
 
                 return response('No hay stock suficiente',400);
+
+            }
+            else {
+
+                $updateproducts = product::find($permits[$i]);
+                $updateproducts->stock = $stock - $cantidad[$i];
+                $updateproducts->save();
+                
+                
 
             }
 
@@ -128,7 +139,7 @@ class OrderController extends Controller
         $order->total = $x;
         $order->save();
 
-        for ($i = 0; $i < count($permits); $i++) {
+        for ($i = 0; $i < $size; $i++) {
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
 
@@ -194,6 +205,13 @@ class OrderController extends Controller
 
     }
 
+
+
+
+
+
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -201,7 +219,7 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, order $order)
+    public function update(Request $request, order $order , product $product)
     {   
         
         $datosOrder = request()->except('_token');
@@ -234,16 +252,61 @@ class OrderController extends Controller
    
 
         $valores = DB::table('products')
-        ->select('products.price')
+        ->select('products.price', 'products.stock')
         ->whereIn('id', $permits)
         ->get();
 
+        /** if($stock <= $cantidad[$i]){
 
+                
 
+            } */
 
-    
+        
+       
+        
 
         for ($i = 0; $i < count($cantidad); $i++) {
+
+            
+            $cantidadOld = DB::table('products_orders')
+            ->select('products_orders.cantidad')
+            ->where('order_id', $order->id)
+            ->where('product_id', $permits[$i])
+            ->get();
+
+            $old = $cantidadOld[0]->cantidad;
+            $stock = $valores[$i]->stock;
+
+            
+            if($old  <= $cantidad[$i]){
+
+                if (($cantidad[$i] - $old) <= $stock) {
+
+                    $updateproducts = product::find($permits[$i]);
+                    $updateproducts->stock = $stock - ($cantidad[$i] - $old);
+                    $updateproducts->save();
+                    
+                } else {
+                    return response('No hay stock suficiente',400);
+                }
+                
+               
+                
+               
+
+            }
+            else {
+                
+
+            
+                $updateproducts = product::find($permits[$i]);
+                $updateproducts->stock = $stock + ($old - $cantidad[$i]);
+                $updateproducts->save();
+                
+                
+
+            }
             $price[$i] = $cantidad[$i] * $valores[$i]->price;
         }
         $x = array_sum($price);
@@ -252,13 +315,15 @@ class OrderController extends Controller
 
         $productos->total = $x;
         $productos->save();
+
+        $order->products()->detach();
         
         for ($i = 0; $i < count($permits); $i++) {
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
             
             
-            $order->products()->sync($id,['cantidad'=>$cont]);
+            $order->products()->attach($id,['cantidad'=>$cont]);
             
         }
 
