@@ -5,10 +5,14 @@
     
 @endsection
 @section('content')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarRol"> Agregar nuevo rol</button>
+    <div class="row my-4">
+        <div class="col d-flex justify-content-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarRol"> Agregar nuevo rol</button>
+        </div>
+    </div>
     <table class="table" id="myTable" style="width: 100%">
         {!! Form::token() !!}
-        <thead class="thead">
+        <thead class="thead bg-secondary text-white">
             <tr>
                 <th>id</th>
                 <th>Nombre del Rol</th>
@@ -18,13 +22,13 @@
         </thead>
     </table>
     <div class="">
-        @include('Mantenedores.Role.modal')
+        @include('Mantenedores.Role.modal.modal')
     </div>
     <div class="">
-        @include('Mantenedores.Role.modalViewPermits')
+        @include('Mantenedores.Role.modal.modalViewPermits')
     </div>
     <div class="">
-        @include('Mantenedores.Role.ModalEditRole')
+        @include('Mantenedores.Role.modal.ModalEditRole')
     </div>
 @endsection
 
@@ -64,6 +68,22 @@
                 success: function (response) {
                     Table.ajax.reload();
                     $("#agregarRol").modal("hide");
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: 'El rol se registro correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto:false,
+                    })
+                },
+                error: (jqXHR)=>{
+                    var errors = JSON.parse(jqXHR.responseText).errors;
+                    $.map(errors, function (e,key) {
+                        $(`#${key}_errorCreate`).text(e);
+                        $(`#${key}`).addClass('is-invalid');
+                    });
                 }
             });
         }

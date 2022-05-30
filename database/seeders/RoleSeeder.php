@@ -17,10 +17,15 @@ class RoleSeeder extends Seeder
         //
         $role = new role(['name_role'=>'Admin']);
         $role->save();
-        for($i = 1; $i < 9 ; $i++){
+        for($i = 1; $i < 10 ; $i++){
             $role->permit()->attach($i);
         }
         $role = new role(['name_role'=>'User']);
         $role->save();
+        
+        $role = new role(['name_role'=>'Cocina']);
+        $role->save();
+        $role->permit()->attach([6,2,7]);
+        
     }
 }

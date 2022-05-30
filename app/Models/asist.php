@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class asist extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'id_user',
+    ];
 }

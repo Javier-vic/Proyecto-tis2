@@ -42,9 +42,24 @@
                         <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                     </li>
                 @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,6))
+                    <li>
+                        <a href="{{route('asist.index')}}" class="my-3"><i class="me-3 fa-solid fa-business-time"></i>Asistencia</a>
+                    </li>
+                @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,7))    
                     <li>
-                        <a href="{{route('product.index')}}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos</a>
+                        <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle {{ request()->is('product','category_product') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-down "></i></a>    
+                        <ul class="collapse list-unstyled" id="submenuCategoryProducts">
+                            <li>
+                                <a href="{{route('product.index')}}" >Listado productos</a>
+
+                            </li>
+                            <li>
+                                <a href="{{route('category_product.index')}}">Categorías</a>
+                            </li>
+        
+                        </ul>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,4))
@@ -54,35 +69,28 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,5))
                     <li>
-                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
-                    </li>
-                @endif
-                @if (RoleController::havePermits(auth()->user()->id_role,8))
-                    <li>
-                        <a href="{{route('roles.index')}}" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Roles</a>
-                    </li>
-                @endif
-                <li>
-                    <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle {{ request()->is('product','category_product') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-down "></i></a>    
-                    <ul class="collapse list-unstyled" id="submenuCategoryProducts">
-                        <li>
-                            <a href="{{route('product.index')}}" >Listado productos</a>
+                        <a href="#submenuTrabajadores" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle {{ request()->is('worker','roles') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-people-group"></i>Trabajadores <i class="fa-solid fa-caret-down "></i></a>    
+                        <ul class="collapse list-unstyled" id="submenuTrabajadores">
+                            <li>
+                                <a href="{{route('worker.index')}}" >Listado de trabajadores</a>
 
-                        </li>
-                        <li>
-                            <a href="{{route('category_product.index')}}">Categorías</a>
-                        </li>
-     
-                    </ul>
-                </li>
+                            </li>
+                            @if (RoleController::havePermits(auth()->user()->id_role,8))
+                                <li>
+                                    <a href="{{route('roles.index')}}" >Roles</a>
+                                </li>
+                            @endif
+        
+                        </ul>
+                    </li>
+                @endif
+                @if (RoleController::havePermits(auth()->user()->id_role,9))    
+                    <li>
+                        <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
+                    </li>
+                @endif
                 <li>
                     <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
-                </li>
-                <li>
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-people-group"></i>Trabajadores</a>
-                </li>
-                <li>
-                    <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
                 </li>
                 <li>
                     <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
@@ -99,11 +107,18 @@
                     </button>   
                     @yield('titlePage')                
                     <div style="visibility:hidden">.</div>                 
+                </div> 
+                <div class="" aria-labelledby="navbarDropdown">
+                    <a class="btn btn-danger d-flex " style="width: max-content;" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Cerrar sesion
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                        class="d-none">
+                        @csrf
+                    </form>
                 </div>
             </nav>
-
             @yield('content')
-
         </div>
     </div>
 </body>

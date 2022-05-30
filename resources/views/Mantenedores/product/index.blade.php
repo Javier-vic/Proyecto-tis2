@@ -25,7 +25,6 @@
     <div>@include('Mantenedores.product.modal.show')</div>
     <div>@include('Mantenedores.product.modal.edit')</div>
 
-
         
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-secondary text-white">

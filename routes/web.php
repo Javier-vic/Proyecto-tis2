@@ -8,8 +8,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\AsistController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyRoles;
+use App\Models\role;
 use GuzzleHttp\Middleware;
 
 /*
@@ -24,7 +26,7 @@ use GuzzleHttp\Middleware;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -41,12 +43,16 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles');
     Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
     Route::get('/asist/dataTable',[AsistController::class,'dataTable'])->name('dataTable.asist');
+    Route::post('/asist/finish/{asist}',[AsistController::class,'finishAsist'])->name('finish.asist');  
     Route::get('/product/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
     Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
+    Route::get('/worker/dataTable',[worker::class,'dataTableWorkers'])->name('datatable.workers');
+    Route::get('/worker/getWorker',[worker::class,'getWorker'])->name('worker.getWorker');
     //POST
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     
     //RESOURCE
+    Route::resource('worker',worker::class);
     Route::resource('asist',AsistController::class);
     Route::resource('order', OrderController::class);
     Route::resource('roles', RoleController::class);

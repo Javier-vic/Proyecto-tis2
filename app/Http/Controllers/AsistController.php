@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\asist;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AsistController extends Controller
 {
@@ -19,10 +21,10 @@ class AsistController extends Controller
         //
         $currentAsist = DB::table('asists')
                             ->where('asists.id_user','=',Request()->user()->id)
-                            ->where('asists.id_user','=','Date(now())')
+                            ->whereDate("asists.created_at",'=',Carbon::today()->toDate())
                             ->whereNull('asists.end')
                             ->get();
-        dd($currentAsist);
+        
         return view('Mantenedores.asist.index',['currentAsist'=>$currentAsist]);
     }
 
@@ -45,6 +47,14 @@ class AsistController extends Controller
     public function store(Request $request)
     {
         //
+        Try{
+            $asist = new asist(['id_user'=>Request()->user()->id]);
+            $asist->save();
+            return response(['message'=>'Asistencia registrada','asist'=>$asist],200);
+        }catch(\Throwable $th){
+            return response('No se pudo realizar el registro del rol',400);
+        }
+        
     }
 
     /**
@@ -90,17 +100,26 @@ class AsistController extends Controller
     public function destroy(asist $asist)
     {
         //
+        //dd(Carbon::today()->toDate());
+        dd(Carbon::today()->toDate());
+        $asist->end= Carbon::today()->toDate();
+        return redirect(route('asist.index'));
     }
     public function dataTable(Request $request){
         if($request->ajax()){
             $data = DB::table('asists')
                     ->where('asists.id_user','=',Request()->user()->id)
-                    ->whereNull('asists.end')
+                    ->orderByDesc('asists.id')
                     ->get();
             return DataTables::of($data)       
                    ->make(true);
         }else{
 
         }
+    }
+    public function finishAsist(asist $asist){
+        $asist->end = Carbon::now()->toDate();
+        $asist->save();
+        return response([$asist->end],200);
     }
 }
