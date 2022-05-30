@@ -4,6 +4,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 
+@section('titlePage')
+<h3>Categorías de insumos</h3>
+@endsection
+
 @section('content')
     <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
     <table class="table" id="myTable" style="width: 100%">

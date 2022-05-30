@@ -4,6 +4,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 
+@section('titlePage')
+<h3>Listado de insumos</h3>
+@endsection
+
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
