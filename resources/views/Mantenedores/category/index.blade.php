@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('titlePage')
-<h2 class="">Categoría de los productos</h2>
+<h2 class="">Categorías de los productos</h2>
 @endsection
 @section('content')
 <div>

@@ -11,6 +11,7 @@
                     <div class="form-group">
                         <label for="" class="form-label">Nombre</label>
                         <input type="text" name="name_category" class="form-control input-modal" id="name_categorySupplyEdit">
+                    <span class="text-danger editmodal_error" id="name_category_errorEDITMODAL"></span>
                     </div>
                     <div class="form-group mt-2 mb-2">
                     </div>

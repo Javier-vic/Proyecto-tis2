@@ -129,7 +129,6 @@
             })
         }
         $(document).ready(function () {
-            console.log(@json($currentAsist))
             currentAsist = @json($currentAsist) 
             if(currentAsist.length>0){
                 $("#currentAsist").text(currentAsist[0].created_at); 

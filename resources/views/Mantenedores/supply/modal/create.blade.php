@@ -10,15 +10,19 @@
                     @csrf
                     <div class="form-group">
                         <label for="" class="form-label">Nombre</label>
-                        <input type="text" name="name_supply" class="form-control" id="idName">
+                        <input type="text" name="name_supply" class="form-control input-modal" id="name_supply">
+                        <span class="text-danger createmodal_error" id="name_supply_errorCREATEMODAL"></span>
+
                     </div>
                     <div class="form-group">
                         <label for="unit_meassurement">Unidad de medida</label>
-                        <input type="text" name="unit_meassurement" class="form-control">
+                        <input type="text" name="unit_meassurement" class="form-control input-modal" id="unit_meassurement">
+                        <span class="text-danger createmodal_error" id="unit_meassurement_errorCREATEMODAL"></span>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Cantidad</label>
-                        <input type="float" name="quantity" class="form-control">
+                        <input type="number" name="quantity" class="form-control input-modal" id="quantity">
+                        <span class="text-danger createmodal_error" id="quantity_errorCREATEMODAL"></span>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Selecciona una categoria</label>

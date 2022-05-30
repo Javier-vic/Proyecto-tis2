@@ -10,7 +10,8 @@
                     <div class="form-group">
                         @csrf
                         <label for="" class="form-label">Nombre</label>
-                        <input type="text" name="name_category" class="form-control" id="idName">
+                        <input type="text" name="name_category" class="form-control input-modal" id="idName">
+                        <span class="text-danger createmodal_error" id="name_category_errorCREATEMODAL"></span>
                     </div>
                     <div class="form-group mt-2 mb-2">
 

@@ -6,7 +6,7 @@
 
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
+    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
     <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}
 
@@ -34,6 +34,8 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -70,6 +72,9 @@
                 select: true
         });
 
+    // ****************************************************************************************************************
+    //MODAL DE CREAR
+    // ****************************************************************************************************************   
         const addSupply = (e) =>{
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
@@ -90,21 +95,38 @@
                         backdrop: false,                       
                         heightAuto:false,
                     })
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").removeClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
                     $('#idname').val('');
                     table.ajax.reload();
                     $("#agregarInsumo").modal("hide");                   
                 },
                 error: function( jqXHR, textStatus, errorThrown ){                 
-                    var text = jqXHR.responseText;
-                    console.log(text)
+                    var text = jqXHR.responseJSON
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: text,
+                        title: 'No se pudo ingresar el nuevo insumo.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
                     })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if(text){
+                        $.each(text.errors, function(key,item){
+                        $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
+                        $(`#${key}`).addClass('is-invalid');
+                        });
+                    }
+                    //////////////////////////////////////
                 }
             });
         }
@@ -163,7 +185,6 @@
                 url: url,
                 dataType: "json",
                 success: function(response) {
-                    console.log(response)
                     let resultado = response[0][0];                  
                     $('#name_supplyEdit').val(resultado.name_supply);
                     $('#unit_meassurementEdit').val(resultado.unit_meassurement);
@@ -184,7 +205,7 @@
             var  url = '{{ route("supply.update" , ":supply") }}';
             url = url.replace(':supply', id);
             Swal.fire({
-                title: '¿Estás seguro de editar este insumo',
+                title: '¿Estás seguro de editar este insumo?',
                 text: "No se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -212,9 +233,11 @@
                         },
                         error: function( jqXHR, textStatus, errorThrown ) {
                             var text = jqXHR.responseJSON;
+                            //AGREGA CLASE DE VALID Y ELIMINA LAS DE INVALID
                             $(".editmodal_error").empty()
                             $(".input-modal").addClass('is-valid')
                             $(".input-modal").removeClass('is-invalid')
+                            /////////////////////////////////////////////
                             Swal.fire({
                                 position: 'bottom-end',
                                 icon: 'error',
@@ -223,18 +246,40 @@
                                 timer: 2000,
                                 backdrop: false
                             })
+                            //AGREGA CLASES Y ELEMENTOS INVALID
                             if(text){
                                 $.each(text.errors, function(key,item){
                                 $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
-                                $(`#${key}EDIT`).addClass('is-invalid');
+                                $(`#${key}Edit`).addClass('is-invalid');
                                 });
                             }
+                            //////////////////////////////
                         }         
                     })
                 }
             })           
         } 
 
+        // ****************************************************************************************************************
+        // ****************************************************************************************************************
+        //LIMPIA LOS INPUTS AL CERRAR UN MODAL
+        // ****************************************************************************************************************
+           $('#agregarInsumo').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".createmodal_error").empty()
+           })
+
+        $('#editSupply').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".editmodal_error").empty()
+        })
+    
+        // ****************************************************************************************************************
+        
 
     </script>
 

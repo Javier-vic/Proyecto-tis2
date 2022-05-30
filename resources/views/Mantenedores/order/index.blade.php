@@ -3,10 +3,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
-<div id="number"></div>
+<!-- <div id="number"></div> -->
 <div>@include('Mantenedores.order.modal.show')</div>
    
-<a type="button" class="btn btn-primary" href="{{route('order.create')}}" href="">Agregar Orden</a>
+<a type="button" class="btn btn-primary mb-5" href="{{route('order.create')}}" href="">Agregar Orden</a>
 
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
@@ -48,12 +48,9 @@
                     url: "{{ route('order.index') }}",
                     type: 'GET',
                 },
-                // language: {
-                //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
-                // },
-                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
+                language: {
+                    url: "{{ asset('js/language.json') }}"
+                },
 
                 columns: [{
                         data: 'id',
@@ -98,10 +95,10 @@
 
 
                 ],
-                initComplete: function(settings, json) {
+                // initComplete: function(settings, json) {
 
-                    document.getElementById("number").innerHTML = table.data().count();
-                },
+                //     document.getElementById("number").innerHTML = table.data().count();
+                // },
                 select: true
             });
             $('#search').on('keyup', function() {
@@ -208,7 +205,7 @@
                                 'La order ha sido eliminado.',
                                 'success'
                             )
-                    document.getElementById("number").innerHTML = table.data().count()-1;
+                    // document.getElementById("number").innerHTML = table.data().count()-1;
                     table.ajax.reload();
          
 

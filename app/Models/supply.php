@@ -21,7 +21,6 @@ class supply extends Model
         'name_supply'          => 'required|string',           
         'unit_meassurement'          => 'required|string',           
         'quantity'          => 'required|string',           
-        'id_category_supplies'          => 'required|string',           
     ];
     
     static  $messages = [

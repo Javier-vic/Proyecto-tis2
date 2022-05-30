@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
+    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
     <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}
 
@@ -64,6 +64,9 @@
             select: true
         });
 
+        // ****************************************************************************************************************
+        //MODAL DE CREAR
+        //****************************************************************************************************************   
         const addCategorySupply = (e) =>{
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
@@ -89,20 +92,36 @@
                     $("#agregarCategoriaInsumo").modal("hide");                   
                 },
                 error: function( jqXHR, textStatus, errorThrown ){                 
-                    var text = jqXHR.responseText;
-                    console.log(text);
+                    var text = jqXHR.responseJSON;
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: text,
+                        title: 'No se pudo crear la categoría.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
                     })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if(text){
+                        $.each(text.errors, function(key,item){
+                        $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
+                        $(`#idName`).addClass('is-invalid');
+                        });
+                    }
+                    //////////////////////////////////////
+                    
                 }
             });
         }
-
+        // ****************************************************************************************************************
+        //RELLENA MODAL DE EDITAR
+        // ****************************************************************************************************************   
+            
         const editCategorySupply = (id) => {          
             var  url = '{{ route("category_supply.edit", ":category_supply") }}';
             url = url.replace(':category_supply',id)
@@ -120,7 +139,9 @@
                 
             });
         }
-
+        //******************************************************************************************
+        //ENVÍA MODAL DE EDITAR
+        // *****************************************************************************************
         const editCategorySupplySubmit = (id,e) => {
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
@@ -156,9 +177,6 @@
                         },
                         error: function( jqXHR, textStatus, errorThrown ) {
                             var text = jqXHR.responseJSON;
-                            $(".editmodal_error").empty()
-                            $(".input-modal").addClass('is-valid')
-                            $(".input-modal").removeClass('is-invalid')
                             Swal.fire({
                                 position: 'bottom-end',
                                 icon: 'error',
@@ -167,17 +185,24 @@
                                 timer: 2000,
                                 backdrop: false
                             })
+                            //AGREGA LAS CLASES DE INVALID
                             if(text){
                                 $.each(text.errors, function(key,item){
                                 $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
-                                $(`#${key}EDIT`).addClass('is-invalid');
+                                $(`#name_categorySupplyEdit`).addClass('is-invalid');
                                 });
                             }
+                            ///////////////////////////////////////////////
                         }         
                     })
                 }
             })
         }
+
+        
+        // *****************************************************************************************
+        //ELIMINAR CATEGORÍA 
+        // *****************************************************************************************
 
         const deleteCategorySupply = (id) =>{
             Swal.fire({
@@ -224,6 +249,26 @@
          
             })
         }
+
+        // ****************************************************************************************************************
+        //LIMPIA LOS INPUTS AL CERRAR UN MODAL
+        // ****************************************************************************************************************
+        $('#agregarCategoriaInsumo').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".createmodal_error").empty()
+           })
+
+        $('#editCategorySupply').on('hidden.bs.modal', function () {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".editmodal_error").empty()
+        })
+    
+        // ****************************************************************************************************************
+        
     </script> 
 
 @endsection

@@ -130,10 +130,11 @@
                     },
                    error: function( jqXHR, textStatus, errorThrown ) {
                     var text = jqXHR.responseJSON;
-                    console.log(text)
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
                     $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',

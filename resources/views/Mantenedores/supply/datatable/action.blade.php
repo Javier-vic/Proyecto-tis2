@@ -6,8 +6,8 @@
 
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-default-primary">
 
-            <button type="button" onclick="editSupply({{$_id}})" class="dropdown-item  " ><i class="fa-solid fa-pen-to-square"></i> Editar insumo</button>
-            <button type="button" onclick="deleteSupply({{$_id}})" class="dropdown-item text-danger" ><i class="fas fa-trash-alt | text-danger | p-1"></i>Eliminar</button>
+            <button type="button" onclick="editSupply({{$_id}})" class=" btn btn-success btn-sm w-100" ><i class="fa-solid fa-pen-to-square"></i> Editar insumo</button>
+            <button type="button" onclick="deleteSupply({{$_id}})" class="btn btn-danger btn-sm w-100 " ><i class="fas fa-trash-alt  p-1"></i>Eliminar</button>
 
 
     </div>

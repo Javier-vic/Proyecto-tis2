@@ -18,7 +18,7 @@
 @if (RoleController::havePermits(auth()->user()->id_role,1))
     
 @endif
-<body>
+<body>  
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -49,12 +49,12 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,3))
                     <li>
-                        <a href="{{route('order.index')}}" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                        <a href="{{route('order.index')}}" class="my-3 {{ request()->is('order','order/*') ? ' active' : '' }}"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,6))
                     <li>
-                        <a href="{{route('asist.index')}}" class="my-3"><i class="me-3 fa-solid fa-business-time"></i>Asistencia</a>
+                        <a href="{{route('asist.index')}}" class="my-3 {{ request()->is('asist','asist/*') ? ' active' : '' }}"><i class="me-3 fa-solid fa-business-time "></i>Asistencia</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,7))    
@@ -131,6 +131,7 @@
 </body>
 
 <script src="{{ asset('js/app.js') }}"></script>
+
 @yield('js_after')
 
 <script>
