@@ -44,8 +44,9 @@
                     </div>
                     <div id="image_productEDITVIEW"></div>
                     <div class="mb-3 mt-2">
-                        <input type="file" class="form-control input-modal" id="image_productEDIT" name="image_product"
-                            aria-describedby="name_product_help" accept="image/*">
+                        <label for="image_productEDIT" class="fw-light">Puedes cambiar la imagen si lo deseas.</label>
+                        <input type="file" class="form-control input-modal " id="image_productEDIT" name="image_product" 
+                            aria-describedby="name_product_help" accept="image/*" value="" >
                     <span class="text-danger editmodal_error" id="image_product_errorEDITMODAL"></span>
                 </div>
                  
@@ -73,4 +74,6 @@
       $('#charNum').text(500 - len);
     }
   };
+
+
   </script>

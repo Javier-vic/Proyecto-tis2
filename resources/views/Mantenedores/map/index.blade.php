@@ -41,9 +41,8 @@
 
        var map = L.map('map').setView([parseFloat(latitud),parseFloat(longitud)], 18);
        map.doubleClickZoom.disable();
-
        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-        attribution:'Haz doble click sobre un lugar para cambiar la ubicación del local.',
+        attribution:'<b style="font-size:1rem;">Haz doble click sobre un lugar para cambiar la ubicación del local.</b> ',
         maxZoom: 18,
         id: 'mapbox/streets-v11',
         tileSize: 512,
@@ -51,6 +50,9 @@
         accessToken: AT,
     }).addTo(map);
 
+    //CREAR LEYENDA
+
+    
     var marker = L.marker([parseFloat(latitud), parseFloat(longitud)], {
         title : 'Tienda ramen dashi'
     }).addTo(map);
