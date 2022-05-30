@@ -336,7 +336,7 @@
                             class: 'img-fluid rounded-start w-100 p-2',
                             style : 'height:400px; object-fit:cover;'
                         }))
-
+                        console.log(response)
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
                         $('#stockVIEWMODAL').html(resultado.stock + ' unidades')
                         $('#descriptionVIEWMODAL').html(resultado.description)

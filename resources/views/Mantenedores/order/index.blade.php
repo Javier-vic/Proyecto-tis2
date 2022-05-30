@@ -158,12 +158,9 @@
                                 <tr>
                                     <td>${product.name_product}</td>
                                     <td>${product.cantidad}</td>
-                                    <td>${product.valor}</td>
+                                    <td>${product.cantidad*product.price}</td>
                                 </tr> 
-                                
                                 `
-
-                                
                             )
                         })
 

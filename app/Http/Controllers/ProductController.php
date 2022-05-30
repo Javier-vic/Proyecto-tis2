@@ -130,7 +130,8 @@ class ProductController extends Controller
                 'products.name_product',
                 'products.description',
                 'products.image_product',
-                'category_products.name as category'
+                'category_products.name as category',
+                'products.price'
 
             )
             ->orderBy('products.id')
