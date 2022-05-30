@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategorySupplyController; 
+use App\Http\Controllers\SupplyController; 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
@@ -29,6 +31,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
+
 Auth::routes();
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
@@ -52,6 +56,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     
     //RESOURCE
+    Route::resource('category_supply', CategorySupplyController::class);
+    Route::resource('supply', SupplyController::class);
     Route::resource('worker',worker::class);
     Route::resource('asist',AsistController::class);
     Route::resource('order', OrderController::class);
@@ -64,4 +70,5 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
