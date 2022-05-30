@@ -49,7 +49,7 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,3))
                     <li>
-                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                        <a href="{{route('order.index')}}" class="my-3"><i class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,6))

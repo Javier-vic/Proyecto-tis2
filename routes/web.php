@@ -12,9 +12,6 @@ use App\Http\Controllers\AsistController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\VerifyRoles;
-use App\Models\role;
-use GuzzleHttp\Middleware;
 
 /*
 |--------------------------------------------------------------------------

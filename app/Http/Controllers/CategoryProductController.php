@@ -21,6 +21,23 @@ class CategoryProductController extends Controller
      */
     public function index()
     {
+        if (request()->ajax()) {
+
+            return datatables(DB::connection(session()->get('database'))
+                ->table('category_products')
+                ->whereNull('category_products.deleted_at')
+                ->select(
+                    'category_products.id as _id',
+                    'category_products.id as id',
+                    'category_products.name',
+                )
+                ->orderBy('category_products.id')
+                ->get())
+                ->addColumn('action', 'mantenedores.category.datatable.action')
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
         return view('mantenedores.category.index');
     }
 
