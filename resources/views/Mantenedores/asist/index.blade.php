@@ -1,5 +1,9 @@
 @extends('layouts.navbar')
 
+@section('titlePage')
+<h2 class="">Asistencia registrada</h2>
+@endsection
+
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
@@ -129,7 +133,6 @@
             })
         }
         $(document).ready(function () {
-            console.log(@json($currentAsist))
             currentAsist = @json($currentAsist) 
             if(currentAsist.length>0){
                 $("#currentAsist").text(currentAsist[0].created_at); 
