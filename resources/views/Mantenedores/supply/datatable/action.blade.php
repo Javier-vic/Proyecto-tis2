@@ -5,10 +5,7 @@
     </a>
 
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-default-primary">
-
-            <button type="button" onclick="editSupply({{$_id}})" class=" btn btn-success btn-sm w-100" ><i class="fa-solid fa-pen-to-square"></i> Editar insumo</button>
-            <button type="button" onclick="deleteSupply({{$_id}})" class="btn btn-danger btn-sm w-100 " ><i class="fas fa-trash-alt  p-1"></i>Eliminar</button>
-
-
+            <button type="button" onclick="editSupply({{$_id}})" class=" btn btn-success btn-sm w-95 m-1" ><i class="fa-solid fa-pen-to-square"></i> Editar insumo</button>
+            <button type="button" onclick="deleteSupply({{$_id}})" class="btn btn-danger btn-sm w-95 m-1" ><i class="fas fa-trash-alt  p-1"></i>Eliminar</button>
     </div>
 </div>
