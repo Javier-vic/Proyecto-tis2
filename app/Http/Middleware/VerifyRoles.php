@@ -17,14 +17,15 @@ class VerifyRoles extends Middleware
     {
         $this->routes = array(
             1 => ['publicidad'],
-            2 => ['insumos'],
+            2 => ['supply','category_supply'],
             3 => ['ventas'],
             4 => ['delivery'],
             5 => ['worker'],
             6 => ['asist'],
             7 => ['product','category_product'],
             8 => ['roles'],
-            9 => ['coupon']
+            9 => ['coupon'],
+            10 => ['map']
         );
     }
     /**

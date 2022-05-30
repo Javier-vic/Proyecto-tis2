@@ -6,9 +6,6 @@
 
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <div>
-        @include('sweetalert::alert')
-    </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
     <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}

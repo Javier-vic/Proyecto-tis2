@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>RamenDashi</title>
+    <title>Ramen Dashi</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}" />
@@ -28,13 +28,23 @@
 
             <ul class="list-unstyled ">
                 @if (RoleController::havePermits(auth()->user()->id_role,2))
-                    <li class="">
-                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-box-open"></i>Insumos</a>
+                    <li>
+                        <a href="#submenuSupply" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle mt-3{{ request()->is('supply','category_supply') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-box-open"></i>Insumos <i class="fa-solid fa-caret-down "></i></a>    
+                        <ul class="collapse list-unstyled" id="submenuSupply">
+                            <li>
+                                <a href="{{route('supply.index')}}" >Listado insumos</a>
+
+                            </li>
+                            <li>
+                                <a href="{{route('category_supply.index')}}">Categorías</a>
+                            </li>
+        
+                        </ul>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,1))
                     <li>
-                        <a href="#" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
+                        <a href="#" class="my-3 " hidden ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,3))
@@ -49,7 +59,7 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,7))    
                     <li>
-                        <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle {{ request()->is('product','category_product') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-down "></i></a>    
+                        <a href="#submenuCategoryProducts" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle mt-3 {{ request()->is('product','category_product') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-list-ul"></i>Productos <i class="fa-solid fa-caret-down "></i></a>    
                         <ul class="collapse list-unstyled" id="submenuCategoryProducts">
                             <li>
                                 <a href="{{route('product.index')}}" >Listado productos</a>
@@ -64,12 +74,12 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,4))
                     <li>
-                        <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
+                        <a href="#" class="my-3" hidden><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,5))
                     <li>
-                        <a href="#submenuTrabajadores" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle {{ request()->is('worker','roles') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-people-group"></i>Trabajadores <i class="fa-solid fa-caret-down "></i></a>    
+                        <a href="#submenuTrabajadores" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle mt-3{{ request()->is('worker','roles') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-people-group"></i>Trabajadores <i class="fa-solid fa-caret-down "></i></a>    
                         <ul class="collapse list-unstyled" id="submenuTrabajadores">
                             <li>
                                 <a href="{{route('worker.index')}}" >Listado de trabajadores</a>
@@ -89,9 +99,6 @@
                         <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
                     </li>
                 @endif
-                <li>
-                    <a href="#" class="my-3"><i class="me-3 fa-solid fa-truck"></i>Delivery</a>
-                </li>
                 <li>
                     <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
                 </li>

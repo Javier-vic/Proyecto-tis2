@@ -5,9 +5,6 @@
 @endsection
 
 @section('content')
-    <div>
-        @include('sweetalert::alert')
-    </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
     <table class="table" id="myTable" style="width: 100%">
     {!! Form::token() !!}

@@ -25,6 +25,7 @@ class permitSeeder extends Seeder
             'productos',
             'roles',
             'cupon',
+            'local'
         ];
         $tipe_permit = array_map( function($permit){
             return[
