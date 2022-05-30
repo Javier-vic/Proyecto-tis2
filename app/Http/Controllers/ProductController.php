@@ -31,7 +31,6 @@ class ProductController extends Controller
                     'products.stock',
                     'products.name_product',
                     'products.description',
-                    'products.price',
                     'products.image_product'
 
                 )
@@ -131,8 +130,7 @@ class ProductController extends Controller
                 'products.name_product',
                 'products.description',
                 'products.image_product',
-                'category_products.name as category',
-                'products.price'
+                'category_products.name as category'
 
             )
             ->orderBy('products.id')
@@ -246,5 +244,7 @@ class ProductController extends Controller
         }
 
         return response('success', 200);
+
+        
     }
 }

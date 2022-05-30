@@ -24,11 +24,6 @@
                 aria-describedby="description_help" value={{ $productSelected->description }}>
         </div>
         <div class="mb-3">
-            <label for="" class="form-label">Precio  </label>
-            <input type="text" class="form-control" id="price" name="price"
-                aria-describedby="description_help" value={{ $productSelected->price }}>
-        </div>
-        <div class="mb-3">
             <label for="" class="form-label">Categoria </label><br>
 
             <select name="id_category_product" id="" name="id_category_product">

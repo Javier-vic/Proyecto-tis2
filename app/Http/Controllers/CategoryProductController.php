@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\category_product;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -22,25 +21,7 @@ class CategoryProductController extends Controller
      */
     public function index()
     {
-        if (request()->ajax()) {
-
-            return datatables(DB::connection(session()->get('database'))
-                ->table('category_products')
-                ->whereNull('category_products.deleted_at')
-                ->select(
-                    'category_products.id as _id',
-                    'category_products.id as id',
-                    'category_products.name',
-                )
-                ->orderBy('category_products.id')
-                ->get())
-                ->addColumn('action', 'mantenedores.category.datatable.action')
-                ->rawColumns(['action'])
-                ->addIndexColumn()
-                ->make(true);
-        }
-
-        return view('Mantenedores.category.index');
+        return view('mantenedores.category.index');
     }
 
     /**
@@ -193,24 +174,6 @@ class CategoryProductController extends Controller
      */
     public function destroy(category_product $category_product)
     {
-
-        // try {
-        //     $equipment = Equipment::on(session()->get('database'))->find($id);
-        //     $equipment->delete();
-
-        //     DB::connection(session()->get('database'))->commit();
-        // } catch (\Illuminate\Database\QueryException $e) {
-
-        //     DB::connection(session()->get('database'))->rollBack();
-
-        //     return  response()->json(['success' => false, 'error' => $e]);
-        // }
-
-
-        $categoryProduct = category_product::on(session()->get('database'))->find($category_product->id);
-        $categoryProduct->delete();
-
-
-        return response('success', 200);
+        //
     }
 }

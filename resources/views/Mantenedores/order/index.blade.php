@@ -3,25 +3,25 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
+<div id="number"></div>
+<div>@include('Mantenedores.order.modal.show')</div>
+   
+<a type="button" class="btn btn-primary" href="{{route('order.create')}}" href="">Agregar Orden</a>
 
-    <a role="button" class="btn btn-success mr-auto" href="{{ url('/order/create') }}">
-        <i class="fa fa-fw fa-plus mr-2"></i> Crear producto
-    </a>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
- 
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+
 
 <table class="table table-light" id="myTable" width = 100%>
     <thead class="thead-light">
         <tr>
             <th>#</th>
             <th>Nombre orden</th>
-            <th>Total</th>
+            <th>Direccion</th>
             <th>Estado</th>
             <th>Retiro</th>
             <th>Metodo de pago</th>
-            <th>comentario</th>
+            <th>Total</th>
             <th>acciones</th>
             
         </tr>
@@ -29,10 +29,13 @@
 
 @endsection
 @section('js_after')
+    
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" ></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function() {
+        
             var table = $("#myTable").DataTable({
                 bProcessing: true,
                 bStateSave: true,
@@ -63,8 +66,8 @@
                         name: 'name_order'
                     },
                     {
-                        data: 'total',
-                        name: 'total'
+                        data: 'address',
+                        name: 'address'
                     },
                     {
                         data: 'order_status',
@@ -79,10 +82,10 @@
                         name: 'pick_up'
                     },
                     {
-                        data: 'comment',
-                        name: 'comment'
+                        data: 'total',
+                        name: 'total'
                     },
-                
+            
                     {
                         data: 'action',
                         name: 'action',
@@ -106,6 +109,121 @@
             });
             // ****************************************************************************************************************
 
-        })
+        
+
+        const addorder = (e) =>{
+            e.preventDefault();
+            var data = $("#postForm").serializeArray();
+            $.ajax({
+                type: "POST",
+                url: "{{route('order.store')}}",
+                data: data,
+                dataType: "text",
+                success: function (response) {
+                    alert(response);
+                   
+                }
+            });
+        }
+        // ****************************************************************************************************************
+        //RELLENA EL MODAL DE VER DETALLES
+        // ****************************************************************************************************************
+       
+        const showOrder = (id) =>{
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('order.view') }}",
+                    data: {
+                        'id': id,
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                    resultado = response;
+                   
+                       
+                        $('#nameOrderVIEWMODAL').val(resultado[1]);
+                        $('#name_order').val(resultado[1][0].name_order);
+                        $('#payment').val(resultado[1][0].payment_method);
+                        $('#total').val(resultado[1][0].total);
+                        $('#dely').val(resultado[1][0].pick_up);
+                        $('#date').val(resultado[1][0].created_at);
+                        
+                        // $('#addorderLabel').html(${resultado.product_id})
+                        console.log(resultado)
+                        $('#pruebaProductos').empty();
+                        resultado[0].map(product =>{
+                            $('#pruebaProductos').append(
+                                `
+                                <tr>
+                                    <td>${product.name_product}</td>
+                                    <td>${product.cantidad}</td>
+                                    <td>${product.valor}</td>
+                                </tr> 
+                                
+                                `
+
+                                
+                            )
+                        })
+
+                    }
+                });
+        }
+        
+        // ****************************************************************************************************************
+        // ****************************************************************************************************************
+        const deleteOrder = (id) =>{
+
+            Swal.fire({
+            title: '¿Estás seguro de eliminar la orden?',
+            text: "No se puede revertir.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Borrar!',
+            cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+            url = '{{ route("order.destroy", ":order") }}';
+            url = url.replace(':order', id);
+            if(result.isConfirmed){
+                $.ajax({
+                type: "DELETE",
+                url: url,
+                error: function( jqXHR, textStatus, errorThrown ) {
+                   var text = jqXHR.responseText;
+                   Swal.fire({
+                       position: 'bottom-end',
+                       icon: 'error',
+                       title: text,
+                       showConfirmButton: false,
+                       timer: 2000,
+                       backdrop: false
+                   })
+               },
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                },
+                    success: function(response) {
+                        Swal.fire(
+                                'Borrado!',
+                                'La order ha sido eliminado.',
+                                'success'
+                            )
+                    document.getElementById("number").innerHTML = table.data().count()-1;
+                    table.ajax.reload();
+         
+
+                    }
+                });
+            }
+         
+            })
+           } 
+
+        /////
+ 
+
     </script>
 @endsection

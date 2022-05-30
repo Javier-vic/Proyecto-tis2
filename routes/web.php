@@ -47,12 +47,15 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles');
     Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
     Route::get('/asist/dataTable',[AsistController::class,'dataTable'])->name('dataTable.asist');
-    Route::post('/asist/finish/{asist}',[AsistController::class,'finishAsist'])->name('finish.asist');  
     Route::get('/product/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
     Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
     Route::get('/worker/dataTable',[worker::class,'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker',[worker::class,'getWorker'])->name('worker.getWorker');
+    Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     //POST
+    Route::post('/asist/finish/{asist}',[AsistController::class,'finishAsist'])->name('finish.asist');  
+    Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
+    Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     
     //RESOURCE
@@ -68,7 +71,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
 });
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
+// RUTAS DE ORDENES
+// RUTA DE ROLES
 

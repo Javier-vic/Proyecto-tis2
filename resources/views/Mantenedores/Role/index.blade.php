@@ -186,6 +186,7 @@
                         data: {"_token": "{{ csrf_token() }}"},
                         dataType: "text",
                         success: function (response) {
+                            console.log('asd');
                             Swal.fire(
                                 'Borrado!',
                                 'El rol ha sido borrado.',
