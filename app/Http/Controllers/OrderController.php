@@ -105,6 +105,7 @@ class OrderController extends Controller
         static  $messages = [
             'required'      => 'Este campo es obligatorio',
         ];
+
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
         $datosOrder = request()->except('_token');
@@ -183,7 +184,7 @@ class OrderController extends Controller
 
 
 
-        return view('Mantenedores.order.index');
+        return redirect()->to('/order');
     }
 
     /**
@@ -282,7 +283,6 @@ class OrderController extends Controller
 
 
 
-            */
 
     
 
@@ -295,13 +295,14 @@ class OrderController extends Controller
 
         $productos->total = $x;
         $productos->save();
+        $order->products()->detach();
 
         for ($i = 0; $i < count($permits); $i++) {
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
             
             
-            $order->products()->sync($id,['cantidad'=>$cont]);
+            $order->products()->attach($id,['cantidad'=>$cont]);
             
         }
 
@@ -330,7 +331,7 @@ class OrderController extends Controller
             ->get();
 
         $productOrders = DB::table('products_orders')
-            ->select('products_orders.product_id','products.name_product', 'products_orders.cantidad','products.price')
+            ->select('products_orders.product_id','products.name_product', 'products_orders.cantidad')
             ->join('products', 'products_orders.product_id', '=', 'products.id')
             ->where('products_orders.order_id', '=', $id)
             ->get();

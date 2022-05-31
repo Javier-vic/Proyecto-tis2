@@ -70,7 +70,7 @@
                 
             </div>
             
-                <button type="submit" class=" mt-3 btn btn-primary">Realizar pedido</button>
+                <button type="submit" class=" mt-5 btn btn-primary"> Realizar pedido</button>
         </form>
 
 
@@ -104,22 +104,29 @@
 
         productsSelected.map(productSelected =>{
 
-          
+
+            
                 
+
+                    var str = productSelected.description
+                    var res = str.substring(0, 59);
+                    var final = res +"..";
+                   
+                                    
                  $('#listaProductos').append(
                     `
                     <div class="card col-2 mx-2" style="width: 15rem;">
                     <div id = "image_product${productSelected.id}EDITVIEW"></div>
                         <div>
                             <h5 class="card-title">${productSelected.name_product}</h5>
-                            <p class="card-text">${productSelected.description}</p>
+                            <p class="card-text">${final}</p>
                             <div>
                                 <h4 class="pt-2 ">${productSelected.price}</h4>
                                 <input type="number" type="number" class="form-control d-none" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
-                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button">Agregar producto</button>
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button"> <i class="fa-thin fa-plus"></i> Agregar producto</button>
                                
                                 </div>
 
@@ -149,7 +156,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
                         $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
-                        $(`#bottonproduct${productSelected.id}`).text('Eliminar Producto');
+                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-regular fa-trash"></i> Eliminar Producto');
 
                         
                         
@@ -162,7 +169,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                         $(`#valor${productSelected.id}`).removeAttr('name');
-                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
+                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-solid fa-circle-plus"></i> Agregar producto');
 
                         
                         console.log('eliminado')

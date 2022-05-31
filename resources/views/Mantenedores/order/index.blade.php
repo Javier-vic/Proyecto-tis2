@@ -25,13 +25,13 @@
     <thead class="thead-light">
         <tr>
             <th>#</th>
-            <th>Nombre orden</th>
+            <th>Nombre Orden</th>
             <th>Direccion</th>
             <th>Estado</th>
+            <th>Metodo De Pago</th>
             <th>Retiro</th>
-            <th>Metodo de pago</th>
             <th>Total</th>
-            <th>acciones</th>
+            <th>Acciones</th>
             
         </tr>
     </thead>
@@ -42,30 +42,7 @@
     <div class="col-md-6">
         <canvas id="myChart" width="400" height="400"></canvas>
     </div>
-    <div id = "grafica2" class="col-md-6 row">
-
-
-            <form action="" id = "form-yea"> 
-
-                
-
-                <select name="" id="selectYear">
-
-                    <option value="2013">2013</option>
-                    <option value="2022">2022</option>
-
-                </select>
-    
-                
-                <div class="">
-
-                    <canvas class = "canva" id="myChart2"></canvas>
-
-                </div>
-            
-            "></form>
-           
-    </div>
+ 
 </div>
 @endsection
 @section('js_after')
@@ -149,94 +126,97 @@
 
             //////////****/////////////
 
+
+
             $('#selectYear').on('change', function() {
 
-                // create data from form input(s)
+            // create data from form input(s)
             const x = $(this).val();
 
-     
-            
-             
+
             $.ajax({
-                type: "GET",
-                url: "{{ route('order.month') }}",
-                data: {
-                    'year': x,
-                },
-                dataType: "json",
-                success: function(response) {
-                const resultado = response;
-        
-                  console.log(resultado);       
-                const label = []
-                const dates = []
-                let myChart;
+            type: "GET",
+            url: "{{ route('order.month') }}",
+            data: {
+                'year': x,
+            },
+            dataType: "json",
+            success: function(response) {
+            const resultado = response;
+
+            console.log(resultado);       
+            const label = []
+            const dates = []
+            let myChart;
+
+                    const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
+                    const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                    };
+
+                    if (myChart) {
+                        console.log('hola')
+                            myChart.destroy();
+                            }
+
+
+                    var ctx = document.getElementById(`myChart2`).getContext('2d');
                 
-                        const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
-                        const data = {
-                        labels: labels,
-                        datasets: [{
-                            label: 'My First Dataset',
-                            data: [65, 59, 80, 81, 56, 55, 40],
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }]
-                        };
-
-                        if (myChart) {
-                            console.log('hola')
-                                  myChart.destroy();
-                                  }
-
-
-                        var ctx = document.getElementById(`myChart2`).getContext('2d');
-                       
-                             myChart = new Chart(ctx, {
-                            type: 'line',
-                            data: data,
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Chart.js Line Chart'
-                                }
-                                }
+                        myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                            legend: {
+                                position: 'top',
                             },
-                         }); 
-
-
-                            
-
-
+                            title: {
+                                display: true,
+                                text: 'Chart.js Line Chart'
+                            }
+                            }
+                        },
+                    }); 
 
 
                         
+
+
+
+
+                    
+
+
+
+
+
+
+                    
 
                 
 
-              
 
 
-                        
-             
-                    
-    
-             
 
-        
 
-                 }
+            }
             }); //ajax
 
 
             });
 
 
+
+
+            
 
             ///*****************///*+
 
@@ -351,68 +331,17 @@
             })
            } 
        
-           $(document).ready(function () {
-                   ///productos mas conprados 
-            /////
-            const bestseller = @json($bestseller);
-            var label = [];
-            var date = [];
-
-            for (var i = 0 in bestseller ) {
-
-                    date.push(bestseller[i].cantida);
-                    label.push(bestseller[i].name_product)
-                    
-
-            
-            }
-        
            
-            const ctx = document.getElementById('myChart');
-            const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: label,
-                datasets: [{
-                    label: '# of Votes',
-                    data: date,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-    });
-           });
+             
 
 
                 // ****************************************************************************************************************
             //RELLENA EL MODAL DE VER DETALLES
             // ****************************************************************************************************************
         
-    const monthlyannual = (year) =>{
-
-    }
+ 
+            
+    
 
     </script>
 @endsection

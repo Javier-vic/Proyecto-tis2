@@ -54,7 +54,8 @@
             <select id="payment_method"  class="form-control" name="payment_method" aria-describedby="name_product_help" value="{{ isset($orderData->payment_method)?$orderData->payment_method:''}}">
                 <option value="Efectivo" >Efectivo</option>
                 <option value="Credito">Credito</option>
-                <option value="Debito" }>Debito</option>
+                <option value="Pedidos ya" >Pedidos ya</option>
+           
             </select>
     </div>   
 
@@ -124,7 +125,7 @@
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
-                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button">Eliminar producto</button>
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button"><i class="fa-regular fa-trash"></i> Eliminar producto</button>
                                
                                 </div>
 
@@ -153,7 +154,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
-                        $(`#bottonproduct${productSelected.id}`).text('Eliminar Producto');
+                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-regular fa-trash"></i> Eliminar Producto');
                         $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
                         
 
@@ -168,7 +169,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                         $(`#valor${productSelected.id}`).removeAttr('name');
-                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
+                        $(`#bottonproduct${productSelected.id}`).html('Agregar producto');
 
                         
                         console.log('eliminado')
@@ -241,7 +242,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                         $(`#valor${productSelected.id}`).removeAttr('name');
-                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
+                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-regular fa-trash"></i> Agregar producto');
                        
                         
                         console.log('eliminado')
