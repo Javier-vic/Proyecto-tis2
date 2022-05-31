@@ -5,13 +5,14 @@
 @endsection
 
 @section('titlePage')
-<h3>Categorías de insumos</h3>
+    <h2>Categorías de insumos</h2>
 @endsection
 
 @section('content')
-    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo"> Agregar nueva categoria</button>
+    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo">
+        Agregar nueva categoria</button>
     <table class="table" id="myTable" style="width: 100%">
-    {!! Form::token() !!}
+        {!! Form::token() !!}
 
         <thead class="thead bg-secondary text-white">
             <tr>
@@ -19,8 +20,8 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-        
-        
+
+
 
     </table>
 
@@ -33,7 +34,6 @@
 @endsection
 
 @section('js_after')
-
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
@@ -61,9 +61,16 @@
             dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
                 "<'row '<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
-            columns:[
-                {data:'name_category',name:'name_category'},
-                {data:'action',name:'action',orderable:false,searchable:true},
+            columns: [{
+                    data: 'name_category',
+                    name: 'name_category'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: true
+                },
             ],
             select: true
         });
@@ -71,31 +78,31 @@
         // ****************************************************************************************************************
         //MODAL DE CREAR
         //****************************************************************************************************************   
-        const addCategorySupply = (e) =>{
+        const addCategorySupply = (e) => {
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
             $.ajax({
                 type: "POST",
-                url: "{{route('category_supply.store')}}",
-                data: formData, 
+                url: "{{ route('category_supply.store') }}",
+                data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                        Swal.fire({
+                    Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
                         title: response,
                         showConfirmButton: false,
                         timer: 2000,
-                        backdrop: false,                       
-                        heightAuto:false,
+                        backdrop: false,
+                        heightAuto: false,
                     })
                     $('#idname').val('');
                     table.ajax.reload();
-                    $("#agregarCategoriaInsumo").modal("hide");                   
+                    $("#agregarCategoriaInsumo").modal("hide");
                 },
-                error: function( jqXHR, textStatus, errorThrown ){                 
+                error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
@@ -111,45 +118,46 @@
                         backdrop: false
                     })
                     //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
-                    if(text){
-                        $.each(text.errors, function(key,item){
-                        $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
-                        $(`#idName`).addClass('is-invalid');
+                    if (text) {
+                        $.each(text.errors, function(key, item) {
+                            $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
+                                item + "</span>")
+                            $(`#idName`).addClass('is-invalid');
                         });
                     }
                     //////////////////////////////////////
-                    
+
                 }
             });
         }
         // ****************************************************************************************************************
         //RELLENA MODAL DE EDITAR
         // ****************************************************************************************************************   
-            
-        const editCategorySupply = (id) => {          
-            var  url = '{{ route("category_supply.edit", ":category_supply") }}';
-            url = url.replace(':category_supply',id)
+
+        const editCategorySupply = (id) => {
+            var url = '{{ route('category_supply.edit', ':category_supply') }}';
+            url = url.replace(':category_supply', id)
             $.ajax({
                 type: "GET",
                 url: url,
                 dataType: "json",
                 success: function(response) {
-                    let resultado = response[0][0];                  
-                    $('#name_categorySupplyEdit').val(resultado.name_category);   
+                    let resultado = response[0][0];
+                    $('#name_categorySupplyEdit').val(resultado.name_category);
                     $("#formEdit").attr('onSubmit', `editCategorySupplySubmit(${id},event)`);
-                    $('#editCategorySupply').modal('show');  
+                    $('#editCategorySupply').modal('show');
                 }
-                
+
             });
         }
         //******************************************************************************************
         //ENVÍA MODAL DE EDITAR
         // *****************************************************************************************
-        const editCategorySupplySubmit = (id,e) => {
+        const editCategorySupplySubmit = (id, e) => {
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
             formData.append('_method', 'put');
-            var  url = '{{ route("category_supply.update" , ":category_supply") }}';
+            var url = '{{ route('category_supply.update', ':category_supply') }}';
             url = url.replace(':category_supply', id);
             Swal.fire({
                 title: '¿Estás seguro de editar esta categoría',
@@ -160,12 +168,12 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, editar!',
                 cancelButtonText: 'Cancelar',
-            }).then((result)=>{
-                if(result.isConfirmed){
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: formData ,
+                        data: formData,
                         cache: false,
                         contentType: false,
                         processData: false,
@@ -178,7 +186,7 @@
                             )
                             $('#editCategorySupply').modal('hide');
                         },
-                        error: function( jqXHR, textStatus, errorThrown ) {
+                        error: function(jqXHR, textStatus, errorThrown) {
                             var text = jqXHR.responseJSON;
                             Swal.fire({
                                 position: 'bottom-end',
@@ -189,25 +197,26 @@
                                 backdrop: false
                             })
                             //AGREGA LAS CLASES DE INVALID
-                            if(text){
-                                $.each(text.errors, function(key,item){
-                                $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
-                                $(`#name_categorySupplyEdit`).addClass('is-invalid');
+                            if (text) {
+                                $.each(text.errors, function(key, item) {
+                                    $("#" + key + "_errorEDITMODAL").append(
+                                        "<span class='text-danger'>" + item + "</span>")
+                                    $(`#name_categorySupplyEdit`).addClass('is-invalid');
                                 });
                             }
                             ///////////////////////////////////////////////
-                        }         
+                        }
                     })
                 }
             })
         }
 
-        
+
         // *****************************************************************************************
         //ELIMINAR CATEGORÍA 
         // *****************************************************************************************
 
-        const deleteCategorySupply = (id) =>{
+        const deleteCategorySupply = (id) => {
             Swal.fire({
                 title: '¿Estás seguro de eliminar esta categoría?',
                 text: "Eliminar la categoría eliminara todo insumo dentro de ella y no se puede revertir.",
@@ -217,14 +226,14 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, Borrar!',
                 cancelButtonText: 'Cancelar',
-            }).then((result)=>{
-                url = '{{ route("category_supply.destroy", ":category_supply") }}';
+            }).then((result) => {
+                url = '{{ route('category_supply.destroy', ':category_supply') }}';
                 url = url.replace(':category_supply', id);
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     $.ajax({
                         type: "DELETE",
                         url: url,
-                        error: function( jqXHR, textStatus, errorThrown ) {
+                        error: function(jqXHR, textStatus, errorThrown) {
                             var text = jqXHR.responseText;
                             Swal.fire({
                                 position: 'bottom-end',
@@ -244,34 +253,32 @@
                                 'La categoría ha sido eliminada.',
                                 'success'
                             )
-                            
-                            table.ajax.reload();           
+
+                            table.ajax.reload();
                         }
                     });
                 }
-         
+
             })
         }
 
         // ****************************************************************************************************************
         //LIMPIA LOS INPUTS AL CERRAR UN MODAL
         // ****************************************************************************************************************
-        $('#agregarCategoriaInsumo').on('hidden.bs.modal', function () {
+        $('#agregarCategoriaInsumo').on('hidden.bs.modal', function() {
             $(".input-modal").removeClass('is-invalid');
             $(".input-modal").removeClass('is-valid');
             $(".input-modal").val('');
             $(".createmodal_error").empty()
-           })
+        })
 
-        $('#editCategorySupply').on('hidden.bs.modal', function () {
+        $('#editCategorySupply').on('hidden.bs.modal', function() {
             $(".input-modal").removeClass('is-invalid');
             $(".input-modal").removeClass('is-valid');
             $(".input-modal").val('');
             $(".editmodal_error").empty()
         })
-    
-        // ****************************************************************************************************************
-        
-    </script> 
 
+        // ****************************************************************************************************************
+    </script>
 @endsection
