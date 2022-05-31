@@ -3,6 +3,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
+@section('titlePage')
+<h3>Listado de ordenes</h3>
+
+@endsection
 <!-- <div id="number"></div> -->
 <div>@include('Mantenedores.order.modal.show')</div>
    

@@ -168,7 +168,6 @@
  
                 dataType: "json",
                     success: function(response) {
-                        console.log(response)
                     let resultado = response[0][0];
                     $('#image_productEDITVIEW').empty();
                     $('#name_productEDIT').val(resultado.name_product);
@@ -337,7 +336,6 @@
                             class: 'img-fluid rounded-start w-100 p-2',
                             style : 'height:400px; object-fit:cover;'
                         }))
-                        console.log(response)
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
                         $('#stockVIEWMODAL').html(resultado.stock + ' unidades')
                         $('#descriptionVIEWMODAL').html(resultado.description)

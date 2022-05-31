@@ -130,7 +130,6 @@
                 url: url,
                 dataType: "json",
                 success: function(response) {
-                    console.log(response)
                     let resultado = response[0][0];                  
                     $('#name_categorySupplyEdit').val(resultado.name_category);   
                     $("#formEdit").attr('onSubmit', `editCategorySupplySubmit(${id},event)`);
