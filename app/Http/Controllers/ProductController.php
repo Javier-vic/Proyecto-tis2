@@ -6,8 +6,6 @@ use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
@@ -132,7 +130,8 @@ class ProductController extends Controller
                 'products.name_product',
                 'products.description',
                 'products.image_product',
-                'category_products.name as category'
+                'category_products.name as category',
+                'products.price'
 
             )
             ->orderBy('products.id')

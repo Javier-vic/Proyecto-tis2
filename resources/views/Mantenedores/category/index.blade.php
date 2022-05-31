@@ -4,17 +4,16 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('titlePage')
-<h2 class="">Categoría de los productos</h2>
+<h2 class="">Categorías de los productos</h2>
 @endsection
 @section('content')
 <div>
-    @include('sweetalert::alert')
 </div>
     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#agregarCategoria">
         Agregar categoría
     </button>
 
-    <div id="number"></div>
+    <!-- <div id="number"></div> -->
 
     <div>
         @include('Mantenedores.category.modal.create')
@@ -57,9 +56,6 @@
                     url: "{{ route('category_product.index') }}",
                     type: 'GET',
                 },
-                // language: {
-                //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
-                // },
                 dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
                     "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
@@ -77,10 +73,10 @@
 
                     },
                 ],
-                initComplete: function(settings, json) {
+                // initComplete: function(settings, json) {
 
-                    document.getElementById("number").innerHTML = table.data().count();
-                },
+                //     document.getElementById("number").innerHTML = table.data().count();
+                // },
                 select: true
             });
 
@@ -145,7 +141,7 @@
                     $('#nameCREATEMODAL').val('');
                     table.ajax.reload();
                     $('#agregarCategoria').modal('hide');
-                    document.getElementById("number").innerHTML = table.data().count()+1;
+                    // document.getElementById("number").innerHTML = table.data().count()+1;
                     }
                 
                 });
@@ -278,7 +274,7 @@
                                 'La categoría ha sido borrada.',
                                 'success'
                             )
-                    document.getElementById("number").innerHTML = table.data().count()-1;
+                    // document.getElementById("number").innerHTML = table.data().count()-1;
                     table.ajax.reload();
                     // $('#editCategoria').modal('hide');
                     // $('#stockEDITMODAL').val(resultado.stock)

@@ -282,6 +282,7 @@ class OrderController extends Controller
 
 
 
+            */
 
     
 
@@ -329,7 +330,7 @@ class OrderController extends Controller
             ->get();
 
         $productOrders = DB::table('products_orders')
-            ->select('products_orders.product_id','products.name_product', 'products_orders.cantidad')
+            ->select('products_orders.product_id','products.name_product', 'products_orders.cantidad','products.price')
             ->join('products', 'products_orders.product_id', '=', 'products.id')
             ->where('products_orders.order_id', '=', $id)
             ->get();

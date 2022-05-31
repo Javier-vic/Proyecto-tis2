@@ -18,20 +18,19 @@ input[type=number] {
 }
 </style>
 {{--  --}}
+
 @endsection
 @section('titlePage')
 <h2 class="">Listado de cupones</h2>
 @endsection
+
 @section('content')
-<div id="number">0</div>
+<!-- <div id="number">0</div> -->
 
 <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCupon">
     Crear cupón
 </button>
     <div>@include('Mantenedores.coupon.modal.create')</div>
-    <div class="block-content block-content-full block-content-sm bg-body-dark mb-2">
-        <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
-    </div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-secondary text-white">
             <tr class="text-center">
@@ -70,13 +69,6 @@ input[type=number] {
                     url: "{{ route('coupon.index') }}",
                     type: 'GET',
                 },
-                // language: {
-                //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
-                // },
-                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block'i><'col-sm-12 col-md-7'p>>",
-
                 columns: [
                     {
                         data: 'percentage',
@@ -108,10 +100,10 @@ input[type=number] {
 
                     },
                 ],
-                initComplete: function(settings, json) {
+                // initComplete: function(settings, json) {
 
-                    document.getElementById("number").innerHTML = table.data().count();
-                },
+                //     document.getElementById("number").innerHTML = table.data().count();
+                // },
                 select: true
             });
 

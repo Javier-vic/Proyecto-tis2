@@ -19,6 +19,7 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.32.11",
         "sass-loader": "^11.0.1",
+        "sweetalert2": "^11.4.14",
         "webpack-cli": "^4.9.2"
     },
     "dependencies": {

@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\role;
 use App\Models\permit;
-use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Laravel\Ui\Presets\React;
-use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+
 class RoleController extends Controller
 {
     /**
@@ -47,16 +46,29 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $values = request()->except('_token');
-        $role = new role();
-        $role->name_role = $values['name_role'];
-        $permits = array();
-        foreach($values['permits'] as $item => $value){
-            $permits[] = (int)$value;
+        $validator = Validator::make($request->all(),role::$rules,role::$message);
+        if($validator->passes()){
+            try{
+                $values = request()->except('_token');
+                $role = new role();
+                $role->name_role = $values['name_role'];
+                $permits = array();
+                foreach($values['permits'] as $item => $value){
+                    $permits[] = (int)$value;
+                }
+                $role->save();
+                $role->permit()->attach($permits);
+                return response('El rol fue registrado con exito.',200);
+            }catch(\Throwable $th){
+                DB::connection(Session()->get('database'))->rollBack();
+                return response('No se pudo realizar el registro del rol',400);
+            }
+        }else{
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ),400);
         }
-        $role->save();
-        $role->permit()->attach($permits);
-        return response('',200);
         //
     }
 
@@ -132,7 +144,7 @@ class RoleController extends Controller
     }
     public function dataTable(Request $request){
         if($request->ajax()){
-            $data = role::all();
+            $data = role::where('id','!=',1)->where('id','!=',2)->get();
             return DataTables::of($data)
                 ->addColumn('viewPermits', function($row){
                     $button = "<button onclick='viewPermits({$row->id})' class='btn btn-success'>Ver permisos</button>"; 
@@ -149,5 +161,16 @@ class RoleController extends Controller
                 ->make(true);
 
         }
+    }
+
+    public function havePermits($idrole,$permit){
+        $flag = DB::table('roles')
+                    ->select(DB::raw('count(*)'))
+                    ->join('role_permit','roles.id','=','role_permit.id_role')
+                    ->where('roles.id','=',$idrole)
+                    ->where('role_permit.id_permit','=',$permit)
+                    ->count();
+
+        return $flag;
     }
 }
