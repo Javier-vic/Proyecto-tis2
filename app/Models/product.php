@@ -28,6 +28,15 @@ class product extends Model
         'image_product' => 'required|file'
 
     ];
+
+    static $rulesEdit = [
+        'name_product'          => 'required|string',
+        'stock'          => 'required|string',
+        'description'          => 'required|string',
+        'price'          => 'required|string',
+        'id_category_product'          => 'required|string',
+
+    ];
     static  $messages = [
         'required'      => 'Este campo es obligatorio',
     ];
