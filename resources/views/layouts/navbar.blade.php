@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css">
     @yield('css_extra')
 
+
+
+
 </head>
 
 <body>
@@ -55,8 +58,12 @@
                     <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
                 </li>
                 <li>
-                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
+                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Mapa</a>
                 </li>
+              
+       
+        
+     
             </ul>
 
 
@@ -67,10 +74,11 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
-                        <i class="fas fa-align-left text-white"></i>
-                    </button>   
-                    @yield('titlePage')                
-                    <div style="visibility:hidden">.</div>                 
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                 
+
+    
                 </div>
             </nav>
 

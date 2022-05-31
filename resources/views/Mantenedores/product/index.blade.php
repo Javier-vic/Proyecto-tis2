@@ -2,30 +2,19 @@
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
-
-@section('titlePage')
-<h3>Listado de productos</h3>
-
-@endsection
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <div class="container ">
-        <div class="row">
-            <div class="col-md justify-content-md-end justify-content-center  d-flex align-self-center col-xs-12">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
-                Agregar producto
-                </button>
-            </div>
-            <div class="col-md justify-content-center justify-content-md-start d-flex align-self-center col-xs-12">
-                <div class="py-4 fs-5">Cantidad de productos: <span id=number></span></div>
-            </div>
-        </div>
-    </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
+        Agregar producto
+    </button>
+    <div id="number"></div>
     <div>@include('Mantenedores.product.modal.create')</div>
     <div>@include('Mantenedores.product.modal.show')</div>
     <div>@include('Mantenedores.product.modal.edit')</div>
 
-
+    <div class="block-content block-content-full block-content-sm bg-body-dark">
+        <input type="text" id="search" class="form-control form-control-alt" autocomplete="off" placeholder="Buscar...">
+    </div>
         
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-secondary text-white">
@@ -68,6 +57,9 @@
                 // language: {
                 //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
                 // },
+                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
+                    "<'row '<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
 
                 columns: [
                     {
@@ -94,6 +86,9 @@
                 select: true
             });
 
+            $('#search').on('keyup', function() {
+                table.search(this.value).draw();
+            });
 
            // ****************************************************************************************************************
            //MODAL DE CREAR
@@ -184,8 +179,7 @@
 
                         $('#image_productEDITVIEW').append($('<img>', {
                             src: url,
-                            class: 'img-fluid w-100',
-
+                            class: 'img-fluid'
                         }))
 
                     $("#formEdit").attr('onSubmit', `editProductSubmit(${id},event)`);
@@ -334,15 +328,14 @@
 
                         $('#mostrarImagen').append($('<img>', {
                             src: url,
-                            class: 'img-fluid rounded-start w-100 p-2',
-                            style : 'height:400px; object-fit:cover;'
+                            class: 'img-fluid rounded-start'
                         }))
 
                         // $('#name_productVIEWMODAL').val(resultado.name_product) NOMBRE DEL PRODUCTO
-                        $('#stockVIEWMODAL').html(resultado.stock + ' unidades')
+                        $('#stockVIEWMODAL').html(resultado.stock)
                         $('#descriptionVIEWMODAL').html(resultado.description)
                         $('#category').html(resultado.category)
-                        $('#priceVIEWMODAL').html('$'+resultado.price)
+                        $('#priceVIEWMODAL').html(resultado.price)
                     }
                 });
             });
@@ -367,6 +360,6 @@
            //
            // ****************************************************************************************************************
         
-
+    
     </script>
 @endsection
