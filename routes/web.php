@@ -29,6 +29,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // RUTAS DE ORDENES
 Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

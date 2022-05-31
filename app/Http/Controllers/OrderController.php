@@ -7,6 +7,8 @@ use App\Models\order;
 use App\Models\products_orders;
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\support\Facades\DB;
 use DataTables;
 
@@ -24,6 +26,7 @@ class OrderController extends Controller
 
             return datatables(DB::connection(session()->get('database'))
                 ->table('orders')
+                ->whereNull('orders.deleted_at')
                 ->select(
                     'orders.id as _id',
                     'orders.id',
@@ -44,8 +47,26 @@ class OrderController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
+        
+        //
+        // consulta de los productos mas ordenados
+        //
+        $bestseller = DB::table('products_orders')
+        ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
+        ->join('products','products_orders.product_id','products.id')
+        ->groupBy('products_orders.product_id', 'products.name_product')
+        ->limit(3)
+        ->orderBy('cantida','DESC')
+        ->get();    
 
-        return view('Mantenedores.order.index');
+
+       
+        ///
+        ///
+        ///
+      
+
+        return view('Mantenedores.order.index',compact('bestseller'));
     }
 
     /**
@@ -68,9 +89,24 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-
-        
+    {
+       
+    
+        static $rules = [
+            'name_order'          => 'required|string',
+      
+        ];
+    
+        static $rulesEdit = [
+            'name_order'          => 'required|string',
+            
+    
+        ];
+        static  $messages = [
+            'required'      => 'Este campo es obligatorio',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
         $datosOrder = request()->except('_token');
         $order = new order;
         $order->name_order = $datosOrder['name_order'];
@@ -87,7 +123,13 @@ class OrderController extends Controller
         $valores = array();
         $price = array();
 
-        
+    } else {
+        return Response::json(array(
+            'success' => false,
+            'errors' => $validator->getMessageBag()->toArray()
+
+        ), 400);
+    }
         
         foreach ($datosOrder['cantidad'] as $item => $value) {
 
@@ -202,7 +244,7 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, order $order)
-    {   
+    {
         
         $datosOrder = request()->except('_token');
         $productos = order::find($order->id);
@@ -252,7 +294,7 @@ class OrderController extends Controller
 
         $productos->total = $x;
         $productos->save();
-        
+
         for ($i = 0; $i < count($permits); $i++) {
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
@@ -293,6 +335,24 @@ class OrderController extends Controller
             ->get();
             
         return response(json_encode([$productOrders, $order]), 200);
+    }
+
+    ///*
+    /// Ventas por años
+    ///
+
+    public function getMonthOrder(request $request){
+
+        $sales = DB::table('orders')
+        ->select(DB::raw('count(DISTINCT(orders.id)) as `data`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+        ->whereyear('created_at', $request->year)
+        ->groupby('year','month')
+        ->get();
+       
+
+
+
+        return response($sales,200);
     }
 
 
