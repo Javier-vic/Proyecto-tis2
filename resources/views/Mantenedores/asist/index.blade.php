@@ -1,5 +1,9 @@
 @extends('layouts.navbar')
 
+@section('titlePage')
+<h2 class="">Asistencia registrada</h2>
+@endsection
+
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection

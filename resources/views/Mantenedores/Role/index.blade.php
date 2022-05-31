@@ -2,8 +2,12 @@
 
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    
 @endsection
+
+@section('titlePage')
+<h2 class="">Roles registrados</h2>
+@endsection
+
 @section('content')
     <div class="row my-4">
         <div class="col d-flex justify-content-center">
@@ -94,7 +98,6 @@
                 data: {'id': id,"_token": "{{ csrf_token() }}"},
                 dataType: "json",
                 success: function (response) {
-                    console.log(response[1]);
                     $('#viewPermits').modal('show')
                     $('#nombreRol').empty();
                     $('#nombreRol').html(`Permisos del Rol: ${response[0][0].name_role}`)
@@ -154,14 +157,12 @@
             var url = '{{ route("roles.update", ":id") }}';
             url = url.replace(':id', id);
             var data = $("#editForm").serializeArray();
-            console.log(data)
             $.ajax({
                 type: "PUT",
                 url: url,
                 data: data,
                 dataType: "json",
-                success: function (response) {
-                    console.log(response)        
+                success: function (response) {   
                 }
             });
             $('#editRole').modal('hide');
@@ -186,7 +187,6 @@
                         data: {"_token": "{{ csrf_token() }}"},
                         dataType: "text",
                         success: function (response) {
-                            console.log('asd');
                             Swal.fire(
                                 'Borrado!',
                                 'El rol ha sido borrado.',

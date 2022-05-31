@@ -2,6 +2,11 @@
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
+
+@section('titlePage')
+<h3>Listado de ventas</h3>
+@endsection
+
 @section('content')
 @section('titlePage')
 <h3>Listado de ordenes</h3>
