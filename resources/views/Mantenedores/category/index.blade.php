@@ -244,6 +244,7 @@
         //ELIMINAR UNA CATEGORÍA
         // ****************************************************************************************************************
         const deleteCategory = (id) => {
+            console.log('aca')
             Swal.fire({
                 title: '¿Estás seguro de eliminar esta categoría?',
                 text: "No se puede revertir.",

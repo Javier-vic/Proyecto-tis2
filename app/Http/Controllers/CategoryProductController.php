@@ -191,6 +191,16 @@ class CategoryProductController extends Controller
      */
     public function destroy(category_product $category_product)
     {
-        //
+        $id = $category_product->id;
+        try {
+            $category_product = $category_product::on(session()->get('database'))->find($id);
+            $category_product->delete();
+            DB::connection(session()->get('database'))->commit();
+            return response('Se eliminó la categoría.', 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::connection(session()->get('database'))->rollBack();
+            return response('Ocurrió un error. No se eliminó la categoría.', 400);
+        }
+        return response('success', 200);
     }
 }
