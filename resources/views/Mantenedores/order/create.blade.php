@@ -119,7 +119,7 @@
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
-                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button"><i class="fa-solid fa-plus"></i>Agregar producto</button>
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button">Agregar producto</button>
                                
                                 </div>
 
@@ -149,7 +149,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
                         $(`#valor${productSelected.id}`).attr('name',`cantidad[${productSelected.id}]`);
-                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-solid fa-trash"></i>  Eliminar Producto');
+                        $(`#bottonproduct${productSelected.id}`).text('Eliminar Producto');
 
                         
                         
@@ -162,7 +162,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                         $(`#valor${productSelected.id}`).removeAttr('name');
-                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-solid fa-plus"></i> Agregar producto');
+                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
 
                         
                         console.log('eliminado')

@@ -117,14 +117,14 @@
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
                             <div>
-                                <h4 class="pt-2 ">$${productSelected.price}</h4>
-                                <input type="number" type="number" name="cantidad[${productSelected.id}]" class="form-control" min="1" value = "${productSelected.cantidad}"  id="valor${productSelected.id}"  >
+                                <h4 class="pt-2 ">${productSelected.price}</h4>
+                                <input type="number" type="number" name="cantidad[${productSelected.id}]" class="form-control" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
                                 
                               
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
-                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button"><i class="fa-solid fa-trash"></i> Eliminar producto</button>
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-danger" value = "${productSelected.id}" type="button">Eliminar producto</button>
                                
                                 </div>
 
@@ -195,12 +195,12 @@
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
                             <div>
-                                <h4 class="pt-2 ">$${productSelected.price}</h4>
+                                <h4 class="pt-2 ">${productSelected.price}</h4>
                                 <input type="number" type="number" class="form-control d-none" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
-                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button"><i class="fa-solid fa-plus"></i>  Agregar producto</button>
+                                    <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button">Agregar producto</button>
                                
                                 </div>
 
@@ -215,8 +215,7 @@
 
                 $(`#image_product${productSelected.id}EDITVIEW`).append($('<img>', {
                     src: url,
-                    class: 'img-fluid mt-2 ' ,
-                    style: 'height: 200px;'
+                    class: 'img-fluid mt-2'
                     }))
 
 
@@ -242,7 +241,7 @@
                         $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                         $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                         $(`#valor${productSelected.id}`).removeAttr('name');
-                        $(`#bottonproduct${productSelected.id}`).html('<i class="fa-solid fa-plus"></i>  Agregar producto');
+                        $(`#bottonproduct${productSelected.id}`).text('Agregar producto');
                        
                         
                         console.log('eliminado')
