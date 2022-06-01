@@ -9,8 +9,15 @@
 @endsection
 
 @section('content')
-    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo">
-        Agregar nueva categoria</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md justify-content-center  d-flex align-self-center col-xs-12">
+                <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoriaInsumo">
+                    Agregar nueva categoria
+                </button>
+            </div>
+        </div>
+    </div>
     <table class="table" id="myTable" style="width: 100%">
         {!! Form::token() !!}
 

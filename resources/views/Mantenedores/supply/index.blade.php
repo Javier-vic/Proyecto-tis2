@@ -10,8 +10,15 @@
 
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo
-        insumo</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md justify-content-center  d-flex align-self-center col-xs-12">
+                <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo">
+                    Agregar nuevo insumo
+                </button>
+            </div>
+        </div>
+    </div>
     <table class="table" id="myTable" style="width: 100%">
         {!! Form::token() !!}
 

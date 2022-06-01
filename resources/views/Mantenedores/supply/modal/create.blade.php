@@ -16,7 +16,13 @@
                     </div>
                     <div class="form-group">
                         <label for="unit_meassurement">Unidad de medida</label>
-                        <input type="text" name="unit_meassurement" class="form-control input-modal" id="unit_meassurement">
+                        <select name="unit_meassurement" id="unit_meassurement" class="form-control input-modal">
+                            <option value="Kg">Kilogramos</option>
+                            <option value="g">Gramos</option>
+                            <option value="L">Litros</option>
+                            <option value="ml">Mililitros</option>
+                            <option value="uds">Unidades</option>
+                        </select>
                         <span class="text-danger createmodal_error" id="unit_meassurement_errorCREATEMODAL"></span>
                     </div>
                     <div class="form-group">
