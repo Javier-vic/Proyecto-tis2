@@ -22,10 +22,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Descripción </label>
-                        <input type="text" onkeyup="countChar(this)" class="form-control input-modal text-limit"
-                            id="description" name="description" aria-describedby="description_help" minlength="1"
-                            maxlength="500">
-                        <div id="charNum"></div>
+                        {{-- <input type="text" onkeyup="countChar(this)" class="" id="description"
+                            name="description" aria-describedby="description_help" minlength="1" maxlength="500"> --}}
+
+                        <textarea name="description" id="description" class="form-control input-modal text-limit" cols="30" rows="10"
+                            minlength="1" maxlength="500" onkeyup="countChar(this)"></textarea>
+
                         <span class="text-danger createmodal_error" id="description_errorCREATEMODAL"></span>
                         <span class="text-danger d-none" id="text-limit_error">Se ha alcanzado el limite de
                             texto.</span>
