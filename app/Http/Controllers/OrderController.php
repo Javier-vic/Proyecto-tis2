@@ -154,14 +154,19 @@ class OrderController extends Controller
        
         //      Calcular el total   ////
         for ($i = 0; $i < sizeof($permits); $i++) {
-            $stock = $valores[$i]->stock;
-            if($stock <= $cantidad[$i]){
+            $stock[$i] = $valores[$i]->stock;
+            if($stock[$i] < $cantidad[$i]){
 
                 return response('No hay stock suficiente',400);
 
             }
+            else {
 
-            $price[$i] = $cantidad[$i] * $valores[$i]->price;
+                $price[$i] = $cantidad[$i] * $valores[$i]->price;
+
+            }
+
+           
             
         }
 
@@ -175,6 +180,9 @@ class OrderController extends Controller
             $id = $permits[$i]; //id
             $cont = $cantidad[$i]; //cantidad
 
+            $productStock = product::find($id);
+            $productStock->stock = $stock[$i] - $cantidad[$i];
+            $productStock->update();
             
             $order->products()->attach($id,['cantidad'=>$cont]);
             
@@ -244,10 +252,12 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, order $order)
+    public function update(Request $request, order $order,product $product )
     {
-        
+            //obtenemos requests
         $datosOrder = request()->except('_token');
+        
+        // consultamos por id de la consulta
         $productos = order::find($order->id);
       
         $productos->name_order = $datosOrder['name_order'];
@@ -256,15 +266,16 @@ class OrderController extends Controller
         $productos->address = $datosOrder['address'];
         $productos->pick_up = $datosOrder['pick_up'];
         $productos->comment = $datosOrder['comment'];
-        
+        $productos->address = $datosOrder['address'];
+
         $permits = array();
         $cantidad = array();
         $valores = array();
-        $price = array();
+     
 
 
         foreach ($datosOrder['cantidad'] as $item => $value) {
-
+            
             if ($value > 0 && isset($value) ){
 
                 $cantidad[] = (int)$value;
@@ -272,12 +283,13 @@ class OrderController extends Controller
                
             }
         }
-        
+
+       
         
    
 
         $valores = DB::table('products')
-        ->select('products.price')
+        ->select('products.price', 'products.stock')
         ->whereIn('id', $permits)
         ->get();
 
@@ -287,8 +299,58 @@ class OrderController extends Controller
     
 
         for ($i = 0; $i < count($cantidad); $i++) {
+
+            $cantidadOld = DB::table('products_orders')
+            ->select('products_orders.cantidad')
+            ->where('order_id', $order->id)
+            ->where('product_id', $permits[$i])
+            ->get();
+
+            // SI SE REALIZA UN NUEVO PEDIDO DE 1 PROUCTO NOS ELECCIONADO
+            if(empty($cantidadOld)){
+
+                $old = 0; 
+            }
+
+            else {
+                $old = $cantidadOld[0]->cantidad; 
+                
+            
+            }
+            /////
+           
+            $stock = $valores[$i]->stock;
+         
+    
+            // 5 = 2
+            if($old  >  $cantidad[$i]){
+               
+                $updateproducts = product::find($permits[$i]);
+                $updateproducts->stock = $stock + ($old - $cantidad[$i]);
+                $updateproducts->save();
+                
+                                                    
+                  
+                
+
+            }
+            else {
+                
+               
+
+                    $updateproducts = product::find($permits[$i]);
+                    $updateproducts->stock = $stock - ($cantidad[$i] - $old);
+                    $updateproducts->save();
+                
+            
+            
+                
+
+            }
             $price[$i] = $cantidad[$i] * $valores[$i]->price;
         }
+
+        
         $x = array_sum($price);
         
          
@@ -370,4 +432,7 @@ class OrderController extends Controller
 
 
     }
+
+
+       
 }

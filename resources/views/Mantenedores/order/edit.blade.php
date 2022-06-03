@@ -74,7 +74,7 @@
     <div class="row " id="listaProductos"></div>
    
    
-    <button type="submit" class="btn btn-primary">Realizar pedido</button>
+    <button type="submit" class="btn btn-primary my-3">Realizar pedido</button>
 
 
 
@@ -119,7 +119,7 @@
                             <p class="card-text">${productSelected.description}</p>
                             <div>
                                 <h4 class="pt-2 ">${productSelected.price}</h4>
-                                <input type="number" type="number" name="cantidad[${productSelected.id}]" class="form-control" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
+                                <input type="number" type="number" name="cantidad[${productSelected.id}]" class="form-control" min="1" value = "${productSelected.cantidad}"  id="valor${productSelected.id}"  >
                                 
                               
                                 
