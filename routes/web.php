@@ -1,10 +1,7 @@
 <?php
 
-<<<<<<< Updated upstream
-=======
 use App\Http\Controllers\CategorySupplyController;
 use App\Http\Controllers\SupplyController;
->>>>>>> Stashed changes
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
@@ -12,11 +9,8 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\UserController;
-<<<<<<< Updated upstream
-=======
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\worker;
->>>>>>> Stashed changes
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyRoles;
 /*
