@@ -2,13 +2,21 @@
 
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    
 @endsection
+
+@section('titlePage')
+<h2 class="">Roles registrados</h2>
+@endsection
+
 @section('content')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarRol"> Agregar nuevo rol</button>
+    <div class="row my-4">
+        <div class="col d-flex justify-content-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarRol"> Agregar nuevo rol</button>
+        </div>
+    </div>
     <table class="table" id="myTable" style="width: 100%">
         {!! Form::token() !!}
-        <thead class="thead">
+        <thead class="thead bg-secondary text-white">
             <tr>
                 <th>id</th>
                 <th>Nombre del Rol</th>
@@ -18,13 +26,13 @@
         </thead>
     </table>
     <div class="">
-        @include('Mantenedores.Role.modal')
+        @include('Mantenedores.Role.modal.modal')
     </div>
     <div class="">
-        @include('Mantenedores.Role.modalViewPermits')
+        @include('Mantenedores.Role.modal.modalViewPermits')
     </div>
     <div class="">
-        @include('Mantenedores.Role.ModalEditRole')
+        @include('Mantenedores.Role.modal.ModalEditRole')
     </div>
 @endsection
 
@@ -64,6 +72,22 @@
                 success: function (response) {
                     Table.ajax.reload();
                     $("#agregarRol").modal("hide");
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: 'El rol se registro correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto:false,
+                    })
+                },
+                error: (jqXHR)=>{
+                    var errors = JSON.parse(jqXHR.responseText).errors;
+                    $.map(errors, function (e,key) {
+                        $(`#${key}_errorCreate`).text(e);
+                        $(`#${key}`).addClass('is-invalid');
+                    });
                 }
             });
         }
@@ -74,7 +98,6 @@
                 data: {'id': id,"_token": "{{ csrf_token() }}"},
                 dataType: "json",
                 success: function (response) {
-                    console.log(response[1]);
                     $('#viewPermits').modal('show')
                     $('#nombreRol').empty();
                     $('#nombreRol').html(`Permisos del Rol: ${response[0][0].name_role}`)
@@ -134,14 +157,12 @@
             var url = '{{ route("roles.update", ":id") }}';
             url = url.replace(':id', id);
             var data = $("#editForm").serializeArray();
-            console.log(data)
             $.ajax({
                 type: "PUT",
                 url: url,
                 data: data,
                 dataType: "json",
-                success: function (response) {
-                    console.log(response)        
+                success: function (response) {   
                 }
             });
             $('#editRole').modal('hide');

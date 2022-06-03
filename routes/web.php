@@ -8,11 +8,12 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\AsistController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\VerifyRoles;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,14 +26,12 @@ use App\Http\Middleware\VerifyRoles;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
+
+
 Auth::routes();
-
-//RUTAS DE CUPONES
-Route::get('/coupon/refresh/coupon', [\App\Http\Controllers\CouponController::class, 'refreshCoupons'])->name('coupon.refresh.coupon');
-
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
     //GET

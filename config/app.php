@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Santiago',
 
     /*
     |--------------------------------------------------------------------------
@@ -163,7 +163,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -231,7 +230,6 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
     ],
 
 ];

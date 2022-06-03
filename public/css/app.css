@@ -6890,6 +6890,28 @@
     }
 }
 
+.backgroundLogin {
+    background-image: url("food.jpg");
+    height: 200vh;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: block;
+}
+.loginCard {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    margin-left: 20px;
+    margin-right: 20px;
+}
 body {
     margin: 0;
     font-family: var(--bs-body-font-family);
@@ -18476,9 +18498,4 @@ fieldset:disabled .btn {
     .d-print-none {
         display: none !important;
     }
-}
-
-/* CLASES CUSTOMS */
-.swal-wide {
-    width: 850px !important;
 }

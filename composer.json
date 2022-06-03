@@ -18,7 +18,6 @@
         "laravel/ui": "^3.4",
         "laravelcollective/html": "^6.3",
         "mckenziearts/laravel-notify": "^2.1",
-        "realrashid/sweet-alert": "^5.0",
         "uxweb/sweet-alert": "^2.0",
         "yajra/laravel-datatables-oracle": "^9.20"
     },

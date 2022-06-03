@@ -26,6 +26,7 @@ class CouponController extends Controller
                 ->select(
                     'coupons.id as _id',
                     'coupons.id',
+                    'coupons.code',
                     'coupons.percentage',
                     'coupons.caducity',
                     'coupons.emited',

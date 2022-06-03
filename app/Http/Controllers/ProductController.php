@@ -6,8 +6,6 @@ use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
@@ -33,7 +31,6 @@ class ProductController extends Controller
                     'products.stock',
                     'products.name_product',
                     'products.description',
-                    'products.price',
                     'products.image_product'
 
                 )
@@ -248,5 +245,7 @@ class ProductController extends Controller
         }
 
         return response('success', 200);
+
+        
     }
 }

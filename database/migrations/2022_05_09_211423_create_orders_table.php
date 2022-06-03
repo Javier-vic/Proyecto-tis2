@@ -21,7 +21,8 @@ class CreateOrdersTable extends Migration
             $table->string('order_status');
             $table->string('payment_method');
             $table->string('pick_up');
-            $table->string('comment');
+            $table->string('comment')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
 
             $table->softDeletes();

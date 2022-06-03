@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+
 class permitSeeder extends Seeder
 {
     /**
@@ -21,7 +22,10 @@ class permitSeeder extends Seeder
             'delivery',
             'trabajadores',
             'asistencia',
-            'roles'
+            'productos',
+            'roles',
+            'cupon',
+            'local'
         ];
         $tipe_permit = array_map( function($permit){
             return[

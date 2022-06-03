@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\category_product;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -39,8 +38,7 @@ class CategoryProductController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-
-        return view('Mantenedores.category.index');
+        return view('mantenedores.category.index');
     }
 
     /**
@@ -193,24 +191,16 @@ class CategoryProductController extends Controller
      */
     public function destroy(category_product $category_product)
     {
-
-        // try {
-        //     $equipment = Equipment::on(session()->get('database'))->find($id);
-        //     $equipment->delete();
-
-        //     DB::connection(session()->get('database'))->commit();
-        // } catch (\Illuminate\Database\QueryException $e) {
-
-        //     DB::connection(session()->get('database'))->rollBack();
-
-        //     return  response()->json(['success' => false, 'error' => $e]);
-        // }
-
-
-        $categoryProduct = category_product::on(session()->get('database'))->find($category_product->id);
-        $categoryProduct->delete();
-
-
+        $id = $category_product->id;
+        try {
+            $category_product = $category_product::on(session()->get('database'))->find($id);
+            $category_product->delete();
+            DB::connection(session()->get('database'))->commit();
+            return response('Se eliminó la categoría.', 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::connection(session()->get('database'))->rollBack();
+            return response('Ocurrió un error. No se eliminó la categoría.', 400);
+        }
         return response('success', 200);
     }
 }

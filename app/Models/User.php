@@ -17,9 +17,19 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'id_role'
+        'name', 'email', 'password', 'id_role','address','phone'
     ];
-
+    static $rules = [
+        'name' => 'required',
+        'email' => 'required', 
+        'password' => 'required',
+        'id_role'=>'required',
+        'address'=>'required',
+        'phone' => 'required'
+    ];
+    static $messages = [
+        'required' => 'El campo es obligatorio'
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -37,9 +47,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function phone()
+    public function role()
     {
-        return $this->hasOne(role::class);
+        return $this->hasOne(role::class,'id','id_role');
     }
 
     //Relación many to many
