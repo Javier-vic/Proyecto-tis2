@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="d-flex mt-5">
-        <div class="col-9  me-5 ">
+        <div class="col-12 col-md-8 col-xl-9 me-5 ">
             <div>
                 <div class=" bg-danger p-2 d-flex py-3 rounded overflow-auto sticky-top align-items-center">
                     @foreach ($category_products as $category_product)
@@ -73,10 +73,18 @@
                                 <div class="my-2 row ">
                                     @foreach ($productAvailable as $product)
                                         @if ($product->category_id == $category->id)
-                                            <div class=" col-12 col-md-6 col-xl-4 mb-3 p-1 ">
-                                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                                    <img src="{{ asset('storage') . '/' . $product->image_product }}"
-                                                        class="img-fluid rounded" />
+                                            <div class="col-12 col-sm-6  col-xl-4 mb-3 p-1 ">
+                                                <div class="bg-image hover-overlay ripple text-center"
+                                                    data-mdb-ripple-color="light">
+                                                    @if ($product->stock > 0)
+                                                        <img src="{{ asset('storage') . '/' . $product->image_product }}"
+                                                            class="img-fluid rounded object-fit-cover "
+                                                            style="height: 239px;object-fit: cover;" />
+                                                    @else
+                                                        <img src="{{ asset('storage') . '/' . $product->image_product }}"
+                                                            class="img-fluid rounded object-fit-cover opacity-50"
+                                                            style="height: 239px;object-fit: cover;" />
+                                                    @endif
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="d-flex justify-content-between position-relative bg-white rounded px-2 pt-1  shadow border mb-3"
@@ -87,19 +95,28 @@
                                                         <p class="mb-2 text-success font-weight-bold">$
                                                             {{ $product->price }}</p>
                                                     </div>
-                                                    <p class="card-text comment more" style="min-height: 50px;">
+                                                    <p class="card-text comment more" style="min-height: 70px;">
                                                         {{ $product->description }}
                                                     </p>
-                                                    <a href="#"
-                                                        class="btn w-100 bg-success text-white text-decoration-none agregarCarrito"><i
-                                                            class="fa-solid fa-plus me-1"></i>
-                                                        Agregar al carrito</a>
+                                                    @if ($product->stock > 0)
+                                                        <a href="#"
+                                                            class="btn w-100 bg-success text-white text-decoration-none agregarCarrito"><i
+                                                                class="fa-solid fa-plus me-1"></i>
+                                                            Agregar al carrito</a>
+                                                    @else
+                                                        <a href="#"
+                                                            class="btn w-100 bg-secondary text-white text-decoration-none disabled"><i
+                                                                class="fa-solid fa-x me-1"></i>
+                                                            PRODUCTO AGOTADO</a>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                         @endif
                                     @endforeach
                                 </div>
-                                </secti>
+                            </section>
+                            <hr>
 
                         </div>
                     @endforeach
@@ -110,7 +127,8 @@
         </div>
 
         {{-- TÚ PEDIDO --}}
-        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top">
+        {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
+        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block">
             <div class="rounded text-center">
                 <h5 class="text-dark  mx-auto">Tu pedido</h5>
                 <hr class="bg-dark">
@@ -126,9 +144,9 @@
             {{-- PRODUCTOS AGREGADOS --}}
             <div>
                 <div class="mx-3 px-2">
-                    <div class="d-flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-between mb-3 flex-column flex-lg-row">
                         <h4 class="text-dark ">Korukushi</h4>
-                        <div class="d-flex gap-2 align-items-center">
+                        <div class="d-flex gap-2 align-items-center ">
                             <a href="#"><i class="fa-solid fa-plus"></i></a>
                             <span>1</span>
                             <a href="#"><i class="fa-solid fa-minus text-danger"></i></a>
@@ -141,7 +159,7 @@
                     <hr>
                 </div>
                 <div class="mx-3 px-2">
-                    <div class="d-flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-between mb-3 flex-column flex-lg-row">
                         <h4 class="text-dark ">Korukushi</h4>
                         <div class="d-flex gap-2 align-items-center">
                             <a href="#"><i class="fa-solid fa-plus"></i></a>
