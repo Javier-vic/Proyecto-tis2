@@ -10,15 +10,25 @@
                     @csrf
                     <div class="form-group">
                         <label for="" class="form-label">Nombre</label>
-                        <input type="text" name="name_supply" class="form-control" id="idName">
+                        <input type="text" name="name_supply" class="form-control input-modal" id="name_supply">
+                        <span class="text-danger createmodal_error" id="name_supply_errorCREATEMODAL"></span>
+
                     </div>
                     <div class="form-group">
                         <label for="unit_meassurement">Unidad de medida</label>
-                        <input type="text" name="unit_meassurement" class="form-control">
+                        <select name="unit_meassurement" id="unit_meassurement" class="form-control input-modal">
+                            <option value="Kg">Kilogramos</option>
+                            <option value="g">Gramos</option>
+                            <option value="L">Litros</option>
+                            <option value="ml">Mililitros</option>
+                            <option value="uds">Unidades</option>
+                        </select>
+                        <span class="text-danger createmodal_error" id="unit_meassurement_errorCREATEMODAL"></span>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Cantidad</label>
-                        <input type="float" name="quantity" class="form-control">
+                        <input type="number" name="quantity" class="form-control input-modal" id="quantity">
+                        <span class="text-danger createmodal_error" id="quantity_errorCREATEMODAL"></span>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Selecciona una categoria</label>

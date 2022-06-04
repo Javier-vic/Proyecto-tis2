@@ -9,6 +9,11 @@
 @endsection
 
 @section('content')
+
+@section('titlePage')
+<h3>Listado de asistencias</h3>
+@endsection
+
 <div class="container my-4">
         @if (isset($currentAsist[0]->id))
             <div class="row mb-3">

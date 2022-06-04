@@ -4,11 +4,23 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 
+@section('titlePage')
+    <h2>Listado de insumos</h2>
+@endsection
+
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarInsumo"> Agregar nuevo insumo</button>
+    <div class="container">
+        <div class="row">
+            <div class="col-md justify-content-center  d-flex align-self-center col-xs-12">
+                <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo">
+                    Agregar nuevo insumo
+                </button>
+            </div>
+        </div>
+    </div>
     <table class="table" id="myTable" style="width: 100%">
-    {!! Form::token() !!}
+        {!! Form::token() !!}
 
         <thead class="thead bg-secondary text-white">
             <tr>
@@ -31,9 +43,11 @@
 @endsection
 
 @section('js_after')
-
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -42,74 +56,110 @@
         });
     </script>
     <script>
-
         var table = $("#myTable").DataTable({
-                bProcessing: true,
-                bStateSave: true,
-                deferRender: true,
-                responsive: true,
-                processing: true,
-                searching: true,
-                language: {
-                    url: "{{ asset('js/language.json') }}"
+            bProcessing: true,
+            bStateSave: true,
+            deferRender: true,
+            responsive: true,
+            processing: true,
+            searching: true,
+            language: {
+                url: "{{ asset('js/language.json') }}"
+            },
+            ajax: {
+                url: "{{ route('supply.index') }}",
+                type: 'GET',
+            },
+            dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
+                "<'row '<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
+            columns: [{
+                    data: 'name_supply',
+                    name: 'name_supply'
                 },
-                ajax: {
-                    url: "{{ route('supply.index') }}",
-                    type: 'GET',
+                {
+                    data: 'unit_meassurement',
+                    name: 'unit_meassurement'
                 },
-                dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
-                    "<'row '<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",
-                columns:[
-                    {data:'name_supply',name:'name_supply'},
-                    {data:'unit_meassurement',name:'unit_meassurement'},
-                    {data:'quantity',name:'quantity'},
-                    {data:'name_category',name:'name_category'},
-                    {data:'action',name:'action',orderable:false,searchable:true}
-                ],
-                select: true
+                {
+                    data: 'quantity',
+                    name: 'quantity'
+                },
+                {
+                    data: 'name_category',
+                    name: 'name_category'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: true
+                }
+            ],
+            select: true
         });
 
-        const addSupply = (e) =>{
+        // ****************************************************************************************************************
+        //MODAL DE CREAR
+        // ****************************************************************************************************************   
+        const addSupply = (e) => {
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
             $.ajax({
                 type: "POST",
-                url: "{{route('supply.store')}}",
-                data: formData, 
+                url: "{{ route('supply.store') }}",
+                data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                        Swal.fire({
+                    Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
                         title: response,
                         showConfirmButton: false,
                         timer: 2000,
-                        backdrop: false,                       
-                        heightAuto:false,
+                        backdrop: false,
+                        heightAuto: false,
                     })
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").removeClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
                     $('#idname').val('');
                     table.ajax.reload();
-                    $("#agregarInsumo").modal("hide");                   
+                    $("#agregarInsumo").modal("hide");
                 },
-                error: function( jqXHR, textStatus, errorThrown ){                 
-                    var text = jqXHR.responseText;
-                    console.log(text)
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var text = jqXHR.responseJSON
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: text,
+                        title: 'No se pudo ingresar el nuevo insumo.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
                     })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if (text) {
+                        $.each(text.errors, function(key, item) {
+                            $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
+                                item + "</span>")
+                            $(`#${key}`).addClass('is-invalid');
+                        });
+                    }
+                    //////////////////////////////////////
                 }
             });
         }
 
-        const deleteSupply = (id) =>{
+        const deleteSupply = (id) => {
             Swal.fire({
                 title: '¿Estás seguro de eliminar este insumo?',
                 text: "No se puede revertir.",
@@ -119,14 +169,14 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, Borrar!',
                 cancelButtonText: 'Cancelar',
-            }).then((result)=>{
-                url = '{{ route("supply.destroy", ":supply") }}';
+            }).then((result) => {
+                url = '{{ route('supply.destroy', ':supply') }}';
                 url = url.replace(':supply', id);
-                if(result.isConfirmed){
+                if (result.isConfirmed) {
                     $.ajax({
                         type: "DELETE",
                         url: url,
-                        error: function( jqXHR, textStatus, errorThrown ) {
+                        error: function(jqXHR, textStatus, errorThrown) {
                             var text = jqXHR.responseText;
                             Swal.fire({
                                 position: 'bottom-end',
@@ -146,45 +196,44 @@
                                 'El insumo ha sido eliminado.',
                                 'success'
                             )
-                            
-                            table.ajax.reload();           
+
+                            table.ajax.reload();
                         }
                     });
                 }
-         
-            })
-        } 
 
-        const editSupply = (id) =>{
-            var  url = '{{ route("supply.edit", ":supply") }}';
-            url = url.replace(':supply',id)
+            })
+        }
+
+        const editSupply = (id) => {
+            var url = '{{ route('supply.edit', ':supply') }}';
+            url = url.replace(':supply', id)
             $.ajax({
                 type: "GET",
                 url: url,
                 dataType: "json",
                 success: function(response) {
-                    console.log(response)
-                    let resultado = response[0][0];                  
+                    let resultado = response[0][0];
                     $('#name_supplyEdit').val(resultado.name_supply);
                     $('#unit_meassurementEdit').val(resultado.unit_meassurement);
                     $('#quantityEdit').val(resultado.quantity);
-                    $('#id_category_suppliesEdit').val(resultado.id_category_supplies);     
+                    $('#id_category_suppliesEdit').val(resultado.id_category_supplies);
 
                     $("#formEdit").attr('onSubmit', `editSupplySubmit(${id},event)`);
-                    $('#editSupply').modal('show');  
+                    $('#editSupply').modal('show');
                 }
-                
+
             });
         }
 
-        const editSupplySubmit = (id,e)=>{
+        const editSupplySubmit = (id, e) => {
             e.preventDefault();
             var formData = new FormData(e.currentTarget);
             formData.append('_method', 'put');
-            var  url = '{{ route("supply.update" , ":supply") }}';
+            var url = '{{ route('supply.update', ':supply') }}';
             url = url.replace(':supply', id);
             Swal.fire({
-                title: '¿Estás seguro de editar este insumo',
+                title: '¿Estás seguro de editar este insumo?',
                 text: "No se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -192,12 +241,12 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, editar!',
                 cancelButtonText: 'Cancelar',
-            }).then((result)=>{
-                if(result.isConfirmed){
+            }).then((result) => {
+                if (result.isConfirmed) {
                     $.ajax({
                         type: "POST",
                         url: url,
-                        data: formData ,
+                        data: formData,
                         cache: false,
                         contentType: false,
                         processData: false,
@@ -210,11 +259,13 @@
                             )
                             $('#editSupply').modal('hide');
                         },
-                        error: function( jqXHR, textStatus, errorThrown ) {
+                        error: function(jqXHR, textStatus, errorThrown) {
                             var text = jqXHR.responseJSON;
+                            //AGREGA CLASE DE VALID Y ELIMINA LAS DE INVALID
                             $(".editmodal_error").empty()
                             $(".input-modal").addClass('is-valid')
                             $(".input-modal").removeClass('is-invalid')
+                            /////////////////////////////////////////////
                             Swal.fire({
                                 position: 'bottom-end',
                                 icon: 'error',
@@ -223,19 +274,39 @@
                                 timer: 2000,
                                 backdrop: false
                             })
-                            if(text){
-                                $.each(text.errors, function(key,item){
-                                $("#"+key+"_errorEDITMODAL").append("<span class='text-danger'>"+item+"</span>")
-                                $(`#${key}EDIT`).addClass('is-invalid');
+                            //AGREGA CLASES Y ELEMENTOS INVALID
+                            if (text) {
+                                $.each(text.errors, function(key, item) {
+                                    $("#" + key + "_errorEDITMODAL").append(
+                                        "<span class='text-danger'>" + item + "</span>")
+                                    $(`#${key}Edit`).addClass('is-invalid');
                                 });
                             }
-                        }         
+                            //////////////////////////////
+                        }
                     })
                 }
-            })           
-        } 
+            })
+        }
 
+        // ****************************************************************************************************************
+        // ****************************************************************************************************************
+        //LIMPIA LOS INPUTS AL CERRAR UN MODAL
+        // ****************************************************************************************************************
+        $('#agregarInsumo').on('hidden.bs.modal', function() {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".createmodal_error").empty()
+        })
 
+        $('#editSupply').on('hidden.bs.modal', function() {
+            $(".input-modal").removeClass('is-invalid');
+            $(".input-modal").removeClass('is-valid');
+            $(".input-modal").val('');
+            $(".editmodal_error").empty()
+        })
+
+        // ****************************************************************************************************************
     </script>
-
 @endsection

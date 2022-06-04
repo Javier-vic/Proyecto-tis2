@@ -7,6 +7,7 @@ use App\Models\category_supply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -150,18 +151,7 @@ class SupplyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'name_supply'          => 'required|string',           
-            'unit_meassurement'          => 'required|string',           
-            'quantity'          => 'required|string',           
-            'id_category_supplies'          => 'required|string',           
-        ];
-        
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-    
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), supply::$rules, supply::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
