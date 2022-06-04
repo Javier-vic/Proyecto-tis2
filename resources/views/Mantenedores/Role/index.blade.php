@@ -18,7 +18,7 @@
         {!! Form::token() !!}
         <thead class="thead bg-secondary text-white">
             <tr>
-                <th>id</th>
+                {{-- <th>id</th> --}}
                 <th>Nombre del Rol</th>
                 <th>Ver permisos</th>
                 <th>Acciones</th>
@@ -50,8 +50,11 @@
                     url: "{{ route('dataTable.Roles') }}",
                     type: 'GET',
             },
+            columnDefs:[
+                {className: "text-center", targets: "_all"},
+            ],
             columns:[
-                {data:'id',name:'id'},
+             //   {data:'id',name:'id'},
                 {data:'name_role',name:'name_role'},
                 {data:'viewPermits',name:'viewPermits',orderable:false,searchable:true},
                 {data:'action',name:'action',orderable:false,searchable:true},

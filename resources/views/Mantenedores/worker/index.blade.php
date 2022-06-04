@@ -32,6 +32,9 @@
     <div>
         @include('Mantenedores.worker.modal.modalEdit')
     </div>
+    <div>
+        @include('Mantenedores.worker.modal.modalAsist')
+    </div>
 @endsection
 
 @section('js_after')
@@ -50,6 +53,9 @@
                     url: "{{ route('datatable.workers') }}",
                     type: 'GET',
             },
+            columnDefs:[
+                {className:'text-center', targets:'_all'}
+            ],
             columns:[
                 {data:'name',name:'name'},
                 {data:'email',name:'email'},
@@ -202,6 +208,30 @@
                     });
                 }
             })
+        }
+        const asistByWorker = (id) => {
+            $('#asistWorkerModal').modal('show');
+            $('#submitAsistForm').attr('onSubmit', `submitAsistByWorker(${id},event)`);
+        }
+        const submitAsistByWorker = (id,e) => {
+            e.preventDefault();
+            var data = $('#submitAsistForm').serializeArray();
+            var url = '{{ route("Asist.ByWorker", ":id") }}';
+            url = url.replace(':id', id);
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: data,
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response)
+                    Swal.fire({
+                        title: `Horas trabajadas de: ${response.name_worker}`,
+                        text: `${response[0].horas_trabajadas} horas.`,
+                        footer: `Durante el mes de ${moment(response.date).locale('es').format("MMMM YYYY")}`
+                    })
+                }
+            });
         }
     </script>
 @endsection
