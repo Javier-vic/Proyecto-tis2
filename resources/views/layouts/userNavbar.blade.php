@@ -76,9 +76,9 @@
                 </ul>
 
             </div>
-            <ul class="navbar-nav flex-row-reverse flex-lg-row ">
+            <ul class="navbar-nav flex-row ">
                 <li class="nav-item mx-3">
-                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
+                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="#"><i
                             class="fa-solid fa-user me-2"></i>Ingresar</a>
                 </li>
                 <li class="nav-item mx-3 ">
