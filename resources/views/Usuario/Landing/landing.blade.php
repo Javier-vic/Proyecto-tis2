@@ -99,7 +99,7 @@
                                                         {{ $product->description }}
                                                     </p>
                                                     @if ($product->stock > 0)
-                                                        <a href="#"
+                                                        <a href="#" onclick="saveInCart({{$product->id}})"
                                                             class="btn w-100 bg-success text-white text-decoration-none agregarCarrito"><i
                                                                 class="fa-solid fa-plus me-1"></i>
                                                             Agregar al carrito</a>
@@ -128,7 +128,7 @@
 
         {{-- TÚ PEDIDO --}}
         {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
-        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block">
+        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block" style="width: -webkit-fill-available;">
             <div class="rounded text-center">
                 <h5 class="text-dark  mx-auto">Tu pedido</h5>
                 <hr class="bg-dark">
@@ -172,7 +172,7 @@
                         <p class="text-success fs-5 ">$ 2500</p>
                     </div>
                     <hr>
-                </div>
+                </div> --}}
             </div>
 
 
@@ -234,7 +234,120 @@
 
 @section('js_after')
     <script type="text/javascript">
+        const productsAvailable = @json($productAvailable);
+
+        const deleteInCart = (id) =>{
+            var cart = localStorage.getItem('cart');
+            cart = JSON.parse(cart);
+            cart.map(e=>{
+                if(e.id == id){
+                    e.cantidad--;
+                    if(e.cantidad == 0){
+                        cart = cart.filter((el) => el.id != e.id);
+                    }
+                }
+            })
+            localStorage.setItem('cart',JSON.stringify(cart));
+            renderCart();
+        }
+        const renderCart = () =>{
+            var cart = localStorage.getItem('cart');
+            cart = JSON.parse(cart);
+            $("#cart").empty();
+            cart = cart.map(e=>{
+                $("#cart").append(
+                    $('<div>',{
+                        class:'mx-3 px-2',
+                    }).append(
+                        //
+                        $('<div>',{
+                            class: 'd-flex justify-content-between mb-3'
+                        }).append(
+                            $('<h4>',{
+                            text:`${e.name_product}`,class:'text-dark'
+                            }),
+                            $('<div>',{
+                                class: 'd-flex gap-2 align-items-center'
+                            }).append(
+                                $('<a>',{
+                                    style: 'color: #0d6efd; cursor: pointer;',
+                                    onclick: `saveInCart(${e.id})`
+                                }).append(
+                                    $('<i>',{
+                                        class:'fa-solid fa-plus'
+                                    })
+                                ),
+                                $('<span>',{
+                                    text:`${e.cantidad}`
+                                }),
+                                $('<a>',{
+                                    style:'cursor: pointer;',
+                                    onclick: `deleteInCart(${e.id})`
+                                }).append(
+                                    $('<i>',{
+                                        class:'fa-solid fa-minus text-danger'
+                                    })
+                                )
+                            )
+                        ),
+                        //
+                        $('<p>',{
+                            class: 'text-muted',
+                            text: `${e.description}`
+                        }),
+                        //
+                        $('<div>',{
+                            class:'text-end'
+                        }).append(
+                            $('<p>',{
+                                class:'text-sucess fs-5',
+                                text: `$${e.price*e.cantidad}`
+                            })
+                        ),
+                        $('<hr>')
+                    )
+                );
+            })
+        }
+        const saveInCart = (id) => {
+            var product;
+            productsAvailable.map(e=>{
+                (e.id==id) ? product = e : null;  
+            })
+            let cart = localStorage.getItem('cart');
+            if(cart){
+                cart = JSON.parse(cart);
+                var flag;
+                cart.map(e=>{
+                    if(e.id == id){
+                        flag = e;
+                        e.cantidad++;
+                        localStorage.setItem('cart',JSON.stringify(cart));
+                        renderCart();
+                    }
+                })
+                if(!flag){
+                    delete product.image_product;
+                    delete product.category;
+                    delete product.category_id;
+                    delete product.stock;
+                    cart = cart.concat({...product,cantidad:1})
+                    localStorage.setItem('cart',JSON.stringify(cart));
+                    renderCart();
+                }
+            }else{
+                delete product.image_product;
+                delete product.category;
+                delete product.category_id;
+                delete product.stock;
+                product = [{...product,cantidad:1}]
+                localStorage.setItem('cart',JSON.stringify(product));
+                renderCart();
+            }
+
+        }
         $(document).ready(function() {
+            renderCart();
             var showChar = 130;
             var ellipsestext = "...";
             var moretext = "ver más";
@@ -269,5 +382,6 @@
                 return false;
             });
         });
+        
     </script>
 @endsection
