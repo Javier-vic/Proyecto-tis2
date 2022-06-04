@@ -48,19 +48,28 @@
             <div>
                 <div class=" bg-danger p-2 d-flex py-3 rounded overflow-auto sticky-top align-items-center">
                     @foreach ($category_products as $category_product)
-                        <div class="text-white">
-                            <a href="#"
-                                class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 "
-                                style="white-space: nowrap">{{ $category_product->name }}</a>
-                        </div>
+                        @if (in_array($category_product->name, $categoryAvailableNames))
+                            <div class="text-white">
+                                <a href="#{{ $category_product->name }}"
+                                    class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 "
+                                    style="white-space: nowrap">{{ $category_product->name }}</a>
+                            </div>
+                        @else
+                            <div class="text-white">
+                                <a href="#{{ $category_product->name }}"
+                                    class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 text-decoration-line-through"
+                                    style="white-space: nowrap">{{ $category_product->name }}</a>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
                 <div>
                     {{-- PRODUCTOS --}}
                     @foreach ($categoryAvailable as $category)
-                        <div class="mt-5">
+                        <h2 id="{{ $category->name }}" class="mb-5 invisible">a</h2>
+                        <div>
                             <h2>{{ $category->name }}</h2>
-                            <div>
+                            <section>
                                 <div class="my-2 row ">
                                     @foreach ($productAvailable as $product)
                                         @if ($product->category_id == $category->id)
@@ -90,7 +99,7 @@
                                         @endif
                                     @endforeach
                                 </div>
-                            </div>
+                                </secti>
 
                         </div>
                     @endforeach
@@ -101,19 +110,58 @@
         </div>
 
         {{-- TÚ PEDIDO --}}
-        <div class="border border-danger border-3 py-3 px-1 align-self-start">
+        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top">
             <div class="rounded text-center">
                 <h5 class="text-dark  mx-auto">Tu pedido</h5>
                 <hr class="bg-dark">
             </div>
-            <div class="text-white mx-3 px-2">
+            {{-- CONTENIDO CÚANDO SE ENCUENTRA VACÍO --}}
+            {{-- <div class="text-white mx-3 px-2">
                 <img src="https://www.papajohns.cl/static/media/ic_cart_empty.1de2c93e.svg" alt="" class="img-fluid"
                     width="500" height="350">
                 <p class="text-muted m-0">Aún no has seleccionado ningún producto.</p>
                 <p class="text-muted m-0">Selecciona alguno y comienza a disfrutar !</p>
+            </div> --}}
+            {{-- END CONTENIDO VACÍO --}}
+            {{-- PRODUCTOS AGREGADOS --}}
+            <div>
+                <div class="mx-3 px-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h4 class="text-dark ">Korukushi</h4>
+                        <div class="d-flex gap-2 align-items-center">
+                            <a href="#"><i class="fa-solid fa-plus"></i></a>
+                            <span>1</span>
+                            <a href="#"><i class="fa-solid fa-minus text-danger"></i></a>
+                        </div>
+                    </div>
+                    <p class="text-muted ">Pescado chino, arroz , korugumi , limón y sal.</p>
+                    <div class="text-end">
+                        <p class="text-success fs-5 ">$ 2500</p>
+                    </div>
+                    <hr>
+                </div>
+                <div class="mx-3 px-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h4 class="text-dark ">Korukushi</h4>
+                        <div class="d-flex gap-2 align-items-center">
+                            <a href="#"><i class="fa-solid fa-plus"></i></a>
+                            <span>1</span>
+                            <a href="#"><i class="fa-solid fa-minus text-danger"></i></a>
+                        </div>
+                    </div>
+                    <p class="text-muted ">Pescado chino, arroz , korugumi , limón y sal.</p>
+                    <div class="text-end">
+                        <p class="text-success fs-5 ">$ 2500</p>
+                    </div>
+                    <hr>
+                </div>
             </div>
+
+
         </div>
-        {{-- END TÚ PEDIDO --}}
+    </div>
+    {{--  --}}
+    {{-- END TÚ PEDIDO --}}
     </div>
     {{-- FOOTER --}}
     <div class="container">

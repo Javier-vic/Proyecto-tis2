@@ -48,7 +48,11 @@ class LandingController extends Controller
             })
             ->get();
         ////////////////////////////////////////////////
-        return view('usuario.landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable'));
+
+        //OBTIENE LAS CATEGORÍAS QUE ESTÁN DISPONIBLES SOLAMENTE Y PASA SOLO LOS NOMBRES A UN ARRAY( con productos en stock)
+
+        $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
+        return view('usuario.landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames'));
     }
 
     /**
