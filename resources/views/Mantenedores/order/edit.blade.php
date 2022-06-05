@@ -70,7 +70,9 @@
     </div>
 
 
-    <div class="row " id="listaProductos"></div>
+    <div class="row " id="listaProductos"+></div>
+
+   
    
    
     <button type="submit" class="btn btn-primary">Realizar pedido</button>
@@ -91,7 +93,7 @@
 
         // mostrar productos y orden
         const selectproduct = @json($orderData); //datos orden
-        const products = @json($products); // todo los productos
+        const products = @json($product); // todo los productos
         const productsSelected = @json($productsSelected);    // id y cantidad productos seleccionados
         const size = products.length;
 

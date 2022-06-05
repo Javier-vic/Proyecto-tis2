@@ -35,7 +35,7 @@ class OrderController extends Controller
                     'orders.total'
 
                 )
-                ->orderBy('orders.id', 'DESC')
+                ->orderByDesc('id')
                 ->get())
                 ->addColumn('viewOrder', 'mantenedores.order.datatable.view')
                 ->rawColumns(['viewOrder'])
@@ -56,9 +56,17 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $product = product::all();
+        $product =  $valores = DB::table('products')
+        ->select('*')
+        ->where('products.stock' , '>' , 0)
+        ->get();
 
-        return view('Mantenedores.order.create', compact('product'));
+        
+        $category =  DB::table('category_products')
+        ->select('category_products.name')
+        ->get(); 
+
+        return view('Mantenedores.order.create', compact('product', 'category'));
     }
 
     /**
@@ -186,14 +194,16 @@ class OrderController extends Controller
 
         $selectedIds = $productsSelected->pluck('product_id');
 
-        $products = DB::table('products')
-            ->select('*')
-            ->whereNotIn('id', $selectedIds)
-            ->whereNull('products.deleted_at')
-            ->get();
+        $product = DB::table('products')
+        ->select('*')
+        ->whereNotIn('id', $selectedIds)
+        ->where('products.stock' , '>' , 0)
+        ->get();
+
+    
 
 
-        return view('Mantenedores.order.edit', compact('orderData', 'products', 'productsSelected'));
+        return view('Mantenedores.order.edit', compact('orderData', 'product', 'productsSelected'));
     }
 
 
@@ -265,7 +275,13 @@ class OrderController extends Controller
                 ->where('product_id', $permits[$i])
                 ->get();
 
-            $old = $cantidadOld[0]->cantidad;
+            if (isset($cantidadOld[0]->cantidad)) {
+                $old = $cantidadOld[0]->cantidad;
+            }else{
+
+                $old = 0;
+            }
+            
             $stock = $valores[$i]->stock;
 
 

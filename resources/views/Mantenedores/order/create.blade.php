@@ -89,6 +89,9 @@
 
 @section('js_after')
     <script type="text/javascript">
+
+
+
         $(document).ready(function() {
             $("#mi-select").change(function() {
                 if ($(this).val() == 'si') {
