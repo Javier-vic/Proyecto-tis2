@@ -91,22 +91,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
        
-    
-        static $rules = [
-            'name_order'          => 'required|string',
-      
-        ];
-    
-        static $rulesEdit = [
-            'name_order'          => 'required|string',
-            
-    
-        ];
-        static  $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
+        dd('la');
+        $validator = Validator::make($request->all(), order::$rules, order::$messages);
         if ($validator->passes()) {
         $datosOrder = request()->except('_token');
         $order = new order;
@@ -123,15 +109,6 @@ class OrderController extends Controller
         $cantidad = array();
         $valores = array();
         $price = array();
-
-    } else {
-        return Response::json(array(
-            'success' => false,
-            'errors' => $validator->getMessageBag()->toArray()
-
-        ), 400);
-    }
-        
         foreach ($datosOrder['cantidad'] as $item => $value) {
 
             if ($value > 0 && isset($value) ){
@@ -150,13 +127,14 @@ class OrderController extends Controller
          
         // obtenemos las cantidades seleccionadas
 
-    
+        
        
         //      Calcular el total   ////
         for ($i = 0; $i < sizeof($permits); $i++) {
-            $stock[$i] = $valores[$i]->stock;
-            if($stock[$i] < $cantidad[$i]){
-
+            $stock = $valores[$i]->stock;
+           
+            if($stock < $cantidad[$i]){
+               
                 return response('No hay stock suficiente',400);
 
             }
@@ -193,6 +171,16 @@ class OrderController extends Controller
 
 
         return redirect()->to('/order');
+
+    } else {
+        return Response::json(array(
+            'success' => false,
+            'errors' => $validator->getMessageBag()->toArray()
+
+        ), 400);
+    }
+        
+      
     }
 
     /**

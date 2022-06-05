@@ -11,13 +11,14 @@ class order extends Model
 
     protected $fillable = [
         'name_order',
+       
   
 
     ];
 
     static $rules = [
         'name_order'          => 'required|string',
-  
+        
     ];
 
     static $rulesEdit = [
@@ -27,6 +28,7 @@ class order extends Model
     ];
     static  $messages = [
         'required'      => 'Este campo es obligatorio',
+        
     ];
 
     public function products()

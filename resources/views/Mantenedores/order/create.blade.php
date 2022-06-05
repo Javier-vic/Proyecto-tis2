@@ -8,12 +8,13 @@
         
     <div class="col">
         
-        <form action="{{ url('/order')}}" method="POST" entype= "multipart/form-data">
+        <form onsubmit="createOrder(event)" method="POST" id="formCreate" entype= "multipart/form-data">
             @csrf
             
             <div class="mb-4">
                 <label for="name_order" class="form-label">Nombre pedido :</label>
-                <input type="text" class="form-control" value="{{ isset($order->name_order)?$order->name_order:'' }}" id="name_order" name="name_order" aria-describedby="name_product_help">
+                <input type="text" class="form-control" value="{{ isset($order->name_order)?$order->name_order:'' }}" id="name_order"" name="name_order" aria-describedby="name_product_help">
+                <span class="text-danger create_error" id="name_order_errorCREATEMODAL"></span>
             </div>
            
             
@@ -64,9 +65,9 @@
                  <input type="text"  class="form-control" value="{{ isset($order->comment)?$order->comment:'' }}" class="form-control" id="comment" name="comment" >
              </div>
         
-             
+            <span class="text-danger create_error" id="permits_errorCREATEMODAL"></span>
             <div id = "listaProductos" class="row">
-        
+                
                 
             </div>
             
@@ -84,19 +85,75 @@
 @endsection
 
 @section('js_after')
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  <script type="text/javascript">
-        $(document).ready(function () {
-            $("#mi-select").change(function(){
-            if ($(this).val() == 'si') {
 
-                $('.entradas').removeClass('d-none');
-            } else {
-                $('.entradas').addClass('d-none');
+        
+
+
+               // ****************************************************************************************************************
+           //MODAL DE CREAR
+           // ****************************************************************************************************************
+           const createOrder = (e) =>{
+            e.preventDefault();
+            var formData =  new FormData(e.currentTarget);       
+            var  url = '{{ route("order.store") }}';
+                $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+
+                    success: function(response, jqXHR) {
+                        console.log(response)
+                        Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: 'Se ingresó el producto correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto:false,
+                    })
+                  
+                    
+ 
+                    },
+                   error: function( jqXHR, textStatus, errorThrown ) {
+                    var text = jqXHR.responseJSON;
+                    console.log(text);
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".create_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: "No se pudo realizar el ingreso de la orden.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if(text){
+                    $.each(text.errors, function(key,item){
+                    $("#"+key+"_errorCREATEMODAL").append("<span class='text-danger'>"+item+"</span>")
+                    $(`#${key}`).addClass('is-invalid');
+                    });
+                    }
+                    //////////////////////////////////////
+ 
+               }
+                
+                });
             }
-            
-	});
-        });
 
+
+            
          // mostrar productos y orden
    
         const productsSelected = @json($product);    // id y cantidad productos seleccionados
