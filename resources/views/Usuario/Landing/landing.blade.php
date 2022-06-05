@@ -120,6 +120,9 @@
 
                         </div>
                     @endforeach
+                    <div class="text-center d-md-none  sticky-margin-bottom" style="position: sticky;bottom: 0;">
+                        <button class="btn btn-danger w-50 py-4  shadow "><h4 class="m-0"><i class="fa-solid fa-basket-shopping me-2"></i>Ver mi pedido</h4></button>
+                    </div>
                     {{-- FIN PRODUCTOS --}}
                 </div>
             </div>
@@ -261,7 +264,7 @@
                         }).append(
                             //
                             $('<div>', {
-                                class: 'd-flex justify-content-between mb-3 flex-column flex-lg-row'
+                                class: 'd-flex justify-content-between mb-3 flex-column flex-lg-row '
                             }).append(
                                 $('<h4>', {
                                     text: `${e.name_product}`,

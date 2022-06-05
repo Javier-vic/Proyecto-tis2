@@ -54,7 +54,10 @@
         }
 
         .sticky-margin-top {
-            top: 1rem;
+            top: 1rem !important;
+        }
+        .sticky-margin-bottom{
+            bottom: 1rem !important;
         }
 
     </style>
