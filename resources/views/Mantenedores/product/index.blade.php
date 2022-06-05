@@ -129,6 +129,7 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
+                    console.log(text)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
@@ -145,6 +146,7 @@
                     //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
                     if (text) {
                         $.each(text.errors, function(key, item) {
+
                             $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
                                 item + "</span>")
                             $(`#${key}`).addClass('is-invalid');

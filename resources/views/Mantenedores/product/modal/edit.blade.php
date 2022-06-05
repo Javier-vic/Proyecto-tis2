@@ -16,7 +16,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Cantidad </label>
-                        <input type="number" class="form-control input-modal" id="stockEDIT" name="stock"
+                        <input type="text" class="form-control input-modal" id="stockEDIT" name="stock"
                             aria-describedby="stock_help">
                         <span class="text-danger editmodal_error" id="stock_errorEDITMODAL"></span>
                     </div>
@@ -34,14 +34,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Precio </label>
-                        <input type="number" class="form-control input-modal" id="priceEDIT" name="price"
+                        <input type="text" class="form-control input-modal" id="priceEDIT" name="price"
                             aria-describedby="description_help">
                         <span class="text-danger editmodal_error" id="price_errorEDITMODAL"></span>
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Categoria </label><br>
 
-                        <select id="categoryEDIT" name="id_category_product" class="form-select">
+                        <select id="categoryEDIT" name="id_category_product" class="form-select is-valid">
                             @foreach ($category_products as $category_product)
                                 <option value={{ $category_product->id }} id="">{{ $category_product->name }}</opti>
                             @endforeach

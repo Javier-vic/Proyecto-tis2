@@ -16,7 +16,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Cantidad </label>
-                        <input type="number" class="form-control input-modal" id="stock" name="stock"
+                        <input type="text" class="form-control input-modal" id="stock" name="stock"
                             aria-describedby="stock_help">
                         <span class="text-danger createmodal_error" id="stock_errorCREATEMODAL"></span>
                     </div>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="" class="form-label">Precio </label>
-                        <input type="number" class="form-control input-modal" id="price" name="price"
+                        <input type="text" class="form-control input-modal" id="price" name="price"
                             aria-describedby="description_help">
                         <span class="text-danger createmodal_error" id="price_errorCREATEMODAL"></span>
                     </div>

@@ -2,7 +2,7 @@
 
 @section('content')
     <div>
-        <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="true">
+        <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                     aria-current="true" aria-label="Slide 1"></button>
@@ -14,19 +14,19 @@
                     aria-label="Slide 4"></button>
             </div>
             <div class="carousel-inner object-fit-cover w-100">
-                <div class="carousel-item active">
+                <div class="carousel-item active" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
                         style="width: 640px; height:500px;">
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
                         style="width: 640px; height:500px;">
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
                         style="width: 640px; height:500px;">
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
                         style="width: 640px; height:500px;">
                 </div>
@@ -46,11 +46,12 @@
     <div class="d-flex mt-5">
         <div class="col-12 col-md-8 col-xl-9 me-5 ">
             <div>
-                <div class=" bg-danger p-2 d-flex py-3 rounded overflow-auto sticky-top align-items-center">
+                <div class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
                     @foreach ($category_products as $category_product)
                         @if (in_array($category_product->name, $categoryAvailableNames))
                             <div class="text-white">
-                                <a href="#{{ $category_product->name }}" id="{{ $category_product->name }}Navbar"
+                                <a href="#{{ str_replace(' ','',$category_product->name) }}"
+                                    id="{{ str_replace(' ','',$category_product->name) }}Navbar"
                                     class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 "
                                     style="white-space: nowrap">{{ $category_product->name }}</a>
                             </div>
@@ -65,7 +66,7 @@
                 <div>
                     {{-- PRODUCTOS --}}
                     @foreach ($categoryAvailable as $category)
-                        <h2 id="{{ $category->name }}" class="mb-5 invisible intersectionObserver">a</h2>
+                        <h2 id="{{ str_replace(' ','',$category->name) }}" class="mb-5 invisible intersectionObserver">a</h2>
                         <div>
                             <h2 class="categoryName" id="{{ $category->name }}Nombre">{{ $category->name }}</h2>
                             <section>
@@ -127,7 +128,7 @@
 
         {{-- TÚ PEDIDO --}}
         {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
-        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block rounded"
+        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top"
             style="width: -webkit-fill-available;">
             <div class="rounded text-center">
                 <h5 class="text-dark  mx-auto">Tu pedido</h5>
@@ -144,25 +145,11 @@
                     <p class="text-muted m-0">Aún no has seleccionado ningún producto.</p>
                     <p class="text-muted m-0">Selecciona alguno y comienza a disfrutar !</p>
                 </div>
+                {{-- OBJETO DE EJEMPLO EN EL CARRO DE COMPRAS --}}
                 {{-- <div class="mx-3 px-2">
                     <div class="d-flex justify-content-between mb-3 flex-column flex-lg-row">
                         <h4 class="text-dark ">Korukushi</h4>
                         <div class="d-flex gap-2 align-items-center ">
-                            <a href="#"><i class="fa-solid fa-plus"></i></a>
-                            <span>1</span>
-                            <a href="#"><i class="fa-solid fa-minus text-danger"></i></a>
-                        </div>
-                    </div>
-                    <p class="text-muted ">Pescado chino, arroz , korugumi , limón y sal.</p>
-                    <div class="text-end">
-                        <p class="text-success fs-5 ">$ 2500</p>
-                    </div>
-                    <hr>
-                </div>
-                <div class="mx-3 px-2">
-                    <div class="d-flex justify-content-between mb-3 flex-column flex-lg-row">
-                        <h4 class="text-dark ">Korukushi</h4>
-                        <div class="d-flex gap-2 align-items-center">
                             <a href="#"><i class="fa-solid fa-plus"></i></a>
                             <span>1</span>
                             <a href="#"><i class="fa-solid fa-minus text-danger"></i></a>
@@ -405,26 +392,28 @@
         });
     </script>
     <script type="text/javascript">
-        const ramen = document.getElementById('Ramen');
         const categorias = Array.from(document.querySelectorAll('.intersectionObserver'))
-        var actualActivo;
-        var options = {
-            root: null,
-            rootMargin: '0px 0px -90%',
-        }
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].target.id != actualActivo) {
-                $('.categoriaActive').removeClass('categoriaActive')
-                actualActivo = entries[0].target.id;
-                $(`#${entries[0].target.id}Navbar`).addClass('categoriaActive')
+        console.log(categorias)
+        if (categorias) {
+            var actualActivo;
+            var options = {
+                root: null,
+                rootMargin: '0px 0px -90%',
             }
+            const observer = new IntersectionObserver(entries => {
+                if (entries[0].target.id != actualActivo) {
+                    $('.categoriaActive').removeClass('categoriaActive')
+                    actualActivo = entries[0].target.id;
+                    $(`#${entries[0].target.id}Navbar`).addClass('categoriaActive')
+                }
 
 
 
-        }, options);
+            }, options);
 
-        categorias.map(categoria => {
-            observer.observe(categoria)
-        })
+            categorias.map(categoria => {
+                observer.observe(categoria)
+            })
+        }
     </script>
 @endsection

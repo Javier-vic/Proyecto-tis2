@@ -21,9 +21,9 @@ class product extends Model
 
     static $rules = [
         'name_product'          => 'required|string',
-        'stock'          => 'required|string',
+        'stock'          => 'required|numeric|gt:0|integer',
         'description'          => 'required|string',
-        'price'          => 'required|string',
+        'price'          => 'required|numeric|gt:0|integer',
         'id_category_product'          => 'required|string',
         'image_product' => 'required|file'
 
@@ -31,14 +31,17 @@ class product extends Model
 
     static $rulesEdit = [
         'name_product'          => 'required|string',
-        'stock'          => 'required|string',
+        'stock'          => 'required|numeric|gt:0|integer',
         'description'          => 'required|string',
-        'price'          => 'required|string',
+        'price'          => 'required|numeric|gt:0|integer',
         'id_category_product'          => 'required|string',
 
     ];
     static  $messages = [
-        'required'      => 'Este campo es obligatorio',
+        'required'      => ' Este campo es obligatorio',
+        'numeric' => ' Solo se permiten números',
+        'gt' => ' Solo se permiten números mayores a 0',
+        'integer' => ' Solo se permiten números enteros',
     ];
     public function category_products()
     {
@@ -48,9 +51,7 @@ class product extends Model
 
     public function orders()
     {
-    
-        return $this->belongsToMany(order::class,'products_orders');    
-    
-    
+
+        return $this->belongsToMany(order::class, 'products_orders');
     }
 }

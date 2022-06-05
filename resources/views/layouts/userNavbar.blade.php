@@ -45,8 +45,16 @@
 
         .comment {
             width: 100%;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             margin: 10px;
+        }
+
+        .bgColor {
+            background-color: #FD1515;
+        }
+
+        .sticky-margin-top {
+            top: 1rem;
         }
 
     </style>
@@ -62,7 +70,22 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between bg-secondary p-2 bg-opacity-10 rounded "
+
+            {{-- NAVBAR PARA CELULAR --}}
+            <ul class="navbar-nav flex-row d-lg-none">
+                <li class="nav-item mx-3 shadow bg-white  rounded py-1">
+                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="#"><i
+                            class="fa-solid fa-user me-2"></i>Ingresar</a>
+                </li>
+                <li class="nav-item mx-3 py-1">
+                    <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
+                        aria-current="page" href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+
+                </li>
+            </ul>
+            {{-- FIN NAVBAR CELULAR --}}
+            {{-- CONTENIDO CENTRAL NAVBAR --}}
+            <div class="collapse navbar-collapse justify-content-between shadow bg-white p-2 rounded mt-2"
                 id="navbarNav">
                 <ul class="navbar-nav p-1 ">
                     <li class="nav-item mx-3 ">
@@ -76,18 +99,20 @@
                 </ul>
 
             </div>
-            <ul class="navbar-nav flex-row ">
-                <li class="nav-item mx-3">
-                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="#"><i
+            {{-- FIN CONTENIDO CENTARL --}}
+            {{-- NAVBAR PARA DESKTOP --}}
+            <ul class="navbar-nav flex-row d-lg-flex d-none">
+                <li class="nav-item mx-3 shadow bg-white  rounded">
+                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="#"><i
                             class="fa-solid fa-user me-2"></i>Ingresar</a>
                 </li>
                 <li class="nav-item mx-3 ">
-                    <a class="nav-link fw-bold px-3  bg-danger text-white d-inline d-lg-block buttonHover"
+                    <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
                         aria-current="page" href="#"><i class="fa-solid fa-cart-shopping"></i></a>
 
                 </li>
             </ul>
-
+            {{-- FIN NAVBAR DESKTOP --}}
         </div>
     </nav>
     <div class="container-lg container-fluid">@yield('content')</div>
