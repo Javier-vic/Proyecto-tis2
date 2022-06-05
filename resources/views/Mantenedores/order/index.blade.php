@@ -40,17 +40,19 @@
 <div class="row">
 
     <div class="col-md-6">
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <h3>Productos Mas Vendido</h3>
+        <canvas id="myChart" ></canvas>
     </div>
-    <div id = "grafica2" class="col-md-6 row">
 
+    <div id = "grafica2" class="col-md-6 ">
+        <h3 >Graficas De Ventas Mensuales</h3>
 
             <form action="" id = "form-yea"> 
 
                 
 
-                <select name="" id="selectYear">
-
+                <select name="" class="form-select" id="selectYear">
+                    <option selected>Seleccione un año</option>
                     <option value="2013">2013</option>
                     <option value="2022">2022</option>
 
@@ -63,7 +65,7 @@
 
                 </div>
             
-            "></form>
+            </form>
            
     </div>
 </div>
@@ -167,22 +169,25 @@
             success: function(response) {
             const resultado = response;
             const label = []
-            const dates = []
+            const dates = new Array(12);
+                dates.fill(0);
             let myChart;
             
             resultado.map( cantidad =>{
-                           console.log(cantidad)
-                        })
+                           
+                dates[cantidad.month] = cantidad.data;
+                
+            })
 
-            console.log(resultado);       
+          
           
 
                     const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
                     const data = {
                     labels: labels,
                     datasets: [{
-                        label: 'My First Dataset',
-                        data: [65, 59, 80, 81, 56, 55, 40],
+                        label: 'Ganancias mensuales',
+                        data: dates,
                         fill: false,
                         borderColor: 'rgb(75, 192, 192)',
                         tension: 0.1
@@ -209,7 +214,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'Chart.js Line Chart'
+                                text: 'Ganancias mensuales'
                             }
                             }
                         },

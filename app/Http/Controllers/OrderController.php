@@ -408,7 +408,7 @@ class OrderController extends Controller
     public function getMonthOrder(request $request){
 
         $sales = DB::table('orders')
-        ->select(DB::raw('count(DISTINCT(orders.id)) as `data`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+        ->select(DB::raw('sum(orders.total) as `data`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
         ->whereyear('created_at', $request->year)
         ->groupby('year','month')
         ->get();
