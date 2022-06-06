@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\AsistController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ImageMainController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +69,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('coupon', CouponController::class);
     Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
+    Route::resource('publicity',ImageMainController::class);
 });
 
 //RUTAS PARA LA VISTA DE USUARIOS

@@ -16,7 +16,7 @@ class VerifyRoles extends Middleware
     public function __construct()
     {
         $this->routes = array(
-            1 => ['publicidad'],
+            1 => ['publicity'],
             2 => ['supply','category_supply'],
             3 => ['order'],
             4 => ['delivery'],
