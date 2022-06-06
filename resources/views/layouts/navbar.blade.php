@@ -44,7 +44,7 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,1))
                     <li>
-                        <a href="#" class="my-3 " hidden ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
+                        <a href="{{route('publicity.index')}}" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,3))

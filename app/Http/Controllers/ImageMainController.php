@@ -15,7 +15,8 @@ class ImageMainController extends Controller
     public function index()
     {
         //
-        return view('Mantenedores.image_main.index');
+        $images = image_main::all();
+        return view('Mantenedores.image_main.index',['images'=>$images]);
     }
 
     /**
@@ -37,6 +38,7 @@ class ImageMainController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request);
     }
 
     /**
