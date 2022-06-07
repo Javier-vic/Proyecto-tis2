@@ -53,8 +53,6 @@
                             aria-describedby="name_product_help" accept="image/*">
                         <span class="text-danger createmodal_error" id="image_product_errorCREATEMODAL"></span>
                     </div>
-
-
                     <button type="submit" class="btn btn-primary">Agregar</button>
                 </form>
             </div>
@@ -77,7 +75,6 @@
             $("#text-limit_error").addClass('d-none')
             $(".text-limit").removeClass('is-invalid')
             $('#charNum').text(498 - len);
-            console.log('aca siu')
         }
     };
 </script>
