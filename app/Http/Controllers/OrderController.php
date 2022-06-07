@@ -225,6 +225,7 @@ class OrderController extends Controller
                 'products.*'
 
             )
+            ->orderBy('products_orders.order_id')
             ->get();
 
 

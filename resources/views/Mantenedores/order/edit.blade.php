@@ -235,6 +235,7 @@
 
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
+                            <span class="card-text">Cantidad disponible: ${productSelected.stock}</span>
                             <div>
                                 <h4 class="pt-2 ">$${productSelected.price}</h4>
                                 <input  type="text" name="cantidad[${productSelected.id}]" class="form-control input-modal"  value = "${productSelected.cantidad}"  id="valor${productSelected.id}"  >                                
@@ -312,6 +313,7 @@
                         <div>
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
+                            <span class="card-text">Cantidad disponible: ${productSelected.stock}</span>
                             <div>
                                 <h4 class="pt-2 ">$${productSelected.price}</h4>
                                 <input type="text" class="form-control d-none input-modal"  value = "${productSelected.cantidad}" id="valor${productSelected.id}"  >
