@@ -8,6 +8,8 @@ use App\Models\products_orders;
 use App\Models\product;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
 use DataTables;
 
 class OrderController extends Controller
@@ -57,14 +59,14 @@ class OrderController extends Controller
     public function create()
     {
         $product =  $valores = DB::table('products')
-        ->select('*')
-        ->where('products.stock' , '>' , 0)
-        ->get();
+            ->select('*')
+            ->where('products.stock', '>', 0)
+            ->get();
 
-        
+
         $category =  DB::table('category_products')
-        ->select('category_products.name')
-        ->get(); 
+            ->select('category_products.name')
+            ->get();
 
         return view('Mantenedores.order.create', compact('product', 'category'));
     }
@@ -79,73 +81,106 @@ class OrderController extends Controller
     {
 
 
-        $datosOrder = request()->except('_token');
-        $order = new order;
-        $order->name_order = $datosOrder['name_order'];
-        $order->order_status = $datosOrder['order_status'];
-        $order->payment_method = $datosOrder['payment_method'];
-        $order->address = $datosOrder['address'];
+        $rules = [
+            'name_order'          => 'required|string',
+            'cantidad' => 'required|array|min:1',
+            'cantidad.*' => 'required|gt:0|integer',
+            'address' => 'required'
+
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+            'cantidad.required' => 'Debes seleccionar al menos un producto',
+            'integer' => 'El número no puede ser decimal',
+            'gt' => 'El número debe ser mayor a 0'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $datosOrder = request()->except('_token');
+                $order = new order;
+                $order->name_order = $datosOrder['name_order'];
+                $order->order_status = $datosOrder['order_status'];
+                $order->payment_method = $datosOrder['payment_method'];
+                $order->address = $datosOrder['address'];
 
 
-        $order->pick_up = $datosOrder['pick_up'];
-        $order->comment = $datosOrder['comment'];
+                $order->pick_up = $datosOrder['pick_up'];
+                $order->comment = $datosOrder['comment'];
 
-        $permits = array();
-        $cantidad = array();
-        $valores = array();
-        $price = array();
+                $permits = array();
+                $cantidad = array();
+                $valores = array();
+                $price = array();
 
 
 
-        foreach ($datosOrder['cantidad'] as $item => $value) {
+                foreach ($datosOrder['cantidad'] as $item => $value) {
 
-            if ($value > 0 && isset($value)) {
+                    if ($value > 0 && isset($value)) {
 
-                $cantidad[] = (int)$value;
-                $permits[] = (int)$item;
+                        $cantidad[] = (int)$value;
+                        $permits[] = (int)$item;
+                    }
+                }
+
+                // consulta de precio y stock a productos seleccinados
+
+                $valores = DB::table('products')
+                    ->select('products.price', 'products.stock', 'products.id')
+                    ->whereIn('id', $permits)
+                    ->get();
+
+                // obtenemos las cantidades disponibles
+
+
+                $size = sizeof($permits);
+
+                //      Calcular el total   ////
+                for ($i = 0; $i < $size; $i++) {
+                    $stock = $valores[$i]->stock;
+                    if ($stock < $cantidad[$i]) {
+                        return Response::json(array(
+                            'success' => false,
+                            'errors2' => $valores
+
+                        ), 400);
+                    } else {
+                        $updateproducts = product::find($permits[$i]);
+                        $updateproducts->stock = $stock - $cantidad[$i];
+                        $updateproducts->update();
+                    }
+
+                    $price[$i] = $cantidad[$i] * $valores[$i]->price;
+                }
+
+                $x = array_sum($price);
+
+
+                $order->total = $x;
+                $order->save();
+
+                for ($i = 0; $i < $size; $i++) {
+                    $id = $permits[$i]; //id
+                    $cont = $cantidad[$i]; //cantidad
+
+
+                    $order->products()->attach($id, ['cantidad' => $cont]);
+                    DB::connection(session()->get('database'))->commit();
+                    return response('Se ingresó la orden con éxito.', 200);
+                }
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo realizar el ingreso de la orden.', 400);
             }
-        }
-        // consulta de precio y stock a productos seleccinados
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
 
-        $valores = DB::table('products')
-            ->select('products.price', 'products.stock')
-            ->whereIn('id', $permits)
-            ->get();
-
-        // obtenemos las cantidades disponibles
-
-
-        $size = sizeof($permits);
-
-        //      Calcular el total   ////
-        for ($i = 0; $i < $size; $i++) {
-
-            $stock = $valores[$i]->stock;
-            if ($stock <= $cantidad[$i]) {
-
-                return response('No hay stock suficiente', 400);
-            } else {
-
-                $updateproducts = product::find($permits[$i]);
-                $updateproducts->stock = $stock - $cantidad[$i];
-                $updateproducts->save();
-            }
-
-            $price[$i] = $cantidad[$i] * $valores[$i]->price;
-        }
-
-        $x = array_sum($price);
-
-
-        $order->total = $x;
-        $order->save();
-
-        for ($i = 0; $i < $size; $i++) {
-            $id = $permits[$i]; //id
-            $cont = $cantidad[$i]; //cantidad
-
-
-            $order->products()->attach($id, ['cantidad' => $cont]);
+            ), 400);
         }
 
 
@@ -174,7 +209,8 @@ class OrderController extends Controller
      */
     public function edit(order $order)
     {
-        //dd(order::findOrFail($order->id))
+
+
         $orderData = order::findOrFail($order->id);
 
 
@@ -195,12 +231,12 @@ class OrderController extends Controller
         $selectedIds = $productsSelected->pluck('product_id');
 
         $product = DB::table('products')
-        ->select('*')
-        ->whereNotIn('id', $selectedIds)
-        ->where('products.stock' , '>' , 0)
-        ->get();
+            ->select('*')
+            ->whereNotIn('id', $selectedIds)
+            ->where('products.stock', '>', 0)
+            ->get();
 
-    
+
 
 
         return view('Mantenedores.order.edit', compact('orderData', 'product', 'productsSelected'));
@@ -222,104 +258,124 @@ class OrderController extends Controller
      */
     public function update(Request $request, order $order, product $product)
     {
+        $rules = [
+            'name_order'          => 'required|string',
+            'cantidad' => 'required|array|min:1',
+            'cantidad.*' => 'required|gt:0|integer',
+            'address' => 'required'
 
-        $datosOrder = request()->except('_token');
-        $productos = order::find($order->id);
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+            'cantidad.required' => 'Debes seleccionar al menos un producto',
+            'integer' => 'El número no puede ser decimal',
+            'gt' => 'El número debe ser mayor a 0'
+        ];
 
-        $productos->name_order = $datosOrder['name_order'];
-        $productos->order_status = $datosOrder['order_status'];
-        $productos->payment_method = $datosOrder['payment_method'];
-        $productos->address = $datosOrder['address'];
-        $productos->pick_up = $datosOrder['pick_up'];
-        $productos->comment = $datosOrder['comment'];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            try {
+                DB::beginTransaction();
+                $datosOrder = request()->except('_token');
+                $productos = order::find($order->id);
 
-        $permits = array();
-        $cantidad = array();
-        $valores = array();
-        $price = array();
+                $productos->name_order = $datosOrder['name_order'];
+                $productos->order_status = $datosOrder['order_status'];
+                $productos->payment_method = $datosOrder['payment_method'];
+                $productos->address = $datosOrder['address'];
+                $productos->pick_up = $datosOrder['pick_up'];
+                $productos->comment = $datosOrder['comment'];
 
-
-        foreach ($datosOrder['cantidad'] as $item => $value) {
-
-            if ($value > 0 && isset($value)) {
-
-                $cantidad[] = (int)$value;
-                $permits[] = (int)$item;
-            }
-        }
-
-
-
-
-        $valores = DB::table('products')
-            ->select('products.price', 'products.stock')
-            ->whereIn('id', $permits)
-            ->get();
-
-        /** if($stock <= $cantidad[$i]){
-
-                
-
-         */
+                $permits = array();
+                $cantidad = array();
+                $valores = array();
+                $price = array();
 
 
+                foreach ($datosOrder['cantidad'] as $item => $value) {
 
+                    if ($value > 0 && isset($value)) {
 
-
-        for ($i = 0; $i < count($cantidad); $i++) {
-
-
-            $cantidadOld = DB::table('products_orders')
-                ->select('products_orders.cantidad')
-                ->where('order_id', $order->id)
-                ->where('product_id', $permits[$i])
-                ->get();
-
-            if (isset($cantidadOld[0]->cantidad)) {
-                $old = $cantidadOld[0]->cantidad;
-            }else{
-
-                $old = 0;
-            }
-            
-            $stock = $valores[$i]->stock;
-
-
-            if ($old  <= $cantidad[$i]) {
-
-                if (($cantidad[$i] - $old) <= $stock) {
-
-                    $updateproducts = product::find($permits[$i]);
-                    $updateproducts->stock = $stock - ($cantidad[$i] - $old);
-                    $updateproducts->save();
-                } else {
-                    return response('No hay stock suficiente', 400);
+                        $cantidad[] = (int)$value;
+                        $permits[] = (int)$item;
+                    }
                 }
-            } else {
 
 
 
-                $updateproducts = product::find($permits[$i]);
-                $updateproducts->stock = $stock + ($old - $cantidad[$i]);
-                $updateproducts->save();
+
+                $valores = DB::table('products')
+                    ->select('products.price', 'products.stock', 'products.id')
+                    ->whereIn('id', $permits)
+                    ->get();
+
+                for ($i = 0; $i < count($cantidad); $i++) {
+
+
+                    $cantidadOld = DB::table('products_orders')
+                        ->select('products_orders.cantidad')
+                        ->where('order_id', $order->id)
+                        ->where('product_id', $permits[$i])
+                        ->get();
+
+                    if (isset($cantidadOld[0]->cantidad)) {
+                        $old = $cantidadOld[0]->cantidad;
+                    } else {
+
+                        $old = 0;
+                    }
+
+                    $stock = $valores[$i]->stock;
+
+
+                    if ($old  <= $cantidad[$i]) {
+
+                        if (($cantidad[$i] - $old) <= $stock) {
+
+                            $updateproducts = product::find($permits[$i]);
+                            $updateproducts->stock = $stock - ($cantidad[$i] - $old);
+                            $updateproducts->save();
+                        } else {
+                            return Response::json(array(
+                                'success' => false,
+                                'errors2' => $valores
+
+                            ), 400);
+                        }
+                    } else {
+
+                        $updateproducts = product::find($permits[$i]);
+                        $updateproducts->stock = $stock + ($old - $cantidad[$i]);
+                        $updateproducts->save();
+                    }
+                    $price[$i] = $cantidad[$i] * $valores[$i]->price;
+                }
+                $x = array_sum($price);
+
+
+
+                $productos->total = $x;
+                $productos->save();
+
+                $order->products()->detach();
+
+                for ($i = 0; $i < count($permits); $i++) {
+                    $id = $permits[$i]; //id
+                    $cont = $cantidad[$i]; //cantidad
+
+
+                    $order->products()->attach($id, ['cantidad' => $cont]);
+                }
+                DB::connection(session()->get('database'))->commit();
+                return response('Se editó la orden con éxito.', 200);
+            } catch (\Throwable $th) {
             }
-            $price[$i] = $cantidad[$i] * $valores[$i]->price;
-        }
-        $x = array_sum($price);
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
 
-
-
-        $productos->total = $x;
-        $productos->save();
-
-        $order->products()->detach();
-
-        for ($i = 0; $i < count($permits); $i++) {
-            $id = $permits[$i]; //id
-            $cont = $cantidad[$i]; //cantidad
-
-
-            $order->products()->attach($id, ['cantidad' => $cont]);
+            ), 400);
         }
 
 
