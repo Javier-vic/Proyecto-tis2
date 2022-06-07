@@ -25,7 +25,7 @@ class CreateProductsTable extends Migration
 
             // ************************** foreign Key **************************
 
-            $table->foreignId('id_category_product')->references('id')->on('category_products');
+            $table->foreignId('id_category_product')->references('id')->on('category_products')->onDelete('cascade');;
         });
     }
 

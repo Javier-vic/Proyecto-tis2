@@ -69,7 +69,6 @@ class ProductController extends Controller
     {
 
 
-
         $validator = Validator::make($request->all(), product::$rules, product::$messages);
         if ($validator->passes()) {
             DB::beginTransaction();

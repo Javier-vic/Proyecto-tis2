@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CategorySupplyController; 
-use App\Http\Controllers\SupplyController; 
+use App\Http\Controllers\CategorySupplyController;
+use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\AsistController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
 
@@ -24,10 +25,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
-
+Route::get('/', [LandingController::class,'index']);
+Route::get('/login',function(){ return view('auth.login');})->name('login');
 
 
 Auth::routes();
@@ -43,23 +42,25 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/category_product/modal/edit', [CategoryProductController::class, 'categoryProductModalEdit'])->name('category.product.modal.edit');
     Route::get('/roles/permitsofrole', [RoleController::class, 'getPermits'])->name('permits.roles');
     Route::get('/roles/dataTableRole', [RoleController::class, 'dataTable'])->name('dataTable.Roles');
-    Route::get('/asist/dataTable',[AsistController::class,'dataTable'])->name('dataTable.asist');
+    Route::get('/asist/dataTable', [AsistController::class, 'dataTable'])->name('dataTable.asist');
     Route::get('/product/productModalEdit', [\App\Http\Controllers\ProductController::class, 'productModalEdit'])->name('product.modal.edit');
     Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
-    Route::get('/worker/dataTable',[worker::class,'dataTableWorkers'])->name('datatable.workers');
-    Route::get('/worker/getWorker',[worker::class,'getWorker'])->name('worker.getWorker');
+    Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
+    Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+    Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     //POST
-    Route::post('/asist/finish/{asist}',[AsistController::class,'finishAsist'])->name('finish.asist');  
+    Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-    
+
+
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);
-    Route::resource('worker',worker::class);
-    Route::resource('asist',AsistController::class);
+    Route::resource('worker', worker::class);
+    Route::resource('asist', AsistController::class);
     Route::resource('order', OrderController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('product', ProductController::class);
@@ -68,6 +69,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
 });
+
+//RUTAS PARA LA VISTA DE USUARIOS
+Route::resource('landing', LandingController::class);
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // RUTAS DE ORDENES
 Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
@@ -75,4 +80,3 @@ Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrde
 Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
 
 // RUTA DE ROLES
-

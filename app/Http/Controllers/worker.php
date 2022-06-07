@@ -8,6 +8,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\role;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 class worker extends Controller
@@ -44,6 +45,25 @@ class worker extends Controller
 
         }
     }
+    public function getAsistByWorker(Request $request, User $user){
+        $year = strtok($request->month,'-');
+        $month = strtok($year);
+        $data = DB::select('select SEC_TO_TIME(sum(TIME_TO_SEC(asists.end)-TIME_TO_SEC(asists.created_at))) AS horas_trabajadas FROM `asists` where id_user= ? and YEAR(created_at)=? and month(created_at) =? group by id_user;', [$user->id,$year,$month]);
+        //DB::select('select * from users where active = ?', [1])
+        if(isset($data[0])){
+            return response::json(Array(
+                $data[0],
+                'name_worker' => $user->name,
+                'date' => $request->month
+            ));
+        }else{
+            return response::json(Array(
+                ['horas_trabajadas'=>'00:00:00'],
+                'name_worker' => $user->name,
+                'date' => $request->month
+            ));
+        }
+    }
     public function dataTableWorkers()
     {
         $worker = DB::table('users')
@@ -55,8 +75,9 @@ class worker extends Controller
         return DataTables::of($worker)
                 ->addColumn('action',function($row){
                     $actionBtn = "
-                                <button onclick='editWorker({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
-                                <button onclick='deleteWorker({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
+                                <button onclick='asistByWorker({$row->id})' class='edit btn btn-primary btn-sm'><i class='fa-solid fa-business-time me-lg-1'></i><span class='d-none d-lg-inline-block'>Asistencia</span></button>
+                                <button onclick='editWorker({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-lg-1'></i><span class='d-none d-lg-inline-block'>Editar</span></button> 
+                                <button onclick='deleteWorker({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-lg-1'></i><span class='d-none d-lg-inline-block'>Borrar</span></button>
                                 ";  
                     return $actionBtn;
                 })

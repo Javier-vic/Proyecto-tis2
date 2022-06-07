@@ -62,19 +62,8 @@ class CouponController extends Controller
     public function store(Request $request)
     {
 
-        $rules = [
-            'code'          => 'required|string',
-            'percentage'          => 'required|integer',
-            'caducity'          => 'required|string',
-            'emited'          => 'required|string',
-            'quantity' => 'required|integer'
 
-        ];
-
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), coupon::$rules, coupon::$messages);
 
         if ($validator->passes()) {
             DB::beginTransaction();
