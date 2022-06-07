@@ -43,9 +43,27 @@ class OrderController extends Controller
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
+
+                
         }
 
-        return view('Mantenedores.order.index');
+        //
+        // consulta de los productos mas ordenados
+        //
+     
+
+        $years = DB::table('orders')
+        ->select( (DB::raw('YEAR(orders.created_at) year')))
+        ->groupby('year')
+        ->get();
+
+    
+        ///
+        ///
+        ///
+      
+
+        return view('Mantenedores.order.index', ['years' => $years] );
     }
 
     /**
@@ -121,14 +139,14 @@ class OrderController extends Controller
         for ($i = 0; $i < $size; $i++) {
 
             $stock = $valores[$i]->stock;
-            if ($stock <= $cantidad[$i]) {
+            if ($stock < $cantidad[$i]) {
 
                 return response('No hay stock suficiente', 400);
             } else {
 
                 $updateproducts = product::find($permits[$i]);
                 $updateproducts->stock = $stock - $cantidad[$i];
-                $updateproducts->save();
+                $updateproducts->update();
             }
 
             $price[$i] = $cantidad[$i] * $valores[$i]->price;
@@ -354,8 +372,38 @@ class OrderController extends Controller
         return response(json_encode([$productOrders, $order]), 200);
     }
 
+    public function getMonthOrder(request $request){
+
+        $sales = DB::table('orders')
+        ->select(DB::raw('sum(orders.total) as `data`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+        ->whereyear('created_at', $request->year)
+        ->groupby('year','month')
+        ->get();
+       
+
+
+
+        return response($sales,200);
+    }
 
     ///eliminar
+
+    public function getbestsellers(){
+
+        $bestseller = DB::table('products_orders')
+        ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
+        ->join('products','products_orders.product_id','products.id')
+        ->groupBy('products_orders.product_id', 'products.name_product')
+        ->limit(3)
+        ->orderBy('cantida','DESC')
+        ->get();    
+
+    
+
+        return response($bestseller,200);
+   
+        
+    }
 
     public function destroy(order $order)
     {
