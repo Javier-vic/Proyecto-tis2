@@ -73,6 +73,9 @@
                         <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
                                 class="fa-solid fa-house-chimney me-2"></i>Local</a>
                     </li>
+                    @if(auth()->user())
+                        <div>{{auth()->user()->id}}</div>
+                    @endif
                 </ul>
 
             </div>

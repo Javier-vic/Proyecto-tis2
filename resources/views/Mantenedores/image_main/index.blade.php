@@ -14,7 +14,7 @@
                 
             @endforeach
             @for ($i = 0; $i < 4-sizeof($images); $i++)
-                <div class="col-12 col-md-3 my-2">
+                <div class="col-12 col-md-6 my-2">
                     <div class="d-flex my-2 align-content-center">
                         <label for="">Orden:</label>
                         <select name="order-{{$i+1+sizeof($images)}}" class="form-select ms-4  d-flex" id="" >
@@ -40,8 +40,10 @@
     <script>
         const submitImages = (e) =>{
             e.preventDefault();
-            var formData = new FormData(e.currentTarget);
-            console.log(FormData);
+            console.log(e);
+            var formData = new FormData(e.target);
+            console.log(formData)
+            /*
             $.ajax({
                 type: "POST",
                 url: "{{route('publicity.store')}}",
@@ -50,6 +52,7 @@
                     console.log(response);
                 }
             });
+            */
         }
     </script>
 @endsection
