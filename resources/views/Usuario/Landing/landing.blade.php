@@ -90,11 +90,11 @@
                                                 <div class="card-body">
                                                     <div class="d-flex justify-content-between position-relative bg-white rounded px-2 pt-1 shadow border mb-3"
                                                         style="margin-top:-30px;">
-                                                        <h5 class="card-title font-weight-bold">
+                                                        <h5 class="card-title font-weight-bold" >
                                                             <a>{{ $product->name_product }}</a>
                                                         </h5>
                                                         <p class="mb-2 text-success font-weight-bold">$
-                                                            {{ $product->price }}</p>
+                                                            {{ ($product->price) }}</p>
                                                     </div>
                                                     <p class="card-text comment more" style="min-height: 70px;">
                                                         {{ $product->description }}
@@ -230,7 +230,7 @@
                         }).append(
                             //
                             $('<div>', {
-                                class: 'd-flex justify-content-between mb-3 flex-column flex-lg-row '
+                                class: 'd-flex justify-content-between mb-3  flex-column'
                             }).append(
                                 $('<h4>', {
                                     text: `${e.name_product}`,
@@ -244,7 +244,7 @@
                                         onclick: `saveInCart(${e.id})`
                                     }).append(
                                         $('<i>', {
-                                            class: 'fa-solid fa-plus'
+                                            class: 'fa-solid fa-circle-plus fa-xl text-success'
                                         })
                                     ),
                                     $('<span>', {
@@ -255,7 +255,7 @@
                                         onclick: `deleteInCart(${e.id})`
                                     }).append(
                                         $('<i>', {
-                                            class: 'fa-solid fa-minus text-danger'
+                                            class: 'fa-solid fa-circle-minus text-danger fa-xl'
                                         })
                                     )
                                 )
@@ -270,8 +270,8 @@
                                 class: 'text-end'
                             }).append(
                                 $('<p>', {
-                                    class: 'text-sucess fs-5',
-                                    text: `$${e.price*e.cantidad}`
+                                    class: 'text-success fs-5',
+                                    text: `$${(e.price*e.cantidad).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
                                 })
                             ),
                             $('<hr>')

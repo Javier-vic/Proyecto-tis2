@@ -47,22 +47,22 @@
         </div>
         {{--  --}}
     {{-- TIPO DE ENVÍO --}}
-    <div class="bg-white shadow p-3 mt-5 col "">
+    <div class="bg-white shadow p-3 mt-5 col ">
         <h3 class="m-0">Tipo de envío</h3>
         <hr>
         <div class="d-flex flex-column justify-content-between">
-            <div class="w-100">
-                <div class="form-check form-switch ">
-                    <input class="form-check-input p-2" type="checkbox" id="localDelivery">
-                    <label class="form-check-label" for="localDelivery"><h4><i class="fa-solid fa-shop mx-2"></i>Retiro en sucursal</h4></label>
-                  </div>
-            </div>
-            <div class="w-100">
-                <div class="form-check form-switch ">
-                    <input class="form-check-input p-2" type="checkbox" id="homeDelivery">
-                    <label class="form-check-label" for="homeDelivery"><h4><i class="fa-solid fa-person-biking mx-2"></i>Despacho a domicilio</h4></label>
-                  </div>
-            </div>
+        <div class="form-check w-100">
+            <input class="form-check-input fs-5" type="radio" name="delivery" id="flexRadioDefault2" checked>
+            <label class="form-check-label" for="flexRadioDefault2">
+                <h4 class="m-0 ms-2" ><i class="fa-solid fa-house me-2"></i>Retiro en sucursal</h4>
+            </label>
+        </div>
+            <div class="form-check w-100 align-center">
+                <input class="form-check-input fs-5" type="radio" name="delivery" id="flexRadioDefault2" checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    <h4 class="m-0 ms-2"><i class="fa-solid fa-person-biking me-2"></i>Despacho a domicilio</h4>
+            </label>
+</div>
         </div>
     
     </div>
@@ -71,9 +71,9 @@
     <div class="bg-white shadow p-3 mt-5 col">
         <h3 class="m-0">Tú pedido</h3>
         <hr>
-        <div class="" id="cartContainer">
+        <div class="" id="cartContainer" style="overflow-y: scroll; height:500px;">
             {{-- PLANTILLA DE UN PRODUCTO DEL CARRITO --}}
-            {{-- <div class="d-flex flex-column justify-content-between">
+            <!-- {{-- <div class="d-flex flex-column justify-content-between">
                 <div class="d-flex justify-content-between mb-3 flex-column flex-lg-row">
                     <h4 class="text-dark ">Korukushi</h4>
                     <div class="d-flex gap-2 align-items-center ">
@@ -86,7 +86,7 @@
                 <div class="text-end">
                     <p class="text-success fs-5 ">$ 2500</p>
                 </div>
-            </div> --}}
+            </div> --}} -->
         </div>
     
     </div>
@@ -125,15 +125,16 @@
                 $('#cartQuantity2').empty()
                 $('#cartQuantity2').append(`<span class="ms-2">${productos.length}</span>`)
                 //////////////////////////////////////////////// 
+
         productos.map(product=>{
            $('#cartContainer').append(`
-           <div class="d-flex flex-column justify-content-between">
+           <div class="d-flex flex-column justify-content-between px-3">
                 <div class="d-flex justify-content-between mb-3 flex-column flex-lg-row">
                     <h4 class="text-dark ">${product.name_product}</h4>
                     <div class="d-flex gap-2 align-items-center ">
                         <a onclick="saveInCart(${product.id})"><i class="fa-solid fa-circle-plus fa-xl text-success"></i></a>
                         <h4 class="m-0">${product.cantidad}</h4>
-                        <a  onclick="deleteInCart(${product.id})" ><i class="fa-solid fa-circle-minus text-danger fa-xl "></i></a>
+                        <a  onclick="deleteInCart(${product.id})" ><i class="fa-solid fa-circle-minus text-danger fa-xl"></i></a>
                     </div>
                 </div>
                 <p class="text-muted ">${product.description}</p>
@@ -185,7 +186,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
-                        title: 'Se eliminó el producto.',
+                        title: `Se eliminó ${e.name_product}`,
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
