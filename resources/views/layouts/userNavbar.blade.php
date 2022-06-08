@@ -49,10 +49,6 @@
             margin: 10px;
         }
 
-        .order-box{
-            border-width: 3px !important;
-        }
-
     </style>
 </head>
 
@@ -79,11 +75,13 @@
                             <i class="fa-solid fa-house-chimney me-2"></i>Local
                         </a>
                     </li>
-                    <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('order.history')}}">
-                            <i class="fa-solid fa-receipt me-2"></i>Mis pedidos
-                        </a>
-                    </li>
+                    @if(auth()->user())
+                        <li class="nav-item mx-3 ">
+                            <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('order.history')}}">
+                                <i class="fa-solid fa-receipt me-2"></i>Mis pedidos
+                            </a>
+                        </li>
+                    @endif
                 </ul>
 
             </div>

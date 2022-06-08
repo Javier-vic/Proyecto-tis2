@@ -1,5 +1,11 @@
 @extends('layouts.userNavbar')
 
+<style>
+    .order-box{
+            border-width: 3px !important;
+    }
+</style>
+
 @section('content')
 
     <div class="bg-white order-box border border-danger rounded">
