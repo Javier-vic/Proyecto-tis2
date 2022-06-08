@@ -45,9 +45,7 @@ class OrderController extends Controller
                 ->make(true);
         }
 
-<<<<<<< Updated upstream
         return view('Mantenedores.order.index');
-=======
         //
         // consulta de los productos mas ordenados
         //
@@ -65,7 +63,6 @@ class OrderController extends Controller
 
 
         return view('Mantenedores.order.index', ['years' => $years]);
->>>>>>> Stashed changes
     }
 
     /**
@@ -358,11 +355,6 @@ class OrderController extends Controller
         return response(json_encode([$productOrders, $order]), 200);
     }
 
-<<<<<<< Updated upstream
-
-    ///eliminar
-
-=======
     public function getMonthOrder(request $request)
     {
 
@@ -396,7 +388,6 @@ class OrderController extends Controller
         return response($bestseller, 200);
     }
 
->>>>>>> Stashed changes
     public function destroy(order $order)
     {
 
