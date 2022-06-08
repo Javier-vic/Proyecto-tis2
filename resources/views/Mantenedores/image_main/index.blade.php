@@ -8,7 +8,7 @@
     <div class="row">
         {{sizeof($images)}}
     </div>
-    <form onsubmit="submitImages(event);" id="formSubmitImages">
+    <form onsubmit="submitImages(event);" id="formSubmitImages" enctype="multipart/form-data">
         <div class="row">
             @foreach ($images as $image)
                 
@@ -41,18 +41,17 @@
         const submitImages = (e) =>{
             e.preventDefault();
             console.log(e);
-            var formData = new FormData(e.target);
-            console.log(formData)
-            /*
-            $.ajax({
-                type: "POST",
-                url: "{{route('publicity.store')}}",
-                data: formData,
-                success: function (response) {
-                    console.log(response);
-                }
-            });
-            */
+            var formData = new FormData(e.currentTarget);
+            console.log(formData);
+                $.ajax({
+                    type: "POST",
+                    url: "{{route('publicity.store')}}",
+                    data: formData,
+                    success: function (response) {
+                        console.log(response);  
+                    }
+                });
+            
         }
     </script>
 @endsection
