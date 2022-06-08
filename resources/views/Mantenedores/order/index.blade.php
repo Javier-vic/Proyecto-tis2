@@ -48,10 +48,18 @@
 
                     <select name="" class="form-select" id="selectYear">
                         <option selected>Seleccione un año</option>
-                        <option value="2013">2013</option>
-                        <option value="2022">2022</option>
+                        
+                        @isset($years)
+                        @foreach ($years as &$valor) 
+
+                        <option value="{{$valor->year}}">{{$valor->year}}</option>
+                        
+                        @endforeach
+                            
+                        @endisset  
     
                     </select>
+
         
         
                     
@@ -64,150 +72,231 @@
                 </form>
             
             </div>
-        @endsection
-        @section('js_after')
-            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-            <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" ></script>
+   @endsection
 
-            <script type="text/javascript">
-                var table = $("#myTable").DataTable({
-                    bProcessing: true,
-                    bStateSave: true,
-                    deferRender: true,
-                    responsive: true,
-                    processing: true,
-                    searching: true,
 
-                    ajax: {
-                        url: "{{ route('order.index') }}",
-                        type: 'GET',
+    @section('js_after')
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" ></script>
+
+        <script type="text/javascript">
+            var table = $("#myTable").DataTable({
+                bProcessing: true,
+                bStateSave: true,
+                deferRender: true,
+                responsive: true,
+                processing: true,
+                searching: true,
+
+                ajax: {
+                    url: "{{ route('order.index') }}",
+                    type: 'GET',
+                },
+                language: {
+                    url: "{{ asset('js/language.json') }}"
+                },
+
+                columns: [{
+                        data: 'id',
+                        name: 'id',
+                        visible: false,
+                        searchable: false
                     },
-                    language: {
-                        url: "{{ asset('js/language.json') }}"
+                    {
+                        data: 'name_order',
+                        name: 'name_order'
+                    },
+                    {
+                        data: 'address',
+                        name: 'address'
+                    },
+                    {
+                        data: 'order_status',
+                        name: 'order_status'
+                    },
+                    {
+                        data: 'payment_method',
+                        name: 'payment_method'
+                    },
+                    {
+                        data: 'pick_up',
+                        name: 'pick_up'
+                    },
+                    {
+                        data: 'total',
+                        name: 'total'
                     },
 
-                    columns: [{
-                            data: 'id',
-                            name: 'id',
-                            visible: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'name_order',
-                            name: 'name_order'
-                        },
-                        {
-                            data: 'address',
-                            name: 'address'
-                        },
-                        {
-                            data: 'order_status',
-                            name: 'order_status'
-                        },
-                        {
-                            data: 'payment_method',
-                            name: 'payment_method'
-                        },
-                        {
-                            data: 'pick_up',
-                            name: 'pick_up'
-                        },
-                        {
-                            data: 'total',
-                            name: 'total'
-                        },
-
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
 
 
 
 
 
-                    ],
-                    // initComplete: function(settings, json) {
+                ],
+                // initComplete: function(settings, json) {
 
-                    //     document.getElementById("number").innerHTML = table.data().count();
-                    // },
-                        select: true
-                    });
-                    $('#search').on('keyup', function() {
-                        table.search(this.value).draw();
-                    });
+                //     document.getElementById("number").innerHTML = table.data().count();
+                // },
+                    select: true
+                });
+                $('#search').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
                     // ****************************************************************************************************************
 
 
 
-                    const addorder = (e) => {
-                        e.preventDefault();
-                        var data = $("#postForm").serializeArray();
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('order.store') }}",
-                            data: data,
-                            dataType: "text",
-                            success: function(response) {
-                                alert(response);
+                const addorder = (e) => {
+                    e.preventDefault();
+                    var data = $("#postForm").serializeArray();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('order.store') }}",
+                        data: data,
+                        dataType: "text",
+                        success: function(response) {
+                            alert(response);
 
-                            }
-                        });
-                    }
+                        }
+                    });
+               }
 
          
            
-                    // ****************************************************************************************************************
-                    //RELLENA EL MODAL DE VER DETALLES
-                    // ****************************************************************************************************************
+                // ****************************************************************************************************************
+                //RELLENA EL MODAL DE VER DETALLES
+                // ****************************************************************************************************************
 
-                    const showOrder = (id) => {
+                const showOrder = (id) => {
 
-                        $.ajax({
-                            type: "GET",
-                            url: "{{ route('order.view') }}",
-                            data: {
-                                'id': id,
-                            },
-                            dataType: "json",
-                            success: function(response) {
-                                resultado = response;
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('order.view') }}",
+                        data: {
+                            'id': id,
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            resultado = response;
 
 
-                                $('#nameOrderVIEWMODAL').val(resultado[1]);
-                                $('#name_order').val(resultado[1][0].name_order);
-                                $('#payment').val(resultado[1][0].payment_method);
-                                $('#total').val(resultado[1][0].total);
-                                $('#dely').val(resultado[1][0].pick_up);
-                                $('#date').val(resultado[1][0].created_at);
+                            $('#nameOrderVIEWMODAL').val(resultado[1]);
+                            $('#name_order').val(resultado[1][0].name_order);
+                            $('#payment').val(resultado[1][0].payment_method);
+                            $('#total').val(resultado[1][0].total);
+                            $('#dely').val(resultado[1][0].pick_up);
+                            $('#date').val(resultado[1][0].created_at);
 
-                                // $('#addorderLabel').html(${resultado.product_id})
-                                console.log(resultado)
-                                $('#pruebaProductos').empty();
-                                resultado[0].map(product => {
-                                    $('#pruebaProductos').append(
-                                        `
-                                    <tr>
-                                        <td>${product.name_product}</td>
-                                        <td>${product.cantidad}</td>
-                                        <td>${product.cantidad*product.price}</td>
-                                    </tr> 
+                            // $('#addorderLabel').html(${resultado.product_id})
+                            console.log(resultado)
+                            $('#pruebaProductos').empty();
+                            resultado[0].map(product => {
+                                $('#pruebaProductos').append(
                                     `
-                                    )
-                                })
+                                <tr>
+                                    <td>${product.name_product}</td>
+                                    <td>${product.cantidad}</td>
+                                    <td>${product.cantidad*product.price}</td>
+                                </tr> 
+                                `
+                                )
+                            })
 
-                            }
-                        });
-                    }
+                        }
+                    });
+                }
 
                
             </script>
 
             <script>
+
+
+
+                let myChart2;
+                function viewGraph(){
+                    //////////***Graficas por años */////////////
+                    
+                    $('#selectYear').on('change', function() {
+                    // create data from form input(s)
+                    const x = $(this).val();
+                    $.ajax({
+                    type: "GET",
+                    url: "{{ route('order.month') }}",
+                    data: {
+                        'year': x,
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                    const resultado = response;
+                    const label = []
+                    const dates = new Array(12);
+                        dates.fill(0);
+                    let myChart;
+                    
+                    resultado.map( cantidad =>{
+                                
+                        dates[cantidad.month] = cantidad.data;
+                        
+                   })
+                
+                
+                    const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
+                    const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ganancias mensuales',
+                        data: dates,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                    };
+
+                    if (myChart) {
+                            myChart.destroy();
+                    }
+
+                    var ctx = document.getElementById(`myChart2`).getContext('2d');
+                        if (myChart2) {
+                            myChart2.destroy();
+                        }
+                        myChart2 = new Chart(ctx, {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Ganancias mensuales'
+                            }
+                            }
+                        },
+                    }); 
+                                
+                            
+                            
+                        
+                    }
+                    }); //ajax
+                    });
+                
+                }
+
+
+
                 var myChart;
                 ////////////////////////////////////
                 // Grafiva producto mas vendido
@@ -274,17 +363,15 @@
                         
                         
                         });
-                
-            
-            
-            
-                }
+               }
 
-                     // ****************************************************************************************************************
-                    // ****************************************************************************************************************
-               
 
-                    const deleteOrder = (id) => {
+
+
+
+                    
+                    
+                const deleteOrder = (id) => {
 
                     Swal.fire({
                         title: '¿Estás seguro de eliminar la orden?',
@@ -327,7 +414,9 @@
                                     table.ajax.reload();
                                     //RECARGA GRÁFICO AL ELIMINAR UNA ORDEN
                                     myChart.destroy()
+                                    myChart2.destroy()
                                     getBestSellers();
+                                    viewGraph();
                                 }
                             });
                         }
@@ -335,102 +424,20 @@
                     })
 
 
-}
+                }
                 
                 // ****************************************************************************************************************
-            //RELLENA EL MODAL DE VER DETALLES
-            // ****************************************************************************************************************
+                //RELLENA EL MODAL DE VER DETALLES
+                // ****************************************************************************************************************
            
-            $(document).ready(function () {
-                
-                getBestSellers();
-            // ****************************************************************************************************************
-            // ****************************************************************************************************************
-          
-
-
-                    //////////***Graficas por años */////////////
-                    let myChart2;
-                    $('#selectYear').on('change', function() {
-                    // create data from form input(s)
-                    const x = $(this).val();
-                    $.ajax({
-                    type: "GET",
-                    url: "{{ route('order.month') }}",
-                    data: {
-                        'year': x,
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                    const resultado = response;
-                    const label = []
-                    const dates = new Array(12);
-                        dates.fill(0);
-                    let myChart;
+                $(document).ready(function () {
                     
-                    resultado.map( cantidad =>{
-                                
-                        dates[cantidad.month] = cantidad.data;
-                        
-                    })
-                
-                
-                            const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
-                            const data = {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Ganancias mensuales',
-                                data: dates,
-                                fill: false,
-                                borderColor: 'rgb(75, 192, 192)',
-                                tension: 0.1
-                            }]
-                            };
-                            if (myChart) {
-                                    myChart.destroy();
-                                    }
-                            var ctx = document.getElementById(`myChart2`).getContext('2d');
-                                if (myChart2) {
-                                    myChart2.destroy();
-                                }
-                                myChart2 = new Chart(ctx, {
-                                type: 'line',
-                                data: data,
-                                options: {
-                                    responsive: true,
-                                    plugins: {
-                                    legend: {
-                                        position: 'top',
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Ganancias mensuales'
-                                    }
-                                    }
-                                },
-                            }); 
-                                
-                            
-                            
-                        
-                    }
-                    }); //ajax
-                    });
-            
-                  ///*****************///*+
+                    viewGraph();
+                    getBestSellers(); /// grafic producto mas vendido
+                 
+                }); 
 
-
-
-    }); // end ready
-
-                // *************************
-                
-                   ///productos mas conprados 
-            /////
-            
-           
-                // ****************************************************************************************************************
-                // productos mas conprados
+               
                 
 
                 

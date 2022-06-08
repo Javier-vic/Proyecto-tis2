@@ -59,13 +59,16 @@ class OrderController extends Controller
         ->groupby('year')
         ->get();
 
-    
+
         ///
         ///
         ///
       
-
-        return view('Mantenedores.order.index', ['years' => $years] );
+        if(isset($years[0])){
+            return view('Mantenedores.order.index', ['years' => $years] );
+        }else{
+            return view('Mantenedores.order.index');
+        }
     }
 
     /**
