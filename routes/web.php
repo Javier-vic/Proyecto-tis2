@@ -79,4 +79,8 @@ Route::resource('cart', CartController::class);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // RUTAS DE ORDENES
+Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
+Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+
 // RUTA DE ROLES

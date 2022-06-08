@@ -4,15 +4,16 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 @section('content')
-<form action="{{ route('order.update', $orderData->id) }}" method="POST" >
+<form onsubmit="updateOrder(event,{{$orderData->id}})" method="POST" >
 
     @csrf
     {{method_field('PATCH') }}
 
     {{$orderData->id}}
     <div class="mb-4">
-        <label for="name_order" class="form-label">Nombre pedido :</label>
-        <input type="text" class="form-control" value="" id="name_order" name="name_order" aria-describedby="name_product_help">
+        <label for="name_order" class="form-label">Nombre cliente :</label>
+        <input type="text" class="form-control input-modal" value="" id="name_order" name="name_order" aria-describedby="name_product_help">
+        <span class="createmodal_error" id="name_order_errorCREATEMODAL"></span>
     </div>
 
     <div class="mb-4">
@@ -46,7 +47,8 @@
 
     <div class="mb-4 entradas">
         <label for="" class="form-label">Direccion :</label>
-        <input type="text"  class="form-control " class="form-control" id="address" name="address" >
+        <input type="text"  class="form-control input-modal" class="form-control" id="address" name="address" >
+        <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
     </div>
   
     <div class="mb-4">
@@ -54,7 +56,7 @@
             <select id="payment_method"  class="form-control" name="payment_method" aria-describedby="name_product_help" value="{{ isset($orderData->payment_method)?$orderData->payment_method:''}}">
                 <option value="Efectivo" >Efectivo</option>
                 <option value="Credito">Credito</option>
-                <option value="Debito" }>Debito</option>
+                <option value="Debito" >Debito</option>
             </select>
     </div>   
 
@@ -70,7 +72,13 @@
     </div>
 
 
-    <div class="row " id="listaProductos"></div>
+    <div class="mt-5">
+        <h3>Productos disponibles</h3>
+        <h2 class="createmodal_error" id="cantidad_errorCREATEMODAL"></h2>
+        <div id="listaProductos" class="row">
+    </div>
+
+   
    
    
     <button type="submit" class="btn btn-primary">Realizar pedido</button>
@@ -86,12 +94,30 @@
 
 @section('js_after')
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
-   
+   $( document ).ready(function() {
+    if($('#mi-select').val() == 'no') $('.entradas').addClass('d-none')
+    else $('.entradas').removeClass('d-none')
+});
+            $("#mi-select").change(function() {
+                if ($(this).val() == 'si') {
+                    $('.entradas').removeClass('d-none');
+                    $('#address').removeClass('is-valid');
+                    $('#address').val('');
+
+
+                } else {
+                   
+                    $('.entradas').addClass('d-none');
+                    $('#address').val('Sin direccion');
+                }
+
+            });
 
         // mostrar productos y orden
         const selectproduct = @json($orderData); //datos orden
-        const products = @json($products); // todo los productos
+        const products = @json($product); // todo los productos
         const productsSelected = @json($productsSelected);    // id y cantidad productos seleccionados
         const size = products.length;
 
@@ -103,10 +129,102 @@
         $('#address').val(selectproduct.address);
         $('#total').val(selectproduct.total);
 
-        productsSelected.map(productSelected =>{
+             // ****************************************************************************************************************
+        //MODAL DE CREAR
+        // ****************************************************************************************************************
+        const updateOrder = (e,id) => {
+            e.preventDefault();
+            const productSelected = @json($productsSelected);
+            console.log(productSelected);
+            var formData = new FormData(e.currentTarget);
+            var url = '{{ route('order.update', ':order') }}';
+            url = url.replace(':order',id)
+            formData.append('_method', 'put');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response, jqXHR) {
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: 'Se editó la orden correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto: false,
+                    })
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    // $("input-modal").removeClass('is-invalid');
+                    // $("input-modal").removeClass('is-valid');
+                    // $(".createmodal_error").empty()
+                    //////////////////////////////////////
+                    $('#agregarProducto').modal('hide');
 
-          
-                
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.responseJSON.errors){
+                        var text = jqXHR.responseJSON.errors;
+
+                    }
+                    if(jqXHR.responseJSON.errors2){
+                        var text2 = jqXHR.responseJSON.errors2;
+                    }
+                    
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: "Ocurrió un error. Verifica los campos.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if (text) {
+                        $.each(text, function(key, item) {
+                            const index = key.lastIndexOf('.');
+                            const after = key.slice(index + 1);
+                            
+                            $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
+                                item + "</span>")
+                            $("#" + after + "errorCREATEMODAL").append("<span class='text-danger'>" +
+                            item + "</span>")
+
+                            $(`#${key}`).addClass('is-invalid');
+                            $(`#valor${after}`).addClass('is-invalid');
+            
+                        });
+                    }
+
+                    if(text2){
+                        $.each(text2,function(key,item){
+                           if($(`#valor${item.id}`).val() > item.stock){
+                               $(`#valor${item.id}`).addClass('is-invalid')
+                               $("#" + item.id + "errorCREATEMODAL").append("<span class='text-danger'>" +
+                            'No hay stock suficiente.' + "</span>")
+                           }
+                        })
+                    }
+                    //////////////////////////////////////
+
+                }
+
+            });
+
+        
+        }
+        //****************************************************************************************************************
+
+        //PRODUCTOS SELECCIONADOS
+        productsSelected.map(productSelected =>{
                 $('#listaProductos').append(
                 `
                 <div class="card col-2 mx-2" style="width: 15rem;">
@@ -116,11 +234,11 @@
 
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
+                            <span class="card-text">Cantidad disponible: ${productSelected.stock}</span>
                             <div>
                                 <h4 class="pt-2 ">$${productSelected.price}</h4>
-                                <input type="number" type="number" name="cantidad[${productSelected.id}]" class="form-control" min="1" value = "${productSelected.cantidad}"  id="valor${productSelected.id}"  >
-                                
-                              
+                                <input  type="text" name="cantidad[${productSelected.id}]" class="form-control input-modal"  value = "${productSelected.cantidad}"  id="valor${productSelected.id}"  >                                
+                                <span class="createmodal_error createmodal_error_product" id="${productSelected.id}errorCREATEMODAL"></span>
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
@@ -194,9 +312,11 @@
                         <div>
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
+                            <span class="card-text">Cantidad disponible: ${productSelected.stock}</span>
                             <div>
                                 <h4 class="pt-2 ">$${productSelected.price}</h4>
-                                <input type="number" type="number" class="form-control d-none" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
+                                <input type="text" class="form-control d-none input-modal"  value = "${productSelected.cantidad}" id="valor${productSelected.id}"  >
+                                <span class="createmodal_error createmodal_error_product" id="${productSelected.id}errorCREATEMODAL"></span>
                                 
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
