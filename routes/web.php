@@ -24,7 +24,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/ubicacion', [LandingController::class,'ubicacion']);
+Route::get('/getLocation', [LandingController::class,'getLocation'])->name('getLocation');
 Route::get('/', [LandingController::class,'index']);
 Route::get('/login',function(){ return view('auth.login');})->name('login');
 
