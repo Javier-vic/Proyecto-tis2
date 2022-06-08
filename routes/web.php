@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategorySupplyController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
@@ -25,8 +26,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [LandingController::class,'index']);
-Route::get('/login',function(){ return view('auth.login');})->name('login');
+Route::get('/', [LandingController::class, 'index']);
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
 
 Auth::routes();
@@ -48,7 +51,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
-    Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
@@ -72,6 +75,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::resource('landing', LandingController::class);
+Route::resource('cart', CartController::class);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // RUTAS DE ORDENES

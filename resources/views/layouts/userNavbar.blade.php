@@ -12,6 +12,9 @@
             color: rgb(254, 0, 0) !important;
 
         }
+        .linkActive{
+            color: rgb(254, 0, 0) !important;
+        }
 
         .buttonHover:hover {
             background: rgb(158, 0, 0) !important;
@@ -82,7 +85,7 @@
                 </li>
                 <li class="nav-item mx-3 py-1">
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
-                        aria-current="page" href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+                        aria-current="page" href="/cart"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity2"></span></a>
 
                 </li>
             </ul>
@@ -92,7 +95,7 @@
                 id="navbarNav">
                 <ul class="navbar-nav p-1 ">
                     <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
+                        <a class="nav-link fw-bold linkHover {{ request()->is('/') ? ' linkActive' : '' }}" aria-current="page" href="/"><i
                                 class="fa-solid fa-utensils me-2"></i>Menú</a>
                     </li>
                     <li class="nav-item mx-3 ">
@@ -110,8 +113,13 @@
                             class="fa-solid fa-user me-2"></i>Ingresar</a>
                 </li>
                 <li class="nav-item mx-3 ">
-                    <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
-                        aria-current="page" href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <div>
+                        <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
+                            aria-current="page" href="/cart"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity"></span></a>
+                 
+
+                    </div>
+                       
 
                 </li>
             </ul>
@@ -119,6 +127,51 @@
         </div>
     </nav>
     <div class="container-lg container-fluid">@yield('content')</div>
+    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top container mx-auto">
+        <div class="col mb-3">
+            <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+                <img src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
+                    alt="Ramen dashi" width="200" height="200">
+            </a>
+        </div>
+
+        <div class="col mb-3">
+
+        </div>
+
+        <div class="col mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+            </ul>
+        </div>
+
+        <div class="col mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+            </ul>
+        </div>
+
+        <div class="col mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+            </ul>
+        </div>
+    </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
 @yield('js_after')
