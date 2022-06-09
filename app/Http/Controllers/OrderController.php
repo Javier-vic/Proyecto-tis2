@@ -354,21 +354,24 @@ class OrderController extends Controller
     public function orderbyuser()
     {
         $user = auth()->user()->id;
-        $orderUser = DB::table('order_user')
-            ->select('order_user.id_order')
+        // $orderUser = DB::table('order_user')
+        //     ->select('order_user.id_order')
+        //     ->where('order_user.id_user', '=', $user)
+        //     ->get();
+            // dd($orderUser);
+        $orders = DB::table('orders')
+            ->join('order_user', 'orders.id', '=', 'order_user.id_order')
+            ->select('orders.id', 'orders.pick_up', 'orders.address', 'orders.created_at')
             ->where('order_user.id_user', '=', $user)
             ->get();
-        $order = DB::table('orders')
-            ->select('orders.*')
-            ->where('orders.id', '=', $orderUser)
-            ->get();
+        dd($orders->id);
         $productOrders = DB::table('products_orders')
             ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
             ->join('products', 'products_orders.product_id', '=', 'products.id')
-            ->where('products_orders.order_id', '=', $orderUser)
+            ->where('products_orders.order_id', '=', 'orders->id')
             ->get();
-        // return response(json_encode([$productOrders, $order]), 200);
-        return view('Usuario.Landing.orders', compact('order', 'productOrders'));
+        dd($productOrders);
+        return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
     }
 
 }
