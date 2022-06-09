@@ -18,7 +18,7 @@
                     </div>
                     <div class="d-flex my-2 justify-content-center align-content-center">
                         <label for="" class="d-flex">Orden:</label>
-                        <select name="order-{{$key}}" class="form-select w-auto ms-2 d-flex" >
+                        <select name="order-{{$key}}" class="form-select w-auto ms-2 d-flex" id="idOrder-{{$key}}">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -58,6 +58,14 @@
             console.log(e.currentTarget);
             var formData = new FormData(e.currentTarget);
             console.log(formData);
+            for(var i = 1; i < 5; i++){
+                for(var j = 1; j < 5; j++){
+                    if($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val() && i!=j ){
+                        console.log(`image ${i} tiene mismo orden que iamgen ${j}`);
+                        
+                    }
+                }
+            }
             $.ajax({
                 type: "POST",
                 url: "{{route('publicity.store')}}",
