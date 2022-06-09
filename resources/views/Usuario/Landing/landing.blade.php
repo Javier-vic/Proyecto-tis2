@@ -121,8 +121,8 @@
 
                         </div>
                     @endforeach
-                    <div class="text-center d-md-none  sticky-margin-bottom" style="position: sticky;bottom: 0;">
-                        <button class="btn btn-danger w-50 py-4  shadow "><h4 class="m-0"><i class="fa-solid fa-basket-shopping me-2"></i>Ver mi pedido</h4></button>
+                    <div class=" d-md-none text-end sticky-margin-bottom" style="position: sticky;bottom: 0; ">
+                        <button class="btn bgColor text-white align-left shadow rounded-circle" style="width:75px;height:75px;"><h4 class="m-0"><i class="fa-solid fa-basket-shopping "></i><span id="cartQuantity3"></span></h4></button>
                     </div>
                     {{-- FIN PRODUCTOS --}}
                 </div>
@@ -142,7 +142,7 @@
 
             {{-- END CONTENIDO VACÍO --}}
             {{-- PRODUCTOS AGREGADOS --}}
-            <div id="cart" class="py-4">
+            <div id="cart" class="py-4" style="overflow-y: auto; max-height:600px;">
                 <div class="text-white mx-3 px-2">
                     <img src="https://www.papajohns.cl/static/media/ic_cart_empty.1de2c93e.svg" alt=""
                         class="img-fluid" width="500" height="350">
@@ -173,19 +173,15 @@
     {{--  --}}
     {{-- END TÚ PEDIDO --}}
     </div>
-    {{-- FOOTER --}}
-    <div class="container">
-  
-    </div>
-    {{-- END FOOTER --}}
+
 @endsection
 
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
-        $( document ).ready(function() {
-            var cart = localStorage.getItem('cart');
-            if(!cart) localStorage.setItem('cart', []);
+        $(document ).ready(function() {
+            if(localStorage.getItem('cart').length > 0) return;
+            else  {localStorage.setItem('cart', JSON.stringify([]));}  
         });
         const productsAvailable = @json($productAvailable);
 
@@ -216,6 +212,9 @@
 
                 $('#cartQuantity2').empty()
                 $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
+
+                $('#cartQuantity3').empty()
+                $('#cartQuantity3').append(`<span class="ms-2">${cart.length}</span>`)
                 //////////////////////////////////////////////// 
                 $('#cart').append(
                     `
@@ -235,6 +234,9 @@
 
                 $('#cartQuantity2').empty()
                 $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
+
+                $('#cartQuantity3').empty()
+                $('#cartQuantity3').append(`<span class="ms-2">${cart.length}</span>`)
                 //////////////////////////////////////////////// 
                 cart = cart.map(e => {
                     $("#cart").append(
@@ -320,7 +322,7 @@
                 
                     }
                     else{
-                        localStorage.setItem('cart', JSON.stringify(cart));
+                    localStorage.setItem('cart', JSON.stringify(cart));
                     renderCart();
                     }
                        

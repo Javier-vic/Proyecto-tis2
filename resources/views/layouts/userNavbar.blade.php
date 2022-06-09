@@ -80,12 +80,12 @@
             {{-- NAVBAR PARA CELULAR --}}
             <ul class="navbar-nav flex-row d-lg-none">
                 <li class="nav-item mx-3 shadow bg-white  rounded py-1">
-                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="#"><i
+                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
                             class="fa-solid fa-user me-2"></i>Ingresar</a>
                 </li>
                 <li class="nav-item mx-3 py-1">
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
-                        aria-current="page" href="/cart"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity2"></span></a>
+                        aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity2"></span></a>
 
                 </li>
             </ul>
@@ -109,7 +109,7 @@
             {{-- NAVBAR PARA DESKTOP --}}
             <ul class="navbar-nav flex-row d-lg-flex d-none">
                 <li class="nav-item mx-3 shadow bg-white  rounded">
-                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="#"><i
+                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
                             class="fa-solid fa-user me-2"></i>Ingresar</a>
                 </li>
                 <li class="nav-item mx-3 ">
@@ -178,28 +178,7 @@ const checkCart = (e) =>{
     e.preventDefault()
     
     let cartItem = localStorage.getItem('cart');
-    if(cartItem.length <= 0){
-        var toastMixin = Swal.mixin({
-            toast: true,
-            icon: 'success',
-            title: 'General Title',
-            position: 'bottom-right',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-        toastMixin.fire({
-            title: 'El carrito se encuentra vacío',
-            icon: 'error'
-        });
-    }
-    else cart = JSON.parse(cartItem);
-    
-    
+    cart = JSON.parse(cartItem);
     
     if(cart.length > 0){
         window.location.href = '/cart'

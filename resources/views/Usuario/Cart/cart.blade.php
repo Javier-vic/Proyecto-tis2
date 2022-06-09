@@ -110,7 +110,9 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
     $( document ).ready(function() {
-        fullfillCart()
+        if(localStorage.getItem('cart').length > 0) fullfillCart();
+        else  {window.location.href = "/";}
+        
     });
     
 
