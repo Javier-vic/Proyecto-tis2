@@ -176,8 +176,30 @@
 <script>
 const checkCart = (e) =>{
     e.preventDefault()
+    
     let cartItem = localStorage.getItem('cart');
-    cart = JSON.parse(cartItem);
+    if(cartItem.length <= 0){
+        var toastMixin = Swal.mixin({
+            toast: true,
+            icon: 'success',
+            title: 'General Title',
+            position: 'bottom-right',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        toastMixin.fire({
+            title: 'El carrito se encuentra vacío',
+            icon: 'error'
+        });
+    }
+    else cart = JSON.parse(cartItem);
+    
+    
     
     if(cart.length > 0){
         window.location.href = '/cart'

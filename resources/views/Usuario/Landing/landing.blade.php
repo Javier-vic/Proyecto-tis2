@@ -183,6 +183,10 @@
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
+        $( document ).ready(function() {
+            var cart = localStorage.getItem('cart');
+            if(!cart) localStorage.setItem('cart', []);
+        });
         const productsAvailable = @json($productAvailable);
 
         const deleteInCart = (id) => {
@@ -201,9 +205,10 @@
         }
         const renderCart = () => {
             var cart = localStorage.getItem('cart');
-            cart = JSON.parse(cart);
+            if(cart.length <= 0) return;
+            else cart = JSON.parse(cart);
             
-            if (cart.length <= 0 || !cart) {
+            if (cart.length <= 0 ) {
                 $("#cart").empty();
                 // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
                 $('#cartQuantity').empty()
