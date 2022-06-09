@@ -35,7 +35,7 @@ class VerifyRoles extends Middleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle($request, Closure $next, ...$guards)
     {   
         $id_role =$request->user()->id_role;
         $ruta = strtok($request->path(),'/');
