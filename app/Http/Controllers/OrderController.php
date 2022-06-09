@@ -361,16 +361,20 @@ class OrderController extends Controller
             // dd($orderUser);
         $orders = DB::table('orders')
             ->join('order_user', 'orders.id', '=', 'order_user.id_order')
-            ->select('orders.id', 'orders.pick_up', 'orders.address', 'orders.created_at')
+            ->select('orders.*')
             ->where('order_user.id_user', '=', $user)
+            // ->where('order_user.id_order', '=', $orderUser)
             ->get();
-        dd($orders->id);
+        // dd($orders);
+     
         $productOrders = DB::table('products_orders')
-            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
+            ->join('orders', 'products_orders.order_id', '=', 'orders.id')
             ->join('products', 'products_orders.product_id', '=', 'products.id')
-            ->where('products_orders.order_id', '=', 'orders->id')
+            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
+            ->where('products_orders.order_id', '=', 'orders.id')
+            // ->orderby('orders.id')
             ->get();
-        dd($productOrders);
+        // dd($productOrders);
         return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
     }
 

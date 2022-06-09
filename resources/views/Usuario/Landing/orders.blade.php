@@ -10,22 +10,38 @@
 
     <div class="bg-white order-box border border-danger rounded">
         <div>
-            <h2 class="p-3 text-danger pedidos-titulo">Mis pedidos</h2>
+            <h2 class="p-3 text-danger fw-bold">Mis pedidos</h2>
         </div>
         <div>
             @foreach ($orders as $order)
-                @foreach ($productOrders as $productorder)
-                    <div>
-                        @if ($order->pick_up = 'si')
-                            <h2>{{$order->address}}</h2>
-                        @else
-                            <h2>Retiro</h2>
-                        @endif
+                <div>                  
+                    <div class="d-inline-block">
+                        foto
+                    </div>
+                    <div class="d-inline-block">
+                        <div>
+                            @if ($order->pick_up == 'si')
+                                <h2 class="fw-bold">{{$order->address}}</h2>
+                            @else
+                                <h2 class="fw-bold">Retiro</h2>
+                            @endif
+                        </div>
+                        <div >
+                            <h6 class="d-inline-block px-1 text-muted">cantidad de productos</h6>
+                            <h6 class="d-inline-block px-1 text-muted">${{$order->total}}</h6>
+                            <h6 class="d-inline-block px-1 text-muted">{{$order->created_at}}</h6>
+                        </div>
+                        @foreach ($productOrders as $productorder)
+                            <div>
+                                <h6 class="d-inline-block px-1 text-danger fw-bold">{{$productorder->cantidad}}</h6>
+                                <h6 class="d-inline-block px-1">{{$productorder->name_product}}</h6>
+                            </div>
+                        @endforeach
                     </div>
                     <div>
-                        <h6>{{$order->created_at}}</h6>
+                        <hr style="width:95%" class="mx-auto">
                     </div>
-                @endforeach
+                </div>
             @endforeach
 
         </div>
