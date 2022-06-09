@@ -38,7 +38,17 @@ class ImageMainController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request);
+        image_main::truncate();
+        $values = $request->all();
+        for($i=1; $i<5; $i++){
+            if($request->hasFile("image-{$i}")){
+                $imageMain = new image_main();
+                $imageMain->order = $values["order-{$i}"];
+                $imageMain->route = $request->file("image-{$i}")->store('uploads','public');
+                $imageMain->save();
+            }
+        }
+        return;
     }
 
     /**

@@ -74,10 +74,9 @@ class ProductController extends Controller
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
-                $values = request()->except('_token');
                 $productData = request()->except('_token');
                 $producto = new Product;
-                $producto->stock = $values['stock'];
+                $producto->stock = $productData['stock'];
                 $producto->name_product = $productData['name_product'];
                 $producto->description = $productData['description'];
                 $producto->price = $productData['price'];
