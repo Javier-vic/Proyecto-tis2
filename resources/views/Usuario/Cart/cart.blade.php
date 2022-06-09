@@ -117,14 +117,17 @@
     function fullfillCart(){
         $("#cartContainer").empty();
         let productos = JSON.parse(localStorage.getItem('cart'));
-        if(productos.length === 0)  window.location.href = "/";
-             // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
-             $('#cartQuantity').empty()
-                $('#cartQuantity').append(`<span class="ms-2">${productos.length}</span>`)
+        if(productos.length <= 0){
+            window.location.href = "/";
+            
+        }  
+        // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
+        $('#cartQuantity').empty()
+        $('#cartQuantity').append(`<span class="ms-2">${productos.length}</span>`)
 
-                $('#cartQuantity2').empty()
-                $('#cartQuantity2').append(`<span class="ms-2">${productos.length}</span>`)
-                //////////////////////////////////////////////// 
+        $('#cartQuantity2').empty()
+        $('#cartQuantity2').append(`<span class="ms-2">${productos.length}</span>`)
+        //////////////////////////////////////////////// 
 
         productos.map(product=>{
            $('#cartContainer').append(`
@@ -183,14 +186,23 @@
             }).then(result=>{
                 if(result.isConfirmed){
                     cart = cart.filter((el) => el.id != e.id);
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: `Se eliminó ${e.name_product}`,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false
-                    })                    
+                var toastMixin = Swal.mixin({
+                    toast: true,
+                    icon: 'success',
+                    title: 'General Title',
+                    position: 'bottom-right',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                toastMixin.fire({
+                    title: 'Se eliminó '+ e.name_product,
+                    icon: 'success'
+                });                  
                     localStorage.setItem('cart', JSON.stringify(cart));
                     cartTotal()
                     fullfillCart();

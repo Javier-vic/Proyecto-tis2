@@ -115,12 +115,8 @@
                 <li class="nav-item mx-3 ">
                     <div>
                         <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
-                            aria-current="page" href="/cart"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity"></span></a>
-                 
-
+                            aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity"></span></a>
                     </div>
-                       
-
                 </li>
             </ul>
             {{-- FIN NAVBAR DESKTOP --}}
@@ -174,6 +170,38 @@
     </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @yield('js_after')
 
+<script>
+const checkCart = (e) =>{
+    e.preventDefault()
+    let cartItem = localStorage.getItem('cart');
+    cart = JSON.parse(cartItem);
+    
+    if(cart.length > 0){
+        window.location.href = '/cart'
+    }
+    else{
+        var toastMixin = Swal.mixin({
+            toast: true,
+            icon: 'success',
+            title: 'General Title',
+            position: 'bottom-right',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        toastMixin.fire({
+            title: 'El carrito se encuentra vacío',
+            icon: 'error'
+        });
+    }
+}
+
+</script>
 </html>

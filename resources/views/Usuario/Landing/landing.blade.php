@@ -202,9 +202,16 @@
         const renderCart = () => {
             var cart = localStorage.getItem('cart');
             cart = JSON.parse(cart);
-            $("#cart").empty();
-            console.log(cart.length)
-            if (cart.length === 0) {
+            
+            if (cart.length <= 0 || !cart) {
+                $("#cart").empty();
+                // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
+                $('#cartQuantity').empty()
+                $('#cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+
+                $('#cartQuantity2').empty()
+                $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
+                //////////////////////////////////////////////// 
                 $('#cart').append(
                     `
                 <div id="cart" class="py-4">
@@ -216,6 +223,7 @@
                     </div>`
                 )
             } else {
+                $("#cart").empty();
                 // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
                 $('#cartQuantity').empty()
                 $('#cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
@@ -376,7 +384,6 @@
     </script>
     <script type="text/javascript">
         const categorias = Array.from(document.querySelectorAll('.intersectionObserver'))
-        console.log(categorias)
         if (categorias) {
             var actualActivo;
             var options = {
@@ -389,9 +396,6 @@
                     actualActivo = entries[0].target.id;
                     $(`#${entries[0].target.id}Navbar`).addClass('categoriaActive')
                 }
-
-
-
             }, options);
 
             categorias.map(categoria => {
