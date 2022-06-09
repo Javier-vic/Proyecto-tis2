@@ -163,7 +163,7 @@ class RoleController extends Controller
         }
     }
 
-    public function havePermits($idrole,$permit){
+    public static function havePermits($idrole,$permit){
         $flag = DB::table('roles')
                     ->select(DB::raw('count(*)'))
                     ->join('role_permit','roles.id','=','role_permit.id_role')
