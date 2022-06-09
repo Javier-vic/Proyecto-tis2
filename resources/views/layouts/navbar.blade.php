@@ -15,9 +15,7 @@
     @yield('css_extra')
 
 </head>
-@if (RoleController::havePermits(auth()->user()->id_role,1))
-    
-@endif
+
 <body>  
     <div class="wrapper">
         <!-- Sidebar  -->
