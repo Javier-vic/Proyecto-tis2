@@ -38,7 +38,7 @@ class CategoryProductController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('mantenedores.category.index');
+        return view('Mantenedores.category.index');
     }
 
     /**

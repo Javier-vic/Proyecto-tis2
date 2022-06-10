@@ -40,7 +40,7 @@ class CategorySupplyController extends Controller
                 ->make(true);
         }
         $category_supplies = category_supply::all();
-        return view('mantenedores.category_supply.index', compact('category_supplies'));
+        return view('Mantenedores.category_supply.index', compact('category_supplies'));
     }
 
     /**

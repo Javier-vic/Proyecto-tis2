@@ -40,7 +40,7 @@ class CouponController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('mantenedores.coupon.index');
+        return view('Mantenedores.coupon.index');
     }
 
     /**

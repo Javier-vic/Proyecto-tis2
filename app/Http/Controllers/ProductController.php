@@ -46,7 +46,7 @@ class ProductController extends Controller
         $productSelected = new product();
 
 
-        return view('mantenedores.product.index', compact('category_products', 'productSelected'));
+        return view('Mantenedores.product.index', compact('category_products', 'productSelected'));
     }
 
     /**
