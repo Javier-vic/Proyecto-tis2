@@ -122,7 +122,7 @@
                         </div>
                     @endforeach
                     <div class=" d-md-none text-end sticky-margin-bottom" style="position: sticky;bottom: 0; ">
-                        <button class="btn bgColor text-white align-left shadow rounded-circle" style="width:75px;height:75px;"><h4 class="m-0"><i class="fa-solid fa-basket-shopping "></i><span id="cartQuantity3"></span></h4></button>
+                        <a href="/cart" onclick="checkCart(event)" class="btn bgColor text-white align-left shadow rounded-circle py-4 px-4" ><h4 class="m-0"><i class="fa-solid fa-basket-shopping "></i><span id="cartQuantity3"></span></h4></a>
                     </div>
                     {{-- FIN PRODUCTOS --}}
                 </div>
@@ -132,8 +132,12 @@
 
         {{-- TÚ PEDIDO --}}
         {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
-        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top"
+        <div class=" py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top shadow"
             style="width: -webkit-fill-available;">
+            <div class="row text-center py-2 px-2 m-0 mb-3 " id="continuePayment">
+                
+                
+            </div>
             <div class="rounded text-center">
                 <h5 class="text-dark  mx-auto">Tu pedido</h5>
                 <hr class="bg-dark">
@@ -294,7 +298,7 @@
                     );
                 })
             }
-
+            cartTotal()
         }
         const saveInCart = (id) => {
             var product;
@@ -311,14 +315,23 @@
                         e.cantidad++;
                         if (e.cantidad > e.stock ) {
                         e.cantidad--;
-                        Swal.fire({
-                            position: 'bottom-end',
-                            icon: 'error',
-                            title: `No hay más unidades de ${e.name_product}`,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            backdrop: false
-                    })
+                        var toastMixin = Swal.mixin({
+                        toast: true,
+                        icon: 'success',
+                        title: 'General Title',
+                        position: 'bottom-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    toastMixin.fire({
+                        title: 'No hay más stock de '+ e.name_product,
+                        icon: 'error'
+                    });
                 
                     }
                     else{
@@ -352,6 +365,19 @@
             }
 
         }
+        const cartTotal = () =>{
+        var cart = localStorage.getItem('cart');
+        var total=0;
+        products = JSON.parse(cart);
+        products.map(product=>{
+            total += product.cantidad * product.price ;
+            
+        })
+        
+        $('#continuePayment').empty()
+        $('#continuePayment').append(`<a onclick="checkCart(event)" href="/cart" class="btn bgColor text-white buttonHover m-0 text-start d-flex justify-content-between">Continuar el pago<span class="text-white">$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span></a>`)
+    }
+        
 
         $(document).ready(function() {
             renderCart();
@@ -388,6 +414,7 @@
                 return false;
             });
         });
+
     </script>
     <script type="text/javascript">
         const categorias = Array.from(document.querySelectorAll('.intersectionObserver'))

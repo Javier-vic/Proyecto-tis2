@@ -6,6 +6,9 @@ use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\landing;
 use Illuminate\Http\Request;
+use App\Models\order;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
 
 class LandingController extends Controller
 {
@@ -74,7 +77,16 @@ class LandingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $values = request()->except('_token');
+        // $productos = json_decode($values['products']);
+        dd($values);
+        $validator = Validator::make($request->all(), order::$rules, order::$messages);
+        if ($validator->passes()) {
+            dd('pase');
+        } else {
+            dd('fallé');
+        }
+        dd($values);
     }
 
     /**

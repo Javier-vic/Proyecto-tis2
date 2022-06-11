@@ -8,12 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class order extends Model
 {
     use HasFactory;
+    static $rules = [
+        'name_order'          => 'required|string',
+        'cantidad' => 'required|array|min:1',
+        'cantidad.*' => 'required|gt:0|integer',
+        'address' => 'required',
+        'mail' => 'required',
+        'number' => 'required|gt:0|integer',
+        'payment_method' => 'required'
+
+    ];
+    static $messages = [
+        'required'      => 'Este campo es obligatorio',
+        'cantidad.required' => 'Debes seleccionar al menos un producto',
+        'integer' => 'El número no puede ser decimal',
+        'gt' => 'El número debe ser mayor a 0'
+    ];
 
     public function products()
-{
-    return $this->belongsToMany(product::class,'products_orders');
+    {
+        return $this->belongsToMany(product::class, 'products_orders');
+    }
 }
-
-
-}
-
