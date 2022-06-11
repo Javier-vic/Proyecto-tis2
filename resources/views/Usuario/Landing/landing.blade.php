@@ -344,7 +344,6 @@
                 if (!flag) {
                     delete product.image_product;
                     delete product.category;
-                    delete product.category_id;
                     cart = cart.concat({
                         ...product,
                         cantidad: 1
@@ -355,7 +354,6 @@
             } else {
                 delete product.image_product;
                 delete product.category;
-                delete product.category_id;
                 product = [{
                     ...product,
                     cantidad: 1

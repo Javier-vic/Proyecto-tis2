@@ -102,7 +102,12 @@ class ProductController extends Controller
 
 
 
-        return response('No se pudo realizar el ingreso del producto.', 400);
+        return response('No se pudo realizar el ingres-
+        
+        
+        
+        
+        o del producto.', 400);
     }
 
     /**

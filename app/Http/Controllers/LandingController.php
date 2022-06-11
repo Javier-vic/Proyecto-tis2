@@ -77,16 +77,76 @@ class LandingController extends Controller
      */
     public function store(Request $request)
     {
+
+        $rules = [
+            'name_order'          => 'required|string',
+            'cantidad' => 'required|min:1',
+            'cantidad.*' => 'required',
+            'address' => 'required',
+            'mail' => 'required',
+            'number' => 'required|gt:0|integer',
+            'payment_method' => 'required'
+
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+            'cantidad.required' => 'Debes seleccionar al menos un producto',
+            'address.required' => 'Debes seleccionar el tipo de envío',
+            'payment_method.required' => 'Debes seleccionar un método de pago',
+            'integer' => 'El número no puede ser decimal',
+            'gt' => 'El número debe ser mayor a 0'
+        ];
+
         $values = request()->except('_token');
-        // $productos = json_decode($values['products']);
-        dd($values);
-        $validator = Validator::make($request->all(), order::$rules, order::$messages);
+        $productos = json_decode($values['cantidad']);
+        // dd($values);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
-            dd('pase');
+            DB::beginTransaction();
+            try {
+                $totalValue = 0;
+                $cantidades = array();
+                $values = request()->except('_token');
+                $order = new Order;
+                $order->name_order = $values['name_order'];
+                $order->mail = $values['mail'];
+                $order->number = $values['number'];
+                $order->payment_method = $values['payment_method'];
+                $order->name_order = $values['name_order'];
+                $order->order_status = 'Espera';
+                $order->pick_up = $values['pick_up'];
+                $order->address = $values['address'];
+                foreach ($productos as $product) {
+                    array_push($cantidades, $product->cantidad);
+                    $totalValue += ($product->price * $product->cantidad);
+                }
+                $order->total = $totalValue;
+                $order->save();
+
+                try {
+                    for ($i = 0; $i < sizeof($cantidades); $i++) {
+                        $order->products()->attach($productos[$i]->id, ['cantidad' => $cantidades[$i]]);
+                    }
+                    DB::connection(session()->get('database'))->commit();
+                    return response('Se ingresó la orden con exito.', 200);
+                } catch (\Throwable $th) {
+                    DB::connection(session()->get('database'))->rollBack();
+                    return response('Ocurrió un error. No se pudo crear la orden. ', 400);
+                }
+
+                // $order->products()->attach($id, ['cantidad' => $cont]);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('Ocurrió un error. No se pudo crear la orden. ', 400);
+            }
         } else {
-            dd('fallé');
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
         }
-        dd($values);
+        return response('No se pudo realizar el ingreso de la ordenFINORDER.', 400);
     }
 
     /**
