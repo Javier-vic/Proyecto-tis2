@@ -14,7 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,7 +32,7 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Auth::routes();
+// Auth::routes();
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
     //GET
@@ -69,9 +69,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::resource('category_product', CategoryProductController::class);
     Route::resource('coupon', CouponController::class);
-    Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
 });
+
+Route::resource('user', UserController::class);
 
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::resource('landing', LandingController::class);

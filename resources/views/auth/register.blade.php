@@ -1,85 +1,143 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container loginCard">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
-
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
+        <div class="row justify-content-center m-0 p-0 overflow-hidden">
+            <div class="backgroundRegister col-lg-6 m-0 p-0"></div>
+            <div class="col-lg-6 align-self-center m-0 p-0">
+                <h3 class="text-center fw-bold mb-5">Registro</h3>
+                        <form method="POST" onsubmit="createUser(event)" enctype="multipart/form-data" class="m-0 p-0">
                             @csrf
+                            <div class="row mb-3">                                
+                                <div class="col-lg-6 mx-auto">
+                                    <label for="name" class="">{{ __('Nombre') }}</label>
+                                    <input id="name" type="text" class="form-control input-modal"
+                                        name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
+                                     <span class="text-danger createmodal_error" id="name_error"></span>
+                                        
 
-                            <div class="row mb-3">
-                                <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <label for="email"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                            <div class="row mb-3">                            
+                                <div class="col-lg-6 mx-auto">
+                                    <label for="email"
+                                    class="">{{ __('Correo electrónico') }}</label>
+                                    <input id="email" type="text" class="form-control input-modal"
+                                        name="email" value="{{ old('email') }}"  autocomplete="email">
+                                        <span class="text-danger createmodal_error" id="email_error"></span>
 
-                                <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <label for="password"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                            <div class="row mb-3">                            
+                                <div class="col-lg-6 mx-auto ">
+                                    <label for="email"
+                                    class="">{{ __('Dirección') }}</label>
+                                    <input id="address" type="text" class="form-control input-modal"
+                                        name="address" value="{{ old('address') }}"  autocomplete="address">
+                                        <span class="text-danger createmodal_error" id="address_error"></span>
 
-                                <div class="col-md-6">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">  
+                                                   
+                                <div class="col-lg-6 mx-auto">
+                                    <label for="phone"
+                                    class="">{{ __('Número') }}</label> 
+                                    <div class="input-group ">
+                                        <span class="input-group-text" id="basic-addon1">+56</span>
+                                        <input id="phone" type="text" class="form-control input-modal"
+                                            name="phone" value="{{ old('phone') }}"  autocomplete="phone" aria-describedby="basic-addon1">
+                                    </div>
+                                    <span class="text-danger createmodal_error" id="phone_error"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">                              
+                                <div class="col-lg-6 mx-auto">
+                                    <label for="password"
+                                    class="">{{ __('Contraseña') }}</label>
                                     <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required autocomplete="new-password">
+                                        class="form-control input-modal" name="password"
+                                         autocomplete="new-password">
+                                         <span class="text-danger createmodal_error" id="password_error"></span>
 
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <label for="password-confirm"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control"
-                                        name="password_confirmation" required autocomplete="new-password">
+                            <div class="row mb-3">                                
+                                <div class="col-lg-6 mx-auto">
+                                    <label for="password-confirm"
+                                    class="">{{ __('Confirmar contraseña') }}</label>
+                                    <input id="password-confirm" type="password" class="form-control "
+                                        name="password_confirmation"  autocomplete="new-password">
                                 </div>
                             </div>
 
                             <div class="row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Register') }}
+                                <div class="col-md-6 mx-auto">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        {{ __('Registrar') }}
                                     </button>
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
+
+        @section('js_after')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+         // ****************************************************************************************************************
+        //MODAL DE CREAR
+        // ****************************************************************************************************************
+        const createUser = (e) => {
+            e.preventDefault();
+            var formData = new FormData(e.currentTarget);
+            var url = '{{ route('user.store') }}';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response, jqXHR) {
+                    //QUE HACER EN SUCCESS...
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var text = jqXHR.responseJSON;
+                    console.log(text)
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: "No se pudo realizar el ingreso del producto.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if (text) {
+                        $.each(text.errors, function(key, item) {
+                            $("#" + key + "_error").append("<span class='text-danger'>" +
+                                item + "</span>")
+                            $(`#${key}`).addClass('is-invalid');
+                        });
+                    }
+                    //////////////////////////////////////
+
+                }
+
+            });
+        }
+        </script>
+        @endsection
+   
 @endsection
