@@ -62,6 +62,12 @@
         .sticky-margin-bottom{
             bottom: 1rem !important;
         }
+        .paymentMethodHover:hover{
+            border: 1px solid #9a9a9a;
+        }
+        .paymentMethodBorder{
+            border: 1px solid #3bda70;
+        }
 
     </style>
 </head>

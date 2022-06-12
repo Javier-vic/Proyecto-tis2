@@ -373,7 +373,7 @@
         })
         
         $('#continuePayment').empty()
-        $('#continuePayment').append(`<a onclick="checkCart(event)" href="/cart" class="btn bgColor text-white buttonHover m-0 text-start d-flex justify-content-between">Continuar el pago<span class="text-white">$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span></a>`)
+        $('#continuePayment').append(`<a onclick="checkCart(event)" href="/cart" class="btn bgColor text-white buttonHover m-0 text-start d-flex justify-content-between">Ir a pagar<span class="text-white">$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span></a>`)
     }
         
 

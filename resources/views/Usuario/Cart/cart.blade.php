@@ -99,9 +99,13 @@
                 <h3 class="m-0">Método de pago</h3c>
                 <hr>
                 <div id="payment_methodContainer" class="mb-3">
-                    <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center" onclick="paymentMethod(event)" id="efectivo_method">
+                    <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2" onclick="paymentMethod(event)" id="efectivo_method">
                         <label class="" for="efectivo_method">Efectivo</label>
-                         <img class=" img-fluid" style="width:50px;height:50px;"src="https://www.citypng.com/public/uploads/preview/money-cash-black-icon-transparent-png-11636944062qw6ybhhwy8.png" alt="Efectivo">
+                         <img class=" img-fluid" style="width:50px;height:50px;" src="{{asset("storage/images/cashicon.svg")}}" alt="Efectivo">
+                    </a>
+                    <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover" onclick="paymentMethod(event)" id="prepago_method">
+                        <label class="" for="prepago_method">Prepago</label>
+                         <img class=" img-fluid" style="width:50px;height:50px;"src="{{asset("storage/images/cardicon.svg")}}" alt="Efectivo">
                     </a>
                 </div>
                 <input type="text" hidden id="paymentMethod" name="payment_method">
@@ -304,8 +308,12 @@
       
         //DEFINE EL MÉTODO DE PAGO 
         const paymentMethod = (e) =>{
+            $('.paymentMethodBorder').removeClass('paymentMethodBorder')
             e.preventDefault()
            $('#paymentMethod').attr('value',e.target.innerText)
+           $(`#${e.target.id}`).addClass('paymentMethodBorder')
+
+           console.log(e.target.id)
         }
         // ****************************************************************************************************************
         //CREAR ORDEN
