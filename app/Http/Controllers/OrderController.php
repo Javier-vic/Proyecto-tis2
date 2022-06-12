@@ -474,4 +474,33 @@ class OrderController extends Controller
         $order->delete();
         return view('Mantenedores.order.index');
     }
+
+
+    public function orderbyuser()
+    {
+        $user = auth()->user()->id;
+        // $orderUser = DB::table('order_user')
+        //     ->select('order_user.id_order')
+        //     ->where('order_user.id_user', '=', $user)
+        //     ->get();
+            // dd($orderUser);
+        $orders = DB::table('orders')
+            ->join('order_user', 'orders.id', '=', 'order_user.id_order')
+            ->select('orders.*')
+            ->where('order_user.id_user', '=', $user)
+            // ->where('order_user.id_order', '=', $orderUser)
+            ->get();
+        // dd($orders);
+     
+        $productOrders = DB::table('products_orders')
+            ->join('orders', 'products_orders.order_id', '=', 'orders.id')
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
+            ->where('products_orders.order_id', '=', 'orders.id')
+            // ->orderby('orders.id')
+            ->get();
+        // dd($productOrders);
+        return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
+    }
+
 }
