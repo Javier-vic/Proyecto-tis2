@@ -49,6 +49,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+    Route::get('/order/GetSaleMonth', [\App\Http\Controllers\OrderController::class, 'GetSaleMonth'])->name('order.GetSaleMonth');
     Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     //POST

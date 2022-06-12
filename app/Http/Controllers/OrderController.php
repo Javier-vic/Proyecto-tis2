@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Http\Controllers\productController;
 use App\Models\order;
 use App\Models\products_orders;
@@ -433,17 +433,45 @@ class OrderController extends Controller
         return response(json_encode([$productOrders, $order]), 200);
     }
 
+    public function GetSaleMonth (request $request){
+
+        $mes = Carbon::now();
+        $mes = $mes->month;
+        $saleMonth = DB::table('orders')
+        ->select(DB::raw('sum(orders.total) as `ganancias` , count(orders.id) as `data`' ))
+        ->whereMonth( 'orders.created_at' ,'=', $mes )
+        ->get();
+
+        $countProducts = DB::table('Products')
+        ->select(DB::raw('count(products.id) as `countproducts`'))
+        ->where('products.stock', '=', 0)
+        ->get();
+        
+        $countSupplies = DB::table('supplies')
+        ->select(DB::raw('count(supplies.id) as `countsupplies`'))
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->get();
+        
+
+        return response::json(array(
+            'countSupplies' => $countSupplies ,
+            'countProducts' => $countProducts ,
+            'saleMonth' => $saleMonth,
+
+        ),200);
+    }
+
     public function getMonthOrder(request $request){
 
         $sales = DB::table('orders')
-        ->select(DB::raw('sum(orders.total) as `data`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+        ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
         ->whereyear('created_at', $request->year)
         ->groupby('year','month')
         ->get();
+
+     
        
-
-
-
+        
         return response($sales,200);
     }
 
@@ -455,16 +483,16 @@ class OrderController extends Controller
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
         ->join('products','products_orders.product_id','products.id')
         ->groupBy('products_orders.product_id', 'products.name_product')
-        ->limit(3)
         ->orderBy('cantida','DESC')
         ->get();    
 
-    
-
+      
         return response($bestseller,200);
    
         
     }
+
+
 
     public function destroy(order $order)
     {
@@ -474,6 +502,7 @@ class OrderController extends Controller
         $order->delete();
         return view('Mantenedores.order.index');
     }
+
 
 
     public function orderbyuser()
@@ -503,4 +532,5 @@ class OrderController extends Controller
         return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
     }
 
+    
 }
