@@ -14,9 +14,12 @@
         </div>
         <div>
             @foreach ($orders as $order)
+                
+
                 <div>                  
                     <div class="d-inline-block">
                         foto
+                        <img src="{{ asset('storage') . '/' . $product->image_product }}" class="img-fluid rounded object-fit-cover " style="height: 239px;object-fit: cover;" />
                     </div>
                     <div class="d-inline-block">
                         <div>
@@ -32,16 +35,19 @@
                             <h6 class="d-inline-block px-1 text-muted">{{$order->created_at}}</h6>
                         </div>
                         @foreach ($productOrders as $productorder)
+                            @if ($productorder->order_id == $order->id )
                             <div>
                                 <h6 class="d-inline-block px-1 text-danger fw-bold">{{$productorder->cantidad}}</h6>
                                 <h6 class="d-inline-block px-1">{{$productorder->name_product}}</h6>
                             </div>
+                            @endif
                         @endforeach
+                        
                     </div>
                     <div>
                         <hr style="width:95%" class="mx-auto">
                     </div>
-                </div>
+                </div>               
             @endforeach
 
         </div>
