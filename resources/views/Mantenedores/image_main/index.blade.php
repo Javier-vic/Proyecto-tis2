@@ -5,27 +5,25 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        {{sizeof($images)}}
-    </div>
+
     <form onsubmit="submitImages(event);" method="POST" id="formSubmitImages" enctype="multipart/form-data">
         @csrf
         <div class="row">
             @foreach ($images as $key=>$image)
                 <div class="col-12 col-md-12 col-xl-6 my-2">
                     <div class="text-center">
-                        <img src="{{ asset('storage') . '/' . $image->route }}" alt="">
+                        <img src="{{ asset('storage') . '/' . $image->route }}" width="500px" class="img-fluid" alt="">
                     </div>
                     <div class="d-flex my-2 justify-content-center align-content-center">
                         <label for="" class="d-flex">Orden:</label>
-                        <select name="order-{{$key}}" class="form-select w-auto ms-2 d-flex" id="idOrder-{{$key}}">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                        <select name="order-{{$key+1}}" class="form-select w-auto ms-2 d-flex" id="idOrder-{{$key+1}}">
+                            <option value="1" {{$image->order == 1 ? 'selected': ''}}>1</option>
+                            <option value="2" {{$image->order == 2 ? 'selected': ''}}>2</option>
+                            <option value="3" {{$image->order == 3 ? 'selected': ''}}>3</option>
+                            <option value="4" {{$image->order == 4 ? 'selected': ''}}>4</option>
                         </select>
                     </div>
-                    <input type="file" class="form-control" name="image-{{$key}}">
+                    <input type="file" class="form-control" name="image-{{$key+1}}">
                 </div>  
             @endforeach
             @for ($i = 0; $i < 4-sizeof($images); $i++)
@@ -39,7 +37,7 @@
                             <option value="4">4</option>
                         </select>
                     </div>
-                    <input type="file" class="form-control" name="image-{{$i+1+sizeof($images)}}">
+                    <input type="file" class="form-control" name="image-{{$i+1+sizeof($images)}}" id="idImage-{{$i+1+sizeof($images)}}">
                 </div>    
             @endfor
         </div>
@@ -62,7 +60,7 @@
                 for(var j = 1; j < 5; j++){
                     if($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val() && i!=j ){
                         console.log(`image ${i} tiene mismo orden que iamgen ${j}`);
-                        
+                        return;
                     }
                 }
             }
@@ -73,7 +71,7 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log(response);  
+                    location.reload();
                 }
             });
             

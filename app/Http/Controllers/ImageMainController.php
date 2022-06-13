@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\image_main;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class ImageMainController extends Controller
     public function index()
     {
         //
-        $images = image_main::all();
+        $images = image_main::orderBy('order')->get();
         return view('Mantenedores.image_main.index',['images'=>$images]);
     }
 
@@ -38,10 +39,18 @@ class ImageMainController extends Controller
     public function store(Request $request)
     {
         //
-        image_main::truncate();
+        //image_main::truncate();
         $values = $request->all();
         for($i=1; $i<5; $i++){
-            if($request->hasFile("image-{$i}")){
+            if(($request->hasFile("image-{$i}")) && (image_main::where('order',$values["order-{$i}"])->first()==null)){
+                $imageMain = new image_main();
+                $imageMain->order = $values["order-{$i}"];
+                $imageMain->route = $request->file("image-{$i}")->store('uploads','public');
+                $imageMain->save();
+            }else if(($request->hasFile("image-{$i}")) && (image_main::where('order',$values["order-{$i}"])->first()!=null)){
+                $oldImage = image_main::where('order',$values["order-{$i}"])->first();
+                Storage::delete('public/' . $oldImage->image);
+                $oldImage->delete();    
                 $imageMain = new image_main();
                 $imageMain->order = $values["order-{$i}"];
                 $imageMain->route = $request->file("image-{$i}")->store('uploads','public');
