@@ -12,6 +12,9 @@
             color: rgb(254, 0, 0) !important;
 
         }
+        .linkActive{
+            color: rgb(254, 0, 0) !important;
+        }
 
         .buttonHover:hover {
             background: rgb(158, 0, 0) !important;
@@ -45,8 +48,25 @@
 
         .comment {
             width: 100%;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             margin: 10px;
+        }
+
+        .bgColor {
+            background-color: #FD1515;
+        }
+
+        .sticky-margin-top {
+            top: 1rem !important;
+        }
+        .sticky-margin-bottom{
+            bottom: 1rem !important;
+        }
+        .paymentMethodHover:hover{
+            border: 1px solid #9a9a9a;
+        }
+        .paymentMethodBorder{
+            border: 1px solid #3bda70;
         }
 
     </style>
@@ -62,11 +82,26 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between bg-secondary p-2 bg-opacity-10 rounded "
+
+            {{-- NAVBAR PARA CELULAR --}}
+            <ul class="navbar-nav flex-row d-lg-none">
+                <li class="nav-item mx-3 shadow bg-white  rounded py-1">
+                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
+                            class="fa-solid fa-user me-2"></i>Ingresar</a>
+                </li>
+                <li class="nav-item mx-3 py-1">
+                    <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
+                        aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity2"></span></a>
+
+                </li>
+            </ul>
+            {{-- FIN NAVBAR CELULAR --}}
+            {{-- CONTENIDO CENTRAL NAVBAR --}}
+            <div class="collapse navbar-collapse justify-content-between shadow bg-white p-2 rounded mt-2"
                 id="navbarNav">
                 <ul class="navbar-nav p-1 ">
                     <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
+                        <a class="nav-link fw-bold linkHover {{ request()->is('/') ? ' linkActive' : '' }}" aria-current="page" href="/"><i
                                 class="fa-solid fa-utensils me-2"></i>Menú</a>
                     </li>
                     <li class="nav-item mx-3 ">
@@ -79,23 +114,104 @@
                 </ul>
 
             </div>
-            <ul class="navbar-nav flex-row-reverse flex-lg-row ">
-                <li class="nav-item mx-3">
-                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
+            {{-- FIN CONTENIDO CENTARL --}}
+            {{-- NAVBAR PARA DESKTOP --}}
+            <ul class="navbar-nav flex-row d-lg-flex d-none">
+                <li class="nav-item mx-3 shadow bg-white  rounded">
+                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
                             class="fa-solid fa-user me-2"></i>Ingresar</a>
                 </li>
                 <li class="nav-item mx-3 ">
-                    <a class="nav-link fw-bold px-3  bg-danger text-white d-inline d-lg-block buttonHover"
-                        aria-current="page" href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-
+                    <div>
+                        <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
+                            aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity"></span></a>
+                    </div>
                 </li>
             </ul>
-
+            {{-- FIN NAVBAR DESKTOP --}}
         </div>
     </nav>
     <div class="container-lg container-fluid">@yield('content')</div>
+    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top container mx-auto">
+        <div class="col mb-3">
+            <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
+                <img src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
+                    alt="Ramen dashi" width="200" height="200">
+            </a>
+        </div>
+
+        <div class="col mb-3">
+
+        </div>
+
+        <div class="col mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+            </ul>
+        </div>
+
+        <div class="col mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+            </ul>
+        </div>
+
+        <div class="col mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Home</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+            </ul>
+        </div>
+    </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @yield('js_after')
 
+<script>
+const checkCart = (e) =>{
+    e.preventDefault()
+    
+    let cartItem = localStorage.getItem('cart');
+    cart = JSON.parse(cartItem);
+    
+    if(cart.length > 0){
+        window.location.href = '/cart'
+    }
+    else{
+        var toastMixin = Swal.mixin({
+            toast: true,
+            icon: 'success',
+            title: 'General Title',
+            position: 'bottom-right',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        toastMixin.fire({
+            title: 'El carrito se encuentra vacío',
+            icon: 'error'
+        });
+    }
+}
+
+</script>
 </html>

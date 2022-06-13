@@ -62,11 +62,12 @@ class CategoryProductController extends Controller
 
 
         $rules = [
-            'name'          => 'required|string',
+            'name'          => 'required|string|regex:/^[A-Za-z0-9 ]+$/',
         ];
 
         $messages = [
             'required'      => 'Este campo es obligatorio',
+            'name.regex' => 'No se permiten caracteres especiales'
         ];
 
 

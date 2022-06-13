@@ -7,13 +7,14 @@
 
         <div class="col">
 
-            <form action="{{ url('/order') }}" method="POST" entype="multipart/form-data">
+            <form onsubmit="createOrder(event)" method="POST" entype="multipart/form-data">
                 @csrf
 
                 <div class="mb-4">
                     <label for="name_order" class="form-label">Nombre cliente :</label>
-                    <input type="text" class="form-control" value="{{ isset($order->name_order) ? $order->name_order : '' }}"
-                        id="name_order" name="name_order" aria-describedby="name_product_help">
+                    <input type="text" class="form-control input-modal" value="{{ isset($order->name_order) ? $order->name_order : '' }}"
+                        id="name_order" name="name_order" aria-describedby="name_product_help" >
+                    <span class="createmodal_error" id="name_order_errorCREATEMODAL"></span>
                 </div>
 
 
@@ -44,8 +45,9 @@
 
                 <div class="mb-4 entradas">
                     <label for="comment" class="form-label">Direccion :</label>
-                    <input type="text" class="form-control " value="{{ isset($order->address) ? $order->address : '' }}"
-                        class="form-control" id="address" name="address">
+                    <input type="text" class="form-control input-modal" value="{{ isset($order->address) ? $order->address : '' }}"
+                        class="form-control" id="address" name="address" >
+                        <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
                 </div>
 
 
@@ -70,8 +72,11 @@
                         class="form-control" id="comment" name="comment">
                 </div>
 
-
-                <div id="listaProductos" class="row">
+                <div class="mt-5">
+                    <h3>Productos disponibles</h3>
+                    <h2 class="createmodal_error" id="cantidad_errorCREATEMODAL"></h2>
+                    <div id="listaProductos" class="row">
+                </div>
 
 
                 </div>
@@ -88,18 +93,118 @@
 @endsection
 
 @section('js_after')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
+
+
+
             $("#mi-select").change(function() {
                 if ($(this).val() == 'si') {
-
                     $('.entradas').removeClass('d-none');
+                    $('#address').removeClass('is-valid');
+                    $('#address').val('');
+
+
                 } else {
+                   
                     $('.entradas').addClass('d-none');
+                    $('#address').val('Sin direccion');
                 }
 
             });
-        });
+
+           // ****************************************************************************************************************
+        //MODAL DE CREAR
+        // ****************************************************************************************************************
+        const createOrder = (e) => {
+            e.preventDefault();
+ 
+                var formData = new FormData(e.currentTarget);
+            var url = '{{ route('order.store') }}';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response, jqXHR) {
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: 'Se ingresó la orden correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto: false,
+                    })
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    // $("input-modal").removeClass('is-invalid');
+                    // $("input-modal").removeClass('is-valid');
+                    // $(".createmodal_error").empty()
+                    //////////////////////////////////////
+                    $('#agregarProducto').modal('hide');
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if(jqXHR.responseJSON.errors){
+                        var text = jqXHR.responseJSON.errors;
+
+                    }
+                    if(jqXHR.responseJSON.errors2){
+                        var text2 = jqXHR.responseJSON.errors2;
+                    }
+                    
+                    console.log(text2)
+                    console.log(text)
+                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                    $(".createmodal_error").empty()
+                    $(".input-modal").addClass('is-valid')
+                    $(".input-modal").removeClass('is-invalid')
+                    //////////////////////////////////////////
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'error',
+                        title: "Ocurrió un error. Verifica los campos.",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false
+                    })
+                    //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if (text) {
+                        $.each(text, function(key, item) {
+                            const index = key.lastIndexOf('.');
+                            const after = key.slice(index + 1);
+                            
+                            $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
+                                item + "</span>")
+                            $("#" + after + "errorCREATEMODAL").append("<span class='text-danger'>" +
+                            item + "</span>")
+
+                            $(`#${key}`).addClass('is-invalid');
+                            $(`#valor${after}`).addClass('is-invalid');
+            
+                        });
+                    }
+
+                    if(text2){
+                        $.each(text2,function(key,item){
+                           if($(`#valor${item.id}`).val() > item.stock){
+                               $(`#valor${item.id}`).addClass('is-invalid')
+                               $("#" + item.id + "errorCREATEMODAL").append("<span class='text-danger'>" +
+                            'No hay stock suficiente.' + "</span>")
+                           }
+                        })
+                    }
+                    //////////////////////////////////////
+
+                }
+
+            });
+
+        
+        }
+        //****************************************************************************************************************
 
         // mostrar productos y orden
 
@@ -117,10 +222,11 @@
                         <div>
                             <h5 class="card-title">${productSelected.name_product}</h5>
                             <p class="card-text">${productSelected.description}</p>
+                            <span>Cantidad disponible: ${productSelected.stock}</span>
                             <div>
                                 <h4 class="pt-2 ">${productSelected.price}</h4>
-                                <input type="number" type="number" class="form-control d-none" min="1" value = "${productSelected.cantidad}" max = "${productSelected.stock}" id="valor${productSelected.id}"  >
-                                
+                                <input type="text" class="form-control d-none input-modal" value = "${productSelected.cantidad}" id="valor${productSelected.id}" >
+                                <span class="createmodal_error createmodal_error_product" id="${productSelected.id}errorCREATEMODAL"></span>
                                 <div class="d-grid gap-2 col-12 my-2">
                                  
                                     <button id = "bottonproduct${productSelected.id}" class="btn btn-success onselect " type="button"><i class="fa-solid fa-plus"></i>Agregar producto</button>
@@ -151,15 +257,12 @@
                     $(`#valor${productSelected.id}`).removeClass(`d-none`);
                     $(`#bottonproduct${productSelected.id}`).removeClass(`onselect`);
                     $(`#bottonproduct${productSelected.id}`).removeClass(`btn-success`);
+                    $(`#errorvalor${productSelected.id}`).removeClass('d-none')
+                    $(`#valor${productSelected.id}`).val('')
                     $(`#bottonproduct${productSelected.id}`).addClass('btn-danger');
                     $(`#valor${productSelected.id}`).attr('name', `cantidad[${productSelected.id}]`);
                     $(`#bottonproduct${productSelected.id}`).html(
                         '<i class="fa-solid fa-trash"></i>  Eliminar Producto');
-
-
-
-
-                    console.log('agregado')
 
                 } else {
                     $(`#valor${productSelected.id}`).addClass(`d-none`);
@@ -167,11 +270,10 @@
                     $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                     $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                     $(`#valor${productSelected.id}`).removeAttr('name');
+                     $(`#errorvalor${productSelected.id}`).addClass('d-none')
                     $(`#bottonproduct${productSelected.id}`).html(
                         '<i class="fa-solid fa-plus"></i> Agregar producto');
-
-
-                    console.log('eliminado')
+                        $('.createmodal_error_product').empty();
                 }
 
             });
@@ -179,5 +281,7 @@
 
 
         })
+
+
     </script>
 @endsection

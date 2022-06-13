@@ -1,6 +1,8 @@
 @extends('layouts.navbar')
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 @endsection
 
 @section('titlePage')
@@ -8,24 +10,11 @@
 @endsection
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <div class="container ">
-        <div class="row">
-            <div class="col-md justify-content-md-end justify-content-center  d-flex align-self-center col-xs-12">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarProducto">
-                    Agregar producto
-                </button>
-            </div>
-            <div class="col-md justify-content-center justify-content-md-start d-flex align-self-center col-xs-12">
+    <div class="container-fluid ">
+            <div class="justify-content-center">
                 <div class="py-4 fs-5">Cantidad de productos: <span id=number></span></div>
             </div>
-        </div>
-    </div>
-    <div>@include('Mantenedores.product.modal.create')</div>
-    <div>@include('Mantenedores.product.modal.show')</div>
-    <div>@include('Mantenedores.product.modal.edit')</div>
-
-
-    <table id="myTable" class="responsive display nowrap" style="width: 100%;">
+            <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-secondary text-white">
             <tr class="text-center">
                 <th class="py-2" style="width:10%">Nombre producto</th>
@@ -34,12 +23,25 @@
             </tr>
         </thead>
     </table>
+    </div>
+    <div>@include('Mantenedores.product.modal.create')</div>
+    <div>@include('Mantenedores.product.modal.show')</div>
+    <div>@include('Mantenedores.product.modal.edit')</div>
+
+
+   
 @endsection
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script type ="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -59,11 +61,46 @@
             language: {
                 url: "{{ asset('js/language.json') }}"
             },
-
+            dom: 'Bfrtip',
             ajax: {
                 url: "{{ route('product.index') }}",
                 type: 'GET',
             },
+            buttons: [
+                {
+                        text: 'Agregar producto',
+                        className: 'btn btn-primary mb-2',
+                        action: function ( e, dt, node, config ) {
+                            $('#agregarProducto').modal('show');
+
+                        }
+                    },
+                {
+                        extend: 'pdf',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: [0,1]
+                        },
+                        titleAttr: 'Exportar a PDF',
+                        className: 'btn btn-danger mb-2',
+                        text: '<i class="fa fa-file-excel"></i> PDF'
+
+                    },
+                    {
+                        extend: 'excel',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: [0,1]
+                        },
+                        titleAttr: 'Exportar a PDF',
+                        className: 'btn btn-success mb-2',
+                        text: '<i class="fa fa-file-excel"></i> Excel'
+
+                    }
+
+                ],
             // language: {
             //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
             // },
@@ -86,7 +123,7 @@
                 },
             ],
             initComplete: function(settings, json) {
-
+                $('.dt-button').removeClass('dt-button')
                 document.getElementById("number").innerHTML = table.data().count();
             },
             select: true
@@ -129,6 +166,7 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
+                    console.log(text)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
@@ -145,6 +183,7 @@
                     //AGREGA LAS CLASES Y ELEMENTOS DE INVALID
                     if (text) {
                         $.each(text.errors, function(key, item) {
+
                             $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
                                 item + "</span>")
                             $(`#${key}`).addClass('is-invalid');
@@ -203,7 +242,7 @@
             var url = '{{ route('product.update', ':product') }}';
             url = url.replace(':product', id);
             Swal.fire({
-                title: '¿Estás seguro de editar este producto',
+                title: '¿Estás seguro de editar este producto?',
                 text: "No se puede revertir.",
                 icon: 'warning',
                 showCancelButton: true,

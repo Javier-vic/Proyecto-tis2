@@ -244,7 +244,6 @@
         //ELIMINAR UNA CATEGORÍA
         // ****************************************************************************************************************
         const deleteCategory = (id) => {
-            console.log('aca')
             Swal.fire({
                 title: '¿Estás seguro de eliminar esta categoría?',
                 text: "No se puede revertir.",
@@ -255,9 +254,21 @@
                 confirmButtonText: 'Si, Borrar!',
                 cancelButtonText: 'Cancelar',
             }).then((result) => {
+               
+                if (result.isConfirmed) {
+                        Swal.fire({
+                title: ' ¿Desea continuar?',
+                text: "Borrar esta categoría eliminará todos los productos asociados a esta.",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Borrar!',
+                cancelButtonText: 'Cancelar',
+            }).then(result=>{
                 url = '{{ route('category_product.destroy', ':category_product') }}';
                 url = url.replace(':category_product', id);
-                if (result.isConfirmed) {
+                if(result.isConfirmed){
                     $.ajax({
                         type: "DELETE",
                         url: url,
@@ -277,6 +288,9 @@
 
                         }
                     });
+                }
+            })
+                 
                 }
 
             })

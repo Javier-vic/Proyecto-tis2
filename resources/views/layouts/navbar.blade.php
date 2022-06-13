@@ -107,16 +107,15 @@
 
         <!-- Page Content  -->
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
-                        <i class="fas fa-align-left text-white"></i>
-                    </button>   
-                    @yield('titlePage')                
-                    <div style="visibility:hidden">.</div>                 
-                </div> 
-                <div class="" aria-labelledby="navbarDropdown">
-                    <a class="btn btn-danger d-flex " style="width: max-content;" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light row">
+                <div class="col d-flex justify-content-between">
+                    <div col-3  >
+                        <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
+                            <i class="fas fa-align-left text-white"></i>
+                        </button>
+                    </div>  
+                    <div class="d-none d-sm-block col text-center">@yield('titlePage')</div>
+                    <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Cerrar sesion
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST"

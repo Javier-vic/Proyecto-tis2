@@ -32,11 +32,11 @@
                   <thead>
                     <tr>
 
-                        <th>producto</th>
+                        <th>Producto</th>
                     
                         <th>Cantidad</th>
 
-                        <th>subtotal</th>
+                        <th>Subtotal</th>
                     
                         <th></th>
                       </tr>

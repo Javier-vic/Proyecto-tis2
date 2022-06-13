@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategorySupplyController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ImageMainController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,11 +27,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [LandingController::class,'index']);
-Route::get('/login',function(){ return view('auth.login');})->name('login');
+Route::get('/', [LandingController::class, 'index']);
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
 
-Auth::routes();
+// Auth::routes();
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
     //GET
@@ -49,7 +52,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
-    Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
@@ -67,14 +70,20 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::resource('category_product', CategoryProductController::class);
     Route::resource('coupon', CouponController::class);
-    Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
     Route::resource('publicity',ImageMainController::class);
 });
 
+Route::resource('user', UserController::class);
+
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::resource('landing', LandingController::class);
+Route::resource('cart', CartController::class);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // RUTAS DE ORDENES
+Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
+Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+
 // RUTA DE ROLES

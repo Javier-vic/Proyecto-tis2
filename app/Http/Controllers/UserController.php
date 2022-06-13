@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
+use App\Models\user;
 
 class UserController extends Controller
 {
@@ -13,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return view('auth.register');
     }
 
     /**
@@ -34,7 +38,40 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validator = Validator::make($request->all(), user::$rules, user::$messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $values = request()->except('_token');
+                $user = new user;
+                $user->name = $values['name'];
+                $user->email = $values['email'];
+                $user->password = crypt(5, $values['password']);
+                $user->id_role = '1'; //ROL DE CLIENTE 
+                $user->address = $values['address'];
+                $user->phone = $values['phone'];
+                if ($values['password'] != $values['password_confirmation']) {
+                    return Response::json(array(
+                        'success' => false,
+                        'errors' => ['password' => 'Las contraseñas no coinciden'],
+
+                    ), 400);
+                }
+                $user->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se creó su cuenta con exito.', 200);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return response('Ocurrió un error en el registro', 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
+        }
     }
 
     /**
