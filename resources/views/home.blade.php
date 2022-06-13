@@ -1,6 +1,7 @@
 @extends('layouts.navbar')
 
 @section('content')
+
     <div class = "row my-4">
 
         <div class="  ms-5 col-md-2 bg-white border  shadow  rounded-3" style="height = 1000px">
@@ -44,6 +45,7 @@
     </div>
 
     <div class="row">
+
         <div class="col-md-5 ms-5 rounded shadow bg-white border rounded-3">
             <h5 class="ms-3 mt-3">Productos mas vendido</h5>
             <canvas width = 400px heigh= 400px id="myChart" ></canvas>
@@ -54,6 +56,7 @@
 
 
             <select name="" class="form-select form-select-sm " style ="width = 10px" id="selectYear">
+                
                 <option selected>Seleccione un año</option>
                 <option value = "2022">2022</option>
             

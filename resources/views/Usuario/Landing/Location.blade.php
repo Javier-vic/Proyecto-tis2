@@ -8,19 +8,19 @@
 }
 </style>
     <div class="container row">
-        <div class="col-6 mb-6">
-            <h1 class="mt-5">Ubicación</h1>
-            <p class="h4 mt-3">Chillan</p>
+        <div class="col-md-6 col-xs-12 mb-6">
+            <h1 class="mt-5 ">Ubicación</h1>
 
-            <div class="row mt-4">
-                <div class="col-1"><i class="fa-solid fa-location-dot fa-3x"></i></div>
-                <div class="col-11 ms-0" style="margin-left:-100px padding-left: 20px;">
-                    <p style="margin-bottom: 5px">callefalsa 123</p>
-                    <p>Chillan, Chile</p>
+            <div class="row mt-5">
+                <div class="col-md-12" style="margin-left:-100px padding-left: 20px;">
+                    <p id="address" class = "h5"></p>
+                    <p class="h5 mt-4"><i class="fa-solid fa-clock fa-xl me-2"></i> 12:30 a 15:25 - 16:30 a 20:30 </p>
+                    <p class="h5 mt-4"><i class="fa-solid fa-calendar fa-xl " style ="margin-left: 2px; margin-right: 12px"></i>  Lunes a Sábado </p>
                 </div>
             </div>
         </div>
-        <div class="col-6 my-5" id="map" >
+
+        <div class="col-6 col-xs-6 my-5 ms-5" id="map" >
         </div>
     </div>
  
@@ -119,7 +119,7 @@
 
                     window.initMap = initMap;
                         
-                    
+                    $('#address').html(`<i class="fa-solid fa-location-dot fa-xl me-3" style ="margin-left: 3px; margin-right: 10px"></i>${response[0].direccion}`  );   
 
                 }
                 

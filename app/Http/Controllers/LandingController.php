@@ -74,7 +74,7 @@ class LandingController extends Controller
     public function getLocation()
     {
         $location = DB::table('maps' )
-        ->select('maps.latitud','maps.longitud')
+        ->select('maps.latitud','maps.longitud','maps.direccion')
         ->where('maps.id', 1)
         ->get();    
 
