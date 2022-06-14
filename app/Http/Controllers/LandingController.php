@@ -101,7 +101,6 @@ class LandingController extends Controller
 
         $values = request()->except('_token');
         $productos = json_decode($values['cantidad']);
-        // dd($values);
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
             DB::beginTransaction();
@@ -131,10 +130,12 @@ class LandingController extends Controller
                     }
                 }
                 //VALIDA EL CUPÓN
-                if ($values['coupon']) {
+                if ($values['coupon'] != null) {
                     $couponToCheck = coupon::where('code', $values['coupon'])->first();
-                    $newQuantity = $couponToCheck->quantity - 1;
-                    if ($couponToCheck && $newQuantity >= 0 && $couponToCheck->emited < $couponToCheck->caducity) {
+                    if ($couponToCheck) $newQuantity = $couponToCheck->quantity - 1;
+
+
+                    if ($couponToCheck != null && $newQuantity >= 0 && $couponToCheck->emited < $couponToCheck->caducity) {
                         $order->total = $totalValue * (1 - $couponToCheck->percentage / 100);
                         $couponToCheck->quantity = $newQuantity;
                         $couponToCheck->save();
@@ -142,10 +143,12 @@ class LandingController extends Controller
                         return Response::json(array(
                             'success' => false,
                             'coupon' => false,
-                            'errors' => 'Ocurrió un error con el cupón'
+                            'message' => 'Ocurrió un error con el cupón',
 
                         ), 400);
                     }
+                } else {
+                    $order->total = $totalValue;
                 }
 
                 $order->save();
@@ -160,7 +163,8 @@ class LandingController extends Controller
                         return Response::json(array(
                             'success' => false,
                             'stock' => false,
-                            'errors' => $checkStock
+                            'errors' => $checkStock,
+                            'message' => 'Ocurrió un problema con el stock'
 
                         ), 400);
                     }
@@ -175,16 +179,24 @@ class LandingController extends Controller
                 // $order->products()->attach($id, ['cantidad' => $cont]);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
-                return response('Ocurrió un error. No se pudo crear la orden. ', 400);
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. No se generó la compra'
+
+                ), 400);
             }
         } else {
             return Response::json(array(
                 'success' => false,
-                'errors' => $validator->getMessageBag()->toArray()
-
+                'errors' => $validator->getMessageBag()->toArray(),
+                'message' => 'Faltan campos por completar',
             ), 400);
         }
-        return response('No se pudo realizar el ingreso de la orden', 400);
+        return Response::json(array(
+            'success' => false,
+            'message' => 'Ocurrió un error. No se generó la compra'
+
+        ), 400);
     }
 
     /**
@@ -259,6 +271,5 @@ class LandingController extends Controller
 
             ), 400);
         }
-        dd($couponToCheck);
     }
 }

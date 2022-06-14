@@ -128,7 +128,6 @@
                     <input type="text" class="form-control" id="coupon" name="coupon" aria-describedby="mail_help" value="">
                     <button class="btn bgColor text-white buttonHover" onclick="checkCoupon(event)">Verificar</button>
                 </div>
-                <span class="text-muted">*Si no verificas el cupón no se aplicará el descuento</span>
             </div>
         </div>
     
@@ -376,7 +375,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: "Ocurrió un error",
+                        title: text.message,
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
@@ -481,7 +480,7 @@
                     var toastMixin = Swal.mixin({
                     toast: true,
                     icon: 'error',
-                    title: text.errors,
+                    title: text.message,
                     position: 'bottom-right',
                     showConfirmButton: false,
                     timer: 3000,
