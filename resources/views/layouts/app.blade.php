@@ -34,6 +34,10 @@
             background-color: #cccccc;
             height: 100vh;
             background-repeat: no-repeat;
+            background-position: center; 
+            background-size: cover;
+            margin: 0;
+            padding: 0;
         }
         body{
             height: 100%;

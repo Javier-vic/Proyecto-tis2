@@ -39,8 +39,8 @@
                         <input class="form-check-input" type="checkbox" id="termsAndConditions">
                         <label class="form-check-label" for="termsAndConditions">Acepto los <a href="">términos</a> y <a href="">condiciones</a></label>
                       </div>
+                      
                 </div>
-    
             </div>
             {{--  --}}
         {{-- TIPO DE ENVÍO --}}
@@ -112,13 +112,23 @@
                 <span class="text-danger createmodal_error " id="payment_method_error"></span>
             </div>
             <div class="h-50">
-                <h3 class="m-0">Resumen pedido</h3>
-                <hr>
-                <div class="" >
-                  <h5>Subtotal: <span id="totalCart"></span> </h5>
-                  <hr>
+                <div class="h-50">
+                    <h3 class="m-0">Resumen pedido</h3>
+                    <hr>
+                    <div class="" >
+                      <h5>Subtotal: <span id="totalCart"></span> </h5>
+                      <hr>
+                    </div>
+                    <button class="btn bgColor text-white buttonHover">Confirmar pedido</button>
                 </div>
-            <button class="btn bgColor text-white buttonHover">Confirmar pedido</button>
+
+            <div class="mt-5 h-50">
+                <span>Cupón</span>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control" id="coupon" name="coupon" aria-describedby="mail_help" value="">
+                    <button class="btn bgColor text-white buttonHover" onclick="checkCoupon(event)">Verificar</button>
+                </div>
+            </div>
         </div>
     
         </div>
@@ -164,6 +174,7 @@
         
     });
     
+    
 
     function fullfillCart(){
         $("#cartContainer").empty();
@@ -201,22 +212,23 @@
                     </div>
                 </div>
             </div>
+            <span id="product${product.id}_error">No hay stock suficiente de este producto.</span>
             <hr>
            `)
            
         })
-        
         cartTotal();
     }
-
+    let valorTotalAnterior;
+    let descuentoAnterior;
     const cartTotal = () =>{
         var cart = localStorage.getItem('cart');
         var total=0;
         products = JSON.parse(cart);
         products.map(product=>{
-            total += product.cantidad * product.price ;
-            
+            total += product.cantidad * product.price ; 
         })
+
         $('#totalCart').empty()
         $('#totalCart').append(`<span>$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>`)
     }
@@ -338,7 +350,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
-                        title: 'Se ingresó el producto correctamente.',
+                        title: 'Se creó la orden correctamente.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false,
@@ -354,6 +366,7 @@
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
                     console.log(text)
+                    console.log(jqXHR)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
@@ -362,7 +375,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: "No se pudo realizar el ingreso del producto.",
+                        title: text.message,
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
@@ -374,8 +387,32 @@
                                 item + "</span>")
                             $(`#${key}`).addClass('is-invalid');
                         });
-                    }
+
                     ////////////////////////////////////
+                    //DESPLIEGA QUE NO HAY SUFICIENTE STOCK PARA CADA PRODUCTO 
+                    if(!text.stock){
+                        let cart = localStorage.getItem('cart');
+                        cart = JSON.parse(cart);
+                        console.log(cart)
+
+                        $.each(text.errors, function(key, item) {                            
+                        $(`#product${item[0]}_error`).empty()
+                            $("#product" + item[0] + "_error").append("<span class='text-danger'> No hay stock suficiente para este producto tienes " +
+                                item[1]+ " unidades extra aproximadamente</span>")
+                        cart.map(product =>{
+                            if(product.id === item[0]){
+                                product.stock = product.cantidad - item[1]
+                            }
+                        })
+                        localStorage.setItem('cart', JSON.stringify(cart));
+
+                        });
+                        
+                     
+                        }
+
+                    }                    
+                 
 
                 }
 
@@ -396,6 +433,78 @@
                 $("#" + e.target.id).addClass('is-invalid')
                 $("#" + e.target.id + "_error").append("<span class='text-danger'>" + 'Este campo es obligatorio' + "</span>")
             }
+        }
+
+        const checkCoupon = (e) =>{
+            e.preventDefault()
+            let code = $('#coupon').val()
+            console.log(code)
+            let url = '{{ route('landing.check.coupon') }}';
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: {code : code},
+                dataType: "json",
+                success: function(response, jqXHR) {
+                    var text = response;
+                    console.log(text)
+                           var toastMixin = Swal.mixin({
+                    toast: true,
+                    icon: 'success',
+                    title: text.correct,
+                    position: 'bottom-right',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                    });
+                    toastMixin.fire({
+                        title:  text.correct,
+                        icon: 'success'
+                    }); 
+                    if (text) {
+                        $('#coupon').removeClass('is-invalid')
+                        $('#coupon').addClass('is-valid')
+                        $('#coupon').val(code);
+                    } 
+                  
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var text = jqXHR.responseJSON;
+                    console.log(jqXHR)
+
+                    var toastMixin = Swal.mixin({
+                    toast: true,
+                    icon: 'error',
+                    title: text.message,
+                    position: 'bottom-right',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                    });
+                    toastMixin.fire({
+                        title:  text.errors,
+                        icon: 'error'
+                    }); 
+                    // AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                    if (text) {
+                        $('#coupon').removeClass('is-valid')
+                        $('#coupon').addClass('is-invalid')
+                        $('#coupon').val('');
+                        }                    
+
+                }
+
+            });
+
         }
 
     

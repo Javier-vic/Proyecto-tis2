@@ -1,6 +1,7 @@
 @extends('layouts.userNavbar')
 
 @section('content')
+
     <div>
         <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel">
             <div class="carousel-indicators">

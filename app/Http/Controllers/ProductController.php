@@ -232,6 +232,7 @@ class ProductController extends Controller
         $id = $product->id;
         try {
             $product = product::on(session()->get('database'))->find($id);
+            Storage::delete('public/' . $product->image_product);
             $product->delete();
 
             DB::connection(session()->get('database'))->commit();

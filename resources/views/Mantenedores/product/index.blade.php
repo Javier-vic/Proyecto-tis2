@@ -204,7 +204,6 @@
             $.ajax({
                 type: "GET",
                 url: url,
-
                 dataType: "json",
                 success: function(response) {
                     let resultado = response[0][0];

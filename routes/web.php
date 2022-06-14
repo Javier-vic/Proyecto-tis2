@@ -33,7 +33,7 @@ Route::get('/login', function () {
 })->name('login');
 
 
-// Auth::routes();
+Auth::routes();
 
 Route::middleware(['auth', 'verifyrole'])->group(function () {
     //GET
@@ -74,9 +74,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('publicity',ImageMainController::class);
 });
 
-Route::resource('user', UserController::class);
-
 //RUTAS PARA LA VISTA DE USUARIOS
+Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
+Route::get('landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
+Route::resource('user', UserController::class);
 Route::resource('landing', LandingController::class);
 Route::resource('cart', CartController::class);
 
