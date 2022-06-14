@@ -129,6 +129,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
+                   
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
@@ -138,12 +139,7 @@
                         backdrop: false,
                         heightAuto: false,
                     })
-                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
-                    // $("input-modal").removeClass('is-invalid');
-                    // $("input-modal").removeClass('is-valid');
-                    // $(".createmodal_error").empty()
-                    //////////////////////////////////////
-                    $('#agregarProducto').modal('hide');
+                    location.reload();
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

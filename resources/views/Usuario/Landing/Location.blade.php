@@ -3,12 +3,12 @@
 @section('content')
 <style>
     #map {
-  width: 400px;
-  height: 300px;
+  width: 600px;
+  height: 600px;
 }
 </style>
     <div class="container row">
-        <div class="col-md-6 col-xs-12 mb-6">
+        <div class="col-md-4 col-xs-12 mb-6">
             <h1 class="mt-5 ">Ubicación</h1>
 
             <div class="row mt-5">
@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div class="col-6 col-xs-6 my-5 ms-5" id="map" >
+        <div class="col my-5 ms-5" id="map" >
         </div>
     </div>
  
@@ -77,7 +77,9 @@
 
 @section('js_after')
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcgeUpk1gzGnzb9t6SiJ6jtca5U-cRA5I&callback=initMap"></script>
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcgeUpk1gzGnzb9t6SiJ6jtca5U-cRA5I&libraries=drawing&callback=initMap">
+</script>
    
    <script type="text/javascript">
         $(document).ready(function () {
@@ -113,7 +115,7 @@
                     
 
                     const marker = new google.maps.Marker({
-                        position: uluru,
+                        position: uluru ,
                         map: map,
                     });
 

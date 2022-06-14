@@ -436,7 +436,15 @@ class OrderController extends Controller
     public function GetSaleMonth (request $request){
 
         $mes = Carbon::now();
+        $año = $mes->year;
         $mes = $mes->month;
+        
+        $saleYear = DB::table('orders')
+        ->select(DB::raw('sum(orders.total) as `ganancias` , count(orders.id) as `data`' ))
+        ->whereYear( 'orders.created_at' ,'=', $año )
+        ->get();
+
+        
         $saleMonth = DB::table('orders')
         ->select(DB::raw('sum(orders.total) as `ganancias` , count(orders.id) as `data`' ))
         ->whereMonth( 'orders.created_at' ,'=', $mes )
@@ -446,17 +454,34 @@ class OrderController extends Controller
         ->select(DB::raw('count(products.id) as `countproducts`'))
         ->where('products.stock', '=', 0)
         ->get();
+
+        $listProducts = DB::table('Products')
+        ->select('products.name_product')
+        ->where('products.stock', '=', 0)
+        ->get();
+        
         
         $countSupplies = DB::table('supplies')
         ->select(DB::raw('count(supplies.id) as `countsupplies`'))
         ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
         ->get();
-        
 
+           
+        $listSupplies = DB::table('supplies')
+        ->select('supplies.name_supply','supplies.critical_quantity','supplies.unit_meassurement','supplies.quantity')
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->orderBy('supplies.unit_meassurement')
+        ->get();
+       
         return response::json(array(
             'countSupplies' => $countSupplies ,
             'countProducts' => $countProducts ,
             'saleMonth' => $saleMonth,
+            'listProducts' => $listProducts,
+            'listSupplies' => $listSupplies,
+            'saleYear' => $saleYear,
+            
+
 
         ),200);
     }
@@ -483,10 +508,11 @@ class OrderController extends Controller
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
         ->join('products','products_orders.product_id','products.id')
         ->groupBy('products_orders.product_id', 'products.name_product')
+        ->limit(5)
         ->orderBy('cantida','DESC')
         ->get();    
 
-      
+        
         return response($bestseller,200);
    
         
@@ -503,34 +529,6 @@ class OrderController extends Controller
         return view('Mantenedores.order.index');
     }
 
-
-
-    public function orderbyuser()
-    {
-        $user = auth()->user()->id;
-        // $orderUser = DB::table('order_user')
-        //     ->select('order_user.id_order')
-        //     ->where('order_user.id_user', '=', $user)
-        //     ->get();
-            // dd($orderUser);
-        $orders = DB::table('orders')
-            ->join('order_user', 'orders.id', '=', 'order_user.id_order')
-            ->select('orders.*')
-            ->where('order_user.id_user', '=', $user)
-            // ->where('order_user.id_order', '=', $orderUser)
-            ->get();
-        // dd($orders);
-     
-        $productOrders = DB::table('products_orders')
-            ->join('orders', 'products_orders.order_id', '=', 'orders.id')
-            ->join('products', 'products_orders.product_id', '=', 'products.id')
-            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
-            ->where('products_orders.order_id', '=', 'orders.id')
-            // ->orderby('orders.id')
-            ->get();
-        // dd($productOrders);
-        return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
-    }
 
     
 }
