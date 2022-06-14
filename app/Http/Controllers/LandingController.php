@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\landing;
 use Illuminate\Http\Request;
 use App\Models\order;
+use App\Models\coupon;
+use App\Models\product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 
@@ -85,7 +87,7 @@ class LandingController extends Controller
             'address' => 'required',
             'mail' => 'required',
             'number' => 'required|gt:0|integer',
-            'payment_method' => 'required'
+            'payment_method' => 'required',
 
         ];
         $messages = [
@@ -106,6 +108,7 @@ class LandingController extends Controller
             try {
                 $totalValue = 0;
                 $cantidades = array();
+                $checkStock = array();
                 $values = request()->except('_token');
                 $order = new Order;
                 $order->name_order = $values['name_order'];
@@ -119,14 +122,49 @@ class LandingController extends Controller
                 foreach ($productos as $product) {
                     array_push($cantidades, $product->cantidad);
                     $totalValue += ($product->price * $product->cantidad);
+                    $productToCheck = product::find($product->id);
+                    if ($product->cantidad <= $productToCheck->stock) {
+                        $productToCheck->stock = $productToCheck->stock - $product->cantidad;
+                        $productToCheck->save();
+                    } else {
+                        array_push($checkStock, [$product->id, $product->cantidad - $productToCheck->stock]);
+                    }
                 }
-                $order->total = $totalValue;
+                //VALIDA EL CUPÓN
+                if ($values['coupon']) {
+                    $couponToCheck = coupon::where('code', $values['coupon'])->first();
+                    $newQuantity = $couponToCheck->quantity - 1;
+                    if ($couponToCheck && $newQuantity >= 0 && $couponToCheck->emited < $couponToCheck->caducity) {
+                        $order->total = $totalValue * (1 - $couponToCheck->percentage / 100);
+                        $couponToCheck->quantity = $newQuantity;
+                        $couponToCheck->save();
+                    } else {
+                        return Response::json(array(
+                            'success' => false,
+                            'coupon' => false,
+                            'errors' => 'Ocurrió un error con el cupón'
+
+                        ), 400);
+                    }
+                }
+
                 $order->save();
 
                 try {
                     for ($i = 0; $i < sizeof($cantidades); $i++) {
                         $order->products()->attach($productos[$i]->id, ['cantidad' => $cantidades[$i]]);
                     }
+                    //SI ESTE ARRAY CONTIENE VALORES SON LOS PRODUCTOS QUE NO TIENEN EL STOCK SUFICIENTE Y LOS RETORNA
+                    if (sizeof($checkStock) > 0) {
+                        DB::connection(session()->get('database'))->rollBack();
+                        return Response::json(array(
+                            'success' => false,
+                            'stock' => false,
+                            'errors' => $checkStock
+
+                        ), 400);
+                    }
+                    // $couponToCheck = coupon::find('code', );
                     DB::connection(session()->get('database'))->commit();
                     return response('Se ingresó la orden con exito.', 200);
                 } catch (\Throwable $th) {
@@ -146,7 +184,7 @@ class LandingController extends Controller
 
             ), 400);
         }
-        return response('No se pudo realizar el ingreso de la ordenFINORDER.', 400);
+        return response('No se pudo realizar el ingreso de la orden', 400);
     }
 
     /**
@@ -192,5 +230,35 @@ class LandingController extends Controller
     public function destroy(landing $landing)
     {
         //
+    }
+
+    public function checkCoupon(request $request)
+    {
+        $values = request()->except('_token');
+
+        $couponToCheck = coupon::where('code', $values['code'])->first();
+        if ($couponToCheck) {
+            if ($couponToCheck->emited <= $couponToCheck->caducity && $couponToCheck->quantity - 1 >= 0) {
+                return Response::json(array(
+                    'success' => true,
+                    'correct' => 'El cupón es valido',
+                    'couponPercentage' => $couponToCheck->percentage
+
+                ), 200);
+            } else {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => 'El cupón ya caducó'
+
+                ), 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => 'El cupón no es valido'
+
+            ), 400);
+        }
+        dd($couponToCheck);
     }
 }

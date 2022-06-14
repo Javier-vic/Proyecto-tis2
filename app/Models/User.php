@@ -33,6 +33,19 @@ class User extends Authenticatable
         'lt' => 'El numero no existe',
         'gt' => 'No es un numero valido'
     ];
+
+    static $rulesLogin = [
+        'email' => 'required|email',
+        'password' => 'required',
+        // 'id_role'=>'required',
+
+    ];
+    static $messagesLogin = [
+        'required' => 'El campo es obligatorio',
+        'email' => 'No es un correo electrónico válido.',
+        'email.required' => 'Debes ingresar un email',
+
+    ];
     /**
      * The attributes that should be hidden for arrays.
      *

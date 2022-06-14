@@ -2,13 +2,13 @@
 
 @section('content')
         <div class="row justify-content-center m-0 p-0 overflow-hidden">
-            <div class="backgroundRegister col-lg-6 m-0 p-0"></div>
-            <div class="col-lg-6 align-self-center m-0 p-0">
+            <div class="backgroundRegister col-md-4 d-none d-md-block m-0 p-0"></div>
+            <div class="col-md-8 col-8 align-self-center m-0 p-0">
                 <h3 class="text-center fw-bold mb-5">Registro</h3>
                         <form method="POST" onsubmit="createUser(event)" enctype="multipart/form-data" class="m-0 p-0">
                             @csrf
                             <div class="row mb-3">                                
-                                <div class="col-lg-6 mx-auto">
+                                <div class="col-md-6 mx-auto">
                                     <label for="name" class="">{{ __('Nombre') }}</label>
                                     <input id="name" type="text" class="form-control input-modal"
                                         name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
@@ -19,7 +19,7 @@
                             </div>
 
                             <div class="row mb-3">                            
-                                <div class="col-lg-6 mx-auto">
+                                <div class="col-md-6 mx-auto">
                                     <label for="email"
                                     class="">{{ __('Correo electrónico') }}</label>
                                     <input id="email" type="text" class="form-control input-modal"
@@ -30,7 +30,7 @@
                             </div>
 
                             <div class="row mb-3">                            
-                                <div class="col-lg-6 mx-auto ">
+                                <div class="col-md-6 mx-auto ">
                                     <label for="email"
                                     class="">{{ __('Dirección') }}</label>
                                     <input id="address" type="text" class="form-control input-modal"
@@ -42,7 +42,7 @@
 
                             <div class="row mb-3">  
                                                    
-                                <div class="col-lg-6 mx-auto">
+                                <div class="col-md-6 mx-auto">
                                     <label for="phone"
                                     class="">{{ __('Número') }}</label> 
                                     <div class="input-group ">
@@ -55,7 +55,7 @@
                             </div>
 
                             <div class="row mb-3">                              
-                                <div class="col-lg-6 mx-auto">
+                                <div class="col-md-6 mx-auto">
                                     <label for="password"
                                     class="">{{ __('Contraseña') }}</label>
                                     <input id="password" type="password"
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="row mb-3">                                
-                                <div class="col-lg-6 mx-auto">
+                                <div class="col-md-6 mx-auto">
                                     <label for="password-confirm"
                                     class="">{{ __('Confirmar contraseña') }}</label>
                                     <input id="password-confirm" type="password" class="form-control "
@@ -90,7 +90,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
          // ****************************************************************************************************************
-        //MODAL DE CREAR
+        //CREAR USUARIO
         // ****************************************************************************************************************
         const createUser = (e) => {
             e.preventDefault();
@@ -104,7 +104,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                    //QUE HACER EN SUCCESS...
+                    window.location.replace("http://127.0.0.1:8000/login");
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
