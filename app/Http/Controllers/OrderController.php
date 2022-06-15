@@ -369,4 +369,23 @@ class OrderController extends Controller
         return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
     }
 
+    public function orderDetails(request $request)
+    {
+        
+        $values = request()->except('_token');
+        $id = $values['id'];
+        $order = DB::table('orders')
+            ->select('orders.*')
+            ->where('orders.id', '=', $id)
+            ->get();
+
+        $productOrders = DB::table('products_orders')
+            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->where('products_orders.order_id', '=', $id)
+            ->get();
+
+        return response(json_encode([$productOrders, $order]), 200);
+    }
+
 }
