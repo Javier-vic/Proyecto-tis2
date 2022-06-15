@@ -36,8 +36,8 @@ class ProductController extends Controller
                 )
                 ->orderBy('products.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.product.datatable.action')
-                ->addColumn('image', 'mantenedores.product.datatable.image')
+                ->addColumn('action', 'Mantenedores.product.datatable.action')
+                ->addColumn('image', 'Mantenedores.product.datatable.image')
                 ->rawColumns(['action', 'image'])
                 ->addIndexColumn()
                 ->make(true);
