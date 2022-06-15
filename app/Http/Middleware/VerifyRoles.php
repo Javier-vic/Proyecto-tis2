@@ -37,7 +37,12 @@ class VerifyRoles extends Middleware
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
+
         $id_role = $request->user()->id_role;
+        
+        if($id_role==2){
+            return redirect(RouteServiceProvider::LANDING);
+        }
 
         $ruta = strtok($request->path(), '/');
         $permits = DB::Table('role_permit')
