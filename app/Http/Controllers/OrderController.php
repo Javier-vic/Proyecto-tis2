@@ -361,18 +361,18 @@ class OrderController extends Controller
         ->where('order_user.id_user', '=', $user)
         ->get();
 
+        $orderItems = DB::table('products_orders')
+        ->select(DB::raw('sum(products_orders.cantidad) as articulos, products_orders.order_id'))
+        ->groupby('products_orders.order_id')
+        ->get();
+        // dd($orderItems);
+
         $productOrders = DB::table('products_orders')
         ->join('products', 'products_orders.product_id', '=', 'products.id')
         ->select('products_orders.*', 'products.*')
         ->get();
 
-        // dd($productOrders);
-
-        // $productPhoto = 
-
-        // dd($productPhoto);
-
-        return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
+        return view('Usuario.Landing.orders', compact('orders', 'productOrders', 'orderItems'));
     }
 
     public function orderDetails(request $request)

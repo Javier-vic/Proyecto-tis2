@@ -33,7 +33,11 @@
                         
                         <!-- INFORMACION EXTRA -->
                         <div >
-                            <h6 class="d-inline-block px-1 text-muted">cantidad de productos</h6>
+                            @foreach ($orderItems as $orderitem)
+                                @if ($orderitem->order_id == $order->id)
+                                    <h6 class="d-inline-block px-1 text-muted">{{$orderitem->articulos}} articulos</h6>
+                                @endif
+                            @endforeach
                             <h6 class="d-inline-block px-1 text-muted">${{$order->total}}</h6>
                             <h6 class="d-inline-block px-1 text-muted">Pedido realizado el {{$order->created_at}}</h6>
                         </div>
