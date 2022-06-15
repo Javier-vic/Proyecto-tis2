@@ -39,7 +39,7 @@ class SupplyController extends Controller
                 )
                 ->orderBy('supplies.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.supply.datatable.action')
+                ->addColumn('action', 'Mantenedores.supply.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);

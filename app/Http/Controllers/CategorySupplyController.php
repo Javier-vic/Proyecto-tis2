@@ -34,7 +34,7 @@ class CategorySupplyController extends Controller
                 )
                 ->orderBy('category_supplies.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.category_supply.datatable.action')
+                ->addColumn('action', 'Mantenedores.category_supply.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
