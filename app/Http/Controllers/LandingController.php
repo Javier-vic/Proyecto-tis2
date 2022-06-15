@@ -59,7 +59,7 @@ class LandingController extends Controller
         $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
         ////////////////////////////////////////////////
 
-        return view('usuario.landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames'));
+        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames'));
     }
 
     /**
@@ -285,7 +285,7 @@ class LandingController extends Controller
         //OBTIENE TODAS LAS CATEGORÍAS
         $category_products = category_product::all();
         ////////////////////////////////////////////////
-        return view('usuario.profile.profile', compact('userData', 'category_products'));
+        return view('Usuario.profile.profile', compact('userData', 'category_products'));
     }
 
     public function updateUserProfile(request $request, user $user)
