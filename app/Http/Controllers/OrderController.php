@@ -366,6 +366,12 @@ class OrderController extends Controller
         ->select('products_orders.*', 'products.*')
         ->get();
 
+        // dd($productOrders);
+
+        // $productPhoto = 
+
+        // dd($productPhoto);
+
         return view('Usuario.Landing.orders', compact('orders', 'productOrders'));
     }
 

@@ -7,27 +7,38 @@
         <div>
             <h2 class="p-3 text-danger fw-bold">Mis pedidos</h2>
         </div>
-        <div>
+        <div class="container">
             @foreach ($orders as $order)
                 
-                <div class="d-inline-block">                  
-                    <div class="d-inline-block">
-                        foto
-                        
+                <div class="row p-2"> 
+                    <!-- IMAGEN DE LA ORDER                  -->
+                    <div class="col-lg-4 d-inline-block ">
+                        @foreach ($productOrders as $productorder)
+                            @if ($productorder->order_id == $order->id )
+                                <img src="{{ asset('storage') . '/' . $productorder->image_product }}" class="img-fluid rounded object-fit-cover " style="height: 239px;object-fit: cover;" />
+                                @break    
+                            @endif
+                        @endforeach
                     </div>
-                    <div class="d-inline-block">
+                    
+                    <div class="col-lg-6 d-inline-block">
+                        <!-- DIRECCION O RETIRO -->
                         <div>
                             @if ($order->pick_up == 'si')
                                 <h2 class="fw-bold">{{$order->address}}</h2>
                             @else
                                 <h2 class="fw-bold">Retiro</h2>
                             @endif
-                        </div>                     
+                        </div>   
+                        
+                        <!-- INFORMACION EXTRA -->
                         <div >
                             <h6 class="d-inline-block px-1 text-muted">cantidad de productos</h6>
                             <h6 class="d-inline-block px-1 text-muted">${{$order->total}}</h6>
-                            <h6 class="d-inline-block px-1 text-muted">{{$order->created_at}}</h6>
+                            <h6 class="d-inline-block px-1 text-muted">Pedido realizado el {{$order->created_at}}</h6>
                         </div>
+
+                        <!-- LISTADO DE PRODUCTOS -->
                         @foreach ($productOrders as $productorder)
                             @if ($productorder->order_id == $order->id )
                             <div>
@@ -38,8 +49,10 @@
                         @endforeach
                         
                     </div>
-                    <div class="justify-content-end  d-inline-block">
-                        <button type="button" onclick="showOrderDetails({{$order->id}})" class="btn btn-danger mb-5" data-bs-toggle="modal" data-bs-target="#viewOrder">
+
+                    <!-- BOTON MODAL DE DETALLES DE LA ORDEN -->
+                    <div class="col-lg-2 d-inline-block">
+                        <button type="button" onclick="showOrderDetails({{$order->id}})" class=" btn btn-danger mb-5" data-bs-toggle="modal" data-bs-target="#viewOrder">
                             Ver detalle
                         </button>
                     </div>
