@@ -19,6 +19,8 @@ class CreateOrdersTable extends Migration
             $table->string('name_order');
             $table->integer('total');
             $table->string('order_status');
+            $table->string('mail');
+            $table->integer('number');
             $table->string('payment_method');
             $table->string('pick_up');
             $table->string('comment')->nullable();
@@ -26,10 +28,7 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
 
             $table->softDeletes();
-
-            
         });
-
     }
 
     /**

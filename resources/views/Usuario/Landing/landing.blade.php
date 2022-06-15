@@ -1,8 +1,8 @@
 @extends('layouts.userNavbar')
 
 @section('content')
-    <div>
-        <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel">
+    <div >
+        <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel" >
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                     aria-current="true" aria-label="Slide 1"></button>
@@ -13,22 +13,22 @@
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
                     aria-label="Slide 4"></button>
             </div>
-            <div class="carousel-inner object-fit-cover w-100">
+            <div class="carousel-inner object-fit-cover " style="max-width: 100%; max-height:600px;">
                 <div class="carousel-item active" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
                 <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
                 <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
                 <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -44,11 +44,12 @@
         </div>
     </div>
 
+ 
     <div class="d-flex mt-5">
         <div class="col-12 col-md-8 col-xl-9 me-5 ">
             <div>
                 <div class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
-                    @foreach ($category_products as $category_product)
+                    @foreach($category_products as $category_product)
                         @if (in_array($category_product->name, $categoryAvailableNames))
                             <div class="text-white">
                                 <a href="#{{ str_replace(' ','',$category_product->name) }}"
@@ -65,6 +66,7 @@
                     @endforeach
                 </div>
                 <div>
+               
                     {{-- PRODUCTOS --}}
                     @foreach ($categoryAvailable as $category)
                         <h2 id="{{ str_replace(' ','',$category->name) }}" class="mb-5 invisible intersectionObserver">a</h2>
@@ -121,8 +123,8 @@
 
                         </div>
                     @endforeach
-                    <div class="text-center d-md-none  sticky-margin-bottom" style="position: sticky;bottom: 0;">
-                        <button class="btn btn-danger w-50 py-4  shadow "><h4 class="m-0"><i class="fa-solid fa-basket-shopping me-2"></i>Ver mi pedido</h4></button>
+                    <div class=" d-md-none text-end sticky-margin-bottom" style="position: sticky;bottom: 0; ">
+                        <a href="/cart" onclick="checkCart(event)" class="btn bgColor text-white align-left shadow rounded-circle py-4 px-4 " ><h4 class="m-0"><i class="fa-solid fa-basket-shopping "></i><span class="cartQuantity"></span></h4></a>
                     </div>
                     {{-- FIN PRODUCTOS --}}
                 </div>
@@ -132,8 +134,12 @@
 
         {{-- TÚ PEDIDO --}}
         {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
-        <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top"
+        <div class=" py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top shadow"
             style="width: -webkit-fill-available;">
+            <div class="row text-center py-2 px-2 m-0 mb-3 " id="continuePayment">
+                
+                
+            </div>
             <div class="rounded text-center">
                 <h5 class="text-dark  mx-auto">Tu pedido</h5>
                 <hr class="bg-dark">
@@ -142,7 +148,7 @@
 
             {{-- END CONTENIDO VACÍO --}}
             {{-- PRODUCTOS AGREGADOS --}}
-            <div id="cart" class="py-4">
+            <div id="cart" class="py-4" style="overflow-y: auto; max-height:600px;">
                 <div class="text-white mx-3 px-2">
                     <img src="https://www.papajohns.cl/static/media/ic_cart_empty.1de2c93e.svg" alt=""
                         class="img-fluid" width="500" height="350">
@@ -173,19 +179,15 @@
     {{--  --}}
     {{-- END TÚ PEDIDO --}}
     </div>
-    {{-- FOOTER --}}
-    <div class="container">
-  
-    </div>
-    {{-- END FOOTER --}}
+
 @endsection
 
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
-        $( document ).ready(function() {
-            var cart = localStorage.getItem('cart');
-            if(!cart) localStorage.setItem('cart', []);
+        $(document ).ready(function() {
+            if(localStorage.getItem('cart').length > 0) return;
+            else  {localStorage.setItem('cart', JSON.stringify([]));}  
         });
         const productsAvailable = @json($productAvailable);
 
@@ -211,11 +213,8 @@
             if (cart.length <= 0 ) {
                 $("#cart").empty();
                 // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
-                $('#cartQuantity').empty()
-                $('#cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+                cartQuantity()
 
-                $('#cartQuantity2').empty()
-                $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
                 //////////////////////////////////////////////// 
                 $('#cart').append(
                     `
@@ -230,11 +229,8 @@
             } else {
                 $("#cart").empty();
                 // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
-                $('#cartQuantity').empty()
-                $('#cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+                cartQuantity()
 
-                $('#cartQuantity2').empty()
-                $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
                 //////////////////////////////////////////////// 
                 cart = cart.map(e => {
                     $("#cart").append(
@@ -292,7 +288,7 @@
                     );
                 })
             }
-
+            cartTotal()
         }
         const saveInCart = (id) => {
             var product;
@@ -309,18 +305,27 @@
                         e.cantidad++;
                         if (e.cantidad > e.stock ) {
                         e.cantidad--;
-                        Swal.fire({
-                            position: 'bottom-end',
-                            icon: 'error',
-                            title: `No hay más unidades de ${e.name_product}`,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            backdrop: false
-                    })
+                        var toastMixin = Swal.mixin({
+                        toast: true,
+                        icon: 'success',
+                        title: 'General Title',
+                        position: 'bottom-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    toastMixin.fire({
+                        title: 'No hay más stock de '+ e.name_product,
+                        icon: 'error'
+                    });
                 
                     }
                     else{
-                        localStorage.setItem('cart', JSON.stringify(cart));
+                    localStorage.setItem('cart', JSON.stringify(cart));
                     renderCart();
                     }
                        
@@ -329,7 +334,6 @@
                 if (!flag) {
                     delete product.image_product;
                     delete product.category;
-                    delete product.category_id;
                     cart = cart.concat({
                         ...product,
                         cantidad: 1
@@ -340,7 +344,6 @@
             } else {
                 delete product.image_product;
                 delete product.category;
-                delete product.category_id;
                 product = [{
                     ...product,
                     cantidad: 1
@@ -350,6 +353,19 @@
             }
 
         }
+        const cartTotal = () =>{
+        var cart = localStorage.getItem('cart');
+        var total=0;
+        products = JSON.parse(cart);
+        products.map(product=>{
+            total += product.cantidad * product.price ;
+            
+        })
+        
+        $('#continuePayment').empty()
+        $('#continuePayment').append(`<a onclick="checkCart(event)" href="/cart" class="btn bgColor text-white buttonHover m-0 text-start d-flex justify-content-between">Ir a pagar<span class="text-white">$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span></a>`)
+    }
+        
 
         $(document).ready(function() {
             renderCart();
@@ -386,8 +402,7 @@
                 return false;
             });
         });
-    </script>
-    <script type="text/javascript">
+
         const categorias = Array.from(document.querySelectorAll('.intersectionObserver'))
         if (categorias) {
             var actualActivo;
@@ -407,5 +422,7 @@
                 observer.observe(categoria)
             })
         }
+
+      
     </script>
 @endsection

@@ -14,7 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,6 +59,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
 
 
+
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);
@@ -69,11 +70,17 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::resource('category_product', CategoryProductController::class);
     Route::resource('coupon', CouponController::class);
-    Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
 });
 
 //RUTAS PARA LA VISTA DE USUARIOS
+Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
+//DEBEN ESTAR EN MIDDLEWARE
+Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
+Route::put('/landing/update/profile/{user}/', [LandingController::class, 'updateUserProfile'])->name('user.update');
+Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
+////////////////////////////////////////////////////////////////////////////////////////
+Route::resource('user', UserController::class);
 Route::resource('landing', LandingController::class);
 Route::resource('cart', CartController::class);
 

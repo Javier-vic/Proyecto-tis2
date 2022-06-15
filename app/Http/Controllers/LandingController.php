@@ -6,6 +6,12 @@ use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\landing;
 use Illuminate\Http\Request;
+use App\Models\order;
+use App\Models\coupon;
+use App\Models\product;
+use App\Models\user;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
 
 class LandingController extends Controller
 {
@@ -74,7 +80,127 @@ class LandingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $rules = [
+            'name_order'          => 'required|string',
+            'cantidad' => 'required|min:1',
+            'cantidad.*' => 'required',
+            'address' => 'required',
+            'mail' => 'required',
+            'number' => 'required|gt:0|integer',
+            'payment_method' => 'required',
+
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+            'cantidad.required' => 'Debes seleccionar al menos un producto',
+            'address.required' => 'Debes seleccionar el tipo de envío',
+            'payment_method.required' => 'Debes seleccionar un método de pago',
+            'integer' => 'El número no puede ser decimal',
+            'gt' => 'El número debe ser mayor a 0'
+        ];
+
+        $values = request()->except('_token');
+        $productos = json_decode($values['cantidad']);
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $totalValue = 0;
+                $cantidades = array();
+                $checkStock = array();
+                $values = request()->except('_token');
+                $order = new Order;
+                $order->name_order = $values['name_order'];
+                $order->mail = $values['mail'];
+                $order->number = $values['number'];
+                $order->payment_method = $values['payment_method'];
+                $order->name_order = $values['name_order'];
+                $order->order_status = 'Espera';
+                $order->pick_up = $values['pick_up'];
+                $order->address = $values['address'];
+                foreach ($productos as $product) {
+                    array_push($cantidades, $product->cantidad);
+                    $totalValue += ($product->price * $product->cantidad);
+                    $productToCheck = product::find($product->id);
+                    if ($product->cantidad <= $productToCheck->stock) {
+                        $productToCheck->stock = $productToCheck->stock - $product->cantidad;
+                        $productToCheck->save();
+                    } else {
+                        array_push($checkStock, [$product->id, $product->cantidad - $productToCheck->stock]);
+                    }
+                }
+                //////////////VALIDA EL CUPÓN////////////
+                if ($values['coupon'] != null) {
+                    $couponToCheck = coupon::where('code', $values['coupon'])->first();
+                    if ($couponToCheck) $newQuantity = $couponToCheck->quantity - 1;
+                    else {
+                        return Response::json(array(
+                            'success' => false,
+                            'coupon' => false,
+                            'message' => 'El cupón no existe',
+
+                        ), 400);
+                    }
+                    if ($couponToCheck != null && $newQuantity >= 0 && $couponToCheck->emited <= $couponToCheck->caducity) {
+                        $order->total = $totalValue * (1 - $couponToCheck->percentage / 100);
+                        $couponToCheck->quantity = $newQuantity;
+                        $couponToCheck->save();
+                    } else {
+                        return Response::json(array(
+                            'success' => false,
+                            'coupon' => false,
+                            'message' => 'El cupón expiró',
+
+                        ), 400);
+                    }
+                } else {
+                    $order->total = $totalValue;
+                }
+                ////////////////////////////////////
+                $order->save();
+
+                for ($i = 0; $i < sizeof($cantidades); $i++) {
+                    $order->products()->attach($productos[$i]->id, ['cantidad' => $cantidades[$i]]);
+                }
+                //SI ESTE ARRAY CONTIENE VALORES SON LOS PRODUCTOS QUE NO TIENEN EL STOCK SUFICIENTE Y LOS RETORNA
+                if (sizeof($checkStock) > 0) {
+                    DB::connection(session()->get('database'))->rollBack();
+                    return Response::json(array(
+                        'success' => false,
+                        'stock' => false,
+                        'errors' => $checkStock,
+                        'message' => 'Ocurrió un problema con el stock'
+
+                    ), 400);
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////
+                // $couponToCheck = coupon::find('code', );
+                DB::connection(session()->get('database'))->commit();
+                return response('Se ingresó la orden con exito.', 200);
+
+
+                // $order->products()->attach($id, ['cantidad' => $cont]);
+            } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. No se generó la compra'
+
+                ), 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray(),
+                'message' => 'Faltan campos por completar',
+            ), 400);
+        }
+        return Response::json(array(
+            'success' => false,
+            'message' => 'Ocurrió un error. No se generó la compra'
+
+        ), 400);
     }
 
     /**
@@ -120,5 +246,50 @@ class LandingController extends Controller
     public function destroy(landing $landing)
     {
         //
+    }
+
+    public function checkCoupon(request $request)
+    {
+        $values = request()->except('_token');
+
+        $couponToCheck = coupon::where('code', $values['code'])->first();
+        if ($couponToCheck) {
+            if ($couponToCheck->emited <= $couponToCheck->caducity && $couponToCheck->quantity - 1 >= 0) {
+                return Response::json(array(
+                    'success' => true,
+                    'correct' => 'El cupón es valido',
+                    'couponPercentage' => $couponToCheck->percentage
+
+                ), 200);
+            } else {
+                return Response::json(array(
+                    'success' => false,
+                    'errors' => 'El cupón ya caducó'
+
+                ), 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => 'El cupón no es valido'
+
+            ), 400);
+        }
+    }
+
+    public function userProfile(request $request)
+    {
+        $userId = auth()->user()->id;
+        $userData = user::where('id', $userId)->first();
+
+        //OBTIENE TODAS LAS CATEGORÍAS
+        $category_products = category_product::all();
+        ////////////////////////////////////////////////
+        return view('usuario.profile.profile', compact('userData', 'category_products'));
+    }
+
+    public function updateUserProfile(request $request, user $user)
+    {
+        dd($request);
     }
 }

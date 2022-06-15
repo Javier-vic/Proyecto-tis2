@@ -17,18 +17,34 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'id_role','address','phone'
+        'name', 'email', 'password', 'id_role', 'address', 'phone'
     ];
     static $rules = [
         'name' => 'required',
-        'email' => 'required', 
+        'email' => 'required|email',
         'password' => 'required',
-        'id_role'=>'required',
-        'address'=>'required',
-        'phone' => 'required'
+        // 'id_role'=>'required',
+        'address' => 'required',
+        'phone' => 'required|lt:999999999|gt:0'
     ];
     static $messages = [
-        'required' => 'El campo es obligatorio'
+        'required' => 'El campo es obligatorio',
+        'email' => 'No es un correo electrónico válido.',
+        'lt' => 'El numero no existe',
+        'gt' => 'No es un numero valido'
+    ];
+
+    static $rulesLogin = [
+        'email' => 'required|email',
+        'password' => 'required',
+        // 'id_role'=>'required',
+
+    ];
+    static $messagesLogin = [
+        'required' => 'El campo es obligatorio',
+        'email' => 'No es un correo electrónico válido.',
+        'email.required' => 'Debes ingresar un email',
+
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -49,7 +65,7 @@ class User extends Authenticatable
     ];
     public function role()
     {
-        return $this->hasOne(role::class,'id','id_role');
+        return $this->hasOne(role::class, 'id', 'id_role');
     }
 
     //Relación many to many

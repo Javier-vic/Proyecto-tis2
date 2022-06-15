@@ -181,8 +181,6 @@ class OrderController extends Controller
                 for ($i = 0; $i < $size; $i++) {
                     $id = $permits[$i]; //id
                     $cont = $cantidad[$i]; //cantidad
-
-
                     $order->products()->attach($id, ['cantidad' => $cont]);
                     DB::connection(session()->get('database'))->commit();
                     return response('Se ingresó la orden con éxito.', 200);

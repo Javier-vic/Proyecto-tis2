@@ -18,15 +18,46 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .backgroundLogin{
+            background-image: url('/storage/images/ramenLogin.svg');
+            background-color: #cccccc;
+            height: 100vh;
+            background-repeat: no-repeat;
+            background-position: center; 
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+        .backgroundRegister{
+            background-image: url('/storage/images/registerLogin.svg');
+            background-color: #cccccc;
+            height: 100vh;
+            background-repeat: no-repeat;
+            background-position: center; 
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            height: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+   
+    </style>
 </head>
 
 <body>
     <div id="app">
-        <div class="backgroundLogin"></div>
-        <main class="py-4 ">
+        <div class=""></div>
+        <main class="">
             @yield('content')
         </main>
     </div>
 </body>
+<script src="{{ asset('js/app.js') }}"></script>
+@yield('js_after')
 
 </html>
