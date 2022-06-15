@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
     Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
-    Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+    Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.vista');
     Route::get('/order/GetSaleMonth', [\App\Http\Controllers\OrderController::class, 'GetSaleMonth'])->name('order.GetSaleMonth');
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');

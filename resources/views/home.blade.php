@@ -109,10 +109,10 @@
 
         <div class="col-md-6 ms-5  rounded shadow bg-white border rounded-3 chart-containers  h-100 " style=" height:500px; width:500px" >
             <h5 class="ms-3 mt-3">Productos mas vendido</h5>
-            <canvas style="" id="myChart" ></canvas>
+            <canvas style="height:40vh; width:80vw" id="myChart" ></canvas>
         </div>
 
-        <div id = "grafica2" class="col-md-5 mx-5 shadow bg-white border rounded-3 h-100 " >
+        <div id = "grafica2" class="col-md-6 mx-5 shadow bg-white border rounded-3 h-100 " >
             <h5 class = "ms-3 mt-3">Ventas mensuales</h5>
 
 
@@ -127,9 +127,9 @@
 
 
             
-            <div class="chart-containers" style=" height:500px; width:500px">
+            <div class="chart-containers">
 
-                <canvas class = "canva"  id="myChart2"></canvas>
+                <canvas class = "canva"  height="52vh" width="80vw" id="myChart2"></canvas>
 
             </div>
             

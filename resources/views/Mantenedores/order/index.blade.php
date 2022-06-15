@@ -176,18 +176,18 @@
                 // ****************************************************************************************************************
 
                 const showOrder = (id) => {
-
+                    
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('order.view') }}",
+                        url: "{{ route('order.vista') }}",
                         data: {
                             'id': id,
                         },
                         dataType: "json",
                         success: function(response) {
                             resultado = response;
-
-
+                            
+                            console.log(resultado)
                             $('#nameOrderVIEWMODAL').val(resultado[1]);
                             $('#name_order').val(resultado[1][0].name_order);
                             $('#payment').val(resultado[1][0].payment_method);
@@ -196,7 +196,7 @@
                             $('#date').val(resultado[1][0].created_at);
 
                             // $('#addorderLabel').html(${resultado.product_id})
-                            console.log(resultado)
+                            
                             $('#pruebaProductos').empty();
                             resultado[0].map(product => {
                                 $('#pruebaProductos').append(

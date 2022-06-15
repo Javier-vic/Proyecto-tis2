@@ -417,6 +417,7 @@ class OrderController extends Controller
 
     public function getview(request $request)
     {
+        
         $values = request()->except('_token');
         $id = $values['id'];
         $order = DB::table('orders')
