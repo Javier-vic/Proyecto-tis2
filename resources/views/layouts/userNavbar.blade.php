@@ -85,13 +85,22 @@
 
             {{-- NAVBAR PARA CELULAR --}}
             <ul class="navbar-nav flex-row d-lg-none">
-                <li class="nav-item mx-3 shadow bg-white  rounded py-1">
-                    <a class="nav-link fw-bold px-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
-                            class="fa-solid fa-user me-2"></i>Ingresar</a>
+          
+                @auth
+                <li class="nav-item mx-3 shadow bg-white  rounded">
+                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
                 </li>
+                @endauth
+              @guest
+              <li class="nav-item mx-3 shadow bg-white  rounded">
+                <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
+                        class="fa-solid fa-user me-2"></i>Ingresar</a>
+            </li>
+              @endguest
+            
                 <li class="nav-item mx-3 py-1">
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
-                        aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity2"></span></a>
+                        aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span class="cartQuantity" ></span></a>
 
                 </li>
             </ul>
@@ -116,15 +125,23 @@
             </div>
             {{-- FIN CONTENIDO CENTARL --}}
             {{-- NAVBAR PARA DESKTOP --}}
-            <ul class="navbar-nav flex-row d-lg-flex d-none">
+            <ul class="navbar-nav flex-row d-lg-flex d-none">        
+                @auth
                 <li class="nav-item mx-3 shadow bg-white  rounded">
-                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
-                            class="fa-solid fa-user me-2"></i>Ingresar</a>
+                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
                 </li>
+                @endauth
+              @guest
+              <li class="nav-item mx-3 shadow bg-white  rounded">
+                <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
+                        class="fa-solid fa-user me-2"></i>Ingresar</a>
+            </li>
+              @endguest
+            
                 <li class="nav-item mx-3 ">
                     <div>
                         <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
-                            aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartQuantity"></span></a>
+                            aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span class="cartQuantity" ></span></a>
                     </div>
                 </li>
             </ul>
@@ -212,6 +229,12 @@ const checkCart = (e) =>{
         });
     }
 }
-
+const cartQuantity = () =>{
+            var cart = localStorage.getItem('cart');
+            cart = JSON.parse(cart);
+            $('.cartQuantity').empty()
+            $('.cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+            
+        }
 </script>
 </html>

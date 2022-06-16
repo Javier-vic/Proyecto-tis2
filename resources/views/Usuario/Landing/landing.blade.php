@@ -1,9 +1,8 @@
 @extends('layouts.userNavbar')
 
 @section('content')
-
-    <div>
-        <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel">
+    <div >
+        <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel" >
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                     aria-current="true" aria-label="Slide 1"></button>
@@ -14,22 +13,22 @@
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
                     aria-label="Slide 4"></button>
             </div>
-            <div class="carousel-inner object-fit-cover w-100">
+            <div class="carousel-inner object-fit-cover " style="max-width: 100%; max-height:600px;">
                 <div class="carousel-item active" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
                 <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
                 <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
                 <div class="carousel-item" data-bs-interval="3000">
                     <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 640px; height:500px;">
+                        style="width: 100%; height:100%; max-height:600px;">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -45,11 +44,12 @@
         </div>
     </div>
 
+ 
     <div class="d-flex mt-5">
         <div class="col-12 col-md-8 col-xl-9 me-5 ">
             <div>
                 <div class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
-                    @foreach ($category_products as $category_product)
+                    @foreach($category_products as $category_product)
                         @if (in_array($category_product->name, $categoryAvailableNames))
                             <div class="text-white">
                                 <a href="#{{ str_replace(' ','',$category_product->name) }}"
@@ -66,6 +66,7 @@
                     @endforeach
                 </div>
                 <div>
+               
                     {{-- PRODUCTOS --}}
                     @foreach ($categoryAvailable as $category)
                         <h2 id="{{ str_replace(' ','',$category->name) }}" class="mb-5 invisible intersectionObserver">a</h2>
@@ -123,7 +124,7 @@
                         </div>
                     @endforeach
                     <div class=" d-md-none text-end sticky-margin-bottom" style="position: sticky;bottom: 0; ">
-                        <a href="/cart" onclick="checkCart(event)" class="btn bgColor text-white align-left shadow rounded-circle py-4 px-4" ><h4 class="m-0"><i class="fa-solid fa-basket-shopping "></i><span id="cartQuantity3"></span></h4></a>
+                        <a href="/cart" onclick="checkCart(event)" class="btn bgColor text-white align-left shadow rounded-circle py-4 px-4 " ><h4 class="m-0"><i class="fa-solid fa-basket-shopping "></i><span class="cartQuantity"></span></h4></a>
                     </div>
                     {{-- FIN PRODUCTOS --}}
                 </div>
@@ -212,14 +213,8 @@
             if (cart.length <= 0 ) {
                 $("#cart").empty();
                 // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
-                $('#cartQuantity').empty()
-                $('#cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+                cartQuantity()
 
-                $('#cartQuantity2').empty()
-                $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
-
-                $('#cartQuantity3').empty()
-                $('#cartQuantity3').append(`<span class="ms-2">${cart.length}</span>`)
                 //////////////////////////////////////////////// 
                 $('#cart').append(
                     `
@@ -234,14 +229,8 @@
             } else {
                 $("#cart").empty();
                 // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
-                $('#cartQuantity').empty()
-                $('#cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+                cartQuantity()
 
-                $('#cartQuantity2').empty()
-                $('#cartQuantity2').append(`<span class="ms-2">${cart.length}</span>`)
-
-                $('#cartQuantity3').empty()
-                $('#cartQuantity3').append(`<span class="ms-2">${cart.length}</span>`)
                 //////////////////////////////////////////////// 
                 cart = cart.map(e => {
                     $("#cart").append(
@@ -414,8 +403,6 @@
             });
         });
 
-    </script>
-    <script type="text/javascript">
         const categorias = Array.from(document.querySelectorAll('.intersectionObserver'))
         if (categorias) {
             var actualActivo;
@@ -435,5 +422,7 @@
                 observer.observe(categoria)
             })
         }
+
+      
     </script>
 @endsection

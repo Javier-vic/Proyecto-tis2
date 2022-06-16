@@ -35,12 +35,12 @@ class CouponController extends Controller
                 )
                 ->orderBy('coupons.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.coupon.datatable.action')
+                ->addColumn('action', 'Mantenedores.coupon.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('mantenedores.coupon.index');
+        return view('Mantenedores.coupon.index');
     }
 
     /**

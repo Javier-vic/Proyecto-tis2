@@ -32,7 +32,7 @@
         @include('Mantenedores.Role.modal.modalViewPermits')
     </div>
     <div class="">
-        @include('Mantenedores.Role.modal.ModalEditRole')
+        @include('Mantenedores.Role.modal.modalEditRole')
     </div>
 @endsection
 

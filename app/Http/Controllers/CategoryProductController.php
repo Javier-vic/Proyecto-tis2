@@ -33,12 +33,12 @@ class CategoryProductController extends Controller
                 )
                 ->orderBy('category_products.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.category.datatable.action')
+                ->addColumn('action', 'Mantenedores.category.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('mantenedores.category.index');
+        return view('Mantenedores.category.index');
     }
 
     /**

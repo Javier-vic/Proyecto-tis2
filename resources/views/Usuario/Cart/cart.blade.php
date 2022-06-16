@@ -184,11 +184,7 @@
             window.location.href = "/"; 
         }  
         // LE PONE NÚMERO AL LADO DEL ICONO DEL CARRITO CON LA CANTIDAD DE PRODUCTOS
-        $('#cartQuantity').empty()
-        $('#cartQuantity').append(`<span class="ms-2">${productos.length}</span>`)
-
-        $('#cartQuantity2').empty()
-        $('#cartQuantity2').append(`<span class="ms-2">${productos.length}</span>`)
+        cartQuantity()
         //////////////////////////////////////////////// 
 
         productos.map(product=>{
@@ -498,7 +494,6 @@
                     if (text) {
                         $('#coupon').removeClass('is-valid')
                         $('#coupon').addClass('is-invalid')
-                        $('#coupon').val('');
                         }                    
 
                 }
