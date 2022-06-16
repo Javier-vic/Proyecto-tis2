@@ -311,7 +311,7 @@ class LandingController extends Controller
         //OBTIENE TODAS LAS CATEGORÍAS
         $category_products = category_product::all();
         ////////////////////////////////////////////////
-        return view('Usuario.profile.profile', compact('userData', 'category_products'));
+        return view('Usuario.Profile.profile', compact('userData', 'category_products'));
     }
 
     public function updateUserProfile(request $request, user $user)
