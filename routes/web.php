@@ -59,7 +59,6 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
 
 
-
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);
@@ -77,14 +76,16 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
 //DEBEN ESTAR EN MIDDLEWARE
 Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
-Route::put('/landing/update/profile/{user}/', [LandingController::class, 'updateUserProfile'])->name('user.update');
+Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
 Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 ////////////////////////////////////////////////////////////////////////////////////////
 Route::resource('user', UserController::class);
 Route::resource('landing', LandingController::class);
 Route::resource('cart', CartController::class);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 // RUTAS DE ORDENES
 Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
 Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');

@@ -22,7 +22,7 @@ class User extends Authenticatable
     static $rules = [
         'name' => 'required',
         'email' => 'required|email',
-        'password' => 'required',
+        'password' => 'required|min:5|max:12',
         // 'id_role'=>'required',
         'address' => 'required',
         'phone' => 'required|lt:999999999|gt:0'
@@ -31,7 +31,9 @@ class User extends Authenticatable
         'required' => 'El campo es obligatorio',
         'email' => 'No es un correo electrónico válido.',
         'lt' => 'El numero no existe',
-        'gt' => 'No es un numero valido'
+        'gt' => 'No es un numero valido',
+        'min' => 'Como minimo deben ser 5 caracteres',
+        'max' => 'Como máximo deben ser 12 caracteres',
     ];
 
     static $rulesLogin = [
