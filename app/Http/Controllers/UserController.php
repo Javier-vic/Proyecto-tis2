@@ -161,6 +161,7 @@ class UserController extends Controller
                         'success' => false,
                         'errors' => ['loginFail' => 'Estas credenciales no existen en nuestros registros'],
 
+
                     ), 400);
                 }
             } catch (\Throwable $th) {

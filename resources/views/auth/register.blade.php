@@ -49,6 +49,7 @@
                                         <span class="input-group-text" id="basic-addon1">+56</span>
                                         <input id="phone" type="text" class="form-control input-modal"
                                             name="phone" value="{{ old('phone') }}"  autocomplete="phone" aria-describedby="basic-addon1">
+
                                     </div>
                                     <span class="text-danger createmodal_error" id="phone_error"></span>
                                 </div>
@@ -58,9 +59,13 @@
                                 <div class="col-md-6 mx-auto">
                                     <label for="password"
                                     class="">{{ __('Contraseña') }}</label>
-                                    <input id="password" type="password"
-                                        class="form-control input-modal" name="password"
-                                         autocomplete="new-password">
+                                    <div class="d-flex">
+                                        <input id="password" type="password"
+                                            class="form-control input-modal" name="password"
+                                             autocomplete="new-password">
+                                                                    <button onclick="showPasword(event)" id="showPasswordBtn" class="me-2 btn"><i class="fa-solid fa-eye-slash fa-xl"></i></button>
+                                    </div>
+
                                          <span class="text-danger createmodal_error" id="password_error"></span>
 
                                 </div>
@@ -118,7 +123,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: "No se pudo realizar el ingreso del producto.",
+                        title: "No se pudo registrar.",
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false
@@ -137,6 +142,25 @@
 
             });
         }
+
+        const showPasword = (e) =>{
+    e.preventDefault()
+    let inputType = $('#password').attr('type');
+    if(inputType === 'password'){
+        $('#password').attr('type','text');
+        $('#password-confirm').attr('type','text');
+        $('#showPasswordBtn').empty()
+        $('#showPasswordBtn').append('<i class="fa-solid fa-eye fa-xl"></i>')
+    } 
+    else {
+        $('#password').attr('type','password');
+        $('#password-confirm').attr('type','password');
+        $('#showPasswordBtn').empty()
+        $('#showPasswordBtn').append('<i class="fa-solid fa-eye-slash fa-xl"></i>')
+    } 
+   
+}
+        
         </script>
         @endsection
    
