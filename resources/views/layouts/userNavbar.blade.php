@@ -19,7 +19,9 @@
         .buttonHover:hover {
             background: rgb(158, 0, 0) !important;
         }
-
+        .buttonHover:focus {
+            background: rgb(158, 0, 0) !important;
+        }
         .agregarCarrito:hover {
             background: rgb(29, 114, 74) !important;
         }
@@ -87,9 +89,28 @@
             <ul class="navbar-nav flex-row d-lg-none">
           
                 @auth
-                <li class="nav-item mx-3 shadow bg-white  rounded">
-                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
-                </li>
+                <div class="dropdown d-flex ms-3">
+                    <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-user me-2"></i>Mi cuenta
+                    </button>
+                    <ul class="dropdown-menu position-absolute" aria-labelledby="dropdownMenuButton1" >
+                        <li class="nav-item mx-3">
+                            <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
+                            <hr>
+                        </li>
+                        <li class="nav-item mx-3">
+
+                        <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesion
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+
+                    </ul>
+                  </div>
                 @endauth
               @guest
               <li class="nav-item mx-3 shadow bg-white  rounded">
@@ -124,9 +145,29 @@
             {{-- NAVBAR PARA DESKTOP --}}
             <ul class="navbar-nav flex-row d-lg-flex d-none">        
                 @auth
-                <li class="nav-item mx-3 shadow bg-white  rounded">
-                    <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
-                </li>
+                <div class="dropdown d-flex ms-3">
+                    <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold fs-5 border-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-user me-2 fa-xl"></i> Mi cuenta
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li class="nav-item mx-3">
+                            <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
+                            <hr>
+                        </li>
+                        <li class="nav-item mx-3">
+
+                        <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesion
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+
+                    </ul>
+                  </div>
+          
                 @endauth
               @guest
               <li class="nav-item mx-3 shadow bg-white  rounded">
