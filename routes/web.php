@@ -53,6 +53,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
@@ -83,7 +84,6 @@ Route::post('/login/check', [UserController::class, 'login'])->name('user.login'
 //DEBEN ESTAR EN MIDDLEWARE
 Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
 Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 ////////////////////////////////////////////////////////////////////////////////////////
 Route::resource('user', UserController::class);
