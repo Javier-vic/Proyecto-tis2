@@ -325,12 +325,12 @@ class LandingController extends Controller
             'phone' => 'required|lt:999999999|gt:0'
         ];
         $messages = [
-            'required' => 'El campo es obligatorio',
-            'email' => 'No es un correo electrónico válido.',
-            'lt' => 'El numero no existe',
-            'gt' => 'No es un numero valido',
-            'min' => 'Como minimo deben ser 5 caracteres',
-            'max' => 'Como máximo deben ser 12 caracteres',
+            'required' => ' El campo es obligatorio',
+            'email' => ' No es un correo electrónico válido.',
+            'lt' => ' El numero no existe',
+            'gt' => ' No es un numero valido',
+            'min' => ' Como minimo deben ser 5 caracteres',
+            'max' => ' Como máximo deben ser 12 caracteres',
 
         ];
         $values = request()->except('_token');

@@ -121,6 +121,8 @@ class OrderController extends Controller
                 $order->order_status = $datosOrder['order_status'];
                 $order->payment_method = $datosOrder['payment_method'];
                 $order->address = $datosOrder['address'];
+                $order->number = $datosOrder['number'];
+                $order->mail = $datosOrder['mail'];
 
 
                 $order->pick_up = $datosOrder['pick_up'];
@@ -301,6 +303,8 @@ class OrderController extends Controller
                 $productos->address = $datosOrder['address'];
                 $productos->pick_up = $datosOrder['pick_up'];
                 $productos->comment = $datosOrder['comment'];
+                $productos->number = $datosOrder['number'];
+                $productos->mail = $datosOrder['mail'];
 
                 $permits = array();
                 $cantidad = array();

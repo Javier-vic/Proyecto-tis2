@@ -13,7 +13,7 @@
                         <div class="w-100">
                             <label for="" class="form-label"><i class="fa-solid fa-user me-2"></i>Nombre</label>
                             <input type="text" class="form-control input-modal" id="name_order" name="name_order"
-                                aria-describedby="name_help" placeholder="Juan Perez" onkeyup="checkInput(event)">
+                                aria-describedby="name_help" placeholder="Juan Perez" onkeyup="checkInput(event)" @if(auth()->user()) value="{{auth()->user()->name}}" readonly @endif >
                             <span class="text-danger createmodal_error" id="name_order_error"></span>
                         </div>
     
@@ -22,7 +22,7 @@
                         <div class="w-100">
                             <label for="" class="form-label"><i class="fa-solid fa-envelope me-2"></i>Correo electrónico </label>
                             <input type="text" class="form-control input-modal" id="mail" name="mail"
-                                aria-describedby="mail_help" placeholder="juanperez@gmail.com" onkeyup="checkInput(event)">
+                                aria-describedby="mail_help" placeholder="juanperez@gmail.com" onkeyup="checkInput(event)" @if(auth()->user()) value="{{auth()->user()->email}}" readonly @endif>
                             <span class="text-danger createmodal_error" id="mail_error"></span>
                         </div>
                         <div class="w-100">
@@ -30,7 +30,7 @@
                             <div class=" input-group">
                             <span class="input-group-text">+56</span>
                             <input type="text" class="form-control input-modal" id="number" name="number"
-                                aria-describedby="number_help" placeholder="912312312" onkeyup="checkInput(event)">
+                                aria-describedby="number_help" placeholder="912312312" onkeyup="checkInput(event)" @if(auth()->user()) value="{{auth()->user()->phone}}" readonly @endif>
                         </div>
                             <span class="text-danger createmodal_error" id="number_error"></span>
                         </div>

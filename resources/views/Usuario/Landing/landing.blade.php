@@ -150,8 +150,8 @@
             {{-- PRODUCTOS AGREGADOS --}}
             <div id="cart" class="py-4" style="overflow-y: auto; max-height:600px;">
                 <div class="text-white mx-3 px-2">
-                    <img src="https://www.papajohns.cl/static/media/ic_cart_empty.1de2c93e.svg" alt=""
-                        class="img-fluid" width="500" height="350">
+                    <img src="https://cdn.picpng.com/fork/silverware-plate-fork-spoon-52667.png" alt=""
+                        class="img-fluid opacity-50 mb-2" width="500" height="350">
                     <p class="text-muted m-0">Aún no has seleccionado ningún producto.</p>
                     <p class="text-muted m-0">Selecciona alguno y comienza a disfrutar !</p>
                 </div>

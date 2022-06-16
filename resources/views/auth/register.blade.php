@@ -123,7 +123,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
-                        title: "No se pudo registrar.",
+                        title: "Ocurrió un error",
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false

@@ -1,24 +1,24 @@
 @extends('layouts.userNavbar')
 
 @section('content')
-        <div class="card-body bg-white rounded p-5">
+        <div class="card-body bg-white rounded p-5 shadow mt-3">
             <form onsubmit="editProfile(event)"  enctype="multipart/form-data" id="formEdit">
                 @csrf
                 @method('PATCH')
                 <meta name="csrf-token" content="{{ csrf_token() }}" />
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="" class="form-label">Nombre </label>
                     <input type="text" class="form-control input-modal" id="name" name="name"
                         aria-describedby="name_help" value="{{$userData->name}}" placeholder="Juan Elías Perez Monsalves">
                     <span class="text-danger createmodal_error" id="name_product_error"></span>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="" class="form-label">Email </label>
                     <input type="text" class="form-control input-modal" id="email" name="email"
                         aria-describedby="email_help" value="{{$userData->email}}" placeholder="juanperez@gmail.com">
                     <span class="text-danger createmodal_error" id="email_error"></span>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="" class="form-label">Dirección</label>
                 
                         <input type="text" class="form-control input-modal" id="address" name="address"
@@ -26,7 +26,7 @@
                     <p class="text-muted">*Entre más detalles de tu dirección tales cómo n° de calle, sector , etc , será mejor para la satisfactoria entrega de tú compra</p>
                     <span class="text-danger createmodal_error" id="address_error"></span>
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="" class="form-label">Numero </label>
                     <div class="input-group">
                         <span class="input-group-text">+56</span>
@@ -42,7 +42,7 @@
                     </label>
                 </div>
                 <div id="passwordContainer" class="d-none">
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="" class="form-label">Nueva contraseña </label>
                         <div class="d-flex">
                             <input type="password" class="form-control input-modal" id="password" name="password"
@@ -52,7 +52,7 @@
                         <span class="text-danger createmodal_error" id="password_error"></span>
                        
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="" class="form-label">Confirmar contraseña </label>
                         <input type="password" class="form-control input-modal" id="passwordConfirm" name="passwordConfirm"
                             aria-describedby="passwordConfirm_help" value="empty">
@@ -107,9 +107,11 @@ const editProfile = (e) =>{
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 var text = jqXHR.responseJSON;
+                //LIMPIA LAS CLASES Y ELEMENTOS INVALID  
                 $(".createmodal_error").empty()
                 $(".input-modal").addClass('is-valid')
                 $(".input-modal").removeClass('is-invalid')
+                //////////////////////////////////////////////
                 Swal.fire({
                     position: 'bottom-end',
                     icon: 'error',

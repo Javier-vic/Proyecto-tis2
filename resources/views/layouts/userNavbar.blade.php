@@ -80,9 +80,10 @@
             <a class="navbar-brand d-none d-lg-block" href="#"><img
                     src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
                     alt="" width="75" height="75"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <!-- <span class="navbar-toggler-icon"></span> -->
+                <i class="fa-solid fa-ellipsis text-white"></i>
             </button>
 
             {{-- NAVBAR PARA CELULAR --}}
@@ -93,15 +94,15 @@
                     <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-circle-user me-2"></i>Mi cuenta
                     </button>
-                    <ul class="dropdown-menu position-absolute" aria-labelledby="dropdownMenuButton1" >
-                        <li class="nav-item mx-3">
-                            <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
+                    <ul class="dropdown-menu position-absolute " aria-labelledby="dropdownMenuButton1" >
+                        <li class="nav-item mx-3 mt-3 ">
+                            <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 " aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl align-self-center"></i>Mi perfil</a>
                             <hr>
                         </li>
                         <li class="nav-item mx-3">
 
                         <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesion
+                            <i class="fa-solid fa-right-from-bracket me-2 align-self-center"></i>Cerrar sesion
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
                             class="d-none">
@@ -113,7 +114,7 @@
                   </div>
                 @endauth
               @guest
-              <li class="nav-item mx-3 shadow bg-white  rounded">
+            <li class="nav-item mx-3 shadow bg-white  rounded">
                 <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
                         class="fa-solid fa-user me-2"></i>Ingresar</a>
             </li>
@@ -138,9 +139,7 @@
                         <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
                                 class="fa-solid fa-house-chimney me-2"></i>Local</a>
                     </li>
-                    @if(auth()->user())
-                        <div>{{auth()->user()->id}}</div>
-                    @endif
+        
                 </ul>
 
             </div>
