@@ -39,7 +39,7 @@ class SupplyController extends Controller
                 )
                 ->orderBy('supplies.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.supply.datatable.action')
+                ->addColumn('action', 'Mantenedores.supply.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
@@ -47,7 +47,7 @@ class SupplyController extends Controller
         $category_supplies = category_supply::all();
         $supplySelected = new supply();
 
-        return view('mantenedores.supply.index', compact('category_supplies', 'supplySelected'));
+        return view('Mantenedores.supply.index', compact('category_supplies', 'supplySelected'));
     }
 
     /**

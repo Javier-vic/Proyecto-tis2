@@ -34,13 +34,13 @@ class CategorySupplyController extends Controller
                 )
                 ->orderBy('category_supplies.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.category_supply.datatable.action')
+                ->addColumn('action', 'Mantenedores.category_supply.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
         }
         $category_supplies = category_supply::all();
-        return view('mantenedores.category_supply.index', compact('category_supplies'));
+        return view('Mantenedores.category_supply.index', compact('category_supplies'));
     }
 
     /**
