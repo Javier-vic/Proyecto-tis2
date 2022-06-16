@@ -10,6 +10,7 @@ use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
 use App\Models\user;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 
@@ -133,12 +134,37 @@ class LandingController extends Controller
                 //////////////VALIDA EL CUPÓN////////////
                 if ($values['coupon'] != null) {
                     $couponToCheck = coupon::where('code', $values['coupon'])->first();
-                    if ($couponToCheck) $newQuantity = $couponToCheck->quantity - 1;
-                    else {
+                    if ($couponToCheck) {
+                        $newQuantity = $couponToCheck->quantity - 1;
+                        $userId = auth()->user()->id;
+                        $user = User::find($userId);
+                        //VERIFICAMOS QUE EL USUARIO NO OCUPE EL MISMO CUPÓN MÁS DE 1 VEZ
+                        $checkUserCoupon = DB::table('coupon_user')
+                            ->select(
+                                'id',
+                            )
+                            ->where('coupon_id', $couponToCheck->id)
+                            ->where('user_id', $userId)
+                            ->get();
+
+
+                        if (sizeof($checkUserCoupon) > 0) {
+                            return Response::json(array(
+                                'success' => false,
+                                'coupon' => false,
+                                'message' => 'Ya has utilizado este cupón',
+                                'errors' => ['coupon' => '']
+
+                            ), 400);
+                        } else {
+                            $user->coupons()->attach($couponToCheck->id);
+                        }
+                    } else {
                         return Response::json(array(
                             'success' => false,
                             'coupon' => false,
                             'message' => 'El cupón no existe',
+                            'errors' => ['coupon' => '']
 
                         ), 400);
                     }
@@ -290,6 +316,68 @@ class LandingController extends Controller
 
     public function updateUserProfile(request $request, user $user)
     {
-        dd($request);
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:5|max:12',
+            'passwordConfirm' => 'required|min:5|max:12',
+            'address' => 'required',
+            'phone' => 'required|lt:999999999|gt:0'
+        ];
+        $messages = [
+            'required' => 'El campo es obligatorio',
+            'email' => 'No es un correo electrónico válido.',
+            'lt' => 'El numero no existe',
+            'gt' => 'No es un numero valido',
+            'min' => 'Como minimo deben ser 5 caracteres',
+            'max' => 'Como máximo deben ser 12 caracteres',
+
+        ];
+        $values = request()->except('_token');
+        $userId = $user->id;
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $user = user::find($userId);
+                $user->name = $values['name'];
+                $user->email = $values['email'];
+                $user->address = $values['address'];
+                $user->phone = $values['phone'];
+                if ($values['password'] != 'empty' && $values['passwordConfirm'] != 'empty') {
+                    if ($values['password'] == $values['passwordConfirm']) {
+                        $user->password = Hash::make($values['password']);
+                    } else {
+                        return Response::json(array(
+                            'success' => false,
+                            'message' => 'Ocurrió un error. Intentalo nuevamente',
+                            'errors' => ['password' => 'Las contraseñas no coinciden'],
+
+                        ), 400);
+                    }
+                }
+                $user->save();
+                DB::connection(session()->get('database'))->commit();
+                return Response::json(array(
+                    'success' => true,
+                    'message' => 'Se actualizó el perfil correctamente'
+
+                ), 200);
+            } catch (\Throwable $t) {
+                DB::connection(session()->get('database'))->rollBack();
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. Intentalo nuevamente'
+
+                ), 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray(),
+                'message' => 'Faltan campos por completar'
+
+            ), 400);
+        }
     }
 }

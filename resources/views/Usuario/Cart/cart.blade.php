@@ -1,11 +1,11 @@
 @extends('layouts.userNavbar')
 
 @section('content')
-<form onsubmit="createOrder(event)" method="POST" enctype="multipart/form-data" id="createOrder">
+<form onsubmit="createOrder(event)" method="POST" enctype="multipart/form-data" id="createOrder" class="container-fluid">
     @csrf
     <div class="row gap-3">
         {{-- DATOS DE COMPRA --}}
-            <div class="bg-white shadow p-3 mt-5 col col-8">
+            <div class="bg-white shadow p-3 mt-5 col-12 col-md-8">
                 <h2 class="">Datos de compra</h2>
                 <hr>
                 <div class="">
@@ -48,15 +48,15 @@
             <h3 class="m-0">Tipo de envío</h3>
             <hr>
             <div class="d-flex flex-column justify-content-between">
-                <div class="form-check w-100">
-                    <input class="form-check-input fs-5" type="radio" name="delivery" id="sucursal" value="Retira en local">
-                    <label class="form-check-label" for="sucursal">
+                <div class="form-check w-100 ms-3 mb-4 d-flex">
+                    <input class="form-check-input fs-4" type="radio" name="delivery" id="sucursal" value="Retira en local">
+                    <label class="form-check-label align-self-center ms-2" for="sucursal">
                         <h4 class="m-0 ms-2" ><i class="fa-solid fa-house me-2"></i>Retiro en sucursal</h4>
                     </label>
                 </div>
-                <div class="form-check w-100 align-center">
-                    <input class="form-check-input fs-5" type="radio" name="delivery" id="delivery" >
-                    <label class="form-check-label" for="delivery">
+                <div class="form-check w-100 align-center ms-3 d-flex">
+                    <input class="form-check-input fs-4" type="radio" name="delivery" id="delivery" >
+                    <label class="form-check-label align-self-center ms-2" for="delivery">
                         <h4 class="m-0 ms-2"><i class="fa-solid fa-person-biking me-2"></i>Despacho a domicilio</h4>
                 </label>
                 </div>
@@ -69,7 +69,7 @@
 
         </div>
     </div>
-    <div class="row gap-3">
+    <div class="row gap-3 col-12">
         <div class="bg-white shadow p-3 mt-5 col">
             <h3 class="m-0">Tú pedido</h3>
             <hr>
@@ -94,7 +94,7 @@
             </div>
     
         </div>
-        <div class="bg-white shadow p-3 mt-5 col">
+        <div class="bg-white shadow p-3 mt-5 col-md-6">
             <div class="h-50">
                 <h3 class="m-0">Método de pago</h3c>
                 <hr>
@@ -122,13 +122,23 @@
                     <button class="btn bgColor text-white buttonHover">Confirmar pedido</button>
                 </div>
 
-            <div class="mt-5 h-50">
-                <span>Cupón</span>
-                <div class="d-flex gap-2">
-                    <input type="text" class="form-control" id="coupon" name="coupon" aria-describedby="mail_help" value="">
-                    <button class="btn bgColor text-white buttonHover" onclick="checkCoupon(event)">Verificar</button>
+                @auth
+                <div class="mt-5 h-50">
+                    <span>Cupón</span>
+                    <div class="d-flex gap-2">
+                        <input type="text" class="form-control" id="coupon" name="coupon" aria-describedby="mail_help" value="">
+                        <button class="btn bgColor text-white buttonHover" onclick="checkCoupon(event)">Verificar</button>
+                    </div>
+                    <span class="text-muted" id="couponDescription"></span>
                 </div>
-            </div>
+                @endauth
+                @guest
+                <div class="mt-5  card-body shadow">
+                    <h5>¿Tienes un cupón de descuento? <a href="/login">Inicia sesión para utilizarlo</a></h5>
+
+                </div>
+                @endguest
+           
         </div>
     
         </div>
@@ -208,7 +218,7 @@
                     </div>
                 </div>
             </div>
-            <span id="product${product.id}_error">No hay stock suficiente de este producto.</span>
+            <span id="product${product.id}_error"></span>
             <hr>
            `)
            
@@ -465,6 +475,7 @@
                         $('#coupon').removeClass('is-invalid')
                         $('#coupon').addClass('is-valid')
                         $('#coupon').val(code);
+                        $('#couponDescription').append(`<span class="text-muted">*El cupón aplicará un ${text.couponPercentage}% de dcto al subtotal de tu compra.</span>`)
                     } 
                   
                     
@@ -494,6 +505,8 @@
                     if (text) {
                         $('#coupon').removeClass('is-valid')
                         $('#coupon').addClass('is-invalid')
+                        $('#couponDescription').empty()
+
                         }                    
 
                 }
