@@ -74,10 +74,13 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('publicity',ImageMainController::class);
 });
 
+Route::middleware(['auth'])->group(function(){
+    Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
+});
+
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
 //DEBEN ESTAR EN MIDDLEWARE
-Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
 Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
 Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
