@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
         <div class="row justify-content-center m-0 p-0 overflow-hidden">
             <div class="backgroundRegister col-md-4 d-none d-md-block m-0 p-0"></div>
             <div class="col-md-8 col-8 align-self-center m-0 p-0">
@@ -11,7 +12,11 @@
                                 <div class="col-md-6 mx-auto">
                                     <label for="name" class="">{{ __('Nombre') }}</label>
                                     <input id="name" type="text" class="form-control input-modal"
-                                        name="name" value="{{ old('name') }}"  autocomplete="name" autofocus>
+                                        name="name"  autocomplete="name" autofocus @if(isset($user))
+                                        value="{{ $user->name}}"
+                                        @else
+                                        value="{{ old('name') }}" 
+                                        @endif>
                                      <span class="text-danger createmodal_error" id="name_error"></span>
                                         
 
@@ -23,7 +28,11 @@
                                     <label for="email"
                                     class="">{{ __('Correo electrónico') }}</label>
                                     <input id="email" type="text" class="form-control input-modal"
-                                        name="email" value="{{ old('email') }}"  autocomplete="email">
+                                        name="email"   autocomplete="email" @if(isset($user))
+                                        value="{{ $user->email}}"
+                                        @else
+                                        value="{{ old('email') }}" 
+                                        @endif>
                                         <span class="text-danger createmodal_error" id="email_error"></span>
 
                                 </div>
@@ -55,28 +64,35 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">                              
+                           
+                            <div class="row mb-3  @if (isset($user))
+                                d-none
+                            @endif">                              
                                 <div class="col-md-6 mx-auto">
                                     <label for="password"
                                     class="">{{ __('Contraseña') }}</label>
                                     <div class="d-flex">
                                         <input id="password" type="password"
                                             class="form-control input-modal" name="password"
-                                             autocomplete="new-password">
-                                                                    <button onclick="showPasword(event)" id="showPasswordBtn" class="me-2 btn"><i class="fa-solid fa-eye-slash fa-xl"></i></button>
+                                             autocomplete="new-password"  @if (isset($user))
+                                        value="g00gl3"
+                                             @endif>
+                                            <button onclick="showPasword(event)" id="showPasswordBtn" class="me-2 btn"><i class="fa-solid fa-eye-slash fa-xl"></i></button>
                                     </div>
-
                                          <span class="text-danger createmodal_error" id="password_error"></span>
-
                                 </div>
                             </div>
 
-                            <div class="row mb-3">                                
+                            <div class="row mb-3  @if (isset($user))
+                                d-none
+                            @endif">                                
                                 <div class="col-md-6 mx-auto">
                                     <label for="password-confirm"
                                     class="">{{ __('Confirmar contraseña') }}</label>
                                     <input id="password-confirm" type="password" class="form-control "
-                                        name="password_confirmation"  autocomplete="new-password">
+                                        name="password_confirmation"  autocomplete="new-password" @if (isset($user))    
+                                        value="g00gl3"                            
+                                        @endif>  
                                 </div>
                             </div>
 

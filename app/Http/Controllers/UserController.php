@@ -82,6 +82,7 @@ class UserController extends Controller
 
                 $user->save();
                 DB::connection(session()->get('database'))->commit();
+                Auth::login($user);
                 return response('Se creó su cuenta con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();

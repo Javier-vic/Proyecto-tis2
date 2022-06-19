@@ -25,7 +25,7 @@ class User extends Authenticatable
         'password' => 'required|min:5|max:12',
         // 'id_role'=>'required',
         'address' => 'required',
-        'phone' => 'required|lt:999999999|gt:0'
+        'phone' => 'required|lt:999999999|gt:900000000'
     ];
     static $messages = [
         'required' => 'El campo es obligatorio',

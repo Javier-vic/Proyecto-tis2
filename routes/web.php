@@ -16,6 +16,9 @@ use App\Http\Controllers\ImageMainController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -72,10 +75,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('category_product', CategoryProductController::class);
     Route::resource('coupon', CouponController::class);
     Route::resource('map', MapController::class);
-    Route::resource('publicity',ImageMainController::class);
+    Route::resource('publicity', ImageMainController::class);
 });
 
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function () {
     Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
 });
 
@@ -96,4 +99,22 @@ Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview
 Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
 Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
 
-// RUTA DE ROLES
+//RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
+Route::get('/login-google', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/google-callback', function () {
+
+
+    $user = Socialite::driver('google')->stateless()->user();
+    $checkCorreo = User::where('email', $user->email)->first();
+    if ($checkCorreo) {
+        Auth::login($checkCorreo);
+        return redirect()->action('App\Http\Controllers\LandingController@index');
+    } else {
+        return view('auth.register', compact('user'));
+    }
+    // $user->token
+});
+//FIN RUTAS INICIO SESIÓN GOOGLE
