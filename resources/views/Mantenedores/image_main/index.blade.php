@@ -30,7 +30,7 @@
                 <div class="col-12 col-md-12 col-lg-6 mt-auto my-2">
                     <div class="d-flex my-2 justify-content-center">
                         <label for="">Orden:</label>
-                        <select name="order-{{$i+1+sizeof($images)}}" class="form-select ms-2 w-auto d-flex" id="" >
+                        <select name="order-{{$i+1+sizeof($images)}}" class="form-select ms-2 w-auto d-flex" id="idOrder-{{$i+1+sizeof($images)}}" >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -50,31 +50,44 @@
 @endsection
 
 @section('js_after')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const submitImages = (e) =>{
             e.preventDefault();
-            console.log(e.currentTarget);
-            var formData = new FormData(e.currentTarget);
-            console.log(formData);
-            for(var i = 1; i < 5; i++){
-                for(var j = 1; j < 5; j++){
-                    if($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val() && i!=j ){
-                        console.log(`image ${i} tiene mismo orden que iamgen ${j}`);
-                        return;
+            Swal.fire({
+            title: '¿Estas seguro de guardar los cambios?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, guardar!',
+            cancelButtonText: 'Cancelar',
+            }).then((result)=>{
+                console.log(e.target);
+                var formData = new FormData(e.target);
+                for(var i = 1; i < 5; i++){
+                    for(var j = 1; j < 5; j++){
+                        if(($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val()) && i!=j && $(`#idImage-${i}`)[0].files[0] && $(`#idImage-${j}`)[0].files[0] ){
+                            Swal.fire({
+                                title: 'Imagenes tienen el mismo orden!',
+                                icon: 'warning',
+                                showCancelButton: true,
+                            })
+                            return;
+                        }
                     }
                 }
-            }
-            $.ajax({
-                type: "POST",
-                url: "{{route('publicity.store')}}",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    location.reload();
-                }
-            });
-            
+                $.ajax({
+                    type: "POST",
+                    url: "{{route('publicity.store')}}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            })
         }
     </script>
 @endsection
