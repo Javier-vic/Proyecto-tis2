@@ -2,34 +2,6 @@
 
 @section('content')
     <div>
-        {{-- <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel" >
-            <div class="carousel-indicators">
-                @foreach($imagesMain as $key=>$image)
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{$key}}"
-                    aria-label="Slide {{$key}}"></button>
-                @endforeach
-            </div>
-            <div class="carousel-inner object-fit-cover " style="max-width: 100%; max-height:600px;">
-                @foreach($imagesMain as $image)
-                    <div class="carousel-item active" data-bs-interval="3000">
-                        <img src="{{ asset('storage') . '/' . $image->route }}" class="d-block w-100" alt="..."
-                            style="width: 100%; height:100%; max-height:600px;">
-                    </div>
-                @endforeach
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div> --}}
-
-
         <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel" >
             <div class="carousel-indicators">
                 @foreach($imagesMain as $key=>$image)
@@ -163,7 +135,7 @@
         {{-- TÚ PEDIDO --}}
         {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
         <div class=" py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top shadow"
-            style="width: -webkit-fill-available;">
+            style="width: -webkit-fill-available; z-index:-1;">
             <div class="row text-center py-2 px-2 m-0 mb-3 " id="continuePayment">
                 
                 
