@@ -307,7 +307,6 @@ class LandingController extends Controller
     {
         $userId = auth()->user()->id;
         $userData = user::where('id', $userId)->first();
-
         //OBTIENE TODAS LAS CATEGORÍAS
         $category_products = category_product::all();
         ////////////////////////////////////////////////

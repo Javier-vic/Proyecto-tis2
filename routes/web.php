@@ -10,13 +10,13 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\AsistController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ImageMainController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 
 /*
@@ -100,30 +100,5 @@ Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrde
 Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
 
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
-Route::get('/login-google', function () {
-    return Socialite::driver('google')->redirect();
-})->name('login.google');
-
-Route::get('/google-callback', function () {
-
-    $user = Socialite::driver('google')->user();
-    $checkCorreo = User::where('email', $user->email)->first();
-    if ($checkCorreo) {
-        Auth::login($checkCorreo);
-        return redirect()->action('App\Http\Controllers\LandingController@index');
-    } else {
-        $newUser = new user;
-        $newUser->name = $user->name;
-        $newUser->email = $user->email;
-        // $newUser->password = '';
-        $newUser->id_role = '2'; //ROL DE CLIENTE 
-        $newUser->address = 'Sin dirección';
-        $newUser->phone = '0';
-        $newUser->save();
-        Auth::login($newUser);
-    }
-    return redirect()->action('App\Http\Controllers\LandingController@index');
-
-    // $user->token
-});
-//FIN RUTAS INICIO SESIÓN GOOGLE
+Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
+Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);
