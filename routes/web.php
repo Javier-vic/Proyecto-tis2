@@ -56,7 +56,6 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
@@ -80,6 +79,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
 //RUTAS PARA LA VISTA DE USUARIOS
