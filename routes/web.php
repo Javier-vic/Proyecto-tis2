@@ -102,19 +102,28 @@ Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsell
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login-google', function () {
     return Socialite::driver('google')->redirect();
-});
+})->name('login.google');
 
 Route::get('/google-callback', function () {
 
-
-    $user = Socialite::driver('google')->stateless()->user();
+    $user = Socialite::driver('google')->user();
     $checkCorreo = User::where('email', $user->email)->first();
     if ($checkCorreo) {
         Auth::login($checkCorreo);
         return redirect()->action('App\Http\Controllers\LandingController@index');
     } else {
-        return view('auth.register', compact('user'));
+        $newUser = new user;
+        $newUser->name = $user->name;
+        $newUser->email = $user->email;
+        // $newUser->password = '';
+        $newUser->id_role = '2'; //ROL DE CLIENTE 
+        $newUser->address = 'Sin dirección';
+        $newUser->phone = '0';
+        $newUser->save();
+        Auth::login($newUser);
     }
+    return redirect()->action('App\Http\Controllers\LandingController@index');
+
     // $user->token
 });
 //FIN RUTAS INICIO SESIÓN GOOGLE

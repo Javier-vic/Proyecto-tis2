@@ -63,12 +63,19 @@
                                     <button type="submit" class="btn btn-danger text-white px-5 py-1 w-100">
                                         {{ __('Entrar') }}
                                     </button>
+                                 
                                 </div>
                                 <div class="col-md-6 text-start-md text-center mx-auto w-100">
                                         <div class="btn p-0 mt-2 w-100" >
                                             No eres miembro ?
                                             <a class=""
                                                 href="{{ route('user.index') }}">{{ __('Registrate ahora') }}</a>
+                                        </div>
+                                        <div class="flex items-center justify-end mt-5 mb-5">
+                                            <a href="{{ route('login.google') }}" class="text-decoration-none border border-primary rounded px-3 py-2">
+                                                <img src="{{asset("storage/images/googleLogo.svg")}}" class="me-2">
+                                                <span class=" ">Iniciar sesión con Google</span>
+                                            </a>
                                         </div>
                                 </div>
                             </div>
