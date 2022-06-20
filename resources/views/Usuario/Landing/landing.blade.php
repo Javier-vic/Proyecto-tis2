@@ -14,22 +14,12 @@
                     aria-label="Slide 4"></button>
             </div>
             <div class="carousel-inner object-fit-cover " style="max-width: 100%; max-height:600px;">
-                <div class="carousel-item active" data-bs-interval="3000">
-                    <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 100%; height:100%; max-height:600px;">
-                </div>
-                <div class="carousel-item" data-bs-interval="3000">
-                    <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 100%; height:100%; max-height:600px;">
-                </div>
-                <div class="carousel-item" data-bs-interval="3000">
-                    <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 100%; height:100%; max-height:600px;">
-                </div>
-                <div class="carousel-item" data-bs-interval="3000">
-                    <img src="https://dummyimage.com/1024x768/000/fff" class="d-block w-100" alt="..."
-                        style="width: 100%; height:100%; max-height:600px;">
-                </div>
+                @foreach($imagesMain as $image)
+                    <div class="carousel-item active" data-bs-interval="3000">
+                        <img src="{{ asset('storage') . '/' . $image->route }}" class="d-block w-100" alt="..."
+                            style="width: 100%; height:100%; max-height:600px;">
+                    </div>
+                @endforeach
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
                 data-bs-slide="prev">
