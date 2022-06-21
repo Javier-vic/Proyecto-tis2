@@ -13,7 +13,7 @@
                                 <div class="col-lg-6 mx-auto ">
                                     <label for="email"
                                     class="form-label mx-auto">{{ __('Correo electrónico') }}</label>
-                                    <input id="email" type="email" class="form-control input-modal loginFail"
+                                    <input id="email" type="text" class="form-control input-modal loginFail {{ $errors->has('email') ? ' is-invalid' : '' }}"
                                         name="email" value="{{ old('email') }}"  autocomplete="email" autofocus>
                                         <span class="text-danger createmodal_error" id="email_error"></span>
 
@@ -30,23 +30,24 @@
                                     <label for="password"
                                     class="form-label mx-auto">{{ __('Contraseña') }}</label>
                                     <input id="password" type="password"
-                                        class="form-control input-modal loginFail" name="password"
+                                        class="form-control input-modal loginFail {{ $errors->has('password') ? ' is-invalid' : '' }}" name="password"
                                          autocomplete="current-password">
-                                        <span class="text-danger createmodal_error" id="password_error"></span>
-
-                                  
-                                        <span class="loginFail" role="alert">
+                                         @error('password')
+                                         <span class="invalid-feedback" role="alert">
+                                             <strong>{{ $message }}</strong>
+                                         </span>
+                                     @enderror
                                            
                                         </span>
                           
                                 </div>
                             </div>
                                 <div class="col-lg-6 mx-auto text-start">
-                                    <a class="btn btn-link text-start m-0 p-0 mb-3" href="#">
+                                    <a class="btn btn-link text-start m-0 p-0 mb-3" href="{{ route('password.request') }}">
                                         {{ __('Olvidaste tu contraseña?') }}
                                     </a>
                                 </div>
-                            <!-- <div class="row mb-3">
+                            {{-- <div class="row mb-3">
                                                         <div class="col-md-6 offset-md-4">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -56,7 +57,7 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                    </div> -->
+                             </div>  --}}
 
                             <div class=" mb-0 mx-auto">
                                 <div class="col-lg-6 text-start-md text-center mx-auto">
