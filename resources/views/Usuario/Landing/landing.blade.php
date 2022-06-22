@@ -44,11 +44,25 @@
         </div>
     </div>
 
- 
     <div class="d-flex mt-5">
         <div class="col-12 col-md-8 col-xl-9 me-5 ">
             <div>
+            
+                <div>
+               
+
+                       {{-- CATEGORÍAS DE LOS PRODUCTOS --}}
                 <div class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
+                    {{-- AGREGA LOS MÁS VENDIDOS AL NAVBAR ( EN CASO DE EXISTIR ) --}}
+                    @if (sizeof($bestSellers) > 0)
+                        <div class="text-white">
+                            <a href="#{{ str_replace(' ','','masVendido') }}"
+                                id="{{ str_replace(' ','','masVendido') }}Navbar"
+                                class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 "
+                                style="white-space: nowrap">{{ 'Más vendidos' }}</a>
+                        </div>
+                    @endif
+                
                     @foreach($category_products as $category_product)
                         @if (in_array($category_product->name, $categoryAvailableNames))
                             <div class="text-white">
@@ -65,13 +79,66 @@
                         @endif
                     @endforeach
                 </div>
-                <div>
-               
+
+                    {{-- MÁS VENDIDOS --}}
+                        {{-- MÁS VENDIDOS --}}
+                        @if (sizeof($bestSellers)>0)
+                        <div>
+                            <h2 id="{{ str_replace(' ','','masVendido') }}" class="mb-5 invisible intersectionObserver">a</h2>
+                            <h2 id="" class="mb-4">Más vendidos</h2>
+                               <div class="my-2 row ">
+                                @foreach ($bestSellers as $bestSeller)
+                                           <div class="col-12 col-sm-6  col-xl-4 mb-3 p-1 ">
+                                               <div class="bg-image hover-overlay ripple text-center"
+                                                   data-mdb-ripple-color="light">
+                                                   @if ($bestSeller->stock > 0)
+                                                       <img src="{{ asset('storage') . '/' . $bestSeller->image_product }}"
+                                                           class="img-fluid rounded object-fit-cover "
+                                                           style="height: 239px;object-fit: cover;" />
+                                                   @else
+                                                       <img src="{{ asset('storage') . '/' . $bestSeller->image_product }}"
+                                                           class="img-fluid rounded object-fit-cover opacity-50"
+                                                           style="height: 239px;object-fit: cover;" />
+                                                   @endif
+                                               </div>
+                                               <div class="card-body">
+                                                   <div class="d-flex justify-content-between position-relative bg-white rounded px-2 pt-1 shadow border mb-3"
+                                                       style="margin-top:-30px;">
+                                                       <h5 class="card-title font-weight-bold" >
+                                                           <a>{{ $bestSeller->name_product }}</a>
+                                                       </h5>
+                                                       <p class="mb-2 text-success font-weight-bold">$
+                                                           {{ ($bestSeller->price) }}</p>
+                                                   </div>
+                                                   <p class="card-text comment more" style="min-height: 70px;">
+                                                       {{ $bestSeller->description }}
+                                                   </p>
+                                                   @if ($bestSeller->stock > 0)
+                                                       <a onclick="saveInCart({{ $bestSeller->id }})"
+                                                           class="btn w-100 bg-success text-white text-decoration-none agregarCarrito"><i
+                                                               class="fa-solid fa-plus me-1"></i>
+                                                           Agregar al carrito</a>
+                                                   @else
+                                                       <a
+                                                           class="btn w-100 bg-secondary text-white text-decoration-none disabled"><i
+                                                               class="fa-solid fa-x me-1"></i>
+                                                           PRODUCTO AGOTADO</a>
+                                                   @endif
+    
+                                               </div>
+                                           </div>
+                                @endforeach
+                               </div>
+                           <hr>
+    
+                       </div>
+                        @endif
+                       
                     {{-- PRODUCTOS --}}
                     @foreach ($categoryAvailable as $category)
                         <h2 id="{{ str_replace(' ','',$category->name) }}" class="mb-5 invisible intersectionObserver">a</h2>
                         <div>
-                            <h2 class="categoryName" id="{{ $category->name }}Nombre">{{ $category->name }}</h2>
+                            <h2 class="categoryName mb-4" id="{{ $category->name }}Nombre">{{ $category->name }}</h2>
                             <section>
                                 <div class="my-2 row ">
                                     @foreach ($productAvailable as $product)

@@ -133,6 +133,7 @@
                 </div>
                 @endauth
                 @guest
+                <input type="text" hidden class="form-control" id="coupon" name="coupon" aria-describedby="mail_help" value="">
                 <div class="mt-5  card-body shadow">
                     <h5>¿Tienes un cupón de descuento? <a href="/login">Inicia sesión para utilizarlo</a></h5>
 

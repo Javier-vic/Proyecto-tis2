@@ -56,11 +56,21 @@ class LandingController extends Controller
             ->get();
         ////////////////////////////////////////////////
 
+        $bestSellers = DB::table('products_orders')
+            ->select('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id', DB::raw('sum(products_orders.cantidad) as cantidad'))
+            ->join('products', 'products_orders.product_id', 'products.id')
+            ->groupBy('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id')
+            ->limit(3)
+            ->orderBy('cantidad', 'DESC')
+            ->get();
+        ////////////////////////////////////////////////
+
+
         //OBTIENE LAS CATEGORÍAS QUE ESTÁN DISPONIBLES SOLAMENTE Y PASA SOLO LOS NOMBRES A UN ARRAY( con productos en stock)
         $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
         ////////////////////////////////////////////////
 
-        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames'));
+        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames', 'bestSellers'));
     }
 
     /**
@@ -186,6 +196,7 @@ class LandingController extends Controller
                 ////////////////////////////////////
                 $order->save();
 
+                //RELLENA LA TABLA RELACION ENTRE PRODUCTOS Y ORDERS
                 for ($i = 0; $i < sizeof($cantidades); $i++) {
                     $order->products()->attach($productos[$i]->id, ['cantidad' => $cantidades[$i]]);
                 }
