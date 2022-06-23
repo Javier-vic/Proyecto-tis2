@@ -89,24 +89,26 @@
                 confirmButtonText: 'Si, Comenzar!',
                 cancelButtonText: 'Cancelar',
             }).then((result)=>{
-                $.ajax({
-                    type: "post",
-                    url: "{{route('asist.store')}}",
-                    data: {"_token": "{{ csrf_token() }}"},
-                    dataType: "json",
-                    success: function (response) {
-                        Swal.fire({
-                            title: 'Turno registrado',
-                            text: `Con hora: ${moment(response.asist.created_at).locale('es').format('LTS')}`,
-                            footer: 'No olvides terminar tu turno' 
-                        }).then((response)=>{
-                            location.reload();
-                        })
-                    },
-                    error: ()=>{
-    
-                    }
-                });
+                if(result.isConfirmed){
+                    $.ajax({
+                        type: "post",
+                        url: "{{route('asist.store')}}",
+                        data: {"_token": "{{ csrf_token() }}"},
+                        dataType: "json",
+                        success: function (response) {
+                            Swal.fire({
+                                title: 'Turno registrado',
+                                text: `Con hora: ${moment(response.asist.created_at).locale('es').format('LTS')}`,
+                                footer: 'No olvides terminar tu turno' 
+                            }).then((response)=>{
+                                location.reload();
+                            })
+                        },
+                        error: ()=>{
+        
+                        }
+                    });
+                }
             })
         }
         const finishAsist = (id) => {
@@ -118,23 +120,25 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, terminar!',
                 cancelButtonText: 'Cancelar',
-            }).then(()=>{
-                var url = '{{ route("finish.asist", ":id") }}';
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: {"_token": "{{ csrf_token() }}"},
-                    dataType: "text",
-                    success: function (response) {
-                        Swal.fire({
-                            title: 'Turno terminado',
-                            text: `Con hora: ${moment(response.date).locale('es').format('LTS')}`
-                        }).then(()=>{
-                            location.reload();
-                        })
-                    }
-                });
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    var url = '{{ route("finish.asist", ":id") }}';
+                    url = url.replace(':id', id);
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: {"_token": "{{ csrf_token() }}"},
+                        dataType: "text",
+                        success: function (response) {
+                            Swal.fire({
+                                title: 'Turno terminado',
+                                text: `Con hora: ${moment(response.date).locale('es').format('LTS')}`
+                            }).then(()=>{
+                                location.reload();
+                            })
+                        }
+                    });
+                }
             })
         }
         $(document).ready(function () {

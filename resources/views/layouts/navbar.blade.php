@@ -99,9 +99,11 @@
                         <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
                     </li>
                 @endif
-                <li>
-                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
-                </li>
+                @if (RoleController::havePermits(auth()->user()->id_role,10))
+                    <li>
+                        <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
+                    </li>
+                @endif
             </ul>
         </nav>
 
