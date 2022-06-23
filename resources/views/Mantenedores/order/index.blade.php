@@ -13,6 +13,7 @@
         <!-- <div id="number"></div> -->
         <div>@include('Mantenedores.order.modal.show')</div>
 
+        <a type="button" class="btn btn-primary mb-5" href="{{ route('order.create') }}" href="">Agregar Orden</a>
         <table class="responsive display nowrap " id="myTable" width=100%>
             <thead class="text-white bg-secondary">
                 <tr>
@@ -136,64 +137,28 @@
                         data: 'total',
                         name: 'total'
                     },
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            text: 'Agregar orden',
-                            className: 'btn btn-primary mb-2',
-                            action: function ( e, dt, node, config ) {
-                                window.location.href = '{{ route('order.create') }}'
-                            }
-                        }
-                    ],
-                    columns: [{
-                            data: 'id',
-                            name: 'id',
-                            visible: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'name_order',
-                            name: 'name_order'
-                        },
-                        {
-                            data: 'address',
-                            name: 'address'
-                        },
-                        {
-                            data: 'order_status',
-                            name: 'order_status'
-                        },
-                        {
-                            data: 'payment_method',
-                            name: 'payment_method'
-                        },
-                        {
-                            data: 'pick_up',
-                            name: 'pick_up'
-                        },
-                        {
-                            data: 'total',
-                            name: 'total'
-                        },
 
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
-
-                    ],
-                    initComplete: function(settings, json) {
-                        $('.dt-button').removeClass('dt-button')
-                        document.getElementById("number").innerHTML = table.data().count();
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
                     },
-                        select: true
-                    });
-                    $('#search').on('keyup', function() {
-                        table.search(this.value).draw();
-                    });
+
+
+
+
+
+                ],
+                // initComplete: function(settings, json) {
+
+                //     document.getElementById("number").innerHTML = table.data().count();
+                // },
+                    select: true
+                });
+                $('#search').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
                     // ****************************************************************************************************************
 
 
@@ -263,7 +228,76 @@
 
             <script>
 
+            function Graphdefault(){
 
+            const x = 2022
+            $.ajax({
+            type: "GET",
+            url: "{{ route('order.month') }}",
+            data: {
+                'year': x,
+            },
+            dataType: "json",
+            success: function(response) {
+            const resultado = response;
+            const label = []
+            const dates = new Array(12);
+                dates.fill(0);
+            let myChart;
+
+            resultado.map( cantidad =>{
+                        
+                dates[cantidad.month] = cantidad.data;
+                
+            })
+
+
+            const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
+            const data = {
+            labels: labels,
+            datasets: [{
+                label: `Ganancias mensuales ${x}`,
+                data: dates,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+            };
+
+            if (myChart) {
+                    myChart.destroy();
+            }
+
+            var ctx = document.getElementById(`myChart2`).getContext('2d');
+                if (myChart2) {
+                    myChart2.destroy();
+                }
+                myChart2 = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Ganancias mensuales'
+                    }
+                    }
+                },
+            }); 
+                        
+                    
+                    
+                
+            }
+            }); //ajax
+
+
+
+            }
 
                 let myChart2;
                 function viewGraph(){
@@ -478,7 +512,7 @@
                     
                     viewGraph();
                     getBestSellers(); /// grafic producto mas vendido
-                 
+                    Graphdefault();
                 }); 
 
                
