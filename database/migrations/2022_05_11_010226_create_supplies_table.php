@@ -18,6 +18,7 @@ class CreateSuppliesTable extends Migration
             $table->string('name_supply');
             $table->string('unit_meassurement');
             $table->float('quantity');
+            $table->float('critical_quantity');
             $table->BigInteger('id_category_supplies')->unsigned();
             $table->softDeletes();            
             $table->timestamps();

@@ -34,6 +34,7 @@ class SupplyController extends Controller
                     'supplies.name_supply',
                     'supplies.unit_meassurement',
                     'supplies.quantity',
+                    'supplies.critical_quantity',
                     'category_supplies.name_category',
                     
                 )
@@ -79,6 +80,7 @@ class SupplyController extends Controller
                 $supply->name_supply = $supplyData['name_supply'];
                 $supply->unit_meassurement = $supplyData['unit_meassurement'];
                 $supply->quantity = $supplyData['quantity'];
+                $supply->critical_quantity = $supplyData['critical_quantity'];
                 $supply->id_category_supplies = $supplyData['id_category_supplies'];
                 $supply->save();
                 DB::connection(session()->get('database'))->commit();
@@ -133,6 +135,7 @@ class SupplyController extends Controller
                 'supplies.name_supply',
                 'supplies.unit_meassurement',
                 'supplies.quantity',
+                'supplies.critical_quantity',
                 'supplies.id_category_supplies',
             )
             ->orderBy('supplies.id')
@@ -161,6 +164,7 @@ class SupplyController extends Controller
                 $supply->name_supply = $request->input('name_supply');
                 $supply->unit_meassurement = $request->input('unit_meassurement');
                 $supply->quantity = $request->input('quantity');
+                $supply->critical_quantity = $request->input('critical_quantity');
                 $id_category_supplies = $request->input('id_category_supplies');
                 $supply->category_supply()->associate($id_category_supplies);
                 $supply->update();

@@ -136,9 +136,17 @@
                                 class="fa-solid fa-utensils me-2"></i>Menú</a>
                     </li>
                     <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
-                                class="fa-solid fa-house-chimney me-2"></i>Local</a>
+                        <a class="nav-link fw-bold linkHover" aria-current="page" href="#">
+                            <i class="fa-solid fa-house-chimney me-2"></i>Local
+                        </a>
                     </li>
+                    @if(auth()->user())
+                        <li class="nav-item mx-3 ">
+                            <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('order.history')}}">
+                                <i class="fa-solid fa-receipt me-2"></i>Mis pedidos
+                            </a>
+                        </li>
+                    @endif
                     @auth
                     @if(auth()->user()->id_role != 2)
                                 <li class="nav-item mx-3 ">

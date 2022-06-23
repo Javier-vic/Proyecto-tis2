@@ -30,6 +30,11 @@
                         <span class="text-danger editmodal_error" id="quantity_errorEDITMODAL"></span>
                     </div>
                     <div class="form-group">
+                        <label for="critical_quantity">Cantidad crítica</label>
+                        <input type="float" name="critical_quantity" id="critical_quantityEdit" class="form-control input-modal">
+                        <span class="text-danger editmodal_error" id="critical_quantity_errorEDITMODAL"></span>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Selecciona una categoria</label>
                         <select name="id_category_supplies" class="form-select" id="id_category_suppliesEdit">
                             @foreach ($category_supplies as $category_supply)

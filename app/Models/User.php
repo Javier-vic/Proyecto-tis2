@@ -75,4 +75,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\coupon');
     }
+
+    public function orders(){
+        return $this->belongToMany('App\Models\order');
+    }
 }
