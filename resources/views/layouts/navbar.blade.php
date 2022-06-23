@@ -44,7 +44,7 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,1))
                     <li>
-                        <a href="{{route('publicity.index')}}" class="my-3" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
+                        <a href="{{route('publicity.index')}}" class="my-3 {{ request()->is('publicity','publicityorder/*') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,3))
@@ -101,6 +101,10 @@
                 @endif
                 <li>
                     <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
+                </li>
+
+                <li>
+                    <a href="{{route('landing.index')}}" class="my-3 "><i class="fa-solid fa-users me-2"></i>Vista usuarios</a>
                 </li>
             </ul>
         </nav>

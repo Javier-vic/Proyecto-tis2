@@ -71,7 +71,7 @@ class LandingController extends Controller
         $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
         ////////////////////////////////////////////////
         $imagesMain = image_main::orderBy('order')->get();
-        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames','imagesMain'));
+        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames','imagesMain','bestSellers'));
     }
 
     /**
