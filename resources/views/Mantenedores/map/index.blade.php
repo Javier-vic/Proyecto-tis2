@@ -19,8 +19,8 @@
 <span>Distancia de delivery</span>
     <input type="text" id="delivery_distance" name="delivery_distance">
     <select name="unit" id="unit">
-    <option value="kilometer">Kilometros</option>
-    <option value="centimeter">Centimetros</option>
+    <option value="kilometer">Kilómetros</option>
+    <option value="meter">Metros</option>
     </select>
 </div>
 
