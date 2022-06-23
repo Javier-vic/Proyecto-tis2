@@ -34,8 +34,3 @@ class order extends Model
         return $this->belongToMany('App\Models\User');
     }
 }
-
-
-
-}
-
