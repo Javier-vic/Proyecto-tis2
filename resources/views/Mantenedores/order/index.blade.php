@@ -1,6 +1,8 @@
 @extends('layouts.navbar')
 @section('css_extra')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 @endsection
 
 @section('titlePage')
@@ -11,23 +13,17 @@
         <!-- <div id="number"></div> -->
         <div>@include('Mantenedores.order.modal.show')</div>
 
-        <a type="button" class="btn btn-primary mb-5" href="{{ route('order.create') }}" href="">Agregar Orden</a>
-
-
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css" />
-
-
-        <table class="table table-light" id="myTable" width=100%>
-            <thead class="thead-light">
+        <table class="responsive display nowrap " id="myTable" width=100%>
+            <thead class="text-white bg-secondary">
                 <tr>
                     <th>#</th>
                     <th>Nombre orden</th>
-                    <th>Direccion</th>
+                    <th>Dirección</th>
                     <th>Estado</th>
                     <th>Retiro</th>
-                    <th>Metodo de pago</th>
+                    <th>Método de pago</th>
                     <th>Total</th>
-                    <th>acciones</th>
+                    <th>Acciones</th>
 
                 </tr>
             </thead>
@@ -35,12 +31,12 @@
             <div class="row">
 
                 <div class="col-md-6">
-                    <h3>Productos Mas Vendido</h3>
+                    <h3>Productos más vendidos</h3>
                     <canvas id="myChart" ></canvas>
                 </div>
 
                 <div id = "grafica2" class="col-md-6 ">
-                <h3 >Graficas De Ventas Mensuales</h3>
+                <h3 >Ventas mensuales</h3>
 
                 <form action="" id = "form-yea"> 
 
@@ -72,7 +68,19 @@
                 </form>
             
             </div>
-   @endsection
+        @endsection
+        @section('js_after')
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" ></script>
 
 
     @section('js_after')
@@ -128,28 +136,64 @@
                         data: 'total',
                         name: 'total'
                     },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            text: 'Agregar orden',
+                            className: 'btn btn-primary mb-2',
+                            action: function ( e, dt, node, config ) {
+                                window.location.href = '{{ route('order.create') }}'
+                            }
+                        }
+                    ],
+                    columns: [{
+                            data: 'id',
+                            name: 'id',
+                            visible: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'name_order',
+                            name: 'name_order'
+                        },
+                        {
+                            data: 'address',
+                            name: 'address'
+                        },
+                        {
+                            data: 'order_status',
+                            name: 'order_status'
+                        },
+                        {
+                            data: 'payment_method',
+                            name: 'payment_method'
+                        },
+                        {
+                            data: 'pick_up',
+                            name: 'pick_up'
+                        },
+                        {
+                            data: 'total',
+                            name: 'total'
+                        },
 
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+
+                    ],
+                    initComplete: function(settings, json) {
+                        $('.dt-button').removeClass('dt-button')
+                        document.getElementById("number").innerHTML = table.data().count();
                     },
-
-
-
-
-
-                ],
-                // initComplete: function(settings, json) {
-
-                //     document.getElementById("number").innerHTML = table.data().count();
-                // },
-                    select: true
-                });
-                $('#search').on('keyup', function() {
-                    table.search(this.value).draw();
-                });
+                        select: true
+                    });
+                    $('#search').on('keyup', function() {
+                        table.search(this.value).draw();
+                    });
                     // ****************************************************************************************************************
 
 

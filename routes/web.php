@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategorySupplyController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CouponController;
@@ -9,10 +10,14 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\AsistController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ImageMainController;
 use App\Http\Controllers\worker;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +33,11 @@ Route::get('/ubicacion', [LandingController::class,'ubicacion']);
 Route::get('/getLocation', [LandingController::class,'getLocation'])->name('getLocation');
 Route::get('/', [LandingController::class,'index']);
 Route::get('/login',function(){ return view('auth.login');})->name('login');
+
+Route::get('/', [LandingController::class, 'index']);
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
 
 Auth::routes();
@@ -72,15 +82,30 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::resource('category_product', CategoryProductController::class);
     Route::resource('coupon', CouponController::class);
-    Route::resource('user', UserController::class);
     Route::resource('map', MapController::class);
+    Route::resource('publicity', ImageMainController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
 //RUTAS PARA LA VISTA DE USUARIOS
-Route::resource('landing', LandingController::class);
+Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
+//DEBEN ESTAR EN MIDDLEWARE
+Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
+Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+////////////////////////////////////////////////////////////////////////////////////////
+Route::resource('user', UserController::class);
+Route::resource('landing', LandingController::class);
+Route::resource('cart', CartController::class);
+
+
 // RUTAS DE ORDENES
 
 
-// RUTA DE ROLES
+//RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
+Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
+Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);

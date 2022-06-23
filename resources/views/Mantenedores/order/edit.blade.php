@@ -36,7 +36,7 @@
 
 
     <div class="mb-4">
-        <label for="pick_up" class="form-label">Despacho pedido :</label>
+        <label for="pick_up" class="form-label">Despacho pedido </label>
             <select id="mi-select"  class="form-control" name="pick_up" value = "{{isset($order->pick_up)?$order->pick_up:'' }}">
 
                 <option value="si" {{ $orderData->pick_up == 'si' ? 'selected' : '' }}>SI</option>
@@ -46,13 +46,25 @@
     </div>
 
     <div class="mb-4 entradas">
-        <label for="" class="form-label">Direccion :</label>
+        <label for="" class="form-label">Número de celular </label>
+        <input type="text"  class="form-control input-modal" class="form-control" id="number" name="number" >
+        <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
+    </div>
+
+    <div class="mb-4 entradas">
+        <label for="" class="form-label">Email </label>
+        <input type="text"  class="form-control input-modal" class="form-control" id="mail" name="mail" >
+        <span class="createmodal_error" id="mail_errorCREATEMODAL"></span>
+    </div>
+
+    <div class="mb-4 entradas">
+        <label for="" class="form-label">Direccion </label>
         <input type="text"  class="form-control input-modal" class="form-control" id="address" name="address" >
         <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
     </div>
   
     <div class="mb-4">
-        <label  class="form-label">Metodo de pago :</label>
+        <label  class="form-label">Metodo de pago </label>
             <select id="payment_method"  class="form-control" name="payment_method" aria-describedby="name_product_help" value="{{ isset($orderData->payment_method)?$orderData->payment_method:''}}">
                 <option value="Efectivo" >Efectivo</option>
                 <option value="Credito">Credito</option>
@@ -128,6 +140,8 @@
         $('#order_status').val(selectproduct.order_status);
         $('#address').val(selectproduct.address);
         $('#total').val(selectproduct.total);
+        $('#mail').val(selectproduct.mail);
+        $('#number').val(selectproduct.number);
 
              // ****************************************************************************************************************
         //MODAL DE CREAR

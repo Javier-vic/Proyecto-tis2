@@ -45,19 +45,17 @@ class OrderController extends Controller
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
-
-                
         }
 
         //
         // consulta de los productos mas ordenados
         //
-     
+
 
         $years = DB::table('orders')
-        ->select( (DB::raw('YEAR(orders.created_at) year')))
-        ->groupby('year')
-        ->get();
+            ->select((DB::raw('YEAR(orders.created_at) year')))
+            ->groupby('year')
+            ->get();
 
 
         ///
@@ -126,6 +124,8 @@ class OrderController extends Controller
                 $order->order_status = $datosOrder['order_status'];
                 $order->payment_method = $datosOrder['payment_method'];
                 $order->address = $datosOrder['address'];
+                $order->number = $datosOrder['number'];
+                $order->mail = $datosOrder['mail'];
 
 
                 $order->pick_up = $datosOrder['pick_up'];
@@ -186,8 +186,6 @@ class OrderController extends Controller
                 for ($i = 0; $i < $size; $i++) {
                     $id = $permits[$i]; //id
                     $cont = $cantidad[$i]; //cantidad
-
-
                     $order->products()->attach($id, ['cantidad' => $cont]);
                     DB::connection(session()->get('database'))->commit();
                     return response('Se ingresó la orden con éxito.', 200);
@@ -308,6 +306,8 @@ class OrderController extends Controller
                 $productos->address = $datosOrder['address'];
                 $productos->pick_up = $datosOrder['pick_up'];
                 $productos->comment = $datosOrder['comment'];
+                $productos->number = $datosOrder['number'];
+                $productos->mail = $datosOrder['mail'];
 
                 $permits = array();
                 $cantidad = array();
@@ -503,7 +503,8 @@ class OrderController extends Controller
 
     ///eliminar
 
-    public function getbestsellers(){
+    public function getbestsellers()
+    {
 
         $bestseller = DB::table('products_orders')
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))

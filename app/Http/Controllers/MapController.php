@@ -19,7 +19,7 @@ class MapController extends Controller
     public function index()
     {
         $mapa = map::find(1);
-        return view('mantenedores.map.index', compact('mapa'));
+        return view('Mantenedores.map.index', compact('mapa'));
     }
 
     /**

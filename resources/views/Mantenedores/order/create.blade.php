@@ -50,6 +50,20 @@
                         <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
                 </div>
 
+                <div class="mb-4 entradas">
+                    <label for="comment" class="form-label">Número de celular :</label>
+                    <input type="text" class="form-control input-modal" value=""
+                        class="form-control" id="number" name="number" >
+                        <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
+                </div>
+
+                <div class="mb-4 entradas">
+                    <label for="comment" class="form-label">Email :</label>
+                    <input type="text" class="form-control input-modal" value=""
+                        class="form-control" id="mail" name="mail" >
+                        <span class="createmodal_error" id="mail_errorCREATEMODAL"></span>
+                </div>
+
 
                 <div class="mb-4">
                     <label for="name_order" class="form-label">Metodo de pago :</label>

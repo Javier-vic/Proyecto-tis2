@@ -36,8 +36,8 @@ class ProductController extends Controller
                 )
                 ->orderBy('products.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.product.datatable.action')
-                ->addColumn('image', 'mantenedores.product.datatable.image')
+                ->addColumn('action', 'Mantenedores.product.datatable.action')
+                ->addColumn('image', 'Mantenedores.product.datatable.image')
                 ->rawColumns(['action', 'image'])
                 ->addIndexColumn()
                 ->make(true);
@@ -46,7 +46,7 @@ class ProductController extends Controller
         $productSelected = new product();
 
 
-        return view('mantenedores.product.index', compact('category_products', 'productSelected'));
+        return view('Mantenedores.product.index', compact('category_products', 'productSelected'));
     }
 
     /**
@@ -73,10 +73,9 @@ class ProductController extends Controller
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
-                $values = request()->except('_token');
                 $productData = request()->except('_token');
                 $producto = new Product;
-                $producto->stock = $values['stock'];
+                $producto->stock = $productData['stock'];
                 $producto->name_product = $productData['name_product'];
                 $producto->description = $productData['description'];
                 $producto->price = $productData['price'];
@@ -233,6 +232,7 @@ class ProductController extends Controller
         $id = $product->id;
         try {
             $product = product::on(session()->get('database'))->find($id);
+            Storage::delete('public/' . $product->image_product);
             $product->delete();
 
             DB::connection(session()->get('database'))->commit();
