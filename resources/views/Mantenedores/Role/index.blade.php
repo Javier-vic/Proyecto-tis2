@@ -32,7 +32,7 @@
         @include('Mantenedores.Role.modal.modalViewPermits')
     </div>
     <div class="">
-        @include('Mantenedores.Role.modal.ModalEditRole')
+        @include('Mantenedores.Role.modal.modalEditRole')
     </div>
 @endsection
 
@@ -40,6 +40,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script>
+
         const Table = $("#myTable").DataTable({
             processing: true,
             serverSide: true,

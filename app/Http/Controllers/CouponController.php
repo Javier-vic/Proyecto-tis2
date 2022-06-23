@@ -35,12 +35,12 @@ class CouponController extends Controller
                 )
                 ->orderBy('coupons.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.coupon.datatable.action')
+                ->addColumn('action', 'Mantenedores.coupon.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('mantenedores.coupon.index');
+        return view('Mantenedores.coupon.index');
     }
 
     /**
@@ -62,19 +62,8 @@ class CouponController extends Controller
     public function store(Request $request)
     {
 
-        $rules = [
-            'code'          => 'required|string',
-            'percentage'          => 'required|integer',
-            'caducity'          => 'required|string',
-            'emited'          => 'required|string',
-            'quantity' => 'required|integer'
 
-        ];
-
-        $messages = [
-            'required'      => 'Este campo es obligatorio',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), coupon::$rules, coupon::$messages);
 
         if ($validator->passes()) {
             DB::beginTransaction();

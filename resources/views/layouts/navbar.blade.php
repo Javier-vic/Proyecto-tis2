@@ -16,7 +16,7 @@
 
 </head>
 @if (RoleController::havePermits(auth()->user()->id_role,1))
-    
+
 @endif
 <body>  
     <div class="wrapper">
@@ -44,7 +44,7 @@
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,1))
                     <li>
-                        <a href="#" class="my-3 " hidden ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
+                        <a href="{{route('publicity.index')}}" class="my-3 {{ request()->is('publicity','publicityorder/*') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-envelope"></i>Publicidad</a>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role,3))
@@ -99,24 +99,25 @@
                         <a href="{{route('coupon.index')}}" class="my-3 {{ request()->is('coupon') ? ' active' : '' }}"><i class="me-3 fa-solid fa-tag"></i>Cupones</a>
                     </li>
                 @endif
-                <li>
-                    <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
-                </li>
+                @if (RoleController::havePermits(auth()->user()->id_role,10))
+                    <li>
+                        <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
+                    </li>
+                @endif
             </ul>
         </nav>
 
         <!-- Page Content  -->
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
-                        <i class="fas fa-align-left text-white"></i>
-                    </button>   
-                    @yield('titlePage')                
-                    <div style="visibility:hidden">.</div>                 
-                </div> 
-                <div class="" aria-labelledby="navbarDropdown">
-                    <a class="btn btn-danger d-flex " style="width: max-content;" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light row">
+                <div class="col d-flex justify-content-between">
+                    <div col-3  >
+                        <button type="button" id="sidebarCollapse" class="btn btn-toggle-color">
+                            <i class="fas fa-align-left text-white"></i>
+                        </button>
+                    </div>  
+                    <div class="d-none d-sm-block col text-center">@yield('titlePage')</div>
+                    <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Cerrar sesion
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST"

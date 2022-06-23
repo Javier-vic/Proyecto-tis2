@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLandingsTable extends Migration
+class CreateImageMainsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateLandingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('landings', function (Blueprint $table) {
+        Schema::create('image_mains', function (Blueprint $table) {
             $table->id();
+            $table->string('route');
+            $table->integer('order');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateLandingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('landings');
+        Schema::dropIfExists('image_mains');
     }
 }

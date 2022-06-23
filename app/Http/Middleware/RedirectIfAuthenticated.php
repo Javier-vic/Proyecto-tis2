@@ -18,11 +18,16 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        $guards = empty($guards) ? [null] : $guards;
 
+        $guards = empty($guards) ? [null] : $guards;
+        
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if($request->user()->id_role==2){
+                    return redirect(RouteServiceProvider::LANDING);
+                }else{
+                    return redirect(RouteServiceProvider::HOME);
+                }
             }
         }
 

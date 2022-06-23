@@ -33,12 +33,12 @@ class CategoryProductController extends Controller
                 )
                 ->orderBy('category_products.id')
                 ->get())
-                ->addColumn('action', 'mantenedores.category.datatable.action')
+                ->addColumn('action', 'Mantenedores.category.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('mantenedores.category.index');
+        return view('Mantenedores.category.index');
     }
 
     /**
@@ -62,11 +62,12 @@ class CategoryProductController extends Controller
 
 
         $rules = [
-            'name'          => 'required|string',
+            'name'          => 'required|string|regex:/^[A-Za-z0-9 ]+$/',
         ];
 
         $messages = [
             'required'      => 'Este campo es obligatorio',
+            'name.regex' => 'No se permiten caracteres especiales'
         ];
 
 
