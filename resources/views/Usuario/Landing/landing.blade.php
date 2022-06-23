@@ -135,7 +135,7 @@
         {{-- TÚ PEDIDO --}}
         {{-- <div class="border border-danger border-3 py-3 px-1 align-self-start sticky-top d-none d-xl-block"> --}}
         <div class=" py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top shadow"
-            style="width: -webkit-fill-available; z-index:-1;">
+            style="width: -webkit-fill-available; z-index:0;">
             <div class="row text-center py-2 px-2 m-0 mb-3 " id="continuePayment">
                 
                 
