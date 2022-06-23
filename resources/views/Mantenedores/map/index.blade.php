@@ -14,10 +14,22 @@
 <div>
     @include('Mantenedores.map.modal.edit')
 </div>
-<span></span>
-<div class="container h-75">
-    <div class="row justify-content-center h-100">
-        <div class="col-8" id="map" style="height: 100%; border: solid 1px;"></div>
+
+<div>
+<span>Distancia de delivery</span>
+    <input type="text" id="delivery_distance" name="delivery_distance">
+    <select name="unit" id="unit">
+    <option value="kilometer">Kilometros</option>
+    <option value="centimeter">Centimetros</option>
+    </select>
+</div>
+
+<div class="h-75">
+    <div class="w-100 text-center mb-2"><button onclick="centerMap()" class="btn btn-primary">Centrar mapa</button></div>
+    <div class="container h-100">
+        <div class="row justify-content-center h-100">
+            <div class="col-8" id="map" style="height: 100%; border: solid 1px;"></div>
+        </div>
     </div>
 </div>
 @endsection
@@ -52,6 +64,9 @@
 
     //CREAR LEYENDA
 
+    const centerMap = () => {
+        map.setView([latitud, longitud], 18);
+    }
     
     var marker = L.marker([parseFloat(latitud), parseFloat(longitud)], {
         title : 'Tienda ramen dashi'

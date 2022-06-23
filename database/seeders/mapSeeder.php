@@ -20,6 +20,8 @@ class mapSeeder extends Seeder
         $producto->direccion = 'Puren 596 Chillán, Ñuble';
         $producto->latitud = '-36.6138882';
         $producto->longitud = '-72.1053811';
+        $producto->delivery_distance = '0';
+        $producto->unit = 'kilometer';
         $producto->save();
     }
 }
