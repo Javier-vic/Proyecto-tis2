@@ -31,5 +31,13 @@ class UserSeeder extends Seeder
             'address'=> 'Example2  #321 pobl Example 2',
             'password' => Hash::make('12341234'),
         ]);
+        User::Create([
+            'name' => 'Test comprado',
+            'email' => 'test3@gmail.com',
+            'id_role' => '2',
+            'phone' => 56911112222,
+            'address' => 'Example #221 pobl Example 3',
+            'password' => Hash::make('12341234'),
+        ]);
     }
 }
