@@ -139,9 +139,16 @@
                         <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
                                 class="fa-solid fa-house-chimney me-2"></i>Local</a>
                     </li>
-                    <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('home')}}"><i class="fa-solid fa-chart-line me-2"></i>Administración</a>
-                    </li>
+                    @auth
+                    @if(auth()->user()->id_role != 2)
+                                <li class="nav-item mx-3 ">
+                                    <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('home')}}"><i class="fa-solid fa-chart-line me-2"></i>Administración</a>
+                                </li>
+                                @endif
+                    @endauth
+                   
+
+                   
                 </ul>
 
             </div>
