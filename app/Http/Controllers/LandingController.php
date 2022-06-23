@@ -10,6 +10,7 @@ use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
 use App\Models\user;
+use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
@@ -69,8 +70,8 @@ class LandingController extends Controller
         //OBTIENE LAS CATEGORÍAS QUE ESTÁN DISPONIBLES SOLAMENTE Y PASA SOLO LOS NOMBRES A UN ARRAY( con productos en stock)
         $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
         ////////////////////////////////////////////////
-
-        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames', 'bestSellers'));
+        $imagesMain = image_main::orderBy('order')->get();
+        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames','imagesMain'));
     }
 
     /**
