@@ -2,6 +2,16 @@
     .fondo.modalBlur>*:not(.modal){
         -webkit-filter: blur(4px);
     }
+
+    .aa{
+       background-color: #f3f3f3;
+    }
+
+    .view-input{
+        background-color: #f3f3f3;
+        border: none;
+    }
+
 </style>
 <script type = "text/JavaScript" src = "https://MomentJS.com/downloads/moment.js"></script>
 
@@ -99,10 +109,10 @@
                     $('#name_order').val(resultado[1][0].name_order);
                     $('#payment').val(resultado[1][0].payment_method);
                     $('#total').val(resultado[1][0].total);
-                    $('#dely').val(resultado[1][0].pick_up);
                     $('#date').val(resultado[1][0].created_at);
+                    $('#dely').val(resultado[1][0].pick_up);
+                    $('#dely_address').val(resultado[1][0].address);
 
-                    // $('#addorderLabel').html(${resultado.product_id})
                     console.log(resultado)
                     $('#pruebaProductos').empty();
                     resultado[0].map(product => {
@@ -110,7 +120,7 @@
                             `
                             <tr>
                                 <td>${product.name_product}</td>
-                                <td>${product.cantidad}</td>
+                                <td class="text-danger fw-bold">${product.cantidad}</td>
                                 <td>${product.cantidad*product.price}</td>
                             </tr> 
                             `
@@ -122,18 +132,18 @@
     </script>
 
     <script>
-        (Blur(){
-        //Show Modal
-        $('#viewOrder').on('show.bs.modal', function (e) {
-            console.log('show');
-            $('.fondo').addClass('modalBlur');
-        })
-        
-        //Remove modal
-        $('#viewOrder').on('hide.bs.modal', function (e) {
-            console.log('hide');
-            $('.fondo').removeClass('modalBlur');
-        })
+        (function(){
+            //Show Modal
+            $('#viewOrder').on('show.bs.modal', function (e) {
+                console.log('show');
+                $('.fondo').addClass('modalBlur');
+            })
+            
+            //Remove modal
+            $('#viewOrder').on('hide.bs.modal', function (e) {
+                console.log('hide');
+                $('.fondo').removeClass('modalBlur');
+            })
         })();
     </script>
 @endsection
