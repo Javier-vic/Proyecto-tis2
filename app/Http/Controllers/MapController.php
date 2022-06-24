@@ -40,7 +40,33 @@ class MapController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $values = request()->except('_token');
+        try {
+            DB::beginTransaction();
+
+            $map = map::first();
+            if ($values == []) {
+                $map->delivery_zones = '';
+            } else {
+                $zonesToString = json_encode($values['polygons']);
+                $map->delivery_zones = $zonesToString;
+            }
+            $map->save();
+            DB::connection(session()->get('database'))->commit();
+
+            return Response::json(array(
+                'success' => true,
+                'message' => 'Se crearon las zonas de delivery correctamente'
+
+            ), 200);
+        } catch (\Throwable $th) {
+            DB::connection(session()->get('database'))->rollBack();
+            return Response::json(array(
+                'success' => false,
+                'message' => 'Ocurrió un error al crear las zonas de delivery'
+
+            ), 400);
+        }
     }
 
     /**
