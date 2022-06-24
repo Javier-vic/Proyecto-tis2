@@ -56,7 +56,8 @@ class MapController extends Controller
 
             return Response::json(array(
                 'success' => true,
-                'message' => 'Se crearon las zonas de delivery correctamente'
+                'message' => 'Se guardaron los cambios correctamente',
+                'mapData' => $map['delivery_zones'],
 
             ), 200);
         } catch (\Throwable $th) {

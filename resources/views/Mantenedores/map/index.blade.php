@@ -17,18 +17,11 @@
     @include('Mantenedores.map.modal.edit')
 </div>
 
-<div>
-<span>Distancia de delivery</span>
-    <input type="text" id="delivery_distance" name="delivery_distance">
-    <select name="unit" id="unit">
-    <option value="kilometer">Kilómetros</option>
-    <option value="meter">Metros</option>
-    </select>
-</div>
-
 <div class="h-75">
-    <div class="w-100 text-center mb-2"><button onclick="centerMap()" class="btn btn-primary">Centrar mapa</button></div>
-    <div class="w-100 text-center mb-2"><button onclick="saveZones(event)" class="btn btn-primary">Guardar zonas</button></div>
+    <div class="d-flex justify-content-center gap-5">
+      <div class=" text-center mb-2"><button onclick="centerMap()" class="btn btn-primary">Centrar mapa</button></div>
+      <div class=" text-center mb-2"><button onclick="saveZones(event)" class="btn btn-success">Guardar zonas</button></div>
+    </div>
     <div class="container h-100">
         <div class="row justify-content-center h-100">
             <div class="col-8" id="map" style="height: 100%; border: solid 1px;"></div>
@@ -56,7 +49,6 @@
       let datosMapa = @json($mapa);
       let {direccion,id,latitud,longitud} = datosMapa
       const AT = 'pk.eyJ1IjoiZmVlbGluZ29vZCIsImEiOiJjbDNreWwzN2YxcWN1M2pxaXYyMmhienFyIn0.W6ChTj4rP0NOsFcvBL-xbg'
-
     // Crea el mapa
     var map = L.map('map').setView([parseFloat(latitud),parseFloat(longitud)], 15);
   
@@ -68,13 +60,12 @@
     //Si es que existen zonas las parseamos a un formato valido...
       if(datosMapa.delivery_zones){
       let polygonsSaved = JSON.parse(datosMapa.delivery_zones);
-       console.log(polygonsSaved)
 
        var arrayOfNumbers = []
        polygonsSaved.map(polygon =>{
        var aux
        let arrayAux = []
-        //FUNCION PARA PASAR TODOS LOS VALORES DE COORDENADAS DE STRING A INT
+       //FUNCION PARA PASAR TODOS LOS VALORES DE COORDENADAS DE STRING A INT
         for (let i = 0; i < polygon.length; i++) {
         aux = polygon[i].map(Number);
         
@@ -150,6 +141,7 @@
         rectangle: false,
         marker: false,
         },
+     
       edit: {
         featureGroup: editableLayers, //REQUIRED!!
         edit: false,
@@ -162,7 +154,7 @@
     //AGREGA COMO LAYER BORRABLE
     map.addControl(drawControl);
 
-//AGREGA LOS POLIGONOS COMO CAPAS ( ASI SE PUEDEN ELIMINAR Y QUEDAN GUARDADOS)
+  //AGREGA LOS POLIGONOS COMO CAPAS ( ASI SE PUEDEN ELIMINAR Y QUEDAN GUARDADOS)
 
   // editableLayers.addLayer(polygon2)
 
@@ -176,26 +168,7 @@
       editableLayers.addLayer(layer);
 
     });
-    // 
-
-
-
-// create a red polygon from an array of LatLng points
-//CREA POLIGONO Y SE LE ASIGNA FUNCION QUE AL CLICKEAR SE PUEDE HACER ALGO
-// var latlngs = [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04],[38, -105.04]];
-
-// var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
-
-// polygon.on("click",function(e){
-//     console.log('clickeau')
-//     console.log(e)
-// })
-
-// zoom the map to the polygon
-// map.fitBounds(polygon.getBounds());
-
-
-      //****************************************************************************************************************
+        ////****************************************************************************************************************
         //GUARDAR LAS ZONAS CREADAS
         // ****************************************************************************************************************
         const saveZones = (e) => {
@@ -204,10 +177,7 @@
             let polygons = editableLayers.toGeoJSON().features
       
             let coordinates = []
-            console.log('poltgonse')
             let valores = polygons.map(singlePolygon =>{
-              console.log('sP')
-              console.log(singlePolygon)
               coordinates.push(singlePolygon.geometry.coordinates[0])
               })
                 $.ajax({
@@ -217,7 +187,6 @@
                 dataType: "json",
 
                 success: function(response) {
-                   console.log(response)
                    if(response.success){
                     var toastMixin = Swal.mixin({
                     toast: true,
@@ -229,12 +198,41 @@
                     toast.addEventListener('mouseenter', Swal.stopTimer)
                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                     }
+                    
                 });
                 toastMixin.fire({
                     title: response.message,
                     icon: 'success'
                 });
+                //ESTO ES PARA CREAR LOS POLYGONOS DE FORMA SIN RECARGAR LA PAGINA
+                if(response.mapData !== ""){
+                let polygonsSaved = JSON.parse(response.mapData);
+
+                var arrayOfNumbers = []
+                polygonsSaved.map(polygon =>{
+                var aux
+                let arrayAux = []
+                //FUNCION PARA PASAR TODOS LOS VALORES DE COORDENADAS DE STRING A INT
+                  for (let i = 0; i < polygon.length; i++) {
+                  aux = polygon[i].map(Number);
+                  
+                  arrayAux.push(aux.reverse())
+                  }
+                  arrayOfNumbers.push(arrayAux)
+                })
+                  //LE QUITA TODOS LOS POLIGONOS A LA CAPA ANTES DE VOLVER A DIBUJARLOS
+                  editableLayers.clearLayers()
+                //CREA LOS POLIGONOS Y LOS DIBUJA EN EL MAPA
+                  let polygon;
+                  arrayOfNumbers.map(polygon=>{
+                  polygon = L.polygon(polygon, {color: 'red'}).addTo(map);
+                    editableLayers.addLayer(polygon)
+                  })
+                
+                };
                    }
+
+                   
     
                 },
                 error: function(jqXHR, textStatus, errorThrown){
@@ -268,7 +266,6 @@
         const editMap = (id,e) =>{
             e.preventDefault();
             var data = $("#formEdit").serializeArray();
-            console.log(data)
             var  url = '{{ route("map.update" , ":map") }}';
             url = url.replace(":map",1)
                 $.ajax({
