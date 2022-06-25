@@ -4,8 +4,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
     crossorigin=""/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
 @endsection
 
 @section('titlePage')
@@ -38,20 +37,21 @@
     }
 });
 </script>
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
    crossorigin=""></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
-   
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
    <script>
 
+    
       let datosMapa = @json($mapa);
       let {direccion,id,latitud,longitud} = datosMapa
       const AT = 'pk.eyJ1IjoiZmVlbGluZ29vZCIsImEiOiJjbDNreWwzN2YxcWN1M2pxaXYyMmhienFyIn0.W6ChTj4rP0NOsFcvBL-xbg'
     // Crea el mapa
     var map = L.map('map').setView([parseFloat(latitud),parseFloat(longitud)], 15);
-  
+    // Automatically defines Leaflet.draw to the specified language
 
     // Inicializa "Featuregroup" para poder ir sumandole capas que son editables ( osea las zonas que se crean)
     var editableLayers = new L.FeatureGroup();
@@ -74,7 +74,7 @@
         arrayOfNumbers.push(arrayAux)
        })
 
-
+       47334f19-6cf9-4386-8fa9-68a69cdaee60
        //CREA LOS POLIGONOS Y LOS DIBUJA EN EL MAPA
         let polygon;
         arrayOfNumbers.map(polygon=>{
@@ -126,10 +126,10 @@
       position: 'topright',
       draw: {
         polygon: {
-          allowIntersection: false, // Restricts shapes to simple polygons
+          allowIntersection: true, // Restricts shapes to simple polygons
           drawError: {
             color: '#e1e100', // Color the shape will turn when intersects
-            message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+            message: '<strong>Error!<strong> no puedes dibujar eso!' // Message that will show when intersect
           },
           shapeOptions: {
             color: '#97009c'
@@ -140,11 +140,12 @@
         circle: false, // Turns off this drawing tool
         rectangle: false,
         marker: false,
+        circlemarker: false,
         },
      
       edit: {
         featureGroup: editableLayers, //REQUIRED!!
-        edit: false,
+        edit: true,
         remove: true 
         
       }
