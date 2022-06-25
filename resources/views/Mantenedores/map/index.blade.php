@@ -37,12 +37,12 @@
     }
 });
 </script>
-
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
    crossorigin=""></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+   <script type=></script>
    <script>
 
     
@@ -74,7 +74,7 @@
         arrayOfNumbers.push(arrayAux)
        })
 
-       47334f19-6cf9-4386-8fa9-68a69cdaee60
+
        //CREA LOS POLIGONOS Y LOS DIBUJA EN EL MAPA
         let polygon;
         arrayOfNumbers.map(polygon=>{

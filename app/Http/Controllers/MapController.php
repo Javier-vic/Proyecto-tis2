@@ -108,11 +108,11 @@ class MapController extends Controller
             DB::beginTransaction();
             try {
 
-                $producto = map::find($map->id);
-                $producto->direccion         = $request->direccion;
-                $producto->latitud         = $request->latitud;
-                $producto->longitud         = $request->longitud;
-                $producto->save();
+                $mapa = map::find($map->id);
+                $mapa->direccion         = $request->direccion;
+                $mapa->latitud         = $request->latitud;
+                $mapa->longitud         = $request->longitud;
+                $mapa->save();
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó la dirección con exito.', 200);
             } catch (\Throwable $th) {

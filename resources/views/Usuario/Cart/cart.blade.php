@@ -1,8 +1,15 @@
 @extends('layouts.userNavbar')
-
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+</head>
 @section('content')
 <form onsubmit="createOrder(event)" method="POST" enctype="multipart/form-data" id="createOrder" class="container-fluid">
     @csrf
+    <div>@include('Usuario.Cart.addressModal')</div>
+
     <div class="row gap-3">
         {{-- DATOS DE COMPRA --}}
             <div class="bg-white shadow p-3 mt-5 col-12 col-md-8">
@@ -63,7 +70,9 @@
                 <span class="text-danger createmodal_error" id="address_error"></span>
                 <input type="text" name="address" id="address" hidden>
                 <input type="text" name="pick_up" id="pick_up" hidden>
-                <div id="deliveryType" class="mt-5"></div>   
+                <div id="deliveryType" class="mt-5">
+                    <button class="btn bgColor text-white buttonHover" onclick="addAddress(event)" data-bs-toggle="modal" data-bs-target="#addAddressModal">Seleccionar Ubicación</button>
+                    </div>   
             </div>  
             
 
@@ -179,6 +188,7 @@
             }
             else if (this.id === 'delivery') {
                 $('#deliveryType').empty()
+
 
             }
         });
@@ -515,7 +525,20 @@
             });
 
         }
+        
+
+        const addAddress = (e) =>{
+            e.preventDefault()
+            $('#addAddressModal').on('shown.bs.modal', function() {
+            map.invalidateSize();
+            });
+            // $('#addAddressModal').modal('show');
+
+           
+        }
 
     
 </script>
+
+  
 @endsection
