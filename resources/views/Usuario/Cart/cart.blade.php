@@ -3,7 +3,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
     crossorigin=""/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 </head>
 @section('content')
 <form onsubmit="createOrder(event)" method="POST" enctype="multipart/form-data" id="createOrder" class="container-fluid">
@@ -68,11 +69,13 @@
                 </label>
                 </div>
                 <span class="text-danger createmodal_error" id="address_error"></span>
-                <input type="text" name="address" id="address" hidden>
+                    <input type="text" name="address" id="address" hidden>
+                <div>
                 <input type="text" name="pick_up" id="pick_up" hidden>
+                </div>
                 <div id="deliveryType" class="mt-5">
-                    <button class="btn bgColor text-white buttonHover" onclick="addAddress(event)" data-bs-toggle="modal" data-bs-target="#addAddressModal">Seleccionar Ubicación</button>
-                    </div>   
+                   
+                </div>   
             </div>  
             
 
@@ -184,10 +187,15 @@
                 `)
                 $('#address').val('Retira en sucursal');
                 $('#pick_up').val('no');
-                console.log('SUCURSAL')
+                
             }
             else if (this.id === 'delivery') {
                 $('#deliveryType').empty()
+                $('#pick_up').val('si');
+                $('#deliveryType').append(`
+                <h2 id="deliveryAddress" class="m-0 p-0"></h2>
+                    <button class="btn bgColor text-white buttonHover" onclick="addAddress(event)" data-bs-toggle="modal" data-bs-target="#addAddressModal">Seleccionar Ubicación</button>
+                `)
 
 
             }
@@ -200,7 +208,7 @@
     function fullfillCart(){
         $("#cartContainer").empty();
         let productos = JSON.parse(localStorage.getItem('cart'));
-        console.log(productos)
+        
         if(productos.length <= 0){
             window.location.href = "/"; 
         }  
@@ -251,7 +259,7 @@
     }
 
     const deleteInCart = (id) => {
-        console.log('borrar')
+        
         var cart = localStorage.getItem('cart');
         cart = JSON.parse(cart);
         cart.map(e => {
@@ -304,7 +312,7 @@
         }
 
     const saveInCart = (id) => {
-        console.log('agregar')
+        
         var cart = localStorage.getItem('cart');
         cart = JSON.parse(cart);
         cart.map(e => {
@@ -342,7 +350,7 @@
            $('#paymentMethod').attr('value',e.target.innerText)
            $(`#${e.target.id}`).addClass('paymentMethodBorder')
 
-           console.log(e.target.id)
+           
         }
         // ****************************************************************************************************************
         //CREAR ORDEN
@@ -362,8 +370,6 @@
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                    console.log(response)
-                    console.log(jqXHR)
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
@@ -382,8 +388,6 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
-                    console.log(text)
-                    console.log(jqXHR)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
@@ -410,7 +414,7 @@
                     if(!text.stock){
                         let cart = localStorage.getItem('cart');
                         cart = JSON.parse(cart);
-                        console.log(cart)
+                        (cart)
 
                         $.each(text.errors, function(key, item) {                            
                         $(`#product${item[0]}_error`).empty()
@@ -437,7 +441,6 @@
         }
 
         const checkInput = (e) =>{
-            console.log(e.target.value)
             if(e.target.value){
             $(`#${e.target.id}_error`).empty()
             $("#" + e.target.id).removeClass('is-invalid')
@@ -455,7 +458,6 @@
         const checkCoupon = (e) =>{
             e.preventDefault()
             let code = $('#coupon').val()
-            console.log(code)
             let url = '{{ route('landing.check.coupon') }}';
             $.ajax({
                 type: "GET",
@@ -464,7 +466,7 @@
                 dataType: "json",
                 success: function(response, jqXHR) {
                     var text = response;
-                    console.log(text)
+                    (text)
                            var toastMixin = Swal.mixin({
                     toast: true,
                     icon: 'success',
@@ -493,7 +495,6 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
-                    console.log(jqXHR)
 
                     var toastMixin = Swal.mixin({
                     toast: true,
@@ -529,9 +530,9 @@
 
         const addAddress = (e) =>{
             e.preventDefault()
-            $('#addAddressModal').on('shown.bs.modal', function() {
-            map.invalidateSize();
-            });
+            // $('#addAddressModal').on('shown.bs.modal', function() {
+            // map.invalidateSize();
+            // });
             // $('#addAddressModal').modal('show');
 
            
