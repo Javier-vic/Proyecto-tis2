@@ -451,12 +451,12 @@ class OrderController extends Controller
         ->whereMonth( 'orders.created_at' ,'=', $mes )
         ->get();
 
-        $countProducts = DB::table('Products')
+        $countProducts = DB::table('products')
         ->select(DB::raw('count(products.id) as `countproducts`'))
         ->where('products.stock', '=', 0)
         ->get();
 
-        $listProducts = DB::table('Products')
+        $listProducts = DB::table('products')
         ->select('products.name_product')
         ->where('products.stock', '=', 0)
         ->get();
@@ -516,6 +516,22 @@ class OrderController extends Controller
 
         
         return response($bestseller,200);
+   
+        
+    }
+    
+    public function getBestClient()
+    {
+
+        $BestClient = DB::table('orders')
+        ->select('orders.mail', DB::raw('sum(orders.total) as gastado'), DB::raw('count(orders.id) as cantidad'))
+        ->limit(5)
+        ->groupby('orders.mail')
+        ->orderby('orders.total', 'DESC')
+        ->get();    
+
+        
+        return response($BestClient,200);
    
         
     }

@@ -65,6 +65,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
     Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
+    Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');

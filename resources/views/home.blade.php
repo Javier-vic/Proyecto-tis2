@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="me-3">
-                                <div id ="titlecantidad"class="text-white-75 h5">Ventas mensuales</div>
+                                <div id ="titlecantidad"class="h5">Ventas del mes</div>
                                 <div class="text-lg fw-bold h2 " id="text" ></div>
                             </div>
                             <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar feather-xl text-white-50"><i class="fa-regular mt-4 fa-calendar-days fa-2xl"></i></svg>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                         <button class="btn text-white btn-sm " data-bs-toggle="modal" data-bs-target="#listsupplies">
+                         <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#listsupplies">
                             Ver insumos escasos
                         </button>
                         <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
@@ -107,12 +107,12 @@
 
     <div class="row">
 
-        <div class="col-md-6 ms-5  rounded shadow bg-white border rounded-3 chart-containers  h-100 " style=" height:500px; width:500px" >
+        <div class="col-md-6 col-xs-6 mx-2 rounded shadow bg-white border rounded-3 chart-containers  h-100 " style=" height:500px; width:500px" >
             <h5 class="ms-3 mt-3">Productos mas vendido</h5>
             <canvas style="height:40vh; width:80vw" id="myChart" ></canvas>
         </div>
 
-        <div id = "grafica2" class="col-md-6 mx-5 shadow bg-white border rounded-3 h-100 " >
+        <div id = "grafica2" class="col-md-6 col-xs-6 mx-2 shadow bg-white border rounded-3 h-100 " >
             <h5 class = "ms-3 mt-3">Ventas mensuales</h5>
 
 
@@ -129,12 +129,36 @@
             
             <div class="chart-containers">
 
-                <canvas class = "canva"  height="52vh" width="80vw" id="myChart2"></canvas>
+                <canvas class = "canva"  style="height:68px; width:80px" id="myChart2"></canvas>
 
             </div>
             
             
         </div>
+    </div>
+
+    <div>
+        <div class="container mt-5">
+
+            <table class="table table-light">
+                <thead>
+                    <tr>
+
+                        <th>Correo</th>
+                        <th>Cantida vendida</th>
+                        <th>total vendido</th>
+    
+                    </tr>
+                </thead>
+                    <tbody id="bestClient">
+
+                        
+                    </tbody>
+                </table>
+
+
+        </div>
+
     </div>
 
     
@@ -154,9 +178,7 @@
                     <tr>
 
                         <th>Producto</th>
-        
-                    
-                        <th></th>
+    
                     </tr>
                 </thead>
                     <tbody id="listaProductos">
@@ -225,6 +247,7 @@
             getBestSellers();
             GetSaleMonth();
             viewGraph();
+            GetBestClient();
 
             $(`#bottoncantidad`).click(function(e) {
 
@@ -329,9 +352,50 @@
         
 
         // cantidad de ventas en el mes
+        function GetBestClient(){
+
+            $.ajax({
+
+                type: "GET",
+                url: "{{ route('order.getBestClient') }}",
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    resultado = response;
+                
+
+
+                    $('#bestClient').empty();
+                            resultado.map(cliente=> {
+                                $('#bestClient').append(
+                                    `
+                                <tr>
+                                    <td>${cliente.mail}</td>
+                                    <td>${cliente.cantidad}</td>
+                                    <td>${cliente.gastado}</td>
+                                </tr> 
+                                `
+                                )
+                    })
+
+
+                }
+
+
+
+
+
+
+            });
+
+
+
+
+        }
+
 
         function GetSaleMonth() {
-            var x = "";
+            
             $.ajax({
 
                 type: "GET",
@@ -404,6 +468,7 @@
 
         
         let myChart2;
+        
         function viewGraph(){
             //////////***Graficas por años */////////////
            
