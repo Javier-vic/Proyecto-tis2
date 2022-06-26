@@ -22,10 +22,10 @@ class User extends Authenticatable
     static $rules = [
         'name' => 'required',
         'email' => 'required|email',
-        'password' => 'required|min:5|max:12',
+        'password' => 'required|min:5|max:40',
         // 'id_role'=>'required',
         'address' => 'required',
-        'phone' => 'required|lt:999999999|gt:900000000'
+        'phone' => 'required|lt:999999999|gt:910000000'
     ];
     static $messages = [
         'required' => 'El campo es obligatorio',
@@ -33,7 +33,7 @@ class User extends Authenticatable
         'lt' => 'El numero no existe',
         'gt' => 'No es un numero valido',
         'min' => 'Como minimo deben ser 5 caracteres',
-        'max' => 'Como máximo deben ser 12 caracteres',
+        'max' => 'Como máximo deben ser 40 caracteres',
     ];
 
     static $rulesLogin = [
@@ -74,5 +74,10 @@ class User extends Authenticatable
     public function coupons()
     {
         return $this->belongsToMany('App\Models\coupon');
+    }
+
+    public function orders()
+    {
+        return $this->belongToMany('App\Models\order');
     }
 }
