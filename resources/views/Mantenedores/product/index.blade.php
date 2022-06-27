@@ -2,7 +2,6 @@
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 @endsection
 
 @section('titlePage')
@@ -73,9 +72,12 @@
                         action: function ( e, dt, node, config ) {
                             $('#agregarProducto').modal('show');
 
+                        },
+                        init: function(api, node, config) {
+                           $(node).removeClass('dt-button')
                         }
                     },
-                {
+                    {
                         extend: 'pdf',
                         orientation: 'landscape',
                         pageSize: 'LEGAL',
@@ -84,7 +86,10 @@
                         },
                         titleAttr: 'Exportar a PDF',
                         className: 'btn btn-danger mb-2',
-                        text: '<i class="fa fa-file-excel"></i> PDF'
+                        text: '<i class="fa fa-file-excel"></i> PDF',
+                        init: function(api, node, config) {
+                           $(node).removeClass('dt-button')
+                        }
 
                     },
                     {
@@ -96,7 +101,10 @@
                         },
                         titleAttr: 'Exportar a PDF',
                         className: 'btn btn-success mb-2',
-                        text: '<i class="fa fa-file-excel"></i> Excel'
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        init: function(api, node, config) {
+                           $(node).removeClass('dt-button')
+                        }
 
                     }
 
@@ -123,7 +131,6 @@
                 },
             ],
             initComplete: function(settings, json) {
-                $('.dt-button').removeClass('dt-button')
                 document.getElementById("number").innerHTML = table.data().count();
             },
             select: true

@@ -14,13 +14,16 @@ class supply extends Model
         'name_supply',
         'unit_meassurement',
         'quantity',
+        'critical_quantity',
         'id_category_supplies',
     ];
 
     static $rules = [
         'name_supply'          => 'required|string',           
         'unit_meassurement'          => 'required|string',           
-        'quantity'          => 'required|string',           
+        'quantity'          => 'required|string',   
+        'critical_quantity' => 'required|string', 
+        'id_category_supplies' => 'required|string',         
     ];
     
     static  $messages = [

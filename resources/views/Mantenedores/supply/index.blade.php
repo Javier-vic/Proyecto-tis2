@@ -27,6 +27,7 @@
                 <th>Nombre de insumo</th>
                 <th>Unidad de medida</th>
                 <th>Cantidad</th>
+                <th>Cantidad crítica</th>
                 <th>Categoria</th>
                 <th>Acciones</th>
             </tr>
@@ -84,6 +85,10 @@
                 {
                     data: 'quantity',
                     name: 'quantity'
+                },
+                {
+                    data: 'critical_quantity',
+                    name: 'critical_quantity'
                 },
                 {
                     data: 'name_category',
@@ -217,6 +222,7 @@
                     $('#name_supplyEdit').val(resultado.name_supply);
                     $('#unit_meassurementEdit').val(resultado.unit_meassurement);
                     $('#quantityEdit').val(resultado.quantity);
+                    $('#critical_quantityEdit').val(resultado.critical_quantity);
                     $('#id_category_suppliesEdit').val(resultado.id_category_supplies);
 
                     $("#formEdit").attr('onSubmit', `editSupplySubmit(${id},event)`);
