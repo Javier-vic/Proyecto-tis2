@@ -10,6 +10,7 @@ use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
 use App\Models\user;
+use App\Models\map;
 use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -390,5 +391,11 @@ class LandingController extends Controller
 
             ), 400);
         }
+    }
+
+    public function userCart(request $request)
+    {
+        $mapa = map::first();
+        return view('Usuario.Cart.cart', compact('mapa'));
     }
 }

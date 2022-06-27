@@ -79,6 +79,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
+    Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
@@ -91,7 +92,6 @@ Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->
 ////////////////////////////////////////////////////////////////////////////////////////
 Route::resource('user', UserController::class);
 Route::resource('landing', LandingController::class);
-Route::resource('cart', CartController::class);
 
 
 // RUTAS DE ORDENES

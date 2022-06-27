@@ -61,6 +61,7 @@ class MapController extends Controller
 
             ), 200);
         } catch (\Throwable $th) {
+            dd($th);
             DB::connection(session()->get('database'))->rollBack();
             return Response::json(array(
                 'success' => false,

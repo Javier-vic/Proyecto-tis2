@@ -220,6 +220,7 @@
 
         //Se ejecuta cuando el usuario clickea el mapa
         map.on('click', (e) => {
+            console.log('aki')
             geocoder.query(`${e.lngLat.lat.toString()},${e.lngLat.lng.toString()}`)
             geocoder.setInput(`${e.lngLat.lat.toString()},${e.lngLat.lng.toString()}`)
         });

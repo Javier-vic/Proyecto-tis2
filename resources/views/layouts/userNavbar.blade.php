@@ -114,7 +114,7 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="fa-solid fa-right-from-bracket me-2 align-self-center"></i>Cerrar sesion
                                 </a>
-                                <form id="logout-form2" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
                             </li>
@@ -131,7 +131,7 @@
 
                 <li class="nav-item mx-3 py-1">
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
-                        aria-current="page" href="/cart" onclick="checkCart(event)"><i
+                        aria-current="page" href="/landing/cart" onclick="checkCart(event)"><i
                             class="fa-solid fa-cart-shopping"></i><span class="cartQuantity"></span></a>
 
                 </li>
@@ -157,7 +157,6 @@
                             </li>
                         @endif
                     @endauth
-
 
 
                 </ul>
@@ -186,7 +185,7 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesion
                                 </a>
-                                <form id="logout-form1" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
                             </li>
@@ -205,7 +204,7 @@
                 <li class="nav-item mx-3 ">
                     <div>
                         <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
-                            aria-current="page" href="/cart" onclick="checkCart(event)"><i
+                            aria-current="page" href="{{ route('user.cart') }}" onclick="checkCart(event)"><i
                                 class="fa-solid fa-cart-shopping"></i><span class="cartQuantity"></span></a>
                     </div>
                 </li>
@@ -272,7 +271,7 @@
         cart = JSON.parse(cartItem);
 
         if (cart.length > 0) {
-            window.location.href = '/cart'
+            window.location.href = '/landing/cart'
         } else {
             var toastMixin = Swal.mixin({
                 toast: true,
