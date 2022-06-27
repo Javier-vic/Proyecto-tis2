@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12341234'),
         ]);
         User::Create([
-            'name' => 'Test comprado',
+            'name' => 'Test comprador',
             'email' => 'test3@gmail.com',
             'id_role' => '2',
             'phone' => 56911112222,
