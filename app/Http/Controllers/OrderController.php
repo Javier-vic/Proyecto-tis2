@@ -205,7 +205,10 @@ class OrderController extends Controller
 
         return view('Mantenedores.order.index');
     }
-
+    public function pendingOrdersView(){
+        $pendingOrders = order::whereNotIn('order_status',['Listo']);
+        return view('Mantenedores.order.pending',compact('pendingOrders'));
+    }
     /**
      * Display the specified resource.
      *
