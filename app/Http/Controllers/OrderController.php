@@ -392,6 +392,12 @@ class OrderController extends Controller
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó la orden con éxito.', 200);
             } catch (\Throwable $th) {
+                DB::connection(session()->get('database'))->rollBack();
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. Intentalo nuevamente'
+
+                ), 400);
             }
         } else {
             return Response::json(array(

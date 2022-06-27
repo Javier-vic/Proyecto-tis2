@@ -40,7 +40,34 @@ class MapController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $values = request()->except('_token');
+        try {
+            DB::beginTransaction();
+
+            $map = map::first();
+            if ($values == []) {
+                $map->delivery_zones = '';
+            } else {
+                $zonesToString = json_encode($values['polygons']);
+                $map->delivery_zones = $zonesToString;
+            }
+            $map->save();
+            DB::connection(session()->get('database'))->commit();
+
+            return Response::json(array(
+                'success' => true,
+                'message' => 'Se guardaron los cambios correctamente',
+                'mapData' => $map['delivery_zones'],
+
+            ), 200);
+        } catch (\Throwable $th) {
+            DB::connection(session()->get('database'))->rollBack();
+            return Response::json(array(
+                'success' => false,
+                'message' => 'Ocurrió un error al crear las zonas de delivery'
+
+            ), 400);
+        }
     }
 
     /**
@@ -81,11 +108,11 @@ class MapController extends Controller
             DB::beginTransaction();
             try {
 
-                $producto = map::find($map->id);
-                $producto->direccion         = $request->direccion;
-                $producto->latitud         = $request->latitud;
-                $producto->longitud         = $request->longitud;
-                $producto->save();
+                $mapa = map::find($map->id);
+                $mapa->direccion         = $request->direccion;
+                $mapa->latitud         = $request->latitud;
+                $mapa->longitud         = $request->longitud;
+                $mapa->save();
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó la dirección con exito.', 200);
             } catch (\Throwable $th) {

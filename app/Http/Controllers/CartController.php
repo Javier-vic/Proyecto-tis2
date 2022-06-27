@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cart;
+use App\Models\map;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -14,7 +15,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('Usuario.Cart.cart');
+
+        $mapa = map::first();
+        return view('Usuario.Cart.cart', compact('mapa'));
     }
 
     /**

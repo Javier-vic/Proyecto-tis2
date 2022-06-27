@@ -22,8 +22,10 @@
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>{{auth()->user()->name}}</h3>
+            <div class="sidebar-header d-flex justify-content-between">
+                <h3 class="m-0 p-0">{{auth()->user()->name}}</h3>
+               <a href="{{route('landing.index')}}" class="m-0 p-0" style="height:50px;width:50px;"><img src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg" alt="" class="img-fluid "></a>
+            
             </div>
 
             <ul class="list-unstyled ">
@@ -104,6 +106,7 @@
                         <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
                     </li>
                 @endif
+
             </ul>
         </nav>
 
