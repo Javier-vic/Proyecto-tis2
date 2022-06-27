@@ -19,6 +19,7 @@ class CreateMapTable extends Migration
             $table->string('longitud');
             $table->string('direccion');
             $table->string('delivery_zones', 4000);
+            $table->string('delivery_price');
             $table->timestamps();
         });
     }

@@ -70,6 +70,14 @@
                             <span class="text-danger createmodal_error" id="number_error"></span>
                         </div>
                     </div>
+                    <div class="mb-2">
+                        <label for="" class="form-label"><i class="fa-solid fa-comment me-2"></i>Comentarios
+                        </label>
+                        <textarea name="comment" id="comment" rows="2" class="w-100 form-control input-modal"
+                            placeholder="Comentarios acerca del pedido..."></textarea>
+                        <span class="text-danger createmodal_error" id="comment_error"></span>
+
+                    </div>
                     <div class="form-check form-switch ">
                         <input class="form-check-input" type="checkbox" id="termsAndConditions">
                         <label class="form-check-label" for="termsAndConditions">Acepto los <a href="">términos</a> y
@@ -106,7 +114,7 @@
 
                     </div>
                 </div>
-
+                <input type="number" name="delivery_price" id="delivery_price" hidden>
 
             </div>
         </div>
@@ -161,10 +169,11 @@
                     <div class="h-50">
                         <h3 class="m-0">Resumen pedido</h3>
                         <hr>
-                        <div class="">
+                        <div class="" id="subtotal">
                             <h5>Subtotal: <span id="totalCart"></span> </h5>
-                            <hr>
+                            <div class="m-0 p-0" id="deliveryPriceContainer"></div>
                         </div>
+                        <hr>
                         <button class="btn bgColor text-white buttonHover">Confirmar pedido</button>
                     </div>
 
@@ -222,15 +231,27 @@
                 `)
                     $('#address').val('Retira en sucursal');
                     $('#pick_up').val('no');
+                    $('#delivery_price').val('')
+                    $('#deliveryPriceContainer').empty()
+                    cartTotal()
 
                 } else if (this.id === 'delivery') {
-                    $('#deliveryType').empty()
-                    $('#pick_up').val('si');
-                    $('#deliveryType').append(`
+                    if (!datosMapa.delivery_zones || datosMapa.delivery_zones === '') {
+                        $('#address').val('');
+                        $('#deliveryType').empty()
+                        $('#deliveryType').append(
+                            '<span class="text-danger fs-5">No hay delivery de momento</span>')
+                    } else {
+                        $('#address').val('');
+                        $('#deliveryType').empty()
+                        $('#pick_up').val('si');
+                        $('#deliveryType').append(`
                 <h2 id="deliveryAddress" class="m-0 p-0"></h2>
                     <button class="btn bgColor text-white buttonHover" onclick="addAddress(event)" data-bs-toggle="modal" data-bs-target="#addAddressModal">Seleccionar Ubicación</button>
                 `)
 
+
+                    }
 
                 }
             });
@@ -278,8 +299,7 @@
             })
             cartTotal();
         }
-        let valorTotalAnterior;
-        let descuentoAnterior;
+
         const cartTotal = () => {
             var cart = localStorage.getItem('cart');
             var total = 0;
@@ -287,6 +307,11 @@
             products.map(product => {
                 total += product.cantidad * product.price;
             })
+
+            if (parseInt($('#delivery_price').val()) > 0) {
+                total += parseInt($('#delivery_price').val())
+            }
+
 
             $('#totalCart').empty()
             $('#totalCart').append(`<span>$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>`)
@@ -526,7 +551,7 @@
                         $('#coupon').addClass('is-valid')
                         $('#coupon').val(code);
                         $('#couponDescription').append(
-                            `<span class="text-muted">*El cupón aplicará un ${text.couponPercentage}% de dcto al subtotal de tu compra.</span>`
+                            `<span class="text-muted">*El cupón aplicará un ${text.couponPercentage}% de dcto al total de tu compra (incluyendo precio del delivery).</span>`
                         )
                     }
 

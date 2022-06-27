@@ -61,7 +61,6 @@ class MapController extends Controller
 
             ), 200);
         } catch (\Throwable $th) {
-            dd($th);
             DB::connection(session()->get('database'))->rollBack();
             return Response::json(array(
                 'success' => false,
@@ -119,6 +118,44 @@ class MapController extends Controller
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo editar la dirección.', 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
+        }
+    }
+
+    public function deliveryPrice(request $request)
+    {
+
+        $rules = [
+            'delivery_price'          => 'required|integer|gt:0',
+
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+            'integer' => 'Debe ser un numero entero',
+            'gt' => 'No puede ser un valor negativo'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            try {
+                $values = request()->except('_token');
+                $mapa = map::first();
+                $mapa->delivery_price = $values['delivery_price'];
+                $mapa->save();
+                DB::connection(session()->get('database'))->commit();
+                return response('Se cambió el valor de delivery correctamente.', 200);
+            } catch (\Throwable $th) {
+                dd(($th));
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo editar el precio del delivery.', 400);
             }
         } else {
             return Response::json(array(

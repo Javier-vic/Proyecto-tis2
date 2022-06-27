@@ -83,6 +83,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
+Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
+
+
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
 //DEBEN ESTAR EN MIDDLEWARE

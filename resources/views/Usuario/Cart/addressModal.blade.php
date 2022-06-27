@@ -11,7 +11,8 @@
                 <div id="map" style="height: 600px; width:100%;" class="border"></div>
                 <p class="text-muted">*Para búsquedas más precisas use el formato: Nombre calle , N° Calle, Ciudad</p>
 
-                <button type="button" class="btn btn-primary">Crear</button>
+                <button type="button" class="btn bgColor text-white buttonHover" data-bs-dismiss="modal"
+                    aria-label="Close">Guardar</button>
             </div>
             {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -184,7 +185,6 @@
 
         //Se ejecuta cuando se escribe una dirección y el marcador se agrega al mapa
         geocoder.on('result', function(e) {
-            console.log(e)
             let checkPoint = false;
             //Funcion que revisa todos los poligonos existentes y si en alguno el marcador está dentro hace la variable checkPoint verdadera
             polygonsTurf.map(polygon => {
@@ -199,19 +199,24 @@
                 $('#deliveryAddress').html(direccion.split(',')[0])
                 $('#map').addClass('border-success')
                 $('#map').removeClass('border-danger')
-
+                $('#deliveryPriceContainer').append(
+                    `<span>Precio delivery : ${datosMapa.delivery_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>`
+                )
                 $('#deliveryError').addClass('d-none')
                 $('#deliveryError').removeClass('d-block')
-
+                $('#delivery_price').val(datosMapa.delivery_price)
+                cartTotal()
 
             } else {
                 $('#address').val('')
                 $('#deliveryAddress').html('')
                 $('#deliveryError').removeClass('d-none')
                 $('#deliveryError').addClass('d-block')
-
                 $('#map').removeClass('border-success')
                 $('#map').addClass('border-danger')
+                $('#delivery_price').val('')
+                $('#deliveryPriceContainer').empty()
+                cartTotal()
             }
 
 

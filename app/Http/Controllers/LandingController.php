@@ -100,8 +100,10 @@ class LandingController extends Controller
             'cantidad.*' => 'required',
             'address' => 'required',
             'mail' => 'required',
-            'number' => 'required|gt:0|integer',
+            'number' => 'required|gt:910000000|lt:999999999|integer',
             'payment_method' => 'required',
+            'comment' => 'max:255'
+
 
         ];
         $messages = [
@@ -110,7 +112,9 @@ class LandingController extends Controller
             'address.required' => 'Debes seleccionar el tipo de envío',
             'payment_method.required' => 'Debes seleccionar un método de pago',
             'integer' => 'El número no puede ser decimal',
-            'gt' => 'El número debe ser mayor a 0'
+            'gt' => 'El número no es válido, modifíquelo en su perfil',
+            'lt' => 'El número no es válido, modifíquelo en su perfil',
+            'comment.max' => 'Has excedido el limite de texto'
         ];
 
         $values = request()->except('_token');
@@ -126,6 +130,7 @@ class LandingController extends Controller
                 $order = new Order;
                 $order->name_order = $values['name_order'];
                 $order->mail = $values['mail'];
+                $order->comment = $values['comment'];
                 $order->number = $values['number'];
                 $order->payment_method = $values['payment_method'];
                 $order->name_order = $values['name_order'];
@@ -142,6 +147,10 @@ class LandingController extends Controller
                     } else {
                         array_push($checkStock, [$product->id, $product->cantidad - $productToCheck->stock]);
                     }
+                }
+                //Suma el valor del delivery al valor total
+                if ($values['delivery_price'] != null) {
+                    $totalValue += $values['delivery_price'];
                 }
                 //////////////VALIDA EL CUPÓN////////////
                 if ($values['coupon'] != null) {
@@ -221,6 +230,7 @@ class LandingController extends Controller
 
                 // $order->products()->attach($id, ['cantidad' => $cont]);
             } catch (\Throwable $th) {
+                dd($th);
                 DB::connection(session()->get('database'))->rollBack();
                 return Response::json(array(
                     'success' => false,
