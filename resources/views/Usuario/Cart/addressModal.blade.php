@@ -11,7 +11,7 @@
                 <div id="map" style="height: 600px; width:100%;" class="border"></div>
                 <p class="text-muted">*Para búsquedas más precisas use el formato: Nombre calle , N° Calle, Ciudad</p>
 
-                <button type="submit" class="btn btn-primary">Crear</button>
+                <button type="button" class="btn btn-primary">Crear</button>
             </div>
             {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -88,7 +88,17 @@
 
         return geocodes;
     };
-
+    //Agrega marcador de la tienda
+    const el = document.createElement('div');
+    el.className = 'marker';
+    new mapboxgl.Marker(el).setLngLat([longitud, latitud]).setPopup(
+        new mapboxgl.Popup({
+            offset: 25
+        }) // add popups
+        .setHTML(
+            `<h4>Estamos ubicados en</h4><p>${direccion}</p>`
+        )
+    ).addTo(map);
     //Agrega controles al mapa (zoom,rotacion,etc)
     let geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -122,43 +132,43 @@
         map.on('load', () => {
             //Crea los poligonos
             arrayOfNumbers.map((polygon, index) => {
-
+                /*
                 //Agrega los poligonos pasandole las coordenadas
-                /* map.addSource(`polygon${index}`, {
-            'type': 'geojson',
-            'data': {
-            'type': 'Feature',
-            'geometry': {
-            'type': 'Polygon',
-            // These coordinates outline Maine.
-            'coordinates': [polygon]
-            }
-            }
-            });
+                map.addSource(`polygon${index}`, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Polygon',
+                            // These coordinates outline Maine.
+                            'coordinates': [polygon]
+                        }
+                    }
+                });
 
-            map.addLayer({
-                'id': `polygon${index}`,
-                'type': 'fill',
-                'source': `polygon${index}`, // reference the data source
-                'layout': {},
-                'paint': {
-                'fill-color': '#F10101', // Relleno de color rojo
-                'fill-opacity': 0.3
-                }
-            });
+                map.addLayer({
+                    'id': `polygon${index}`,
+                    'type': 'fill',
+                    'source': `polygon${index}`, // reference the data source
+                    'layout': {},
+                    'paint': {
+                        'fill-color': '#F10101', // Relleno de color rojo
+                        'fill-opacity': 0.3
+                    }
+                });
 
-            //Agrega borde de color negro
-            map.addLayer({
-            'id': `border${index}`,
-            'type': 'line',
-            'source': `polygon${index}`,
-            'layout': {},
-            'paint': {
-            'line-color': '#000',
-            'line-width': 0.1
-            }
-            });
-        */
+                //Agrega borde de color negro
+                map.addLayer({
+                    'id': `border${index}`,
+                    'type': 'line',
+                    'source': `polygon${index}`,
+                    'layout': {},
+                    'paint': {
+                        'line-color': '#000',
+                        'line-width': 0.1
+                    }
+                });
+                */
                 //Se crean poligonos con la libreria TURF para luego verificar si el marcador del cliente se encuentra dentro de alguno
                 polygonsTurf.push(turf.polygon([polygon], {
                     name: `poly${index}`
@@ -181,7 +191,7 @@
                 let isInside = turf.inside(e.result.center, polygon)
                 if (isInside) checkPoint = isInside;
             })
-            console.log(checkPoint)
+            console.log(e.result)
 
             if (checkPoint) {
                 let direccion = e.result.place_name;

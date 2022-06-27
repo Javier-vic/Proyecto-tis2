@@ -12,16 +12,19 @@
             color: rgb(254, 0, 0) !important;
 
         }
-        .linkActive{
+
+        .linkActive {
             color: rgb(254, 0, 0) !important;
         }
 
         .buttonHover:hover {
             background: rgb(158, 0, 0) !important;
         }
+
         .buttonHover:focus {
             background: rgb(158, 0, 0) !important;
         }
+
         .agregarCarrito:hover {
             background: rgb(29, 114, 74) !important;
         }
@@ -61,16 +64,18 @@
         .sticky-margin-top {
             top: 1rem !important;
         }
-        .sticky-margin-bottom{
+
+        .sticky-margin-bottom {
             bottom: 1rem !important;
         }
-        .paymentMethodHover:hover{
+
+        .paymentMethodHover:hover {
             border: 1px solid #9a9a9a;
         }
-        .paymentMethodBorder{
+
+        .paymentMethodBorder {
             border: 1px solid #3bda70;
         }
-
     </style>
 </head>
 
@@ -88,41 +93,46 @@
 
             {{-- NAVBAR PARA CELULAR --}}
             <ul class="navbar-nav flex-row d-lg-none">
-          
+
                 @auth
-                <div class="dropdown d-flex ms-3">
-                    <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-circle-user me-2"></i>Mi cuenta
-                    </button>
-                    <ul class="dropdown-menu position-absolute " aria-labelledby="dropdownMenuButton1" >
-                        <li class="nav-item mx-3 mt-3 ">
-                            <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 " aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl align-self-center"></i>Mi perfil</a>
-                            <hr>
-                        </li>
-                        <li class="nav-item mx-3">
+                    <div class="dropdown d-flex ms-3">
+                        <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold" type="button"
+                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-circle-user me-2"></i>Mi cuenta
+                        </button>
+                        <ul class="dropdown-menu position-absolute " aria-labelledby="dropdownMenuButton1">
+                            <li class="nav-item mx-3 mt-3 ">
+                                <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 "
+                                    aria-current="page" href="{{ route('user.profile') }}"><i
+                                        class="fa-solid fa-address-card me-2 fa-xl align-self-center"></i>Mi perfil</a>
+                                <hr>
+                            </li>
+                            <li class="nav-item mx-3">
 
-                        <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fa-solid fa-right-from-bracket me-2 align-self-center"></i>Cerrar sesion
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            class="d-none">
-                            @csrf
-                        </form>
-                    </li>
+                                <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3"
+                                    href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fa-solid fa-right-from-bracket me-2 align-self-center"></i>Cerrar sesion
+                                </a>
+                                <form id="logout-form2" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
 
-                    </ul>
-                  </div>
+                        </ul>
+                    </div>
                 @endauth
-              @guest
-            <li class="nav-item mx-3 shadow bg-white  rounded">
-                <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
-                        class="fa-solid fa-user me-2"></i>Ingresar</a>
-            </li>
-              @endguest
-            
+                @guest
+                    <li class="nav-item mx-3 shadow bg-white  rounded">
+                        <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page"
+                            href="{{ route('login') }}"><i class="fa-solid fa-user me-2"></i>Ingresar</a>
+                    </li>
+                @endguest
+
                 <li class="nav-item mx-3 py-1">
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
-                        aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span class="cartQuantity" ></span></a>
+                        aria-current="page" href="/cart" onclick="checkCart(event)"><i
+                            class="fa-solid fa-cart-shopping"></i><span class="cartQuantity"></span></a>
 
                 </li>
             </ul>
@@ -132,65 +142,71 @@
                 id="navbarNav">
                 <ul class="navbar-nav p-1 ">
                     <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover {{ request()->is('/') ? ' linkActive' : '' }}" aria-current="page" href="/"><i
-                                class="fa-solid fa-utensils me-2"></i>Menú</a>
+                        <a class="nav-link fw-bold linkHover {{ request()->is('/') ? ' linkActive' : '' }}"
+                            aria-current="page" href="/"><i class="fa-solid fa-utensils me-2"></i>Menú</a>
                     </li>
                     <li class="nav-item mx-3 ">
                         <a class="nav-link fw-bold linkHover" aria-current="page" href="#"><i
                                 class="fa-solid fa-house-chimney me-2"></i>Local</a>
                     </li>
                     @auth
-                    @if(auth()->user()->id_role != 2)
-                                <li class="nav-item mx-3 ">
-                                    <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('home')}}"><i class="fa-solid fa-chart-line me-2"></i>Administración</a>
-                                </li>
-                                @endif
+                        @if (auth()->user()->id_role != 2)
+                            <li class="nav-item mx-3 ">
+                                <a class="nav-link fw-bold linkHover" aria-current="page" href="{{ route('home') }}"><i
+                                        class="fa-solid fa-chart-line me-2"></i>Administración</a>
+                            </li>
+                        @endif
                     @endauth
-                   
 
-                   
+
+
                 </ul>
 
             </div>
             {{-- FIN CONTENIDO CENTARL --}}
             {{-- NAVBAR PARA DESKTOP --}}
-            <ul class="navbar-nav flex-row d-lg-flex d-none">        
+            <ul class="navbar-nav flex-row d-lg-flex d-none">
                 @auth
-                <div class="dropdown d-flex ms-3">
-                    <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold fs-5 border-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-circle-user me-2 fa-xl"></i> Mi cuenta
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li class="nav-item mx-3">
-                            <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3" aria-current="page" href="{{route('user.profile')}}"><i class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
-                            <hr>
-                        </li>
-                        <li class="nav-item mx-3">
+                    <div class="dropdown d-flex ms-3">
+                        <button class="btn btn-secondary dropdown-toggle bgColor buttonHover fw-bold fs-5 border-0"
+                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-circle-user me-2 fa-xl"></i> Mi cuenta
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li class="nav-item mx-3">
+                                <a class="nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3"
+                                    aria-current="page" href="{{ route('user.profile') }}"><i
+                                        class="fa-solid fa-address-card me-2 fa-xl"></i>Mi perfil</a>
+                                <hr>
+                            </li>
+                            <li class="nav-item mx-3">
 
-                        <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesion
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            class="d-none">
-                            @csrf
-                        </form>
-                    </li>
+                                <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3"
+                                    href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar sesion
+                                </a>
+                                <form id="logout-form1" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
 
-                    </ul>
-                  </div>
-          
+                        </ul>
+                    </div>
+
                 @endauth
-              @guest
-              <li class="nav-item mx-3 shadow bg-white  rounded">
-                <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page" href="{{route('login')}}"><i
-                        class="fa-solid fa-user me-2"></i>Ingresar</a>
-            </li>
-              @endguest
-            
+                @guest
+                    <li class="nav-item mx-3 shadow bg-white  rounded">
+                        <a class="nav-link fw-bold px-3 py-3 d-inline d-lg-block linkHover" aria-current="page"
+                            href="{{ route('login') }}"><i class="fa-solid fa-user me-2"></i>Ingresar</a>
+                    </li>
+                @endguest
+
                 <li class="nav-item mx-3 ">
                     <div>
                         <a class="nav-link fw-bold px-4 py-3 bgColor text-white d-inline d-lg-block buttonHover rounded rounded-5"
-                            aria-current="page" href="/cart" onclick="checkCart(event)"><i class="fa-solid fa-cart-shopping"></i><span class="cartQuantity" ></span></a>
+                            aria-current="page" href="/cart" onclick="checkCart(event)"><i
+                                class="fa-solid fa-cart-shopping"></i><span class="cartQuantity"></span></a>
                     </div>
                 </li>
             </ul>
@@ -249,41 +265,41 @@
 @yield('js_after')
 
 <script>
-const checkCart = (e) =>{
-    e.preventDefault()
-    
-    let cartItem = localStorage.getItem('cart');
-    cart = JSON.parse(cartItem);
-    
-    if(cart.length > 0){
-        window.location.href = '/cart'
-    }
-    else{
-        var toastMixin = Swal.mixin({
-            toast: true,
-            icon: 'success',
-            title: 'General Title',
-            position: 'bottom-right',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-        toastMixin.fire({
-            title: 'El carrito se encuentra vacío',
-            icon: 'error'
-        });
-    }
-}
-const cartQuantity = () =>{
-            var cart = localStorage.getItem('cart');
-            cart = JSON.parse(cart);
-            $('.cartQuantity').empty()
-            $('.cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
-            
+    const checkCart = (e) => {
+        e.preventDefault()
+
+        let cartItem = localStorage.getItem('cart');
+        cart = JSON.parse(cartItem);
+
+        if (cart.length > 0) {
+            window.location.href = '/cart'
+        } else {
+            var toastMixin = Swal.mixin({
+                toast: true,
+                icon: 'success',
+                title: 'General Title',
+                position: 'bottom-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+            toastMixin.fire({
+                title: 'El carrito se encuentra vacío',
+                icon: 'error'
+            });
         }
+    }
+    const cartQuantity = () => {
+        var cart = localStorage.getItem('cart');
+        cart = JSON.parse(cart);
+        $('.cartQuantity').empty()
+        $('.cartQuantity').append(`<span class="ms-2">${cart.length}</span>`)
+
+    }
 </script>
+
 </html>

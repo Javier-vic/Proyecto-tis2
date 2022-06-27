@@ -333,7 +333,7 @@ class LandingController extends Controller
             'password' => 'required|min:5|max:12',
             'passwordConfirm' => 'required|min:5|max:12',
             'address' => 'required',
-            'phone' => 'required|lt:999999999|gt:0'
+            'phone' => 'required|lt:999999999|gt:910000000'
         ];
         $messages = [
             'required' => ' El campo es obligatorio',
