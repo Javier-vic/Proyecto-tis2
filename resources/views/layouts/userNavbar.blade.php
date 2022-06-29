@@ -77,7 +77,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light fs-5">
         <div class="container-lg container-fluid">
-            <a class="navbar-brand d-none d-lg-block" href="#"><img
+            <a class="navbar-brand d-none d-lg-block" href="/"><img
                     src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
                     alt="" width="75" height="75"></a>
             <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
