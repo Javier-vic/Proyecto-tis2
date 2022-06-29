@@ -190,7 +190,7 @@
                     
                     $.ajax({
                         type: "GET",
-                        url: "{{ route('order.vista') }}",
+                        url: "{{ route('order.view') }}",
                         data: {
                             'id': id,
                         },

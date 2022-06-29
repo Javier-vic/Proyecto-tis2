@@ -69,7 +69,7 @@
                                 <div class="text-white-75 h5">Insumos por abastecer</div>
                                 <div class="text-lg fw-bold h2" id ="supplies"></div>
                             </div>
-                            <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square feather-xl text-white-50"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                            <svg width="24" height="24" class=" text-white-50"><i class="fa-solid fa-boxes-packing fa-2xl mt-3"></i></svg>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
@@ -89,14 +89,14 @@
                                 <div class="text-white-75 h5 ">Productos sin stock</div>
                                 <div class="text-lg fw-bold h2" id = "product"></div>
                             </div>
-                            <svg  width="24" height="24" class="feather feather-message-circle feather-xl text-white-50"> </svg>
+                            <svg width="24" height="24" class=" text-white-50"><i class="fa-solid fa-bowl-food fa-2xl mt-3"></i></svg>
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
                         <button class="btn text-white  " data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Ver produtos sin stock
                         </button>
-                        <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
+                        <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg></div>
                     </div>
                 </div>
             </div>
@@ -116,12 +116,18 @@
             <h5 class = "ms-3 mt-3">Ventas mensuales</h5>
 
 
-            <select name="" class="form-select form-select-sm " id="selectYear">
-                
-                <option selected>Seleccione un año</option>
-                <option value = "2022">2022</option>
-            
+            <select name="" class="form-select" id="selectYear">
+                        <option selected>Seleccione un año</option>
+                        
+                        @isset($years)
+                        @foreach ($years as &$valor) 
 
+                        <option value="{{$valor->year}}">{{$valor->year}}</option>
+                        
+                        @endforeach
+                            
+                        @endisset  
+    
             </select>
 
 
@@ -231,6 +237,33 @@
     </div>
 
    
+<div>
+    <div class="border p-2">
+        
+        <div class="d-inline-block m-1">
+            <div class="text-center">
+                <i class="fa-solid fa-circle-exclamation text-danger fs-1"></i>
+                <div>
+                    <span class="text-danger">
+                        Insumo en cero
+                    </span>
+                </div>
+            </div>
+        </div>
+    
+        <div class="d-inline-block m-1">
+            <div class="text-center">
+                <i class="fa-solid fa-triangle-exclamation text-warning fs-1"></i>
+                <div>
+                    <span class="text-warning">
+                        insumo bajo en cantidad
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
 @endsection
 
 

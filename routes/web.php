@@ -64,7 +64,6 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
     Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
-    Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.vista');
     Route::get('/order/GetSaleMonth', [\App\Http\Controllers\OrderController::class, 'GetSaleMonth'])->name('order.GetSaleMonth');
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
@@ -76,6 +75,11 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     
 
 
+    Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+    // Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
+    Route::get('/order/orderDetails', [\App\Http\Controllers\OrderController::class, 'orderDetails'])->name('order.details');
+    Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
