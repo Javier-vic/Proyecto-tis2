@@ -28,8 +28,9 @@
 
                 </tr>
             </thead>
+        <table>
         
-            <div class="row">
+        <div class="row">
 
                 <div class="col-md-6">
                     <h3>Productos más vendidos</h3>
@@ -68,7 +69,8 @@
                 
                 </form>
             
-            </div>
+        </div>
+        
         @endsection
         @section('js_after')
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

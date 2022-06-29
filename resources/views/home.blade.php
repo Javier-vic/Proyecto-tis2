@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <button class="btn text-white btn-sm " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button class="btn text-white  " data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Ver produtos sin stock
                         </button>
                         <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
@@ -107,12 +107,12 @@
 
     <div class="row">
 
-        <div class="col-md-6 col-xs-6 mx-2 rounded shadow bg-white border rounded-3 chart-containers  h-100 " style=" height:500px; width:500px" >
-            <h5 class="ms-3 mt-3">Productos mas vendido</h5>
+        <div class="col-md-5 col-xs-5 ms-5 mt-3 rounded shadow bg-white border rounded-3">
+            <h5 class="ms-3 mt-3">Productos más vendidos</h5>
             <canvas style="height:40vh; width:80vw" id="myChart" ></canvas>
         </div>
 
-        <div id = "grafica2" class="col-md-6 col-xs-6 mx-2 shadow bg-white border rounded-3 h-100 " >
+        <div id = "grafica2" class="col-md-5 col-xs-5 ms-5 mt-3 shadow bg-white border rounded-3 h-100 " >
             <h5 class = "ms-3 mt-3">Ventas mensuales</h5>
 
 
@@ -129,7 +129,7 @@
             
             <div class="chart-containers">
 
-                <canvas class = "canva"  style="height:68px; width:80px" id="myChart2"></canvas>
+                <canvas class = "canva"  style="height:75px; width:80px" id="myChart2"></canvas>
 
             </div>
             
@@ -139,14 +139,14 @@
 
     <div>
         <div class="container mt-5">
-
+            <div id ="titlecantidad" class="h5">Mejores clientes</div>
             <table class="table table-light">
                 <thead>
                     <tr>
 
                         <th>Correo</th>
-                        <th>Cantida vendida</th>
-                        <th>total vendido</th>
+                        <th>Cantidad vendida</th>
+                        <th>Total vendido</th>
     
                     </tr>
                 </thead>
@@ -248,6 +248,7 @@
             GetSaleMonth();
             viewGraph();
             GetBestClient();
+            defaultGraph();
 
             $(`#bottoncantidad`).click(function(e) {
 
@@ -306,49 +307,52 @@
         // Grafiva producto mas vendido
         //*////////////////////////////////////
         function getBestSellers() {
-                    var label = [];
-                    var date = [];
-                    $.ajax({
-                            type: "GET",
-                            url: "{{ route('order.bestsellers') }}",
-                            dataType: "json",
-                            success: function(response) {
-                                resultado = response;
-                                
-                                resultado.map( products =>{ 
-                            
-                                    date.push(products.cantida);
-                                    label.push(products.name_product);
+            var label = [];
+            var date = [];
+            $.ajax({
+                type: "GET",
+                url: "{{ route('order.bestsellers') }}",
+                dataType: "json",
+                success: function(response) {
+                    resultado = response;
+                    
+                    resultado.map( products =>{ 
+                
+                        date.push(products.cantida);
+                        label.push(products.name_product);
 
-                                })
-                                
+                    })
+                    
 
-                                const ctx = document.getElementById('myChart');
-                                myChart = new Chart(ctx, {
-                                type: 'doughnut',
-                                data: {
-                                    labels: label,
-                                datasets: [{
-                                    label: 'My First Dataset',
-                                    data: date,
-                                    backgroundColor: [
-                                    'rgb(255, 99, 132)',
-                                    'rgb(54, 162, 235)',
-                                    'rgb(255, 205, 86)',
-                                    'rgb(0, 128, 0)',
-                                    'rgb(255, 73, 0  )'
-                                    ],
-                                    hoverOffset: 4
-                                }]
-                                },
-                                    
-                            });
-
-                            }
+                    const ctx = document.getElementById('myChart');
+                    myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: label,
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: date,
+                        backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(0, 128, 0)',
+                        'rgb(255, 73, 0  )'
+                        ],
+                        hoverOffset: 4
+                    }]
+                    },
                         
-                        
-                        });
-               }
+                });
+
+                }
+            
+            
+            });
+
+
+
+        }
         
 
         // cantidad de ventas en el mes
@@ -468,7 +472,7 @@
 
         
         let myChart2;
-        
+
         function viewGraph(){
             //////////***Graficas por años */////////////
            
@@ -587,6 +591,125 @@
         
         }
 
+        function defaultGraph(){
+            //////////***Graficas por años */////////////
+           
+          
+            var today = new Date();
+            var year = today.getFullYear();
+            const x = year;
+            let url = '{{ route('order.month') }}';
+            $.ajax({
+               
+                type: "GET",
+                url: url ,
+                data: {
+                    'year': x,
+                },
+                dataType: "json",
+                success: function(response) {
+                    const resultado = response;
+                    console.log('error')
+                    const label = []
+                    const datesMoney = new Array(12);
+                    const datesSale = new Array(12);
+                    datesSale.fill(0);
+                    datesMoney.fill(0);
+            
+                
+                    resultado.map( cantidad =>{
+                                
+                        datesMoney[cantidad.month-1] = cantidad.data/1000;
+                        datesSale[cantidad.month-1] = cantidad.cantidad;
+                    })
+                
+                    console.log(datesSale);
+            
+                    const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
+                    const data = {
+                    labels: labels,
+                    datasets: [ {
+                    label: 'Ganancias mensuales',
+                    data: datesMoney,
+                    borderColor: 'rgba(255, 99, 132, 0.2)',
+                    backgroundColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(0, 128, 0)',
+                                        'rgb(255, 73, 0  )'],
+                    borderWidth: 2,
+                    borderSkipped: false,
+                    },
+                    {
+                    label: 'Ventas mensuales',
+                    data: datesSale,
+                    borderColor: 'rgba(255, 99, 132, 0.2)',
+                    backgroundColor: 'rgb(255, 205, 86)',
+                    borderWidth: 2,
+                    borderRadius: 5,
+                    borderSkipped: false,
+                    }]
+                    };
+
+                    if (myChart2) {
+                            myChart2.destroy();
+                    }
+
+                    var ctx = document.getElementById(`myChart2`).getContext('2d');
+                        if (myChart2) {
+                            myChart2.destroy();
+                        }
+                        myChart2 = new Chart(ctx, {
+                            type: 'bar',
+                            data: data,
+                            options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                position: 'top',
+                                },
+                                title: {
+                                display: false,
+            
+                            }
+                            }
+                        },
+                }); 
+                            
+                        
+                        
+                    
+             },error: function(jqXHR, textStatus, errorThrown) {
+                    
+                    console.log(jqXHR)
+
+                    var toastMixin = Swal.mixin({
+                    toast: true,
+                    icon: 'error',
+                    title: 'error',
+                    position: 'bottom-right',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                    });
+                    toastMixin.fire({
+                        title:  'No se encontraron Datos de este años',
+                        icon: 'error'
+                    }); 
+
+
+                }
+            }); //ajax
+            
+        
+        }
+
+        
 
 
     </script>

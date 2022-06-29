@@ -27,6 +27,11 @@
             </div>
 
             <ul class="list-unstyled ">
+                
+                <li>
+                    <a href="{{route('home')}}" class="my-3 {{ request()->is('publicity','publicityorder/*') ? ' active' : '' }}" ><i class="me-3 fa-light fa-gauge"></i> Dashboard</a>
+                </li>
+
                 @if (RoleController::havePermits(auth()->user()->id_role,2))
                     <li>
                         <a href="#submenuSupply" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle mt-3{{ request()->is('supply','category_supply') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-box-open"></i>Insumos <i class="fa-solid fa-caret-down "></i></a>    
@@ -104,6 +109,9 @@
                         <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
                     </li>
                 @endif
+
+       
+
             </ul>
         </nav>
 

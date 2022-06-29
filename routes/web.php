@@ -14,9 +14,15 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ImageMainController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\worker;
+use App\Http\Controllers\SendCouponController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
+
+use App\Mail\welcomeMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 
 /*
@@ -66,6 +72,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
+    Route::get('/publicity/sendCoupon',[SendCouponController::class, 'index'])->name('sendCoupon.index');
+    
+
+
     //POST
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
@@ -85,6 +95,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('coupon', CouponController::class);
     Route::resource('map', MapController::class);
     Route::resource('publicity', ImageMainController::class);
+    
+
 });
 
 Route::middleware(['auth'])->group(function () {
