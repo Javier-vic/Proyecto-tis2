@@ -441,14 +441,14 @@ class OrderController extends Controller
         $mes = $mes->month;
         
         $saleYear = DB::table('orders')
-        ->select(DB::raw('sum(orders.total) as `ganancias` , count(orders.id) as `data`' ))
+        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
         ->whereYear( 'orders.created_at' ,'=', $año )
         ->get();
 
 
         
         $saleMonth = DB::table('orders')
-        ->select(DB::raw('sum(orders.total) as `ganancias` , count(orders.id) as `data`' ))
+        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
         ->whereMonth( 'orders.created_at' ,'=', $mes )
         ->get();
 
@@ -552,7 +552,7 @@ class OrderController extends Controller
     {
 
         $BestClient = DB::table('orders')
-        ->select( 'users.name', 'users.email','users.phone', DB::raw('sum(orders.total) as gastado'), DB::raw('count(orders.id) as cantidad'))
+        ->select( 'users.name', 'users.email','users.phone', DB::raw('COALESCE(sum(orders.total), 0)  as gastado'), DB::raw('count(orders.id) as cantidad'))
         ->leftjoin('order_user','orders.id','order_user.id_order')
         ->rightjoin('users','order_user.id_user','users.id')
         ->where('users.id_role' , 2)
