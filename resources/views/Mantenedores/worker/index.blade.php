@@ -1,6 +1,7 @@
 @extends('layouts.navbar')
 
 @section('css_extra')
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 
@@ -9,11 +10,6 @@
 @endsection
 
 @section('content')
-    <div class="row my-4">
-        <div class="col d-flex justify-content-center">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarTrabajador">Agregar nuevo trabajador</button>
-        </div>
-    </div>
     <table class="table" id="myTable" style="width: 100%">
         {!! Form::token() !!}
         <thead class="thead bg-secondary text-white">
@@ -42,6 +38,12 @@
     <script   script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script>
         const Table = $("#myTable").DataTable({
             processing: true,
@@ -54,15 +56,59 @@
                     type: 'GET',
             },
             columnDefs:[
-                {className:'text-center', targets:'_all'}
+                {className:'text-center', targets:'_all'},
+                
             ],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                        text: 'Agregar trabajador',
+                        className: 'btn btn-primary mb-2',
+                        action: function ( e, dt, node, config ) {
+                            $('#agregarTrabajador').modal('show');
+
+                        },
+                        init: function(api, node, config) {
+                           $(node).removeClass('dt-button')
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: [0,1,2,3]
+                        },
+                        titleAttr: 'Exportar a PDF',
+                        className: 'btn btn-danger mb-2',
+                        text: '<i class="fa fa-file-excel"></i> PDF',
+                        init: function(api, node, config) {
+                           $(node).removeClass('dt-button')
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: [0,1,2,3]
+                        },
+                        titleAttr: 'Exportar a PDF',
+                        className: 'btn btn-success mb-2',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        init: function(api, node, config) {
+                           $(node).removeClass('dt-button')
+                        }
+                    }
+                ],
+                
             columns:[
                 {data:'name',name:'name'},
                 {data:'email',name:'email'},
                 {data:'name_role',name:'name_role'},
                 {data:'created_at',name:'created_at',render(data){ return moment(data).locale('es').format('LL');}},
                 {data:'action',name:'action',orderable:false,searchable:true}
-            ]
+            ],
         }); 
         const saveWorker = (e) => {
             e.preventDefault();

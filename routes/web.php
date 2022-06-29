@@ -126,3 +126,4 @@ Route::resource('cart', CartController::class);
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
 Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);
+        
