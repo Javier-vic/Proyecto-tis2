@@ -2,16 +2,17 @@
 @section('content')
     <div class="row">
         @foreach ($pendingOrders as $item)
-            <div class="col-lg-3">
+            <div class="col-xl-4 col-md-6 col-12 mt-2">
                 <div class="card {{($item->order_status == "Espera")? 'border-danger border-2': null;}}">
                     <div class="card-body">
                         <span class="card-title fs-5 text-center d-block">Nombre cliente: <span class="fw-bold"> {{$item->name_order}} </span></span>
-                        <div class="card-subtitle text-muted text-center">Número: {{$item->number}} - Despacho: {{$item->address}}</div>
                         <div class="card-text mt-3">
                             <span class="fw-bold fs-5">Orden:</span>
                             <ul class="list-group fs-5">
                                 @foreach ($item->listProducts as $product)
-                                    <li class="list-group-item">{{$product->name_product}} - cantidad : {{$product->cantidad}}</li>
+                                    <li class="list-group-item">{{$product->name_product}} - cantidad : {{$product->cantidad}} 
+                                       
+                                    </li>
                                 @endforeach
                             </ul>
                             @if($item->order_status == "Espera")
