@@ -561,7 +561,7 @@ class OrderController extends Controller
         ->groupby('users.name', 'users.email','users.phone')
         ->orderby('orders.total', 'DESC')
         ->get();    
-        dd($BestClient);
+      
         
         return response($BestClient,200);
    

@@ -72,6 +72,14 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
     Route::get('/publicity/sendCoupon',[SendCouponController::class, 'index'])->name('sendCoupon.index');
+    Route::get('/publicity/couponSend', function(){
+
+        $correo = new welcomeMail;
+
+        Mail::to('apinto@ing.ucsc.cl')->send($correo);
+        return "mensaje enviado";
+
+    });
     
 
 

@@ -150,9 +150,11 @@
                 <thead>
                     <tr>
 
+                        <th>nombre</th>
                         <th>Correo</th>
-                        <th>Cantidad vendida</th>
-                        <th>Total vendido</th>
+                        <th>Celular</th>
+                        <th>Gastado</th>
+                        <th>Cantidad</th>
     
                     </tr>
                 </thead>
@@ -407,9 +409,11 @@
                                 $('#bestClient').append(
                                     `
                                 <tr>
-                                    <td>${cliente.mail}</td>
-                                    <td>${cliente.cantidad}</td>
+                                    <td>${cliente.name}</td>
+                                    <td>${cliente.email}</td>
+                                    <td>${cliente.phone}</td>
                                     <td>${cliente.gastado}</td>
+                                    <td>${cliente.cantidad}</td>
                                 </tr> 
                                 `
                                 )
@@ -531,7 +535,7 @@
                     datesSale.fill(0);
                     datesMoney.fill(0);
             
-                
+                    
                     resultado.map( cantidad =>{
                                 
                         datesMoney[cantidad.month-1] = cantidad.data/1000;
