@@ -11,12 +11,20 @@
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div class="container">
-        <div class="row">
-            <div class="col-md justify-content-center  d-flex align-self-center col-xs-12">
-                <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo">
-                    Agregar nuevo insumo
-                </button>
-            </div>
+        <div class="col-md justify-content-center  d-flex align-self-center col-xs-12">
+            <form action="{{ route('supply.excel') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="import_file" id="import_file">
+                <button class="btn btn-success">Importar Excel</button>
+            </form>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md justify-content-center  d-flex align-self-center col-xs-12">
+            <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarInsumo">
+                Agregar nuevo insumo
+            </button>
         </div>
     </div>
     <table class="table" id="myTable" style="width: 100%">
