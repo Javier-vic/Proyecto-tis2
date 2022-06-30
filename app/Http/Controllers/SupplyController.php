@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Redirect;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -220,8 +221,15 @@ class SupplyController extends Controller
     {
         $file = $request->file('import_file');
 
-        Excel::import(new SupplyImport, $file);
+        if(!$file){
+            return Redirect::back()->withErrors(['message' => 'No has cargado un archivo valido']);
+        }
+        else{
 
-        return view('home');
+            Excel::import(new SupplyImport, $file);
+    
+            return view('home');
+        }
+     
     }
 }

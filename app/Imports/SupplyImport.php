@@ -17,7 +17,6 @@ class SupplyImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $category = category_supply::where('name_category', $row['categoria'])->first();
-
         return new supply([
             'name_supply' => $row['nombre'],
             'unit_meassurement' => $row['unidad_de_medida'],

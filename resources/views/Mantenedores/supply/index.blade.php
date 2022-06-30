@@ -16,6 +16,10 @@
                 @csrf
                 <input type="file" name="import_file" id="import_file">
                 <button class="btn btn-success">Importar Excel</button>
+                <span class="text-danger">   @if($errors->any())
+                {{$errors->first('message')}}
+                 @endif</span>
+             
             </form>
         </div>
 
