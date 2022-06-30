@@ -12,8 +12,9 @@
 
                 <div class="mb-4">
                     <label for="name_order" class="form-label">Nombre cliente :</label>
-                    <input type="text" class="form-control input-modal" value="{{ isset($order->name_order) ? $order->name_order : '' }}"
-                        id="name_order" name="name_order" aria-describedby="name_product_help" >
+                    <input type="text" class="form-control input-modal"
+                        value="{{ isset($order->name_order) ? $order->name_order : '' }}" id="name_order"
+                        name="name_order" aria-describedby="name_product_help">
                     <span class="createmodal_error" id="name_order_errorCREATEMODAL"></span>
                 </div>
 
@@ -45,23 +46,24 @@
 
                 <div class="mb-4 entradas">
                     <label for="comment" class="form-label">Direccion :</label>
-                    <input type="text" class="form-control input-modal" value="{{ isset($order->address) ? $order->address : '' }}"
-                        class="form-control" id="address" name="address" >
-                        <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
+                    <input type="text" class="form-control input-modal"
+                        value="{{ isset($order->address) ? $order->address : '' }}" class="form-control" id="address"
+                        name="address">
+                    <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
                 </div>
 
                 <div class="mb-4 entradas">
                     <label for="comment" class="form-label">Número de celular :</label>
-                    <input type="text" class="form-control input-modal" value=""
-                        class="form-control" id="number" name="number" >
-                        <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
+                    <input type="text" class="form-control input-modal" value="" class="form-control"
+                        id="number" name="number">
+                    <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
                 </div>
 
                 <div class="mb-4 entradas">
                     <label for="comment" class="form-label">Email :</label>
-                    <input type="text" class="form-control input-modal" value=""
-                        class="form-control" id="mail" name="mail" >
-                        <span class="createmodal_error" id="mail_errorCREATEMODAL"></span>
+                    <input type="text" class="form-control input-modal" value="" class="form-control"
+                        id="mail" name="mail">
+                    <span class="createmodal_error" id="mail_errorCREATEMODAL"></span>
                 </div>
 
 
@@ -90,7 +92,7 @@
                     <h3>Productos disponibles</h3>
                     <h2 class="createmodal_error" id="cantidad_errorCREATEMODAL"></h2>
                     <div id="listaProductos" class="row">
-                </div>
+                    </div>
 
 
                 </div>
@@ -109,31 +111,28 @@
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
+        $("#mi-select").change(function() {
+            if ($(this).val() == 'si') {
+                $('.entradas').removeClass('d-none');
+                $('#address').removeClass('is-valid');
+                $('#address').val('');
 
 
+            } else {
 
-            $("#mi-select").change(function() {
-                if ($(this).val() == 'si') {
-                    $('.entradas').removeClass('d-none');
-                    $('#address').removeClass('is-valid');
-                    $('#address').val('');
+                $('.entradas').addClass('d-none');
+                $('#address').val('Sin direccion');
+            }
 
+        });
 
-                } else {
-                   
-                    $('.entradas').addClass('d-none');
-                    $('#address').val('Sin direccion');
-                }
-
-            });
-
-           // ****************************************************************************************************************
+        // ****************************************************************************************************************
         //MODAL DE CREAR
         // ****************************************************************************************************************
         const createOrder = (e) => {
             e.preventDefault();
- 
-                var formData = new FormData(e.currentTarget);
+
+            var formData = new FormData(e.currentTarget);
             var url = '{{ route('order.store') }}';
             $.ajax({
                 type: "POST",
@@ -161,14 +160,14 @@
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    if(jqXHR.responseJSON.errors){
+                    if (jqXHR.responseJSON.errors) {
                         var text = jqXHR.responseJSON.errors;
 
                     }
-                    if(jqXHR.responseJSON.errors2){
+                    if (jqXHR.responseJSON.errors2) {
                         var text2 = jqXHR.responseJSON.errors2;
                     }
-                    
+
                     console.log(text2)
                     console.log(text)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
@@ -189,25 +188,27 @@
                         $.each(text, function(key, item) {
                             const index = key.lastIndexOf('.');
                             const after = key.slice(index + 1);
-                            
+
                             $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
                                 item + "</span>")
-                            $("#" + after + "errorCREATEMODAL").append("<span class='text-danger'>" +
-                            item + "</span>")
+                            $("#" + after + "errorCREATEMODAL").append(
+                                "<span class='text-danger'>" +
+                                item + "</span>")
 
                             $(`#${key}`).addClass('is-invalid');
                             $(`#valor${after}`).addClass('is-invalid');
-            
+
                         });
                     }
 
-                    if(text2){
-                        $.each(text2,function(key,item){
-                           if($(`#valor${item.id}`).val() > item.stock){
-                               $(`#valor${item.id}`).addClass('is-invalid')
-                               $("#" + item.id + "errorCREATEMODAL").append("<span class='text-danger'>" +
-                            'No hay stock suficiente.' + "</span>")
-                           }
+                    if (text2) {
+                        $.each(text2, function(key, item) {
+                            if ($(`#valor${item.id}`).val() > item.stock) {
+                                $(`#valor${item.id}`).addClass('is-invalid')
+                                $("#" + item.id + "errorCREATEMODAL").append(
+                                    "<span class='text-danger'>" +
+                                    'No hay stock suficiente.' + "</span>")
+                            }
                         })
                     }
                     //////////////////////////////////////
@@ -216,7 +217,7 @@
 
             });
 
-        
+
         }
         //****************************************************************************************************************
 
@@ -284,10 +285,10 @@
                     $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                     $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                     $(`#valor${productSelected.id}`).removeAttr('name');
-                     $(`#errorvalor${productSelected.id}`).addClass('d-none')
+                    $(`#errorvalor${productSelected.id}`).addClass('d-none')
                     $(`#bottonproduct${productSelected.id}`).html(
                         '<i class="fa-solid fa-plus"></i> Agregar producto');
-                        $('.createmodal_error_product').empty();
+                    $('.createmodal_error_product').empty();
                 }
 
             });
@@ -295,7 +296,5 @@
 
 
         })
-
-
     </script>
 @endsection

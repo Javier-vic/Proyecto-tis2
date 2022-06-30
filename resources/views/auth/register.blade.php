@@ -54,7 +54,8 @@
                         <div class="input-group ">
                             <span class="input-group-text" id="basic-addon1">+56</span>
                             <input id="phone" type="text" class="form-control input-modal" name="phone"
-                                value="{{ old('phone') }}" autocomplete="phone" aria-describedby="basic-addon1">
+                                value="{{ old('phone') }}" autocomplete="phone" aria-describedby="basic-addon1"
+                                maxlength="9">
 
                         </div>
                         <span class="text-danger createmodal_error" id="phone_error"></span>

@@ -79,10 +79,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
-    Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
+Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
 Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
 
 

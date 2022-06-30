@@ -33,7 +33,7 @@
                 <div class="input-group">
                     <span class="input-group-text">+56</span>
                     <input type="text" class="form-control input-modal" id="phone" name="phone"
-                        aria-describedby="phone_help" value="{{ $userData->phone }}">
+                        aria-describedby="phone_help" value="{{ $userData->phone }}" maxlength="9">
                 </div>
                 <span class="text-danger createmodal_error" id="phone_error"></span>
             </div>

@@ -65,7 +65,8 @@
                                 <span class="input-group-text">+56</span>
                                 <input type="text" class="form-control input-modal" id="number" name="number"
                                     aria-describedby="number_help" placeholder="912312312" onkeyup="checkInput(event)"
-                                    @if (auth()->user()) value="{{ auth()->user()->phone }}" readonly @endif>
+                                    @if (auth()->user()) value="{{ auth()->user()->phone }}" readonly @endif
+                                    maxlength="9">
                             </div>
                             <span class="text-danger createmodal_error" id="number_error"></span>
                         </div>
