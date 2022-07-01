@@ -59,6 +59,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/order/pending', [OrderController::class, 'pendingOrdersView'])->name('pendingOrdersView');
     //POST
     Route::post('/supply/excel', [\App\Http\Controllers\SupplyController::class, 'importExcel'])->name('supply.excel');
+    Route::get('/supply/import/', [\App\Http\Controllers\SupplyController::class, 'importExcelView'])->name('supply.import');
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');

@@ -11,31 +11,28 @@
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div class="container-fluid ">
-            <div class="justify-content-center">
-                <div class="py-4 fs-5">Cantidad de productos: <span id=number></span></div>
-            </div>
-            <table id="myTable" class="responsive display nowrap" style="width: 100%;">
-        <thead class="bg-secondary text-white">
-            <tr class="text-center">
-                <th class="py-2" style="width:10%">Nombre producto</th>
-                <th class="py-2" style="width:10%">Stock</th>
-                <th class="py-2" style="width:10%">Acciones</th>
-            </tr>
-        </thead>
-    </table>
+        <div class="justify-content-center">
+            <div class="py-4 fs-5">Cantidad de productos: <span id=number></span></div>
+        </div>
+        <table id="myTable" class="responsive display nowrap" style="width: 100%;">
+            <thead class="bg-secondary text-white">
+                <tr class="text-center">
+                    <th class="py-2" style="width:10%">Nombre producto</th>
+                    <th class="py-2" style="width:10%">Stock</th>
+                    <th class="py-2" style="width:10%">Acciones</th>
+                </tr>
+            </thead>
+        </table>
     </div>
     <div>@include('Mantenedores.product.modal.create')</div>
     <div>@include('Mantenedores.product.modal.show')</div>
     <div>@include('Mantenedores.product.modal.edit')</div>
-
-
-   
 @endsection
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-    <script type ="text/javascript" charset="utf8"
-    src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -66,41 +63,40 @@
                 url: "{{ route('product.index') }}",
                 type: 'GET',
             },
-            buttons: [
-                {
-                        text: 'Agregar producto',
-                        className: 'btn btn-primary mb-2',
-                        action: function ( e, dt, node, config ) {
-                            $('#agregarProducto').modal('show');
-
-                        }
-                    },
-                {
-                        extend: 'pdf',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL',
-                        exportOptions: {
-                            columns: [0,1]
-                        },
-                        titleAttr: 'Exportar a PDF',
-                        className: 'btn btn-danger mb-2',
-                        text: '<i class="fa fa-file-excel"></i> PDF'
-
-                    },
-                    {
-                        extend: 'excel',
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL',
-                        exportOptions: {
-                            columns: [0,1]
-                        },
-                        titleAttr: 'Exportar a PDF',
-                        className: 'btn btn-success mb-2',
-                        text: '<i class="fa fa-file-excel"></i> Excel'
+            buttons: [{
+                    text: 'Agregar producto',
+                    className: 'btn btn-primary mb-2',
+                    action: function(e, dt, node, config) {
+                        $('#agregarProducto').modal('show');
 
                     }
+                },
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    exportOptions: {
+                        columns: [0, 1]
+                    },
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-danger mb-2',
+                    text: '<i class="fa fa-file-excel"></i> PDF'
 
-                ],
+                },
+                {
+                    extend: 'excel',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    exportOptions: {
+                        columns: [0, 1]
+                    },
+                    titleAttr: 'Exportar a PDF',
+                    className: 'btn btn-success mb-2',
+                    text: '<i class="fa fa-file-excel"></i> Excel'
+
+                }
+
+            ],
             // language: {
             //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
             // },

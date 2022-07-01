@@ -217,19 +217,24 @@ class SupplyController extends Controller
         }
     }
 
+    public function importExcelView(request $request)
+    {
+        return view('Mantenedores.supply.importExcel');
+    }
+
     public function importExcel(request $request)
     {
         $file = $request->file('import_file');
 
-        if(!$file){
-            return Redirect::back()->withErrors(['message' => 'No has cargado un archivo valido']);
+        if (!$file) {
+            return Redirect::back()->withErrors(['message' => 'No has cargado un archivo.']);
+        } else {
+            try {
+                Excel::import(new SupplyImport, $file);
+                return redirect()->action('App\Http\Controllers\SupplyController@index');
+            } catch (\Throwable $th) {
+                return Redirect::back()->withErrors(['message' => 'Ocurrió un error con el archivo. Verifique los datos']);
+            }
         }
-        else{
-
-            Excel::import(new SupplyImport, $file);
-    
-            return view('home');
-        }
-     
     }
 }
