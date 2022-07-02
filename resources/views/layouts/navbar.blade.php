@@ -27,6 +27,11 @@
             </div>
 
             <ul class="list-unstyled ">
+                
+                <li>
+                    <a href="{{route('home')}}" class="my-3 {{ request()->is('publicity','publicityorder/*') ? ' active' : '' }}" ><i class="me-3 fa-light fa-gauge"></i> Dashboard</a>
+                </li>
+
                 @if (RoleController::havePermits(auth()->user()->id_role,2))
                     <li>
                         <a href="#submenuSupply" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle mt-3{{ request()->is('supply','category_supply') ? ' active' : '' }}" ><i class="me-3 fa-solid fa-box-open"></i>Insumos <i class="fa-solid fa-caret-down "></i></a>    
@@ -104,6 +109,9 @@
                         <a href="{{route('map.index')}}" class="my-3 {{ request()->is('map') ? ' active' : '' }}"><i class="me-3 fa-solid fa-location-dot"></i>Local</a>
                     </li>
                 @endif
+
+       
+
             </ul>
         </nav>
 
@@ -117,6 +125,15 @@
                         </button>
                     </div>  
                     <div class="d-none d-sm-block col text-center">@yield('titlePage')</div>
+                    <!-- Notificaciones -->
+                    <div class="mx-3 text-center col-lg-1">
+                        <button type="button" class="btn btn-light position-relative border"> 
+                            <i class="fa-solid fa-bell fs-3"></i>                        
+                            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>                          
+                        </button>
+                    </div>
                     <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Cerrar sesion
                     </a>

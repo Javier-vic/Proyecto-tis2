@@ -14,9 +14,15 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ImageMainController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\worker;
+use App\Http\Controllers\SendCouponController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
+
+use App\Mail\welcomeMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 
 /*
@@ -29,6 +35,10 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/ubicacion', [LandingController::class,'ubicacion']);
+Route::get('/getLocation', [LandingController::class,'getLocation'])->name('getLocation');
+Route::get('/', [LandingController::class,'index']);
+Route::get('/login',function(){ return view('auth.login');})->name('login');
 
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/login', function () {
@@ -54,6 +64,25 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/product/productView', [\App\Http\Controllers\ProductController::class, 'productView'])->name('product.view');
     Route::get('/worker/dataTable', [worker::class, 'dataTableWorkers'])->name('datatable.workers');
     Route::get('/worker/getWorker', [worker::class, 'getWorker'])->name('worker.getWorker');
+    Route::get('/order/GetSaleMonth', [\App\Http\Controllers\OrderController::class, 'GetSaleMonth'])->name('order.GetSaleMonth');
+    Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
+    Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
+    Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+    Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
+    Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
+    Route::get('/publicity/sendCoupon',[SendCouponController::class, 'index'])->name('sendCoupon.index');
+    Route::get('/publicity/couponSend', function(){
+
+        $correo = new welcomeMail;
+
+        Mail::to('apinto@ing.ucsc.cl')->send($correo);
+        return "mensaje enviado";
+
+    });
+    
+
+
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     // Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
@@ -78,6 +107,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('coupon', CouponController::class);
     Route::resource('map', MapController::class);
     Route::resource('publicity', ImageMainController::class);
+    
+
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -98,9 +129,7 @@ Route::resource('cart', CartController::class);
 
 
 // RUTAS DE ORDENES
-Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
-Route::get('/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
-Route::get('/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+
 
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
