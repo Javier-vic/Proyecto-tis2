@@ -46,22 +46,22 @@
         </div>
     </div>
 
-    <div>
-        <h5>Busqueda</h5>
-        <input type="text" name="search" id="search" onkeyup="searchFilter(event)">
+    <div class="mt-5 p-0">
+        <div class="input-group ">
+            <span class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="text" name="search" id="search" onkeyup="searchFilter(event)" class="form-control"
+                placeholder="Ingrese el nombre de algún producto...">
+        </div>
     </div>
-    <div id="searchContainer">
-
-    </div>
-
-    <div class="d-flex mt-5" >
+    <div class="d-flex mt-2">
         <div class="col-12 col-md-8 col-xl-9 me-5 ">
             <div>
 
                 <div>
                     <div id="productsContainer">
                         {{-- CATEGORÍAS DE LOS PRODUCTOS --}}
-                        <div class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
+                        <div
+                            class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
                             {{-- AGREGA LOS MÁS VENDIDOS AL NAVBAR ( EN CASO DE EXISTIR ) --}}
                             @if (sizeof($bestSellers) > 0)
                                 <div class="text-white">
@@ -73,7 +73,7 @@
                             @endif
                             @foreach ($category_products as $category_product)
                                 @if (in_array($category_product->name, $categoryAvailableNames))
-                                    <div class="text-white">
+                                    <div class="text-white {{ strtolower($category_product->name) }}Indicator">
                                         <a href="#{{ str_replace(' ', '', $category_product->name) }}"
                                             id="{{ str_replace(' ', '', $category_product->name) }}Navbar"
                                             class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 "
@@ -128,7 +128,8 @@
                                                             class="fa-solid fa-plus me-1"></i>
                                                         Agregar al carrito</a>
                                                 @else
-                                                    <a class="btn w-100 bg-secondary text-white text-decoration-none disabled"><i
+                                                    <a
+                                                        class="btn w-100 bg-secondary text-white text-decoration-none disabled"><i
                                                             class="fa-solid fa-x me-1"></i>
                                                         PRODUCTO AGOTADO</a>
                                                 @endif
@@ -141,16 +142,21 @@
                         @endif
                         {{-- PRODUCTOS --}}
                         @foreach ($categoryAvailable as $category)
-                            <h2 id="{{ str_replace(' ', '', $category->name) }}" class="mb-5 invisible intersectionObserver">
+                            <h2 id="{{ str_replace(' ', '', $category->name) }}"
+                                class="mb-5 invisible intersectionObserver {{ strtolower($category->name) }}Indicator">
                                 a
                             </h2>
                             <div>
-                                <h2 class="categoryName mb-4" id="{{ $category->name }}Nombre">{{ $category->name }}</h2>
+                                <h2 class="categoryName mb-4 {{ strtolower($category->name) }}Indicator"
+                                    id="{{ $category->name }}Nombre">
+                                    {{ $category->name }}
+                                </h2>
                                 <section>
                                     <div class="my-2 row ">
                                         @foreach ($productAvailable as $product)
                                             @if ($product->category_id == $category->id)
-                                                <div class="col-12 col-sm-6  col-xl-4 mb-3 p-1 ">
+                                                <div
+                                                    class="col-12 col-sm-6  col-xl-4 mb-3 p-1 {{ strtolower($product->name_product) }}">
                                                     <div class="bg-image hover-overlay ripple text-center"
                                                         data-mdb-ripple-color="light">
                                                         @if ($product->stock > 0)
@@ -167,7 +173,8 @@
                                                         <div class="d-flex justify-content-between position-relative bg-white rounded px-2 pt-1 shadow border mb-3"
                                                             style="margin-top:-30px;">
                                                             <h5 class="card-title font-weight-bold">
-                                                                <a>{{ $product->name_product }}</a>
+                                                                <a
+                                                                    class="productsNames text-dark text-decoration-none ">{{ $product->name_product }}</a>
                                                             </h5>
                                                             <p class="mb-2 text-success font-weight-bold">$
                                                                 {{ $product->price }}</p>
@@ -192,7 +199,7 @@
                                         @endforeach
                                     </div>
                                 </section>
-                                <hr>
+                                <hr class="{{ strtolower($category->name) }}Indicator">
                             </div>
                         @endforeach
                     </div>
@@ -268,70 +275,57 @@
                 localStorage.setItem('cart', JSON.stringify([]));
             }
         });
+        const categoryAvailable = @json($categoryAvailable);
         const productsAvailable = @json($productAvailable);
-        console.log(productsAvailable)
-
 
         const searchFilter = (e) => {
+            input = e.target.value
+            filter = input.toLowerCase();
+            listOfNames = $('.productsNames')
 
+            let listOfCategorys = []
+            categoryAvailable.map(category => {
+                listOfCategorys.push(category.name.toLowerCase())
+            })
 
-            if(e.target.value != ''){
-                $('#productsContainer').addClass('d-none')
-                const arrayFiltered = productsAvailable.filter(product => (product.name_product).includes(e.target.value))
-            console.log(console.log(arrayFiltered))
-            arrayFiltered.map(product=>{
+            for (let i = 0; i < listOfNames.length; i++) {
+                name = listOfNames[i].innerText.toLowerCase()
+                if (name.indexOf(filter) > -1) {
 
-            $('#searchContainer').append(
-                    `
-                    <div class="col-12 col-sm-6  col-xl-4 mb-3 p-1 ">
-                                                <div class="bg-image hover-overlay ripple text-center"
-                                                    data-mdb-ripple-color="light">
-                                                    @if ($product->stock > 0)
-                                                        <img src="{{ asset('storage') . '/' . '${product.image_product}' }}"
-                                                            class="img-fluid rounded object-fit-cover "
-                                                            style="height: 239px;object-fit: cover;" />
-                                                    @else
-                                                        <img src="{{ asset('storage') . '/' . '${product.image_product}' }}"
-                                                            class="img-fluid rounded object-fit-cover opacity-50"
-                                                            style="height: 239px;object-fit: cover;" />
-                                                    @endif
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="d-flex justify-content-between position-relative bg-white rounded px-2 pt-1 shadow border mb-3"
-                                                        style="margin-top:-30px;">
-                                                        <h5 class="card-title font-weight-bold">
-                                                            <a>${product.name_product}</a>
-                                                        </h5>
-                                                        <p class="mb-2 text-success font-weight-bold">$
-                                                            ${product.price}</p>
-                                                    </div>
-                                                    <p class="card-text comment more" style="min-height: 70px;">
-                                                        ${product.description}
-                                                    </p>
-                                                    @if ($product->stock > 0)
-                                                        <a onclick="saveInCart('${product.id}')"
-                                                            class="btn w-100 bg-success text-white text-decoration-none agregarCarrito"><i
-                                                                class="fa-solid fa-plus me-1"></i>
-                                                            Agregar al carrito</a>
-                                                    @else
-                                                        <a
-                                                            class="btn w-100 bg-secondary text-white text-decoration-none disabled"><i
-                                                                class="fa-solid fa-x me-1"></i>
-                                                            PRODUCTO AGOTADO</a>
-                                                    @endif
+                    listOfCategorys.map(category => {
+                        $(`.${category}Indicator`).removeClass('d-none')
 
-                                                </div>
-                                            </div>
-                    `
-            )
-        })
+                    })
+                    $(`.${name}`).removeClass('d-none')
+                    productsAvailable.map(product => {
+                        if (product.name_product.toLowerCase() === name) {
+                            if (listOfCategorys.includes(product.category.toLowerCase())) {
+                                const index = listOfCategorys.indexOf(product.category.toLowerCase());
+                                if (index > -1) {
+                                    listOfCategorys.splice(index,
+                                        1);
+                                }
+                            }
+                        }
+                    })
+                    listOfCategorys.map(category => {
+                        $(`.${category}Indicator`).addClass('d-none')
+                    })
+
+                } else {
+                    $(`.${name}`).addClass('d-none')
+                    listOfCategorys.map(category => {
+                        $(`.${category}Indicator`).addClass('d-none')
+                    })
+
+                }
 
             }
-            else{
-                $('#productsContainer').removeClass('d-none')
-                $('#searchContainer').empty()
-            }
-   
+
+
+
+
+
         }
 
         const deleteInCart = (id) => {
