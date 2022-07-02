@@ -150,7 +150,7 @@ s<!DOCTYPE html>
                     @auth
                     @if(auth()->user()->id_role != 2)
                                 <li class="nav-item mx-3 ">
-                                    <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('home')}}"><i class="fa-solid fa-chart-line me-2"></i>Administración</a>
+                                    <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('home')}}"><i class="fa-solid fa-chart-line me-2"></i>Funcionarios</a>
                                 </li>
                                 @endif
                     @endauth

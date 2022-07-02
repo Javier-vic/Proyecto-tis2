@@ -488,11 +488,7 @@ class OrderController extends Controller
        
         if(isset($years[0])){
             return response::json(array(
-                'countSupplies' => $countSupplies ,
-                'countProducts' => $countProducts ,
                 'saleMonth' => $saleMonth,
-                'listProducts' => $listProducts,
-                'listSupplies' => $listSupplies,
                 'saleYear' => $saleYear,
                 'years' => $years,
                 
@@ -502,11 +498,7 @@ class OrderController extends Controller
             
         }else{
             return response::json(array(
-                'countSupplies' => $countSupplies ,
-                'countProducts' => $countProducts ,
                 'saleMonth' => $saleMonth,
-                'listProducts' => $listProducts,
-                'listSupplies' => $listSupplies,
                 'saleYear' => $saleYear,
      
             ),200);

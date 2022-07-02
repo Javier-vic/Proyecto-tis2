@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Response;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Arr;
 
 class SupplyController extends Controller
 {
@@ -223,5 +224,20 @@ class SupplyController extends Controller
                 ->make(true);
 
         }
+    }
+    public function dashboardSupply(){
+        $countSupplies = DB::table('supplies')
+        ->select(DB::raw('count(supplies.id) as `countsupplies`'))
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->get();
+
+           
+        $listSupplies = DB::table('supplies')
+        ->select('supplies.name_supply','supplies.critical_quantity','supplies.unit_meassurement','supplies.quantity')
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->orderBy('supplies.unit_meassurement')
+        ->get();
+        
+        return response::json(array('countSupplies'=>$countSupplies, 'listSupplies' => $listSupplies));
     }
 }
