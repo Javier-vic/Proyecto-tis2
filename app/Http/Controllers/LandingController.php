@@ -84,6 +84,24 @@ class LandingController extends Controller
         //
     }
 
+    public function ubicacion()
+    {
+        return view('Usuario.Landing.Location');
+    }
+    
+    public function getLocation()
+    {
+        $location = DB::table('maps' )
+        ->select('maps.latitud','maps.longitud','maps.direccion')
+        ->where('maps.id', 1)
+        ->get();    
+
+    
+
+        return response($location,200);
+    }
+  
+    
     /**
      * Store a newly created resource in storage.
      *
