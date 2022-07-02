@@ -6,9 +6,11 @@ use App\Models\category_product;
 use Illuminate\Support\Facades\DB;
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
+use PhpParser\Node\Expr\Cast\Array_;
 
 class ProductController extends Controller
 {
@@ -244,5 +246,19 @@ class ProductController extends Controller
         }
 
         return response('success', 200);
+    }
+
+    public function dashboardProduct(){
+        $countProducts = DB::table('products')
+        ->select(DB::raw('count(products.id) as `countproducts`'))
+        ->where('products.stock', '=', 0)
+        ->get();
+
+        $listProducts = DB::table('products')
+        ->select('products.name_product')
+        ->where('products.stock', '=', 0)
+        ->get();
+
+        return response::json(Array('countProducts'=>$countProducts,'listProducts'=>$listProducts));
     }
 }

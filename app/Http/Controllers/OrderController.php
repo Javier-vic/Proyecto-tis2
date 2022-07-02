@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Http\Controllers\productController;
 use App\Models\order;
 use App\Models\products_orders;
@@ -61,9 +61,12 @@ class OrderController extends Controller
         ///
         ///
         ///
-
-
-        return view('Mantenedores.order.index', ['years' => $years]);
+        
+        if(isset($years[0])){
+            return view('Mantenedores.order.index', ['years' => $years] );
+        }else{
+            return view('Mantenedores.order.index');
+        }
     }
 
     /**
@@ -233,17 +236,17 @@ class OrderController extends Controller
 
 
         $productsSelected = DB::table('products_orders')
-            ->where('products_orders.order_id', '=', $order->id)
-            ->whereNull('products.deleted_at')
-            ->join('products', 'products_orders.product_id', 'products.id')
-            ->select(
-                'products_orders.product_id',
-                'products_orders.cantidad',
-                'products.*'
+        ->where('products_orders.order_id', '=', $order->id)
+        ->whereNull('products.deleted_at')
+        ->join('products', 'products_orders.product_id', 'products.id')
+        ->select(
+            'products_orders.product_id',
+            'products_orders.cantidad',
+            'products.*'
 
-            )
-            ->orderBy('products_orders.order_id')
-            ->get();
+        )
+        ->orderBy('products_orders.order_id')
+        ->get();
 
 
         $selectedIds = $productsSelected->pluck('product_id');
@@ -421,6 +424,7 @@ class OrderController extends Controller
 
     public function getview(request $request)
     {
+        
         $values = request()->except('_token');
         $id = $values['id'];
         $order = DB::table('orders')
@@ -437,19 +441,91 @@ class OrderController extends Controller
         return response(json_encode([$productOrders, $order]), 200);
     }
 
-    public function getMonthOrder(request $request)
-    {
+    public function GetSaleMonth (request $request){
+
+        $mes = Carbon::now();
+        $año = $mes->year;
+        $mes = $mes->month;
+        
+        $saleYear = DB::table('orders')
+        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
+        ->whereYear( 'orders.created_at' ,'=', $año )
+        ->get();
+
+
+        
+        $saleMonth = DB::table('orders')
+        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
+        ->whereMonth( 'orders.created_at' ,'=', $mes )
+        ->get();
+
+        
+        $countProducts = DB::table('products')
+        ->select(DB::raw('count(products.id) as `countproducts`'))
+        ->where('products.stock', '=', 0)
+        ->get();
+
+        $listProducts = DB::table('products')
+        ->select('products.name_product')
+        ->where('products.stock', '=', 0)
+        ->get();
+        
+        
+        $countSupplies = DB::table('supplies')
+        ->select(DB::raw('count(supplies.id) as `countsupplies`'))
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->get();
+
+           
+        $listSupplies = DB::table('supplies')
+        ->select('supplies.name_supply','supplies.critical_quantity','supplies.unit_meassurement','supplies.quantity')
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->orderBy('supplies.unit_meassurement')
+        ->get();
+
+        $years = DB::table('orders')
+        ->select((DB::raw('YEAR(orders.created_at) year')))
+        ->groupby('year')
+        ->get();
+
+
+        ///
+        ///
+        ///
+       
+        if(isset($years[0])){
+            return response::json(array(
+                'saleMonth' => $saleMonth,
+                'saleYear' => $saleYear,
+                'years' => $years,
+                
+    
+    
+            ),200);
+            
+        }else{
+            return response::json(array(
+                'saleMonth' => $saleMonth,
+                'saleYear' => $saleYear,
+     
+            ),200);
+        }
+       
+       
+    }
+
+    public function getMonthOrder(request $request){
 
         $sales = DB::table('orders')
-            ->select(DB::raw('sum(orders.total) as `data`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
-            ->whereyear('created_at', $request->year)
-            ->groupby('year', 'month')
-            ->get();
+        ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+        ->whereyear('created_at', $request->year)
+        ->groupby('year','month')
+        ->get();
 
-
-
-
-        return response($sales, 200);
+     
+       
+        
+        return response($sales,200);
     }
 
     ///eliminar
@@ -458,17 +534,40 @@ class OrderController extends Controller
     {
 
         $bestseller = DB::table('products_orders')
-            ->select('products_orders.product_id', 'products.name_product', DB::raw('sum(products_orders.cantidad) as cantida'))
-            ->join('products', 'products_orders.product_id', 'products.id')
-            ->groupBy('products_orders.product_id', 'products.name_product')
-            ->limit(3)
-            ->orderBy('cantida', 'DESC')
-            ->get();
+        ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
+        ->join('products','products_orders.product_id','products.id')
+        ->groupBy('products_orders.product_id', 'products.name_product')
+        ->limit(5)
+        ->orderBy('cantida','DESC')
+        ->get();    
 
-
-
-        return response($bestseller, 200);
+        
+        return response($bestseller,200);
+   
+        
     }
+    
+    public function getBestClient()
+    {
+
+        $BestClient = DB::table('orders')
+        ->select( 'users.name', 'users.email','users.phone', DB::raw('COALESCE(sum(orders.total), 0)  as gastado'), DB::raw('count(orders.id) as cantidad'))
+        ->leftjoin('order_user','orders.id','order_user.id_order')
+        ->rightjoin('users','order_user.id_user','users.id')
+        ->where('users.id_role' , 2)
+        ->where('orders.total',">", 0)
+        ->limit(5)
+        ->groupby('users.name', 'users.email','users.phone')
+        ->orderby('orders.total', 'DESC')
+        ->get();    
+      
+        
+        return response($BestClient,200);
+   
+        
+    }
+
+
 
     public function destroy(order $order)
     {
@@ -478,4 +577,49 @@ class OrderController extends Controller
         $order->delete();
         return view('Mantenedores.order.index');
     }
+
+
+    public function orderbyuser()
+    {
+        $user = auth()->user()->id;
+
+        $orders = DB::table('orders')
+        ->join('order_user', 'orders.id', '=', 'order_user.id_order')
+        ->select('orders.*')
+        ->where('order_user.id_user', '=', $user)
+        ->get();
+
+        $orderItems = DB::table('products_orders')
+        ->select(DB::raw('sum(products_orders.cantidad) as articulos, products_orders.order_id'))
+        ->groupby('products_orders.order_id')
+        ->get();
+        // dd($orderItems);
+
+        $productOrders = DB::table('products_orders')
+        ->join('products', 'products_orders.product_id', '=', 'products.id')
+        ->select('products_orders.*', 'products.*')
+        ->get();
+
+        return view('Usuario.Landing.orders', compact('orders', 'productOrders', 'orderItems'));
+    }
+
+    public function orderDetails(request $request)
+    {
+        
+        $values = request()->except('_token');
+        $id = $values['id'];
+        $order = DB::table('orders')
+            ->select('orders.*')
+            ->where('orders.id', '=', $id)
+            ->get();
+
+        $productOrders = DB::table('products_orders')
+            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->where('products_orders.order_id', '=', $id)
+            ->get();
+
+        return response(json_encode([$productOrders, $order]), 200);
+    }
+
 }
