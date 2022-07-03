@@ -1,5 +1,6 @@
 @extends('layouts.userNavbar')
 
+
 @section('content')
     <div>
         <div id="carouselExampleIndicators" class="carousel slide bg-dark" data-bs-ride="carousel">
@@ -151,12 +152,14 @@
                                     id="{{ $category->name }}Nombre">
                                     {{ $category->name }}
                                 </h2>
+
                                 <section>
                                     <div class="my-2 row ">
                                         @foreach ($productAvailable as $product)
                                             @if ($product->category_id == $category->id)
                                                 <div
-                                                    class="col-12 col-sm-6  col-xl-4 mb-3 p-1 {{ strtolower($product->name_product) }}">
+                                                    class="col-12 col-sm-6  col-xl-4 mb-3 p-1 {{ strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', cleanString($product->name_product))) }}">
+
                                                     <div class="bg-image hover-overlay ripple text-center"
                                                         data-mdb-ripple-color="light">
                                                         @if ($product->stock > 0)
@@ -298,15 +301,17 @@
                 listOfCategorys.push(category.name.toLowerCase())
             })
             for (let i = 0; i < listOfNames.length; i++) {
-                name = listOfNames[i].innerText.toLowerCase()
+                name = listOfNames[i].innerText.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\-]+/g,
+                    '').toLowerCase()
                 if (name.indexOf(filter) > -1) {
-
                     listOfCategorys.map(category => {
                         $(`.${category}Indicator`).removeClass('d-none')
                     })
                     $(`.${name}`).removeClass('d-none')
                     productsAvailable.map(product => {
-                        if (product.name_product.toLowerCase() === name) {
+                        formatedProductName = product.name_product.replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g,
+                            '').toLowerCase();
+                        if (formatedProductName === name) {
                             if (listOfCategorys.includes(product.category.toLowerCase())) {
                                 const index = listOfCategorys.indexOf(product.category.toLowerCase());
                                 if (index > -1) {
@@ -321,6 +326,7 @@
                     })
 
                 } else {
+                    console.log(name)
                     $(`.${name}`).addClass('d-none')
                     listOfCategorys.map(category => {
                         $(`.${category}Indicator`).addClass('d-none')
@@ -329,6 +335,7 @@
                 }
 
             }
+            console.log(listOfCategorys)
 
 
 

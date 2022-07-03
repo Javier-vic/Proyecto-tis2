@@ -53,12 +53,15 @@ class LandingController extends Controller
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('products')
+                    ->whereNull('products.deleted_at')
+
                     ->whereColumn('products.id_category_product', 'category_products.id');
             })
             ->get();
         ////////////////////////////////////////////////
 
         $bestSellers = DB::table('products_orders')
+            // ->whereNull('products.deleted_at')
             ->select('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id', DB::raw('sum(products_orders.cantidad) as cantidad'))
             ->join('products', 'products_orders.product_id', 'products.id')
             ->groupBy('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id')
