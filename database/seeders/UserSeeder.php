@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'name' => 'test',
             'email' => 'test@gmail.com',
             'id_role' => '1',
-            'phone' => 56912341234,
+            'phone' => 912341234,
             'address'=> 'Example #123 pobl Example',
             'password' => Hash::make('12341234'),
         ]);
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
             'name' => 'Test Trabajador',
             'email' => 'test2@gmail.com',
             'id_role'=> '3',
-            'phone' => 56943214321,
+            'phone' => 943214321,
             'address'=> 'Example2  #321 pobl Example 2',
             'password' => Hash::make('12341234'),
         ]);
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'name' => 'Test comprador',
             'email' => 'test3@gmail.com',
             'id_role' => '2',
-            'phone' => 56911112222,
+            'phone' => 911112222,
             'address' => 'Example #221 pobl Example 3',
             'password' => Hash::make('12341234'),
         ]);

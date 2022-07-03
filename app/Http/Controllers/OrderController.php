@@ -209,7 +209,19 @@ class OrderController extends Controller
 
         return view('Mantenedores.order.index');
     }
+    public function pendingOrdersView(){
 
+        $pendingOrders = order::where('order_status','!=','Listo')->get(); 
+        foreach($pendingOrders as $order){
+            $productsOrder = DB::table('products')
+                            ->select('*')
+                            ->join('products_orders','products.id','=','products_orders.product_id')
+                            ->where('products_orders.order_id','=',$order->id)
+                            ->get();  
+            $order->listProducts = $productsOrder;
+        }
+        return view('Mantenedores.order.pending',['pendingOrders'=>$pendingOrders]);
+    } 
     /**
      * Display the specified resource.
      *
