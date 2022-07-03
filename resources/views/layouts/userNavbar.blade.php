@@ -83,7 +83,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fs-5">
         <div class="container-lg container-fluid">
             <a class="navbar-brand d-none d-lg-block" href="/"><img
-                    src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
+                    src="{{ asset('storage/files/Logo.png') }}"
                     alt="" width="75" height="75"></a>
             <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -225,7 +225,7 @@
     <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top container mx-auto">
         <div class="col mb-3">
             <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none">
-                <img src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
+                <img src="{{ asset('storage/files/Logo.png') }}"
                     alt="Ramen dashi" width="200" height="200">
             </a>
         </div>
