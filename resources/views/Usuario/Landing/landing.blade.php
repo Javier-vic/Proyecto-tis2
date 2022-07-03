@@ -49,8 +49,8 @@
     <div class="mt-5 p-0">
         <div class="input-group ">
             <span class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input type="text" name="search" id="search" onkeyup="searchFilter(event)" class="form-control"
-                placeholder="Ingrese el nombre de algún producto...">
+            <input type="text" name="search" id="search" onkeyup="searchFilter(event)"
+                class="form-control shadow-none" placeholder="Ingrese el nombre de algún producto...">
         </div>
     </div>
     <div class="d-flex mt-2">
