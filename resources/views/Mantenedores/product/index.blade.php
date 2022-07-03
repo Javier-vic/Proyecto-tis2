@@ -103,58 +103,32 @@
                     }
 
                 }
-            },
-            {
-                extend: 'pdf',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: [0, 1]
+            ],
+            // language: {
+            //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
+            // },
+
+            columns: [{
+                    data: 'name_product',
+                    name: 'name_product'
                 },
-                titleAttr: 'Exportar a PDF',
-                className: 'btn btn-danger mb-2',
-                text: '<i class="fa fa-file-excel"></i> PDF'
-
-            },
-            {
-                extend: 'excel',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: [0, 1]
+                {
+                    data: 'stock',
+                    name: 'stock'
                 },
-                titleAttr: 'Exportar a PDF',
-                className: 'btn btn-success mb-2',
-                text: '<i class="fa fa-file-excel"></i> Excel'
 
-            }
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
 
-        ],
-        // language: {
-        //     url: "{{ asset('js/plugins/datatables/spanish.json') }}",
-        // },
-
-        columns: [{
-                data: 'name_product',
-                name: 'name_product'
+                },
+            ],
+            initComplete: function(settings, json) {
+                document.getElementById("number").innerHTML = table.data().count();
             },
-            {
-                data: 'stock',
-                name: 'stock'
-            },
-
-            {
-                data: 'action',
-                name: 'action',
-                orderable: false,
-                searchable: false
-
-            },
-        ],
-        initComplete: function(settings, json) {
-            document.getElementById("number").innerHTML = table.data().count();
-        },
-        select: true
+            select: true
         });
 
 

@@ -129,7 +129,6 @@ use App\Http\Controllers\RoleController;
                     </li>
                 @endif
 
-                <<<<<<< HEAD=======>>>>>>> main
             </ul>
         </nav>
 
@@ -143,27 +142,24 @@ use App\Http\Controllers\RoleController;
                         </button>
                     </div>
                     <div class="d-none d-sm-block col text-center">@yield('titlePage')</div>
-                    <<<<<<< HEAD <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}"
+
+                    <!-- Notificaciones -->
+                    <div class="mx-3 text-center col-lg-1">
+                        <button type="button" class="btn btn-light position-relative border">
+                            <i class="fa-solid fa-bell fs-3"></i>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </button>
+                    </div>
+                    <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        =======
-                        <!-- Notificaciones -->
-                        <div class="mx-3 text-center col-lg-1">
-                            <button type="button" class="btn btn-light position-relative border">
-                                <i class="fa-solid fa-bell fs-3"></i>
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                                    <span class="visually-hidden">New alerts</span>
-                                </span>
-                            </button>
-                        </div>
-                        <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            >>>>>>> main
-                            Cerrar sesion
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
+                        Cerrar sesion
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </div>
             </nav>
             @yield('content')

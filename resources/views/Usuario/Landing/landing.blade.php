@@ -64,7 +64,7 @@
                             class=" bgColor p-2 d-flex py-3 rounded rounded-4 overflow-auto sticky-top align-items-center ">
                             {{-- AGREGA LOS MÁS VENDIDOS AL NAVBAR ( EN CASO DE EXISTIR ) --}}
                             @if (sizeof($bestSellers) > 0)
-                                <div class="text-white">
+                                <div class="text-white masvendidoIndicator">
                                     <a href="#{{ str_replace(' ', '', 'masVendido') }}"
                                         id="{{ str_replace(' ', '', 'masVendido') }}Navbar"
                                         class="text-decoration-none text-white categoriaBackground py-1 px-3 rounded-pill mx-1 "
@@ -92,12 +92,12 @@
                         @if (sizeof($bestSellers) > 0)
                             <div>
                                 <h2 id="{{ str_replace(' ', '', 'masVendido') }}"
-                                    class="mb-5 invisible intersectionObserver">a
+                                    class="mb-5 invisible intersectionObserver masvendidoIndicator">a
                                 </h2>
-                                <h2 id="" class="mb-4">Más vendidos</h2>
+                                <h2 id="" class="mb-4 masvendidoIndicator">Más vendidos</h2>
                                 <div class="my-2 row ">
                                     @foreach ($bestSellers as $bestSeller)
-                                        <div class="col-12 col-sm-6  col-xl-4 mb-3 p-1 ">
+                                        <div class="col-12 col-sm-6  col-xl-4 mb-3 p-1 masvendidoIndicator">
                                             <div class="bg-image hover-overlay ripple text-center"
                                                 data-mdb-ripple-color="light">
                                                 @if ($bestSeller->stock > 0)
@@ -137,7 +137,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                <hr>
+                                <hr class="masvendidoIndicator">
                             </div>
                         @endif
                         {{-- PRODUCTOS --}}
@@ -277,24 +277,32 @@
         });
         const categoryAvailable = @json($categoryAvailable);
         const productsAvailable = @json($productAvailable);
-
+        const bestSellers = @json($bestSellers);
         const searchFilter = (e) => {
             input = e.target.value
             filter = input.toLowerCase();
             listOfNames = $('.productsNames')
 
             let listOfCategorys = []
+
+
+            //Esconder a más vendidos en caso que haya una busqueda
+            if (input.length > 0) {
+                $('.masvendidoIndicator').addClass('d-none')
+            } else {
+                $('.masvendidoIndicator').removeClass('d-none')
+
+            }
+
             categoryAvailable.map(category => {
                 listOfCategorys.push(category.name.toLowerCase())
             })
-
             for (let i = 0; i < listOfNames.length; i++) {
                 name = listOfNames[i].innerText.toLowerCase()
                 if (name.indexOf(filter) > -1) {
 
                     listOfCategorys.map(category => {
                         $(`.${category}Indicator`).removeClass('d-none')
-
                     })
                     $(`.${name}`).removeClass('d-none')
                     productsAvailable.map(product => {
