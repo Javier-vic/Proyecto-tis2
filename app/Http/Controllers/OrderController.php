@@ -41,7 +41,7 @@ class OrderController extends Controller
                 ->get())
                 ->addColumn('viewOrder', 'mantenedores.order.datatable.view')
                 ->rawColumns(['viewOrder'])
-                ->addColumn('action', 'mantenedores.order.datatable.action')
+                ->addColumn('action', 'Mantenedores.order.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
