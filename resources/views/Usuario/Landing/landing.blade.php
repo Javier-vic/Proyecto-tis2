@@ -288,7 +288,6 @@
 
             let listOfCategorys = []
 
-
             //Esconder a más vendidos en caso que haya una busqueda
             if (input.length > 0) {
                 $('.masvendidoIndicator').addClass('d-none')
@@ -296,20 +295,23 @@
                 $('.masvendidoIndicator').removeClass('d-none')
 
             }
-
             categoryAvailable.map(category => {
                 listOfCategorys.push(category.name.toLowerCase())
             })
+            console.log(listOfCategorys.indexOf('appetizers'))
+
             for (let i = 0; i < listOfNames.length; i++) {
-                name = listOfNames[i].innerText.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\-]+/g,
+                name = listOfNames[i].innerText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w\-]+/g,
                     '').toLowerCase()
+                console.log(name)
                 if (name.indexOf(filter) > -1) {
                     listOfCategorys.map(category => {
                         $(`.${category}Indicator`).removeClass('d-none')
                     })
                     $(`.${name}`).removeClass('d-none')
                     productsAvailable.map(product => {
-                        formatedProductName = product.name_product.replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g,
+                        formatedProductName = product.name_product.normalize("NFD").replace(/[\u0300-\u036f]/g,
+                            "").replace(/[^\w\-]+/g,
                             '').toLowerCase();
                         if (formatedProductName === name) {
                             if (listOfCategorys.includes(product.category.toLowerCase())) {
@@ -318,6 +320,8 @@
                                     listOfCategorys.splice(index,
                                         1);
                                 }
+                            } else {
+
                             }
                         }
                     })
@@ -326,16 +330,15 @@
                     })
 
                 } else {
-                    console.log(name)
                     $(`.${name}`).addClass('d-none')
                     listOfCategorys.map(category => {
                         $(`.${category}Indicator`).addClass('d-none')
                     })
 
                 }
+                console.log(listOfCategorys)
 
             }
-            console.log(listOfCategorys)
 
 
 
