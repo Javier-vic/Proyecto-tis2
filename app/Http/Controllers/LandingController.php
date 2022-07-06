@@ -53,12 +53,15 @@ class LandingController extends Controller
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('products')
+                    ->whereNull('products.deleted_at')
+
                     ->whereColumn('products.id_category_product', 'category_products.id');
             })
             ->get();
         ////////////////////////////////////////////////
 
         $bestSellers = DB::table('products_orders')
+            // ->whereNull('products.deleted_at')
             ->select('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id', DB::raw('sum(products_orders.cantidad) as cantidad'))
             ->join('products', 'products_orders.product_id', 'products.id')
             ->groupBy('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id')
@@ -89,20 +92,20 @@ class LandingController extends Controller
     {
         return view('Usuario.Landing.Location');
     }
-    
+
     public function getLocation()
     {
-        $location = DB::table('maps' )
-        ->select('maps.latitud','maps.longitud','maps.direccion')
-        ->where('maps.id', 1)
-        ->get();    
+        $location = DB::table('maps')
+            ->select('maps.latitud', 'maps.longitud', 'maps.direccion')
+            ->where('maps.id', 1)
+            ->get();
 
-    
 
-        return response($location,200);
+
+        return response($location, 200);
     }
-  
-    
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -170,13 +173,15 @@ class LandingController extends Controller
                 if ($values['delivery_price'] != null) {
                     $totalValue += $values['delivery_price'];
                 }
+
+                $userId = auth()->user()->id;
+                $user = User::find($userId);
                 //////////////VALIDA EL CUPÓN////////////
                 if ($values['coupon'] != null) {
                     $couponToCheck = coupon::where('code', $values['coupon'])->first();
                     if ($couponToCheck) {
                         $newQuantity = $couponToCheck->quantity - 1;
-                        $userId = auth()->user()->id;
-                        $user = User::find($userId);
+
                         //VERIFICAMOS QUE EL USUARIO NO OCUPE EL MISMO CUPÓN MÁS DE 1 VEZ
                         $checkUserCoupon = DB::table('coupon_user')
                             ->select(
@@ -241,7 +246,7 @@ class LandingController extends Controller
                     ), 400);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////
-                // $couponToCheck = coupon::find('code', );
+                $user->orders()->attach($order->id);
                 DB::connection(session()->get('database'))->commit();
                 return response('Se ingresó la orden con exito.', 200);
 

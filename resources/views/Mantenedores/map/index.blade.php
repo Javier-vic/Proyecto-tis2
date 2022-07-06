@@ -396,7 +396,6 @@
                         $('#delivery_error').empty()
                         $('#delivery_error').append(`<span>${ text.errors.delivery_price[0]}</span>`)
                     }
-
                 }
 
             });
