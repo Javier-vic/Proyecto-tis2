@@ -146,7 +146,7 @@ use App\Http\Controllers\RoleController;
                     <div class="dropdown mx-3 text-center col-lg-1">
                         <button type="button" class="btn btn-light position-relative border dropdown-toggle" id="Notificaciones" data-bs-toggle="dropdown" aria-expanded="false"> 
                             <i class="fa-solid fa-bell fs-3"></i>                        
-                            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-pill fs-6">
                                 {{count(auth()->user()->unreadNotifications)}}
                             </span>                          
                         </button>
@@ -154,17 +154,21 @@ use App\Http\Controllers\RoleController;
                             @foreach (auth()->user()->unreadNotifications as $notification)
                                 
                                 @if ($notification->data['quantity'] == '0')
-                                    <li>
+                                    <li onclick="{{$notification->markAsRead()}}">
                                         <i class="fa-solid fa-circle-exclamation text-danger fs-3"></i>
                                         <div class="d-inline-block">
-                                            <span class="text-danger">{{$notification->data['name_supply']}} en cero</span>
+                                            <a href="/supply">
+                                                <span class="text-danger">{{$notification->data['name_supply']}} en cero</span>
+                                            </a>
                                         </div>
                                     </li>
                                 @elseif ($notification->data['quantity'] < $notification->data['critical_quantity'])
-                                    <li>
+                                    <li onclick="{{$notification->markAsRead()}}">
                                         <i class="fa-solid fa-triangle-exclamation text-warning fs-3"></i>
                                         <div class="d-inline-block">
-                                            <span class="text-warning">{{$notification->data['name_supply']}} en cantidad critica</span>
+                                            <a href="/supply">
+                                                <span class="text-warning">{{$notification->data['name_supply']}} en cantidad critica</span>
+                                            </a>
                                         </div>
                                     </li>
                                 @endif
@@ -196,6 +200,5 @@ use App\Http\Controllers\RoleController;
         $("#sidebar").toggleClass("active");
     });
 </script>
-
 
 </html>
