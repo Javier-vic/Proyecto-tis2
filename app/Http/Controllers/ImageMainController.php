@@ -100,8 +100,11 @@ class ImageMainController extends Controller
      * @param  \App\Models\image_main  $image_main
      * @return \Illuminate\Http\Response
      */
-    public function destroy(image_main $image_main)
+    public function destroy($id)
     {
         //
+        $image = image_main::find($id);
+        $image->delete();
+        return response('',200);
     }
 }

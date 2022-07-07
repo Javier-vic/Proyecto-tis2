@@ -19,8 +19,8 @@ class CreateOrdersTable extends Migration
             $table->string('name_order');
             $table->integer('total');
             $table->string('order_status');
-            $table->string('mail');
-            $table->integer('number');
+            $table->string('mail')->nullable();
+            $table->integer('number')->nullable();
             $table->string('payment_method');
             $table->string('pick_up');
             $table->string('comment')->nullable();

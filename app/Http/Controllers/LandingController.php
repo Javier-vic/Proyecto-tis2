@@ -10,6 +10,7 @@ use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
 use App\Models\user;
+use App\Models\map;
 use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,6 +53,8 @@ class LandingController extends Controller
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('products')
+                    ->whereNull('products.deleted_at')
+
                     ->whereColumn('products.id_category_product', 'category_products.id');
             })
             ->get();
@@ -60,6 +63,7 @@ class LandingController extends Controller
         $bestSellers = DB::table('products_orders')
             ->select('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id', DB::raw('sum(products_orders.cantidad) as cantidad'))
             ->join('products', 'products_orders.product_id', 'products.id')
+            ->whereNull('products.deleted_at')
             ->groupBy('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id')
             ->limit(3)
             ->orderBy('cantidad', 'DESC')
@@ -71,7 +75,7 @@ class LandingController extends Controller
         $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
         ////////////////////////////////////////////////
         $imagesMain = image_main::orderBy('order')->get();
-        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames','imagesMain','bestSellers'));
+        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames', 'imagesMain', 'bestSellers'));
     }
 
     /**
@@ -88,20 +92,20 @@ class LandingController extends Controller
     {
         return view('Usuario.Landing.Location');
     }
-    
+
     public function getLocation()
     {
-        $location = DB::table('maps' )
-        ->select('maps.latitud','maps.longitud','maps.direccion')
-        ->where('maps.id', 1)
-        ->get();    
+        $location = DB::table('maps')
+            ->select('maps.latitud', 'maps.longitud', 'maps.direccion')
+            ->where('maps.id', 1)
+            ->get();
 
-    
 
-        return response($location,200);
+
+        return response($location, 200);
     }
-  
-    
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -117,8 +121,10 @@ class LandingController extends Controller
             'cantidad.*' => 'required',
             'address' => 'required',
             'mail' => 'required',
-            'number' => 'required|gt:0|integer',
+            'number' => 'required|gt:910000000|lt:999999999|integer',
             'payment_method' => 'required',
+            'comment' => 'max:255'
+
 
         ];
         $messages = [
@@ -127,7 +133,9 @@ class LandingController extends Controller
             'address.required' => 'Debes seleccionar el tipo de envío',
             'payment_method.required' => 'Debes seleccionar un método de pago',
             'integer' => 'El número no puede ser decimal',
-            'gt' => 'El número debe ser mayor a 0'
+            'gt' => 'El número no es válido, modifíquelo en su perfil',
+            'lt' => 'El número no es válido, modifíquelo en su perfil',
+            'comment.max' => 'Has excedido el limite de texto'
         ];
 
         $values = request()->except('_token');
@@ -143,6 +151,7 @@ class LandingController extends Controller
                 $order = new Order;
                 $order->name_order = $values['name_order'];
                 $order->mail = $values['mail'];
+                $order->comment = $values['comment'];
                 $order->number = $values['number'];
                 $order->payment_method = $values['payment_method'];
                 $order->name_order = $values['name_order'];
@@ -160,13 +169,19 @@ class LandingController extends Controller
                         array_push($checkStock, [$product->id, $product->cantidad - $productToCheck->stock]);
                     }
                 }
+                //Suma el valor del delivery al valor total
+                if ($values['delivery_price'] != null) {
+                    $totalValue += $values['delivery_price'];
+                }
+
+                $userId = auth()->user()->id;
+                $user = User::find($userId);
                 //////////////VALIDA EL CUPÓN////////////
                 if ($values['coupon'] != null) {
                     $couponToCheck = coupon::where('code', $values['coupon'])->first();
                     if ($couponToCheck) {
                         $newQuantity = $couponToCheck->quantity - 1;
-                        $userId = auth()->user()->id;
-                        $user = User::find($userId);
+
                         //VERIFICAMOS QUE EL USUARIO NO OCUPE EL MISMO CUPÓN MÁS DE 1 VEZ
                         $checkUserCoupon = DB::table('coupon_user')
                             ->select(
@@ -231,13 +246,14 @@ class LandingController extends Controller
                     ), 400);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////
-                // $couponToCheck = coupon::find('code', );
+                $user->orders()->attach($order->id);
                 DB::connection(session()->get('database'))->commit();
                 return response('Se ingresó la orden con exito.', 200);
 
 
                 // $order->products()->attach($id, ['cantidad' => $cont]);
             } catch (\Throwable $th) {
+                dd($th);
                 DB::connection(session()->get('database'))->rollBack();
                 return Response::json(array(
                     'success' => false,
@@ -351,7 +367,7 @@ class LandingController extends Controller
             'password' => 'required|min:5|max:12',
             'passwordConfirm' => 'required|min:5|max:12',
             'address' => 'required',
-            'phone' => 'required|lt:999999999|gt:0'
+            'phone' => 'required|lt:999999999|gt:910000000'
         ];
         $messages = [
             'required' => ' El campo es obligatorio',
@@ -408,5 +424,11 @@ class LandingController extends Controller
 
             ), 400);
         }
+    }
+
+    public function userCart(request $request)
+    {
+        $mapa = map::first();
+        return view('Usuario.Cart.cart', compact('mapa'));
     }
 }

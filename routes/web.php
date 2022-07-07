@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 use App\Mail\welcomeMail;
+use App\Models\product;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 
@@ -35,10 +36,13 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/ubicacion', [LandingController::class,'ubicacion']);
-Route::get('/getLocation', [LandingController::class,'getLocation'])->name('getLocation');
-Route::get('/', [LandingController::class,'index']);
-Route::get('/login',function(){ return view('auth.login');})->name('login');
+
+Route::get('/ubicacion', [LandingController::class, 'ubicacion']);
+Route::get('/getLocation', [LandingController::class, 'getLocation'])->name('getLocation');
+Route::get('/', [LandingController::class, 'index']);
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
 
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/login', function () {
@@ -68,19 +72,18 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
     Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
-    Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
-    Route::get('/publicity/sendCoupon',[SendCouponController::class, 'index'])->name('sendCoupon.index');
-    Route::get('/publicity/couponSend', function(){
-
+    Route::get('/supply/dashboard', [SupplyController::class, 'dashboardSupply'])->name('supplyDashboard');
+    Route::get('/product/dashboard', [ProductController::class, 'dashboardProduct'])->name('productDashboard');
+    Route::get('/publicity/sendCoupon', [SendCouponController::class, 'index'])->name('sendCoupon.index');
+    Route::get('/publicity/couponSend', function () {
         $correo = new welcomeMail;
-
         Mail::to('apinto@ing.ucsc.cl')->send($correo);
         return "mensaje enviado";
-
     });
-    
+
 
 
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
@@ -88,7 +91,10 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/orderDetails', [\App\Http\Controllers\OrderController::class, 'orderDetails'])->name('order.details');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
+    Route::get('/order/pending', [OrderController::class, 'pendingOrdersView'])->name('pendingOrdersView');
     //POST
+    Route::post('/supply/excel', [\App\Http\Controllers\SupplyController::class, 'importExcel'])->name('supply.excel');
+    Route::get('/supply/import/', [\App\Http\Controllers\SupplyController::class, 'importExcelView'])->name('supply.import');
     Route::post('/asist/finish/{asist}', [AsistController::class, 'finishAsist'])->name('finish.asist');
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
@@ -107,14 +113,16 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::resource('coupon', CouponController::class);
     Route::resource('map', MapController::class);
     Route::resource('publicity', ImageMainController::class);
-    
-
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/landing/profile/', [LandingController::class, 'userProfile'])->name('user.profile');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
+
+Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
+Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
+
 
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
@@ -125,7 +133,6 @@ Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->
 ////////////////////////////////////////////////////////////////////////////////////////
 Route::resource('user', UserController::class);
 Route::resource('landing', LandingController::class);
-Route::resource('cart', CartController::class);
 
 
 // RUTAS DE ORDENES
@@ -134,4 +141,3 @@ Route::resource('cart', CartController::class);
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
 Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);
-        

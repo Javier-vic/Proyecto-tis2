@@ -16,7 +16,7 @@ class order extends Model
         'mail' => 'required',
         'number' => 'required|gt:0|integer',
         'payment_method' => 'required'
-
+        
     ];
     static $messages = [
         'required'      => 'Este campo es obligatorio',
@@ -24,6 +24,8 @@ class order extends Model
         'integer' => 'El número no puede ser decimal',
         'gt' => 'El número debe ser mayor a 0'
     ];
+    
+    protected $cast = ['listProducts'=>'array'];
 
     public function products()
     {
