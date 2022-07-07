@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use App\Notifications\criticalSupply;
 
 class SupplyController extends Controller
 {
@@ -170,6 +170,7 @@ class SupplyController extends Controller
                 $supply->update();
         
                 DB::connection(session()->get('database'))->commit();
+                auth()->user()->notify(new criticalSupply($supply));
                 return response('Se editó el insumo con exito.', 200);
             } catch (\Throwable $th) {
                 DB::connection(session()->get('database'))->rollBack();

@@ -130,26 +130,29 @@
                         <button type="button" class="btn btn-light position-relative border dropdown-toggle" id="Notificaciones" data-bs-toggle="dropdown" aria-expanded="false"> 
                             <i class="fa-solid fa-bell fs-3"></i>                        
                             <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
+                                {{count(auth()->user()->unreadNotifications)}}
                             </span>                          
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="Notificaciones">
-                        
- 
-                        
-
-                            <li>
-                                <i class="fa-solid fa-circle-exclamation text-danger fs-3"></i>
-                                <div class="d-inline-block">
-                                    <span class="text-danger">Insumo en cero</span>
-                                </div>
-                            </li>
-                            <li>
-                                <i class="fa-solid fa-triangle-exclamation text-warning fs-3"></i>
-                                <div class="d-inline-block">
-                                    <span class="text-warning">Insumo en cero</span>
-                                </div>
-                            </li>
+                        <ul class="dropdown-menu" aria-labelledby="Notificaciones">   
+                            @foreach (auth()->user()->unreadNotifications as $notification)
+                                
+                                @if ($notification->data['quantity'] == '0')
+                                    <li>
+                                        <i class="fa-solid fa-circle-exclamation text-danger fs-3"></i>
+                                        <div class="d-inline-block">
+                                            <span class="text-danger">{{$notification->data['name_supply']}} en cero</span>
+                                        </div>
+                                    </li>
+                                @elseif ($notification->data['quantity'] < $notification->data['critical_quantity'])
+                                    <li>
+                                        <i class="fa-solid fa-triangle-exclamation text-warning fs-3"></i>
+                                        <div class="d-inline-block">
+                                            <span class="text-warning">{{$notification->data['name_supply']}} en cantidad critica</span>
+                                        </div>
+                                    </li>
+                                @endif
+                            @endforeach
+                            
 
                         </ul>
                     </div>
@@ -176,8 +179,7 @@
         $("#sidebarCollapse").on("click", function() {
             $("#sidebar").toggleClass("active");
         });
-
-
 </script>
+
 
 </html>

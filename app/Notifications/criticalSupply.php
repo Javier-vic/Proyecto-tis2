@@ -16,10 +16,9 @@ class criticalSupply extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($supply)
     {
-        //
-        // $this->aftercommit();
+        $this->supply = $supply;
     }
 
     /**
@@ -39,13 +38,13 @@ class criticalSupply extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
+    // public function toMail($notifiable)
+    // {
+    //     return (new MailMessage)
+    //                 ->line('The introduction to the notification.')
+    //                 ->action('Notification Action', url('/'))
+    //                 ->line('Thank you for using our application!');
+    // }
 
     /**
      * Get the array representation of the notification.
@@ -53,18 +52,18 @@ class criticalSupply extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
-    {
+    // public function toArray($notifiable)
+    // {
+    //     return [
+        //         'data'=>'ejemplo notificacion'
+        //     ];
+        // }
+        
+    public function toDatabase($notifiable){
         return [
-            'data'=>'ejemplo notificacion'
+            'name_supply' => $this->supply->name_supply,
+            'quantity' => $this->supply->quantity,
+            'critical_quantity' => $this->supply->critical_quantity,
         ];
     }
-
-    // public function toDatabase($notifiable){
-    //     return [
-    //         'name_supply' => $this->supply->name_supply,
-    //         'quantity' => $this->supply->quantity,
-    //         'critical_quantity' => $this->supply->critical_quantity,
-    //     ];
-    // }
 }
