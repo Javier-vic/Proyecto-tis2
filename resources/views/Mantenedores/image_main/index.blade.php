@@ -6,6 +6,19 @@
 
 @section('content')
 
+    <div class="">
+        @include('Mantenedores.image_main.modal.modal')
+    </div>
+
+
+    <div class="row my-4">
+        <div class="col d-flex justify-content-center">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enviarCupon"> Enviar cupón</button>
+        </div>
+    </div>
+
+
+
     <form onsubmit="submitImages(event);" method="POST" id="formSubmitImages" enctype="multipart/form-data">
         @csrf
         <div class="row">
