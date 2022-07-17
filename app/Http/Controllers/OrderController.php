@@ -7,6 +7,7 @@ use App\Http\Controllers\productController;
 use App\Models\order;
 use App\Models\products_orders;
 use App\Models\product;
+use App\Models\user;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -100,114 +101,113 @@ class OrderController extends Controller
     public function store(Request $request, product $product)
     {
 
-
         $rules = [
-            'name_order'          => 'required|string',
-            'cantidad' => 'required|array|min:1',
+            'name_order' => 'required|string',
+            'cantidad' => 'required|min:1',
             'cantidad.*' => 'required|gt:0|integer',
-            'address' => 'required'
+
+            'payment_method' => 'required',
+            'comment' => 'max:255'
+
 
         ];
         $messages = [
             'required'      => 'Este campo es obligatorio',
             'cantidad.required' => 'Debes seleccionar al menos un producto',
+            'payment_method.required' => 'Debes seleccionar un método de pago',
             'integer' => 'El número no puede ser decimal',
+            'comment.max' => 'Has excedido el limite de texto',
             'gt' => 'El número debe ser mayor a 0'
         ];
+
+        $values = request()->except('_token');
+        $cantidad = $values['cantidad'];
+        $cantidadIds =  array_keys($values['cantidad']);
+
+
+        // $productos = json_decode($values['cantidad']);
+
+
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
-                $datosOrder = request()->except('_token');
-                $order = new order;
-                $order->name_order = $datosOrder['name_order'];
-                $order->order_status = $datosOrder['order_status'];
-                $order->payment_method = $datosOrder['payment_method'];
-                $order->address = $datosOrder['address'];
-                $order->number = $datosOrder['number'];
-                $order->mail = $datosOrder['mail'];
+                $totalValue = 0;
+                $cantidades = array();
+                $checkStock = array();
+                $values = request()->except('_token');
+                $order = new Order;
+                $order->name_order = $values['name_order'];
+                $order->mail = $values['mail'];
+                $order->comment = $values['comment'];
+                $order->number = $values['number'];
+                $order->payment_method = $values['payment_method'];
+                $order->name_order = $values['name_order'];
+                $order->order_status = 'Espera';
+                $order->pick_up = $values['pick_up'];
+                $order->address = $values['address'];
+                foreach ($cantidad as $key => $product) {
+                    $productToCheck = product::find($key);
+                    array_push($cantidades, intval($product));
+                    $totalValue += ($productToCheck->price * intval($product));
 
-
-                $order->pick_up = $datosOrder['pick_up'];
-                $order->comment = $datosOrder['comment'];
-
-                $permits = array();
-                $cantidad = array();
-                $valores = array();
-                $price = array();
-
-
-
-                foreach ($datosOrder['cantidad'] as $item => $value) {
-
-                    if ($value > 0 && isset($value)) {
-                        $cantidad[] = (int)$value;
-                        $permits[] = (int)$item;
-                    }
-                }
-
-                // consulta de precio y stock a productos seleccinados
-
-                $valores = DB::table('products')
-                    ->select('products.price', 'products.stock', 'products.id')
-                    ->whereIn('id', $permits)
-                    ->get();
-
-                // obtenemos las cantidades disponibles
-
-
-                $size = sizeof($permits);
-
-                //      Calcular el total   ////
-                for ($i = 0; $i < $size; $i++) {
-                    $stock = $valores[$i]->stock;
-                    if ($stock < $cantidad[$i]) {
-                        return Response::json(array(
-                            'success' => false,
-                            'errors2' => $valores
-
-                        ), 400);
+                    if (intval($product) <= $productToCheck->stock) {
+                        $productToCheck->stock = $productToCheck->stock - intval($product);
+                        $productToCheck->save();
                     } else {
-                        $updateproducts = product::find($permits[$i]);
-                        $updateproducts->stock = $stock - $cantidad[$i];
-                        $updateproducts->update();
+                        array_push($checkStock, [$key, intval($product) - $productToCheck->stock]);
                     }
-
-                    $price[$i] = $cantidad[$i] * $valores[$i]->price;
                 }
 
-                $x = array_sum($price);
 
 
-                $order->total = $x;
+                $order->total = $totalValue;
                 $order->save();
 
-                for ($i = 0; $i < $size; $i++) {
-                    $id = $permits[$i]; //id
-                    $cont = $cantidad[$i]; //cantidad
-                    $order->products()->attach($id, ['cantidad' => $cont]);
-                    DB::connection(session()->get('database'))->commit();
-                    return response('Se ingresó la orden con éxito.', 200);
+                //RELLENA LA TABLA RELACION ENTRE PRODUCTOS Y ORDERS
+                foreach ($cantidad as $key => $product) {
+                    $order->products()->attach($key, ['cantidad' => intval($product)]);
                 }
+
+                //SI ESTE ARRAY CONTIENE VALORES SON LOS PRODUCTOS QUE NO TIENEN EL STOCK SUFICIENTE Y LOS RETORNA
+                if (sizeof($checkStock) > 0) {
+                    DB::connection(session()->get('database'))->rollBack();
+                    return Response::json(array(
+                        'success' => false,
+                        'stock' => false,
+                        'errors' => $checkStock,
+                        'message' => 'Ocurrió un problema con el stock'
+
+                    ), 400);
+                }
+
+                DB::connection(session()->get('database'))->commit();
+                return response('Se ingresó la orden con exito.', 200);
+
+
+                // $order->products()->attach($id, ['cantidad' => $cont]);
             } catch (\Throwable $th) {
                 dd($th);
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo realizar el ingreso de la orden.', 400);
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. No se generó la compra'
+
+                ), 400);
             }
         } else {
             return Response::json(array(
                 'success' => false,
-                'errors' => $validator->getMessageBag()->toArray()
-
+                'errors' => $validator->getMessageBag()->toArray(),
+                'message' => 'Faltan campos por completar',
             ), 400);
         }
+        return Response::json(array(
+            'success' => false,
+            'message' => 'Ocurrió un error. No se generó la compra'
 
-
-
-
-
-        return view('Mantenedores.order.index');
+        ), 400);
     }
     public function pendingOrdersView()
     {

@@ -23,7 +23,6 @@
                     <label for="order_status" class="form-label">Estado pedido :</label>
                     <select id="order_status" class="form-control" name="order_status"
                         value="{{ isset($order->order_status) ? $order->order_status : '' }}">
-
                         <option value="Espera">Espera</option>
                         <option value="Cocinando">Cocinando</option>
                         <option value="Listo">Listo</option>
@@ -37,7 +36,6 @@
                     <label for="name_order" class="form-label">Despacho pedido :</label>
                     <select id="mi-select" class="form-control" name="pick_up"
                         value="{{ isset($order->pick_up) ? $order->pick_up : '' }}">
-
                         <option value="si">SI</option>
                         <option value="no">NO</option>
 
@@ -53,7 +51,7 @@
                 </div>
 
                 <div class="mb-4 entradas">
-                    <label for="comment" class="form-label">Número de celular :</label>
+                    <label for="comment" class="form-label">Teléfono :</label>
                     <input type="text" class="form-control input-modal" value="" class="form-control"
                         id="number" name="number">
                     <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
@@ -72,15 +70,12 @@
                     <select id="payment_method" class="form-control" name="payment_method"
                         aria-describedby="name_product_help"
                         value="{{ isset($order->payment_method) ? $order->payment_method : 'no' }}">
-
                         <option value="Efectivo">Efectivo</option>
                         <option value="Credito">Credito</option>
                         <option value="Debito">Debito</option>
 
                     </select>
                 </div>
-
-
 
                 <div class="mb-4">
                     <label for="comment" class="form-label">Comentario :</label>
@@ -142,7 +137,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                   
+
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
@@ -156,6 +151,7 @@
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR)
                     if (jqXHR.responseJSON.errors) {
                         var text = jqXHR.responseJSON.errors;
 
@@ -164,8 +160,6 @@
                         var text2 = jqXHR.responseJSON.errors2;
                     }
 
-                    console.log(text2)
-                    console.log(text)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
@@ -236,7 +230,7 @@
                             <span>Cantidad disponible: ${productSelected.stock}</span>
                             <div>
                                 <h4 class="pt-2 ">${productSelected.price}</h4>
-                                <input type="text" class="form-control d-none input-modal" value = "${productSelected.cantidad}" id="valor${productSelected.id}" >
+                                <input type="text" class="form-control d-none input-modal" value ="" id="valor${productSelected.id}" >
                                 <span class="createmodal_error createmodal_error_product" id="${productSelected.id}errorCREATEMODAL"></span>
                                 <div class="d-grid gap-2 col-12 my-2">
                                  

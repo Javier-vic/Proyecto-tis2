@@ -372,7 +372,6 @@
         }
 
         const saveInCart = (id) => {
-
             var cart = localStorage.getItem('cart');
             cart = JSON.parse(cart);
             cart.map(e => {

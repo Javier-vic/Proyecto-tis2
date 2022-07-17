@@ -140,6 +140,7 @@ class LandingController extends Controller
 
         $values = request()->except('_token');
         $productos = json_decode($values['cantidad']);
+
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
             DB::beginTransaction();
@@ -159,6 +160,7 @@ class LandingController extends Controller
                 $order->pick_up = $values['pick_up'];
                 $order->address = $values['address'];
                 foreach ($productos as $product) {
+                    dd($product);
                     array_push($cantidades, $product->cantidad);
                     $totalValue += ($product->price * $product->cantidad);
                     $productToCheck = product::find($product->id);
