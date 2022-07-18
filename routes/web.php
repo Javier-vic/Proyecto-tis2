@@ -76,6 +76,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
     Route::get('/supply/dashboard', [SupplyController::class, 'dashboardSupply'])->name('supplyDashboard');
+    Route::get('/supply/notification', [SupplyController::class, 'notificationSupply'])->name('supplyNotification');
     Route::get('/product/dashboard', [ProductController::class, 'dashboardProduct'])->name('productDashboard');
     Route::get('/publicity/sendCoupon', [SendCouponController::class, 'index'])->name('sendCoupon.index');
     Route::get('/publicity/couponSend', function () {
