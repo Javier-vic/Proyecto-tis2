@@ -19,33 +19,34 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
-        .backgroundLogin{
+        .backgroundLogin {
             background-image: url('/storage/images/ramenLogin.svg');
             background-color: #cccccc;
             height: 100vh;
             background-repeat: no-repeat;
-            background-position: center; 
+            background-position: center;
             background-size: cover;
             margin: 0;
             padding: 0;
         }
-        .backgroundRegister{
+
+        .backgroundRegister {
             background-image: url('/storage/images/registerLogin.svg');
             background-color: #cccccc;
             height: 100vh;
             background-repeat: no-repeat;
-            background-position: center; 
+            background-position: center;
             background-size: cover;
             margin: 0;
             padding: 0;
         }
-        body{
+
+        body {
             height: 100%;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-   
     </style>
 </head>
 

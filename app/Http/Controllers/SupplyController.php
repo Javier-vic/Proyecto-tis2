@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SupplyImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\supply;
 use App\Models\category_supply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Redirect;
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Arr;
 
 class SupplyController extends Controller
 {
@@ -21,7 +25,7 @@ class SupplyController extends Controller
      */
     public function index()
     {
-        
+
         if (request()->ajax()) {
 
             return datatables(DB::connection(session()->get('database'))
@@ -36,7 +40,7 @@ class SupplyController extends Controller
                     'supplies.quantity',
                     'supplies.critical_quantity',
                     'category_supplies.name_category',
-                    
+
                 )
                 ->orderBy('supplies.id')
                 ->get())
@@ -101,8 +105,6 @@ class SupplyController extends Controller
 
 
         return response('No se pudo realizar el ingreso del insumo.', 400);
-
-        
     }
 
     /**
@@ -122,7 +124,7 @@ class SupplyController extends Controller
      * @param  \App\Models\supply  $supply
      * @return \Illuminate\Http\Response
      */
-    public function edit(supply $supply )
+    public function edit(supply $supply)
     {
         $id = $supply->id;
         $supplySelected = DB::table('supplies')
@@ -141,8 +143,6 @@ class SupplyController extends Controller
             ->orderBy('supplies.id')
             ->get();
         return json_encode([$supplySelected]);
-
-
     }
 
     /**
@@ -168,7 +168,7 @@ class SupplyController extends Controller
                 $id_category_supplies = $request->input('id_category_supplies');
                 $supply->category_supply()->associate($id_category_supplies);
                 $supply->update();
-        
+
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó el insumo con exito.', 200);
             } catch (\Throwable $th) {
@@ -183,9 +183,6 @@ class SupplyController extends Controller
             ), 400);
         }
         return response('No se pudo editar el insumo.', 400);
-
-
-
     }
 
     /**
@@ -208,20 +205,56 @@ class SupplyController extends Controller
         return response('success', 200);
     }
 
-    public function dataTable(Request $request){
-        if($request->ajax()){
+    public function dataTable(Request $request)
+    {
+        if ($request->ajax()) {
             $data = supply::all();
             return DataTables::of($data)
-                ->addColumn('action',function($row){
+                ->addColumn('action', function ($row) {
                     $actionBtn = "
                                 <button onclick='editSupply({$row->id})' class='edit btn btn-success btn-sm'><i class='fa-solid fa-pen-to-square me-1'></i><span class=''>Editar</span></button> 
                                 <button onclick='deleteSupply({$row->id})' class='delete btn btn-danger btn-sm'><i class='fa-solid fa-trash-can me-1'></i><span>Borrar</span></button>
-                                ";  
+                                ";
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-
         }
+    }
+
+    public function importExcelView(request $request)
+    {
+        return view('Mantenedores.supply.importExcel');
+    }
+
+    public function importExcel(request $request)
+    {
+        $file = $request->file('import_file');
+
+        if (!$file) {
+            return Redirect::back()->withErrors(['message' => 'No has cargado un archivo.']);
+        } else {
+            try {
+                Excel::import(new SupplyImport, $file);
+                return redirect()->action('App\Http\Controllers\SupplyController@index');
+            } catch (\Throwable $th) {
+                return Redirect::back()->withErrors(['message' => 'Ocurrió un error con el archivo. Verifique los datos']);
+            }
+        }
+    }
+    public function dashboardSupply(){
+        $countSupplies = DB::table('supplies')
+        ->select(DB::raw('count(supplies.id) as `countsupplies`'))
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->get();
+
+           
+        $listSupplies = DB::table('supplies')
+        ->select('supplies.name_supply','supplies.critical_quantity','supplies.unit_meassurement','supplies.quantity')
+        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+        ->orderBy('supplies.unit_meassurement')
+        ->get();
+        
+        return response::json(array('countSupplies'=>$countSupplies, 'listSupplies' => $listSupplies));
     }
 }

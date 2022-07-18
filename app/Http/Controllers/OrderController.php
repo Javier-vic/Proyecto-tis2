@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Carbon\Carbon;
 use App\Http\Controllers\productController;
 use App\Models\order;
 use App\Models\products_orders;
 use App\Models\product;
+use App\Models\user;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -61,10 +63,10 @@ class OrderController extends Controller
         ///
         ///
         ///
-        
-        if(isset($years[0])){
-            return view('Mantenedores.order.index', ['years' => $years] );
-        }else{
+
+        if (isset($years[0])) {
+            return view('Mantenedores.order.index', ['years' => $years]);
+        } else {
             return view('Mantenedores.order.index');
         }
     }
@@ -99,116 +101,126 @@ class OrderController extends Controller
     public function store(Request $request, product $product)
     {
 
-
         $rules = [
-            'name_order'          => 'required|string',
-            'cantidad' => 'required|array|min:1',
+            'name_order' => 'required|string',
+            'cantidad' => 'required|min:1',
             'cantidad.*' => 'required|gt:0|integer',
-            'address' => 'required'
+
+            'payment_method' => 'required',
+            'comment' => 'max:255'
+
 
         ];
         $messages = [
             'required'      => 'Este campo es obligatorio',
             'cantidad.required' => 'Debes seleccionar al menos un producto',
+            'payment_method.required' => 'Debes seleccionar un método de pago',
             'integer' => 'El número no puede ser decimal',
+            'comment.max' => 'Has excedido el limite de texto',
             'gt' => 'El número debe ser mayor a 0'
         ];
+
+        $values = request()->except('_token');
+        $cantidad = $values['cantidad'];
+        $cantidadIds =  array_keys($values['cantidad']);
+
+
+        // $productos = json_decode($values['cantidad']);
+
+
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
-                $datosOrder = request()->except('_token');
-                $order = new order;
-                $order->name_order = $datosOrder['name_order'];
-                $order->order_status = $datosOrder['order_status'];
-                $order->payment_method = $datosOrder['payment_method'];
-                $order->address = $datosOrder['address'];
-                $order->number = $datosOrder['number'];
-                $order->mail = $datosOrder['mail'];
+                $totalValue = 0;
+                $cantidades = array();
+                $checkStock = array();
+                $values = request()->except('_token');
+                $order = new Order;
+                $order->name_order = $values['name_order'];
+                $order->mail = $values['mail'];
+                $order->comment = $values['comment'];
+                $order->number = $values['number'];
+                $order->payment_method = $values['payment_method'];
+                $order->name_order = $values['name_order'];
+                $order->order_status = 'Espera';
+                $order->pick_up = $values['pick_up'];
+                $order->address = $values['address'];
+                foreach ($cantidad as $key => $product) {
+                    $productToCheck = product::find($key);
+                    array_push($cantidades, intval($product));
+                    $totalValue += ($productToCheck->price * intval($product));
 
-
-                $order->pick_up = $datosOrder['pick_up'];
-                $order->comment = $datosOrder['comment'];
-
-                $permits = array();
-                $cantidad = array();
-                $valores = array();
-                $price = array();
-
-
-
-                foreach ($datosOrder['cantidad'] as $item => $value) {
-
-                    if ($value > 0 && isset($value)) {
-
-                        $cantidad[] = (int)$value;
-                        $permits[] = (int)$item;
-                    }
-                }
-
-                // consulta de precio y stock a productos seleccinados
-
-                $valores = DB::table('products')
-                    ->select('products.price', 'products.stock', 'products.id')
-                    ->whereIn('id', $permits)
-                    ->get();
-
-                // obtenemos las cantidades disponibles
-
-
-                $size = sizeof($permits);
-
-                //      Calcular el total   ////
-                for ($i = 0; $i < $size; $i++) {
-                    $stock = $valores[$i]->stock;
-                    if ($stock < $cantidad[$i]) {
-                        return Response::json(array(
-                            'success' => false,
-                            'errors2' => $valores
-
-                        ), 400);
+                    if (intval($product) <= $productToCheck->stock) {
+                        $productToCheck->stock = $productToCheck->stock - intval($product);
+                        $productToCheck->save();
                     } else {
-                        $updateproducts = product::find($permits[$i]);
-                        $updateproducts->stock = $stock - $cantidad[$i];
-                        $updateproducts->update();
+                        array_push($checkStock, [$key, intval($product) - $productToCheck->stock]);
                     }
-
-                    $price[$i] = $cantidad[$i] * $valores[$i]->price;
                 }
 
-                $x = array_sum($price);
-
-
-                $order->total = $x;
+                $order->total = $totalValue;
                 $order->save();
 
-                for ($i = 0; $i < $size; $i++) {
-                    $id = $permits[$i]; //id
-                    $cont = $cantidad[$i]; //cantidad
-                    $order->products()->attach($id, ['cantidad' => $cont]);
-                    DB::connection(session()->get('database'))->commit();
-                    return response('Se ingresó la orden con éxito.', 200);
+                //RELLENA LA TABLA RELACION ENTRE PRODUCTOS Y ORDERS
+                foreach ($cantidad as $key => $product) {
+                    $order->products()->attach($key, ['cantidad' => intval($product)]);
                 }
+
+                //SI ESTE ARRAY CONTIENE VALORES SON LOS PRODUCTOS QUE NO TIENEN EL STOCK SUFICIENTE Y LOS RETORNA
+                if (sizeof($checkStock) > 0) {
+                    DB::connection(session()->get('database'))->rollBack();
+                    return Response::json(array(
+                        'success' => false,
+                        'stock' => false,
+                        'errors' => $checkStock,
+                        'message' => 'Ocurrió un problema con el stock'
+
+                    ), 400);
+                }
+
+                DB::connection(session()->get('database'))->commit();
+                return response('Se ingresó la orden con exito.', 200);
+
+
+                // $order->products()->attach($id, ['cantidad' => $cont]);
             } catch (\Throwable $th) {
+                dd($th);
                 DB::connection(session()->get('database'))->rollBack();
-                return response('No se pudo realizar el ingreso de la orden.', 400);
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. No se generó la compra'
+
+                ), 400);
             }
         } else {
             return Response::json(array(
                 'success' => false,
-                'errors' => $validator->getMessageBag()->toArray()
-
+                'errors' => $validator->getMessageBag()->toArray(),
+                'message' => 'Faltan campos por completar',
             ), 400);
         }
+        return Response::json(array(
+            'success' => false,
+            'message' => 'Ocurrió un error. No se generó la compra'
 
-
-
-
-
-        return view('Mantenedores.order.index');
+        ), 400);
     }
+    public function pendingOrdersView()
+    {
 
+        $pendingOrders = order::where('order_status', '!=', 'Listo')->get();
+        foreach ($pendingOrders as $order) {
+            $productsOrder = DB::table('products')
+                ->select('*')
+                ->join('products_orders', 'products.id', '=', 'products_orders.product_id')
+                ->where('products_orders.order_id', '=', $order->id)
+                ->get();
+            $order->listProducts = $productsOrder;
+        }
+        return view('Mantenedores.order.pending', ['pendingOrders' => $pendingOrders]);
+    }
     /**
      * Display the specified resource.
      *
@@ -309,22 +321,39 @@ class OrderController extends Controller
                 $productos->number = $datosOrder['number'];
                 $productos->mail = $datosOrder['mail'];
 
+                //VERIFICAMOS SI ES QUE SE ELIMINÓ ALGÚN PRODUCTO PARA DEVOLVER SU CANTIDAD PEDIDA AL STOCK
+                $productosOld = DB::table('products_orders')
+                    ->select(
+                        'product_id',
+                        'cantidad'
+                    )
+                    ->where('order_id', $order->id)
+                    ->pluck('cantidad', 'product_id')
+                    ->toArray();
+
+                $productosNew = array_map('intval', $datosOrder['cantidad']);
+
+                $productosDeleted = array_diff($productosOld, $productosNew);
+                if ($productosDeleted != []) {
+                    foreach ($productosDeleted as $id => $quantity) {
+                        $updateStock = product::find($id);
+                        $updateStock->stock += $productosOld[$id];
+                        $updateStock->save();
+                    }
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////
+
                 $permits = array();
                 $cantidad = array();
                 $valores = array();
                 $price = array();
 
-
                 foreach ($datosOrder['cantidad'] as $item => $value) {
-
                     if ($value > 0 && isset($value)) {
-
                         $cantidad[] = (int)$value;
                         $permits[] = (int)$item;
                     }
                 }
-
-
 
 
                 $valores = DB::table('products')
@@ -333,8 +362,6 @@ class OrderController extends Controller
                     ->get();
 
                 for ($i = 0; $i < count($cantidad); $i++) {
-
-
                     $cantidadOld = DB::table('products_orders')
                         ->select('products_orders.cantidad')
                         ->where('order_id', $order->id)
@@ -352,9 +379,7 @@ class OrderController extends Controller
 
 
                     if ($old  <= $cantidad[$i]) {
-
                         if (($cantidad[$i] - $old) <= $stock) {
-
                             $updateproducts = product::find($permits[$i]);
                             $updateproducts->stock = $stock - ($cantidad[$i] - $old);
                             $updateproducts->save();
@@ -366,17 +391,14 @@ class OrderController extends Controller
                             ), 400);
                         }
                     } else {
-
                         $updateproducts = product::find($permits[$i]);
                         $updateproducts->stock = $stock + ($old - $cantidad[$i]);
                         $updateproducts->save();
                     }
                     $price[$i] = $cantidad[$i] * $valores[$i]->price;
                 }
+
                 $x = array_sum($price);
-
-
-
                 $productos->total = $x;
                 $productos->save();
 
@@ -385,13 +407,19 @@ class OrderController extends Controller
                 for ($i = 0; $i < count($permits); $i++) {
                     $id = $permits[$i]; //id
                     $cont = $cantidad[$i]; //cantidad
-
-
                     $order->products()->attach($id, ['cantidad' => $cont]);
                 }
+
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó la orden con éxito.', 200);
             } catch (\Throwable $th) {
+                dd($th);
+                DB::connection(session()->get('database'))->rollBack();
+                return Response::json(array(
+                    'success' => false,
+                    'message' => 'Ocurrió un error. Intentalo nuevamente'
+
+                ), 400);
             }
         } else {
             return Response::json(array(
@@ -417,7 +445,7 @@ class OrderController extends Controller
 
     public function getview(request $request)
     {
-        
+
         $values = request()->except('_token');
         $id = $values['id'];
         $order = DB::table('orders')
@@ -434,99 +462,91 @@ class OrderController extends Controller
         return response(json_encode([$productOrders, $order]), 200);
     }
 
-    public function GetSaleMonth (request $request){
+    public function GetSaleMonth(request $request)
+    {
 
         $mes = Carbon::now();
         $año = $mes->year;
         $mes = $mes->month;
-        
+
         $saleYear = DB::table('orders')
-        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
-        ->whereYear( 'orders.created_at' ,'=', $año )
-        ->get();
+            ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`'))
+            ->whereYear('orders.created_at', '=', $año)
+            ->get();
 
 
-        
+
         $saleMonth = DB::table('orders')
-        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
-        ->whereMonth( 'orders.created_at' ,'=', $mes )
-        ->get();
+            ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`'))
+            ->whereMonth('orders.created_at', '=', $mes)
+            ->get();
+
 
         
         $countProducts = DB::table('products')
-        ->select(DB::raw('count(products.id) as `countproducts`'))
-        ->where('products.stock', '=', 0)
-        ->get();
+            ->select(DB::raw('count(products.id) as `countproducts`'))
+            ->where('products.stock', '=', 0)
+            ->get();
 
         $listProducts = DB::table('products')
-        ->select('products.name_product')
-        ->where('products.stock', '=', 0)
-        ->get();
-        
-        
-        $countSupplies = DB::table('supplies')
-        ->select(DB::raw('count(supplies.id) as `countsupplies`'))
-        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
-        ->get();
+            ->select('products.name_product')
+            ->where('products.stock', '=', 0)
+            ->get();
 
-           
+
+        $countSupplies = DB::table('supplies')
+            ->select(DB::raw('count(supplies.id) as `countsupplies`'))
+            ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+            ->get();
+
+
         $listSupplies = DB::table('supplies')
-        ->select('supplies.name_supply','supplies.critical_quantity','supplies.unit_meassurement','supplies.quantity')
-        ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
-        ->orderBy('supplies.unit_meassurement')
-        ->get();
+            ->select('supplies.name_supply', 'supplies.critical_quantity', 'supplies.unit_meassurement', 'supplies.quantity')
+            ->where('supplies.critical_quantity', '>=', 'supplies.unit_meassurement')
+            ->orderBy('supplies.unit_meassurement')
+            ->get();
 
         $years = DB::table('orders')
-        ->select((DB::raw('YEAR(orders.created_at) year')))
-        ->groupby('year')
-        ->get();
+            ->select((DB::raw('YEAR(orders.created_at) year')))
+            ->groupby('year')
+            ->get();
 
 
         ///
         ///
         ///
-       
-        if(isset($years[0])){
+
+        if (isset($years[0])) {
             return response::json(array(
-                'countSupplies' => $countSupplies ,
-                'countProducts' => $countProducts ,
                 'saleMonth' => $saleMonth,
-                'listProducts' => $listProducts,
-                'listSupplies' => $listSupplies,
                 'saleYear' => $saleYear,
                 'years' => $years,
-                
-    
-    
-            ),200);
-            
-        }else{
+
+
+
+            ), 200);
+        } else {
             return response::json(array(
-                'countSupplies' => $countSupplies ,
-                'countProducts' => $countProducts ,
                 'saleMonth' => $saleMonth,
-                'listProducts' => $listProducts,
-                'listSupplies' => $listSupplies,
                 'saleYear' => $saleYear,
-     
-            ),200);
+
+            ), 200);
         }
-       
-       
     }
 
-    public function getMonthOrder(request $request){
+    public function getMonthOrder(request $request)
+    {
 
         $sales = DB::table('orders')
-        ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
-        ->whereyear('created_at', $request->year)
-        ->groupby('year','month')
-        ->get();
+            ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+            ->whereyear('created_at', $request->year)
+            ->groupby('year', 'month')
+            ->get();
 
-     
-       
-        
-        return response($sales,200);
+
+
+
+        return response($sales, 200);
     }
 
     ///eliminar
@@ -535,36 +555,33 @@ class OrderController extends Controller
     {
 
         $bestseller = DB::table('products_orders')
-        ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
-        ->join('products','products_orders.product_id','products.id')
-        ->groupBy('products_orders.product_id', 'products.name_product')
-        ->limit(5)
-        ->orderBy('cantida','DESC')
-        ->get();    
+            ->select('products_orders.product_id', 'products.name_product', DB::raw('sum(products_orders.cantidad) as cantida'))
+            ->join('products', 'products_orders.product_id', 'products.id')
+            ->groupBy('products_orders.product_id', 'products.name_product')
+            ->limit(5)
+            ->orderBy('cantida', 'DESC')
+            ->get();
 
-        
-        return response($bestseller,200);
-   
-        
+
+        return response($bestseller, 200);
     }
-    
+
     public function getBestClient()
     {
 
         $BestClient = DB::table('orders')
-        ->select( 'users.name', 'users.email','users.phone', DB::raw('COALESCE(sum(orders.total), 0)  as gastado'), DB::raw('count(orders.id) as cantidad'))
-        ->leftjoin('order_user','orders.id','order_user.id_order')
-        ->rightjoin('users','order_user.id_user','users.id')
-        ->where('users.id_role' , 2)
-        ->limit(5)
-        ->groupby('users.name', 'users.email','users.phone')
-        ->orderby('gastado', 'DESC')
-        ->get();    
-      
-        
-        return response($BestClient,200);
-   
-        
+            ->select('users.name', 'users.email', 'users.phone', DB::raw('COALESCE(sum(orders.total), 0)  as gastado'), DB::raw('count(orders.id) as cantidad'))
+            ->leftjoin('order_user', 'orders.id', 'order_user.id_order')
+            ->rightjoin('users', 'order_user.id_user', 'users.id')
+            ->where('users.id_role', 2)
+            ->where('orders.total', ">", 0)
+            ->limit(5)
+            ->groupby('users.name', 'users.email', 'users.phone')
+            ->orderby('orders.total', 'DESC')
+            ->get();
+
+
+        return response($BestClient, 200);
     }
 
 
@@ -584,28 +601,27 @@ class OrderController extends Controller
         $user = auth()->user()->id;
 
         $orders = DB::table('orders')
-        ->join('order_user', 'orders.id', '=', 'order_user.id_order')
-        ->select('orders.*')
-        ->where('order_user.id_user', '=', $user)
-        ->get();
+            ->join('order_user', 'orders.id', '=', 'order_user.id_order')
+            ->select('orders.*')
+            ->where('order_user.id_user', '=', $user)
+            ->get();
 
         $orderItems = DB::table('products_orders')
-        ->select(DB::raw('sum(products_orders.cantidad) as articulos, products_orders.order_id'))
-        ->groupby('products_orders.order_id')
-        ->get();
+            ->select(DB::raw('sum(products_orders.cantidad) as articulos, products_orders.order_id'))
+            ->groupby('products_orders.order_id')
+            ->get();
         // dd($orderItems);
 
         $productOrders = DB::table('products_orders')
-        ->join('products', 'products_orders.product_id', '=', 'products.id')
-        ->select('products_orders.*', 'products.*')
-        ->get();
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->select('products_orders.*', 'products.*')
+            ->get();
 
         return view('Usuario.Landing.orders', compact('orders', 'productOrders', 'orderItems'));
     }
 
     public function orderDetails(request $request)
     {
-        
         $values = request()->except('_token');
         $id = $values['id'];
         $order = DB::table('orders')
@@ -621,5 +637,4 @@ class OrderController extends Controller
 
         return response(json_encode([$productOrders, $order]), 200);
     }
-
 }

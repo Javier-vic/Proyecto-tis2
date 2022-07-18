@@ -144,7 +144,6 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
-                    console.log(text)
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
                     $(".input-modal").removeClass('is-invalid')
