@@ -42,7 +42,6 @@ class LandingController extends Controller
                 'category_products.name as category',
                 'category_products.id as category_id',
                 'products.price'
-
             )
             ->orderBy('products.id')
             ->get();
@@ -160,7 +159,7 @@ class LandingController extends Controller
                 $order->pick_up = $values['pick_up'];
                 $order->address = $values['address'];
                 foreach ($productos as $product) {
-                    dd($product);
+
                     array_push($cantidades, $product->cantidad);
                     $totalValue += ($product->price * $product->cantidad);
                     $productToCheck = product::find($product->id);

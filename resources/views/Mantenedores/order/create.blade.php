@@ -256,7 +256,6 @@
             //al hacer click cambia color botton y borra vista de input number
 
             $(`#bottonproduct${productSelected.id}`).click(function(e) {
-
                 if ($(`#bottonproduct${productSelected.id}`).hasClass(`onselect`)) {
 
                     $(`#valor${productSelected.id}`).removeClass(`d-none`);
@@ -280,7 +279,6 @@
                         '<i class="fa-solid fa-plus"></i> Agregar producto');
                     $('.createmodal_error_product').empty();
                 }
-
             });
 
 
