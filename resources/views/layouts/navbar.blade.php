@@ -147,7 +147,7 @@ use App\Http\Controllers\RoleController;
                         <button type="button" class="btn btn-light position-relative border dropdown-toggle" id="Notificaciones" data-bs-toggle="dropdown" aria-expanded="false"> 
                             <i class="fa-solid fa-bell fs-3"></i>                        
                             <span class="badge-notification position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light badge rounded-pill fs-6">                       
-                                <div class="" id ="supplies"></div>                           
+                                <div class="" id ="countsupplies"></div>                           
                             </span>                          
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="Notificaciones">
@@ -192,12 +192,12 @@ use App\Http\Controllers\RoleController;
                         if(response.countSupplies[0].countsupplies == 0){
                             $(".badge-notification").addClass('d-none')
                         }     
-                        $('#supplies').text(response.countSupplies[0].countsupplies);
+                        $('#countsupplies').text(response.countSupplies[0].countsupplies);
                         $('#critical_supply').empty();
                         response.criticalSupplies.map(supplies=> {
                             $('#critical_supply').append(                                                      
                                 `
-                                    <li>                                   
+                                    <li class="dropdown-item">                                   
                                         <i class="fa-solid fa-triangle-exclamation text-warning fs-3 d-inline-block" ></i>
                                         <div class="d-inline-block">                                        
                                             <a href="/supply">
@@ -214,7 +214,7 @@ use App\Http\Controllers\RoleController;
                         response.missingSupplies.map(supplies=> {
                             $('#missing_supply').append(                                                      
                                 `
-                                    <li>
+                                    <li class="dropdown-item">
                                         <i class="d-inline-block fa-solid fa-circle-exclamation text-danger fs-3"></i>
                                         <div class="d-inline-block">
                                             <a href="/supply" >
