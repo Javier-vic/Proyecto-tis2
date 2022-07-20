@@ -145,10 +145,10 @@
 
             </div>
             <div class="bg-white shadow p-3 mt-5 col-md-6">
-                <div class="h-50">
+                <div>
                     <h3 class="m-0">Método de pago</h3c>
                         <hr>
-                        <div id="payment_methodContainer" class="mb-3">
+                        <div id="payment_methodContainer" class="mb-3" style="overflow-y: scroll; height:350px;">
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="efectivo_method">
                                 <label class="" for="efectivo_method">Efectivo</label>
@@ -156,22 +156,67 @@
                                     src="{{ asset('storage/images/cashicon.svg') }}" alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
-                                onclick="paymentMethod(event)" id="prepago_method">
-                                <label class="" for="prepago_method">Prepago</label>
+                                onclick="paymentMethod(event)" id="tarjeta_method">
+                                <label class="" for="prepago_method">Tarjeta débito/crédito</label>
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
+                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                                onclick="paymentMethod(event)" id="khipu_method">
+                                <label class="" for="prepago_method">Transferencia vía Khipu</label>
+                                <img class=" img-fluid"
+                                    style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
+                                    alt="Efectivo">
+                            </a>
+                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                                onclick="paymentMethod(event)" id="onepay_method">
+                                <label class="" for="prepago_method">Onepay</label>
+                                <img class=" img-fluid"
+                                    style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
+                                    alt="Efectivo">
+                            </a>
+                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                                onclick="paymentMethod(event)" id="servipag_method">
+                                <label class="" for="prepago_method">Servipag</label>
+                                <img class=" img-fluid"
+                                    style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
+                                    alt="Efectivo">
+                            </a>
+                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                                onclick="paymentMethod(event)" id="ripley_method">
+                                <label class="" for="prepago_method">Ripley checK</label>
+                                <img class=" img-fluid"
+                                    style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
+                                    alt="Efectivo">
+                            </a>
+                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                                onclick="paymentMethod(event)" id="fpay_method">
+                                <label class="" for="prepago_method">Fpay</label>
+                                <img class=" img-fluid"
+                                    style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
+                                    alt="Efectivo">
+                            </a>
+                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                                onclick="paymentMethod(event)" id="mach_method">
+                                <label class="" for="prepago_method">Mach</label>
+                                <img class=" img-fluid"
+                                    style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
+                                    alt="Efectivo">
+                            </a>
+
+
                         </div>
+                        <hr>
                         <input type="text" hidden id="paymentMethod" name="payment_method">
+                        <input type="text" hidden id="paymentSelected" name="paymentSelected">
                         <span class="text-danger createmodal_error " id="payment_method_error"></span>
                 </div>
-                <div class="h-50">
-                    <div class="h-50">
-                        <h3 class="m-0">Resumen pedido</h3>
-                        <hr>
+                <div>
+                    <div>
+                        <h4 class="m-0 mb-2">Resumen del pedido</h4>
                         <div class="" id="subtotal">
-                            <h5>Subtotal: <span id="totalCart"></span> </h5>
+                            <h3>Subtotal: <span id="totalCart"></span> </h3>
                             <div class="m-0 p-0" id="deliveryPriceContainer"></div>
                         </div>
                         <hr>
@@ -257,6 +302,8 @@
                 }
             });
 
+
+
         });
 
 
@@ -300,6 +347,13 @@
             })
             cartTotal();
         }
+        //PARA FORMATEAR LOS PRECIOS
+        const currency = function(number) {
+            return new Intl.NumberFormat('es-CL', {
+                currency: 'CLP',
+                minimumFractionDigits: 2
+            }).format(number);
+        };
 
         const cartTotal = () => {
             var cart = localStorage.getItem('cart');
@@ -312,10 +366,19 @@
             if (parseInt($('#delivery_price').val()) > 0) {
                 total += parseInt($('#delivery_price').val())
             }
+            if (parseInt($('#paymentSelected').val()) > 0) {
+                total *= (1.0289)
+            }
+
+
+
+
 
 
             $('#totalCart').empty()
-            $('#totalCart').append(`<span>$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>`)
+            $('#totalCart').append(
+
+                `<span>$ ${currency(total)}</span>`)
         }
 
         const deleteInCart = (id) => {
@@ -345,8 +408,10 @@
                                     timer: 3000,
                                     timerProgressBar: true,
                                     didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal
+                                        toast.addEventListener('mouseenter',
+                                            Swal.stopTimer)
+                                        toast.addEventListener('mouseleave',
+                                            Swal
                                             .resumeTimer)
                                     }
                                 });
@@ -406,6 +471,16 @@
         const paymentMethod = (e) => {
             $('.paymentMethodBorder').removeClass('paymentMethodBorder')
             e.preventDefault()
+            let metodoPago = e.target.id;
+            if (metodoPago === 'ripley_method') $('#paymentSelected').val(25)
+            else if (metodoPago === 'tarjeta_method') $('#paymentSelected').val(1)
+            else if (metodoPago === 'khipu_method') $('#paymentSelected').val(22)
+            else if (metodoPago === 'onepay_method') $('#paymentSelected').val(5)
+            else if (metodoPago === 'servipag_method') $('#paymentSelected').val(2)
+            else if (metodoPago === 'fpay_method') $('#paymentSelected').val(110)
+            else if (metodoPago === 'efectivo_method') $('#paymentSelected').val(0)
+            else if (metodoPago === 'mach_method') $('#paymentSelected').val(15)
+            cartTotal()
             $('#paymentMethod').attr('value', e.target.innerText)
             $(`#${e.target.id}`).addClass('paymentMethodBorder')
 
@@ -429,15 +504,17 @@
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'Se creó la orden correctamente.',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false,
-                        heightAuto: false,
-                    })
+                    console.log(response);
+                    window.location.replace(response.urlCompra);
+                    // Swal.fire({
+                    //     position: 'bottom-end',
+                    //     icon: 'success',
+                    //     title: 'Se creó la orden correctamente.',
+                    //     showConfirmButton: false,
+                    //     timer: 2000,
+                    //     backdrop: false,
+                    //     heightAuto: false,
+                    // })
                     // //QUITA LAS CLASES Y ELEMENTOS DE INVALID
                     // $("input-modal").removeClass('is-invalid');
                     // $("input-modal").removeClass('is-valid');
@@ -463,7 +540,8 @@
                     // AGREGA LAS CLASES Y ELEMENTOS DE INVALID
                     if (text) {
                         $.each(text.errors, function(key, item) {
-                            $("#" + key + "_error").append("<span class='text-danger'>" +
+                            $("#" + key + "_error").append(
+                                "<span class='text-danger'>" +
                                 item + "</span>")
                             $(`#${key}`).addClass('is-invalid');
                         });
@@ -479,10 +557,12 @@
                                 $(`#product${item[0]}_error`).empty()
                                 $("#product" + item[0] + "_error").append(
                                     "<span class='text-danger'> No hay stock suficiente para este producto tienes " +
-                                    item[1] + " unidades extra aproximadamente</span>")
+                                    item[1] +
+                                    " unidades extra aproximadamente</span>")
                                 cart.map(product => {
                                     if (product.id === item[0]) {
-                                        product.stock = product.cantidad - item[1]
+                                        product.stock = product.cantidad - item[
+                                            1]
                                     }
                                 })
                                 localStorage.setItem('cart', JSON.stringify(cart));
@@ -510,7 +590,8 @@
                 $(`#${e.target.id}_error`).empty()
                 $("#" + e.target.id).removeClass('is-valid')
                 $("#" + e.target.id).addClass('is-invalid')
-                $("#" + e.target.id + "_error").append("<span class='text-danger'>" + 'Este campo es obligatorio' +
+                $("#" + e.target.id + "_error").append("<span class='text-danger'>" +
+                    'Este campo es obligatorio' +
                     "</span>")
             }
         }
@@ -589,17 +670,11 @@
 
             });
 
-        }
 
+        }
 
         const addAddress = (e) => {
             e.preventDefault()
-            // $('#addAddressModal').on('shown.bs.modal', function() {
-            // map.invalidateSize();
-            // });
-            // $('#addAddressModal').modal('show');
-
-
         }
     </script>
 @endsection

@@ -121,6 +121,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
+Route::post('/landing/confirmation/', [LandingController::class, 'transactionConfirmation'])->name('landing.confirmation');
 Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
 
 

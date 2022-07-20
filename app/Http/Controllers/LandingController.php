@@ -114,6 +114,7 @@ class LandingController extends Controller
     public function store(Request $request)
     {
 
+
         $rules = [
             'name_order'          => 'required|string',
             'cantidad' => 'required|min:1',
@@ -123,8 +124,6 @@ class LandingController extends Controller
             'number' => 'required|gt:910000000|lt:999999999|integer',
             'payment_method' => 'required',
             'comment' => 'max:255'
-
-
         ];
         $messages = [
             'required'      => 'Este campo es obligatorio',
@@ -248,6 +247,91 @@ class LandingController extends Controller
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////
                 $user->orders()->attach($order->id);
+
+
+
+
+                /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
+
+                $token = request()->_token;
+
+                $params = array(
+                    "apiKey" => "6C7EEDFF-CE18-4A7C-8372-86DAB5D6L117",
+                    "token" => $token,
+                    "commerceOrder" => $order->id,
+                    "subject" => "Nueva compra",
+                    "amount" => $totalValue,
+                    "email" => "fernando8tavob@gmail.com",
+                    "urlConfirmation" => "http://127.0.0.1:8000/landing/",
+                    "urlReturn" => "http://127.0.0.1:8000/landing/confirmation/",
+                    "paymentMethod" => intval($values['paymentSelected']),
+                );
+                $keys = array_keys($params);
+                sort($keys);
+                $secretKey = "13d5ea307f465ffed4051223d5327490d032e0b2";
+
+                $toSign = "";
+
+                foreach ($keys as $key) {
+                    $toSign .= $key . $params[$key];
+                };
+
+                $signature = hash_hmac('sha256', $toSign, $secretKey);
+
+                $url = 'https://sandbox.flow.cl/api';
+                // Agrega a la url el servicio a consumir
+                $url = $url . '/payment/create';
+
+                //Agrega la firma a los parámetros
+                $params["s"] = $signature;
+
+                try {
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                    curl_setopt($ch, CURLOPT_POST, TRUE);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+                    $response = curl_exec($ch);
+                    if ($response === false) {
+                        $error = curl_error($ch);
+                        throw new Exception($error, 1);
+
+                        return Response::json(array(
+                            'success' => false,
+                            'message' => 'Problema con los servicios de pago. Intentelo más tarde',
+
+                        ), 400);
+                    }
+                    $info = curl_getinfo($ch);
+                    if (!in_array($info['http_code'], array('200', '400', '401'))) {
+                        return Response::json(array(
+                            'success' => false,
+                            'message' => 'Problema con los servicios de pago. Intentelo más tarde',
+
+                        ), 400);
+                    }
+                    if (in_array($info['http_code'], array('200'))) {
+                        $responseToJSON = json_decode($response);
+                        $payUrl = $responseToJSON->url . "?token=" . $responseToJSON->token;
+
+                        return Response::json(array(
+                            'success' => true,
+                            'urlCompra' => $payUrl,
+                            'message' => 'Redirigiendo hacía página de compra...',
+
+                        ), 200);
+                    } else {
+                        return Response::json(array(
+                            'success' => false,
+                            'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o selecciona otro método de pago.',
+
+                        ), 400);
+                    }
+                } catch (Exception $e) {
+                    echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
+                }
+
+                ///////////////FIN LLAMADA PASARELA DE PAGO
                 DB::connection(session()->get('database'))->commit();
                 return response('Se ingresó la orden con exito.', 200);
 
@@ -319,6 +403,74 @@ class LandingController extends Controller
     public function destroy(landing $landing)
     {
         //
+    }
+
+    public function transactionConfirmation(request $request)
+    {
+        $values = request()->except('_token');
+
+        $params = array(
+            "token" => $values['token'],
+            "apiKey" => "6C7EEDFF-CE18-4A7C-8372-86DAB5D6L117"
+
+        );
+        $keys = array_keys($params);
+        sort($keys);
+        $secretKey = "13d5ea307f465ffed4051223d5327490d032e0b2";
+
+        $toSign = "";
+
+        foreach ($keys as $key) {
+            $toSign .= $key . $params[$key];
+        };
+
+        $signature = hash_hmac('sha256', $toSign, $secretKey);
+
+        $url = 'https://sandbox.flow.cl/api';
+        // Agrega a la url el servicio a consumir
+        $url = $url . '/payment/getStatus';
+        // agrega la firma a los parámetros
+        $params["s"] = $signature;
+        //Codifica los parámetros en formato URL y los agrega a la URL
+        $url = $url . "?" . http_build_query($params);
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $response = curl_exec($ch);
+            if ($response === false) {
+                $error = curl_error($ch);
+                throw new Exception($error, 1);
+            }
+            $info = curl_getinfo($ch);
+            if (!in_array($info['http_code'], array('200', '400', '401'))) {
+                throw new Exception('Unexpected error occurred. HTTP_CODE: ' . $info['http_code'], $info['http_code']);
+            }
+            if (in_array($info['http_code'], array('200'))) {
+                $responseToJSON = json_decode($response);
+                $resultadosOrden = [
+                    'orden_compra' => $responseToJSON->flowOrder,
+                    'fecha_compra' => $responseToJSON->requestDate,
+                    'estado_compra' => $responseToJSON->status,
+                    'correo_comprador' => $responseToJSON->payer,
+                    'monto' => $responseToJSON->amount,
+                    'medio_pago' => $responseToJSON->paymentData->media,
+                ];
+                if ($responseToJSON->status == 2) {
+                    return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
+
+                    // return view('Usuario.landing.paymentFailed', $resultadosOrden);
+                } else {
+                    return view('Usuario.landing.paymentFailed', $resultadosOrden);
+                }
+            } else {
+                dd('ocurrió un problemón');
+            }
+
+            dd($response);
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
+        }
     }
 
     public function checkCoupon(request $request)
