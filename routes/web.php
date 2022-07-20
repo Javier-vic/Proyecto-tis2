@@ -89,8 +89,6 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
 
     Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     // Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
-    Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
-    Route::get('/order/orderDetails', [\App\Http\Controllers\OrderController::class, 'orderDetails'])->name('order.details');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/pending', [OrderController::class, 'pendingOrdersView'])->name('pendingOrdersView');
     //POST
@@ -100,8 +98,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-
-
+    
+    
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);
@@ -121,6 +119,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
+Route::get('/user/orderDetails', [\App\Http\Controllers\UserController::class, 'orderDetails'])->name('order.details');
+Route::get('/user/orderbyuser', [\App\Http\Controllers\UserController::class, 'orderbyuser'])->name('order.history');
 Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
 Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
 

@@ -183,4 +183,48 @@ class UserController extends Controller
             ), 400);
         }
     }
+
+    public function orderbyuser()
+    {
+        $user = auth()->user()->id;
+
+        $orders = DB::table('orders')
+            ->join('order_user', 'orders.id', '=', 'order_user.id_order')
+            ->select('orders.*')
+            ->where('order_user.id_user', '=', $user)
+            ->get();
+
+        $orderItems = DB::table('products_orders')
+            ->select(DB::raw('sum(products_orders.cantidad) as articulos, products_orders.order_id'))
+            ->groupby('products_orders.order_id')
+            ->get();
+        // dd($orderItems);
+
+        $productOrders = DB::table('products_orders')
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->select('products_orders.*', 'products.*')
+            ->get();
+
+        return view('Usuario.Landing.orders', compact('orders', 'productOrders', 'orderItems'));
+    }
+
+
+    public function orderDetails(request $request)
+    {
+
+        $values = request()->except('_token');
+        $id = $values['id'];
+        $order = DB::table('orders')
+            ->select('orders.*')
+            ->where('orders.id', '=', $id)
+            ->get();
+
+        $productOrders = DB::table('products_orders')
+            ->select('products_orders.product_id', 'products.name_product', 'products_orders.cantidad', 'products.price')
+            ->join('products', 'products_orders.product_id', '=', 'products.id')
+            ->where('products_orders.order_id', '=', $id)
+            ->get();
+
+        return response(json_encode([$productOrders, $order]), 200);
+    }
 }
