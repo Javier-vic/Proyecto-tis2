@@ -268,10 +268,11 @@ class LandingController extends Controller
                         "commerceOrder" => $order->id,
                         "subject" => "Nueva compra",
                         "amount" => intval($totalValue),
-                        "email" => "fernando8tavob@gmail.com",
+                        "email" => $values['mail'],
                         "urlConfirmation" => "http://127.0.0.1:8000/landing/",
                         "urlReturn" => "http://127.0.0.1:8000/landing/confirmation/",
                         "paymentMethod" => intval($values['paymentSelected']),
+
                     );
                     $keys = array_keys($params);
                     sort($keys);
@@ -316,8 +317,19 @@ class LandingController extends Controller
 
                             ), 400);
                         }
+                        $responseToJSON = json_decode($response);
+                        if ($responseToJSON->code) {
+                            if ($responseToJSON->code == 1620) {
+                                return Response::json(array(
+                                    'success' => false,
+                                    'message' => 'El correo no existe en nuestros registros',
+                                ), 400);
+                            }
+                        }
+                        dd($responseToJSON);
+
                         if (in_array($info['http_code'], array('200'))) {
-                            $responseToJSON = json_decode($response);
+
                             $payUrl = $responseToJSON->url . "?token=" . $responseToJSON->token;
                             DB::connection(session()->get('database'))->commit();
 
@@ -472,7 +484,7 @@ class LandingController extends Controller
                     // return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 } else {
                     //CASOS 1, 3 Y 4
-                    Order::where('id', $responseToJSON->commerceOrder)->forceDelete();
+                    Order::where('id', $responseToJSON->commerceOrder)->delete();
                     return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 }
             } else {

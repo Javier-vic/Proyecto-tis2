@@ -156,50 +156,49 @@
                                     src="{{ asset('storage/images/cashicon.svg') }}" alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
-                                onclick="paymentMethod(event)" id="tarjeta_method">
-                                <label class="" for="prepago_method">Tarjeta débito/crédito</label>
+                                onclick="paymentMethod(event)" id="tarjeta_method">Tarjeta débito/crédito
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
                                 onclick="paymentMethod(event)" id="khipu_method">
-                                <label class="" for="prepago_method">Transferencia vía Khipu</label>
+                                Transferencia vía Khipu
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
                                 onclick="paymentMethod(event)" id="onepay_method">
-                                <label class="" for="prepago_method">Onepay</label>
+                                Onepay
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
                                 onclick="paymentMethod(event)" id="servipag_method">
-                                <label class="" for="prepago_method">Servipag</label>
+                                Servipag
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
                                 onclick="paymentMethod(event)" id="ripley_method">
-                                <label class="" for="prepago_method">Ripley checK</label>
+                                Ripley checK
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
                                 onclick="paymentMethod(event)" id="fpay_method">
-                                <label class="" for="prepago_method">Fpay</label>
+                                Fpay
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
                             <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
                                 onclick="paymentMethod(event)" id="mach_method">
-                                <label class="" for="prepago_method">Mach</label>
+                                Mach
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
