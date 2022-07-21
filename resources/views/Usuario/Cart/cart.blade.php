@@ -218,6 +218,7 @@
                         <div class="" id="subtotal">
                             <h3>Subtotal: <span id="totalCart"></span> </h3>
                             <div class="m-0 p-0" id="deliveryPriceContainer"></div>
+                            <div class="m-0 p-0" id="comisionContainer"></div>
                         </div>
                         <hr>
                         <button class="btn bgColor text-white buttonHover">Confirmar pedido</button>
@@ -350,8 +351,9 @@
         //PARA FORMATEAR LOS PRECIOS
         const currency = function(number) {
             return new Intl.NumberFormat('es-CL', {
+                style: 'currency',
                 currency: 'CLP',
-                minimumFractionDigits: 2
+                minimumFractionDigits: 0
             }).format(number);
         };
 
@@ -366,8 +368,17 @@
             if (parseInt($('#delivery_price').val()) > 0) {
                 total += parseInt($('#delivery_price').val())
             }
+
             if (parseInt($('#paymentSelected').val()) > 0) {
-                total *= (1.0289)
+                $('#comisionContainer').empty()
+                $('#comisionContainer').append(
+                    `<span>Comisión : ${(currency((total*1.0319) - total) )}</span>`
+                )
+                total *= (1.0319)
+
+            } else {
+                $('#comisionContainer').empty()
+
             }
 
 
@@ -378,7 +389,7 @@
             $('#totalCart').empty()
             $('#totalCart').append(
 
-                `<span>$ ${currency(total)}</span>`)
+                `<span> ${currency(total)}</span>`)
         }
 
         const deleteInCart = (id) => {
@@ -505,21 +516,34 @@
                 processData: false,
                 success: function(response, jqXHR) {
                     console.log(response);
-                    window.location.replace(response.urlCompra);
-                    // Swal.fire({
-                    //     position: 'bottom-end',
-                    //     icon: 'success',
-                    //     title: 'Se creó la orden correctamente.',
-                    //     showConfirmButton: false,
-                    //     timer: 2000,
-                    //     backdrop: false,
-                    //     heightAuto: false,
-                    // })
-                    // //QUITA LAS CLASES Y ELEMENTOS DE INVALID
-                    // $("input-modal").removeClass('is-invalid');
-                    // $("input-modal").removeClass('is-valid');
-                    // $(".createmodal_error").empty()
-                    // //////////////////////////////////////                    
+                    Swal.fire({
+                        position: 'bottom-end',
+                        icon: 'success',
+                        title: 'Se creó la orden correctamente.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        backdrop: false,
+                        heightAuto: false,
+                    })
+                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                    $("input-modal").removeClass('is-invalid');
+                    $("input-modal").removeClass('is-valid');
+                    $(".createmodal_error").empty()
+                    //////////////////////////////////////   
+                    if (response.urlCompra) {
+                        setTimeout(() => {
+                            localStorage.clear()
+                            window.location.replace(response.urlCompra);
+
+                        }, 1000);
+                    } else {
+                        setTimeout(() => {
+                            localStorage.clear()
+                            window.location.reload()
+
+                        }, 2000);
+                    }
+
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

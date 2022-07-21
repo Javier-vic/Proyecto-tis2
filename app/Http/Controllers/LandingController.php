@@ -174,61 +174,68 @@ class LandingController extends Controller
                     $totalValue += $values['delivery_price'];
                 }
 
-                $userId = auth()->user()->id;
-                $user = User::find($userId);
-                //////////////VALIDA EL CUPÓN////////////
-                if ($values['coupon'] != null) {
-                    $couponToCheck = coupon::where('code', $values['coupon'])->first();
-                    if ($couponToCheck) {
-                        $newQuantity = $couponToCheck->quantity - 1;
+                if (auth()->user()) {
+                    $userId = auth()->user()->id;
+                    $user = User::find($userId);
+                    //////////////VALIDA EL CUPÓN////////////
+                    if ($values['coupon'] != null) {
+                        $couponToCheck = coupon::where('code', $values['coupon'])->first();
+                        if ($couponToCheck) {
+                            $newQuantity = $couponToCheck->quantity - 1;
 
-                        //VERIFICAMOS QUE EL USUARIO NO OCUPE EL MISMO CUPÓN MÁS DE 1 VEZ
-                        $checkUserCoupon = DB::table('coupon_user')
-                            ->select(
-                                'id',
-                            )
-                            ->where('coupon_id', $couponToCheck->id)
-                            ->where('user_id', $userId)
-                            ->get();
+                            //VERIFICAMOS QUE EL USUARIO NO OCUPE EL MISMO CUPÓN MÁS DE 1 VEZ
+                            $checkUserCoupon = DB::table('coupon_user')
+                                ->select(
+                                    'id',
+                                )
+                                ->where('coupon_id', $couponToCheck->id)
+                                ->where('user_id', $userId)
+                                ->get();
 
 
-                        if (sizeof($checkUserCoupon) > 0) {
+                            if (sizeof($checkUserCoupon) > 0) {
+                                return Response::json(array(
+                                    'success' => false,
+                                    'coupon' => false,
+                                    'message' => 'Ya has utilizado este cupón',
+                                    'errors' => ['coupon' => '']
+
+                                ), 400);
+                            } else {
+                                $user->coupons()->attach($couponToCheck->id);
+                            }
+                        } else {
                             return Response::json(array(
                                 'success' => false,
                                 'coupon' => false,
-                                'message' => 'Ya has utilizado este cupón',
+                                'message' => 'El cupón no existe',
                                 'errors' => ['coupon' => '']
 
                             ), 400);
-                        } else {
-                            $user->coupons()->attach($couponToCheck->id);
                         }
-                    } else {
-                        return Response::json(array(
-                            'success' => false,
-                            'coupon' => false,
-                            'message' => 'El cupón no existe',
-                            'errors' => ['coupon' => '']
+                        if ($couponToCheck != null && $newQuantity >= 0 && $couponToCheck->emited <= $couponToCheck->caducity) {
+                            $totalValue = $totalValue * (1 - $couponToCheck->percentage / 100);
+                            $couponToCheck->quantity = $newQuantity;
+                            $couponToCheck->save();
+                        } else {
+                            return Response::json(array(
+                                'success' => false,
+                                'coupon' => false,
+                                'message' => 'El cupón expiró',
 
-                        ), 400);
+                            ), 400);
+                        }
                     }
-                    if ($couponToCheck != null && $newQuantity >= 0 && $couponToCheck->emited <= $couponToCheck->caducity) {
-                        $order->total = $totalValue * (1 - $couponToCheck->percentage / 100);
-                        $couponToCheck->quantity = $newQuantity;
-                        $couponToCheck->save();
-                    } else {
-                        return Response::json(array(
-                            'success' => false,
-                            'coupon' => false,
-                            'message' => 'El cupón expiró',
-
-                        ), 400);
-                    }
-                } else {
-                    $order->total = $totalValue;
+                    ////////////////////////////////////
                 }
-                ////////////////////////////////////
+                if (intval($values['paymentSelected']) != 0) {
+                    $totalValue = $totalValue * 1.0319;
+                    $order->total = intval($totalValue);
+                }
+                $totalValue = intval($totalValue);
+
                 $order->save();
+                $order->delete();
 
                 //RELLENA LA TABLA RELACION ENTRE PRODUCTOS Y ORDERS
                 for ($i = 0; $i < sizeof($cantidades); $i++) {
@@ -246,92 +253,95 @@ class LandingController extends Controller
                     ), 400);
                 }
                 ////////////////////////////////////////////////////////////////////////////////////////////////
-                $user->orders()->attach($order->id);
+                if (auth()->user()) {
+                    $user->orders()->attach($order->id);
+                }
+                //SI EL METODO DE PAGO NO ES EFECTIVO
+                if (intval($values['paymentSelected']) != 0) {
 
+                    /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
 
+                    $token = request()->_token;
 
+                    $params = array(
+                        "apiKey" => "6C7EEDFF-CE18-4A7C-8372-86DAB5D6L117",
+                        "token" => $token,
+                        "commerceOrder" => $order->id,
+                        "subject" => "Nueva compra",
+                        "amount" => intval($totalValue),
+                        "email" => "fernando8tavob@gmail.com",
+                        "urlConfirmation" => "http://127.0.0.1:8000/landing/",
+                        "urlReturn" => "http://127.0.0.1:8000/landing/confirmation/",
+                        "paymentMethod" => intval($values['paymentSelected']),
+                    );
+                    $keys = array_keys($params);
+                    sort($keys);
+                    $secretKey = "13d5ea307f465ffed4051223d5327490d032e0b2";
 
-                /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
+                    $toSign = "";
+                    foreach ($keys as $key) {
+                        $toSign .= $key . $params[$key];
+                    };
 
-                $token = request()->_token;
+                    $signature = hash_hmac('sha256', $toSign, $secretKey);
 
-                $params = array(
-                    "apiKey" => "6C7EEDFF-CE18-4A7C-8372-86DAB5D6L117",
-                    "token" => $token,
-                    "commerceOrder" => $order->id,
-                    "subject" => "Nueva compra",
-                    "amount" => $totalValue,
-                    "email" => "fernando8tavob@gmail.com",
-                    "urlConfirmation" => "http://127.0.0.1:8000/landing/",
-                    "urlReturn" => "http://127.0.0.1:8000/landing/confirmation/",
-                    "paymentMethod" => intval($values['paymentSelected']),
-                );
-                $keys = array_keys($params);
-                sort($keys);
-                $secretKey = "13d5ea307f465ffed4051223d5327490d032e0b2";
+                    $url = 'https://sandbox.flow.cl/api';
+                    // Agrega a la url el servicio a consumir
+                    $url = $url . '/payment/create';
 
-                $toSign = "";
+                    //Agrega la firma a los parámetros
+                    $params["s"] = $signature;
 
-                foreach ($keys as $key) {
-                    $toSign .= $key . $params[$key];
-                };
+                    try {
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, $url);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                        curl_setopt($ch, CURLOPT_POST, TRUE);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+                        $response = curl_exec($ch);
+                        if ($response === false) {
+                            $error = curl_error($ch);
+                            throw new Exception($error, 1);
 
-                $signature = hash_hmac('sha256', $toSign, $secretKey);
+                            return Response::json(array(
+                                'success' => false,
+                                'message' => 'Problema con los servicios de pago. Intentelo más tarde',
 
-                $url = 'https://sandbox.flow.cl/api';
-                // Agrega a la url el servicio a consumir
-                $url = $url . '/payment/create';
+                            ), 400);
+                        }
+                        $info = curl_getinfo($ch);
+                        if (!in_array($info['http_code'], array('200', '400', '401'))) {
+                            return Response::json(array(
+                                'success' => false,
+                                'message' => 'Problema con los servicios de pago. Intentelo más tarde',
 
-                //Agrega la firma a los parámetros
-                $params["s"] = $signature;
+                            ), 400);
+                        }
+                        if (in_array($info['http_code'], array('200'))) {
+                            $responseToJSON = json_decode($response);
+                            $payUrl = $responseToJSON->url . "?token=" . $responseToJSON->token;
+                            DB::connection(session()->get('database'))->commit();
 
-                try {
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, $url);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-                    curl_setopt($ch, CURLOPT_POST, TRUE);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-                    $response = curl_exec($ch);
-                    if ($response === false) {
-                        $error = curl_error($ch);
-                        throw new Exception($error, 1);
+                            return Response::json(array(
+                                'success' => true,
+                                'urlCompra' => $payUrl,
+                                'message' => 'Redirigiendo hacía página de compra...',
 
-                        return Response::json(array(
-                            'success' => false,
-                            'message' => 'Problema con los servicios de pago. Intentelo más tarde',
+                            ), 200);
+                        } else {
+                            return Response::json(array(
+                                'success' => false,
+                                'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o selecciona otro método de pago.',
 
-                        ), 400);
+                            ), 400);
+                        }
+                    } catch (Exception $e) {
+                        echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
                     }
-                    $info = curl_getinfo($ch);
-                    if (!in_array($info['http_code'], array('200', '400', '401'))) {
-                        return Response::json(array(
-                            'success' => false,
-                            'message' => 'Problema con los servicios de pago. Intentelo más tarde',
 
-                        ), 400);
-                    }
-                    if (in_array($info['http_code'], array('200'))) {
-                        $responseToJSON = json_decode($response);
-                        $payUrl = $responseToJSON->url . "?token=" . $responseToJSON->token;
-
-                        return Response::json(array(
-                            'success' => true,
-                            'urlCompra' => $payUrl,
-                            'message' => 'Redirigiendo hacía página de compra...',
-
-                        ), 200);
-                    } else {
-                        return Response::json(array(
-                            'success' => false,
-                            'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o selecciona otro método de pago.',
-
-                        ), 400);
-                    }
-                } catch (Exception $e) {
-                    echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
+                    ///////////////FIN LLAMADA PASARELA DE PAGO
                 }
 
-                ///////////////FIN LLAMADA PASARELA DE PAGO
                 DB::connection(session()->get('database'))->commit();
                 return response('Se ingresó la orden con exito.', 200);
 
@@ -443,9 +453,9 @@ class LandingController extends Controller
                 throw new Exception($error, 1);
             }
             $info = curl_getinfo($ch);
-            if (!in_array($info['http_code'], array('200', '400', '401'))) {
-                throw new Exception('Unexpected error occurred. HTTP_CODE: ' . $info['http_code'], $info['http_code']);
-            }
+            // if (!in_array($info['http_code'], array('200', '400', '401'))) {
+            //     throw new Exception('Unexpected error occurred. HTTP_CODE: ' . $info['http_code'], $info['http_code']);
+            // }
             if (in_array($info['http_code'], array('200'))) {
                 $responseToJSON = json_decode($response);
                 $resultadosOrden = [
@@ -456,18 +466,20 @@ class LandingController extends Controller
                     'monto' => $responseToJSON->amount,
                     'medio_pago' => $responseToJSON->paymentData->media,
                 ];
+                //CASO SE COMPLETÓ PAGO CORRECTAMENTE
                 if ($responseToJSON->status == 2) {
+                    Order::where('id', $responseToJSON->commerceOrder)->restore();
                     return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
-
                     // return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 } else {
+                    //CASOS 1, 3 Y 4
+                    Order::where('id', $responseToJSON->commerceOrder)->forceDelete();
                     return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 }
             } else {
+                //Acá crear otra vista que sólo te diga que ocurrieron problemas con el sistema de pago y lo intentes de nuevo
                 dd('ocurrió un problemón');
             }
-
-            dd($response);
         } catch (Exception $e) {
             echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
         }
