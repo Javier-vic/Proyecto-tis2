@@ -230,12 +230,11 @@ class LandingController extends Controller
                 }
                 if (intval($values['paymentSelected']) != 0) {
                     $totalValue = $totalValue * 1.0319;
-                    $order->total = intval($totalValue);
                 }
-                $totalValue = intval($totalValue);
-
+                $order->total = intval($totalValue);
                 $order->save();
-                $order->delete();
+
+
 
                 //RELLENA LA TABLA RELACION ENTRE PRODUCTOS Y ORDERS
                 for ($i = 0; $i < sizeof($cantidades); $i++) {
@@ -258,7 +257,7 @@ class LandingController extends Controller
                 }
                 //SI EL METODO DE PAGO NO ES EFECTIVO
                 if (intval($values['paymentSelected']) != 0) {
-
+                    $order->delete();
                     /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
 
                     $token = request()->_token;

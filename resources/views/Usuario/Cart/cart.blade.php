@@ -548,6 +548,8 @@
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     var text = jqXHR.responseJSON;
+                    console.log(jqXHR)
+                    console.log(errorThrown)
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
