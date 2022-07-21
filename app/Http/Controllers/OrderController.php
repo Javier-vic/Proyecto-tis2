@@ -39,9 +39,9 @@ class OrderController extends Controller
                 )
                 ->orderByDesc('id')
                 ->get())
-                ->addColumn('viewOrder', 'mantenedores.order.datatable.view')
+                ->addColumn('viewOrder', 'Mantenedores.order.datatable.view')
                 ->rawColumns(['viewOrder'])
-                ->addColumn('action', 'mantenedores.order.datatable.action')
+                ->addColumn('action', 'Mantenedores.order.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
@@ -84,7 +84,7 @@ class OrderController extends Controller
 
 
         $category =  DB::table('category_products')
-            ->select('category_products.name')
+            ->select('category_products.name','category_products.id')
             ->get();
 
         return view('Mantenedores.order.create', compact('product', 'category'));
@@ -121,7 +121,7 @@ class OrderController extends Controller
                 $datosOrder = request()->except('_token');
                 $order = new order;
                 $order->name_order = $datosOrder['name_order'];
-                $order->order_status = $datosOrder['order_status'];
+                $order->order_status = "Espera";
                 $order->payment_method = $datosOrder['payment_method'];
                 $order->address = $datosOrder['address'];
                 $order->number = $datosOrder['number'];
