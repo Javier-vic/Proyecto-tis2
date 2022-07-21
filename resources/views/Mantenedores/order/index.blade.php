@@ -97,7 +97,6 @@
                 responsive: true,
                 processing: true,
                 searching: true,
-
                 ajax: {
                     url: "{{ route('order.index') }}",
                     type: 'GET',
