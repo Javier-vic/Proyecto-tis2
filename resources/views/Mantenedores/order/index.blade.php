@@ -41,9 +41,6 @@
                 <h3 >Ventas mensuales</h3>
 
                 <form action="" id = "form-yea"> 
-
-                    
-
                     <select name="" class="form-select" id="selectYear">
                         <option selected>Seleccione un año</option>
                         

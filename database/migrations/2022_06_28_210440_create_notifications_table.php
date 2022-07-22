@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMapTable extends Migration
+class CreateNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateMapTable extends Migration
      */
     public function up()
     {
-        Schema::create('maps', function (Blueprint $table) {
-            $table->id();
-            $table->string('latitud');
-            $table->string('longitud');
-            $table->string('direccion');
-            $table->string('delivery_zones', 4000);
-            $table->string('delivery_price');
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
+            $table->morphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateMapTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('map');
+        Schema::dropIfExists('notifications');
     }
 }

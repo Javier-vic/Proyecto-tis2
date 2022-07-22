@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     static $rules = [
         'name_order'          => 'required|string',
         'cantidad' => 'required|array|min:1',
@@ -25,12 +26,15 @@ class order extends Model
         'gt' => 'El número debe ser mayor a 0'
     ];
 
+    protected $cast = ['listProducts' => 'array'];
+
     public function products()
     {
         return $this->belongsToMany(product::class, 'products_orders');
     }
-    
-    public function users(){
+
+    public function users()
+    {
         return $this->belongToMany('App\Models\User');
     }
 }

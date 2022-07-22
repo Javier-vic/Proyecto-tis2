@@ -84,8 +84,12 @@ class OrderController extends Controller
 
 
         $category =  DB::table('category_products')
-            ->select('category_products.name','category_products.id')
-            ->get();
+        ->select('category_products.name','category_products.id', DB::raw('count(products.id) as `data`' ))
+        ->where('products.stock', '>', 0)
+        ->join('products', 'category_products.id', 'products.id_category_product')
+        ->groupby('category_products.name','category_products.id')
+        ->get();
+
 
         return view('Mantenedores.order.create', compact('product', 'category'));
     }
@@ -251,16 +255,24 @@ class OrderController extends Controller
         $selectedIds = $productsSelected->pluck('product_id');
 
         $product = DB::table('products')
-            ->select('*')
-            ->whereNotIn('id', $selectedIds)
-            ->where('products.stock', '>', 0)
-            ->orderBy('products.id')
-            ->get();
+        ->select('*')
+        ->whereNotIn('id', $selectedIds)
+        ->where('products.stock', '>', 0)
+        ->orderBy('products.id')
+        ->get();
+
+        $category =  DB::table('category_products')
+        ->select('category_products.name','category_products.id', DB::raw('count(products.id) as `data`' ))
+        ->where('products.stock', '>', 0)
+        ->join('products', 'category_products.id', 'products.id_category_product')
+        ->groupby('category_products.name','category_products.id')
+        ->get();
 
 
 
 
-        return view('Mantenedores.order.edit', compact('orderData', 'product', 'productsSelected'));
+
+        return view('Mantenedores.order.edit', compact('orderData', 'product', 'productsSelected','category'));
     }
 
 

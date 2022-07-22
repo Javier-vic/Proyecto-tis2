@@ -163,35 +163,33 @@
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
-
-        var products = new Map()
-    
         var total = 0;
+        $("#mi-select").change(function() {
+            if ($(this).val() == 'si') {
+                $('.entradas').removeClass('d-none');
+                $('#address').removeClass('is-valid');
+                $('#address').val('');
+
+      
+    
+        
         var count = 0;
 
+            } else {
 
-            $("#mi-select").change(function() {
-                if ($(this).val() == 'si') {
-                    $('.entradas').removeClass('d-none');
-                    $('#address').removeClass('is-valid');
-                    $('#address').val('');
+                $('.entradas').addClass('d-none');
+                $('#address').val('Sin direccion');
+            }
 
+        });
 
-                } else {
-                   
-                    $('.entradas').addClass('d-none');
-                    $('#address').val('Sin direccion');
-                }
-
-            });
-
-           // ****************************************************************************************************************
+        // ****************************************************************************************************************
         //MODAL DE CREAR
         // ****************************************************************************************************************
         const createOrder = (e) => {
             e.preventDefault();
- 
-                var formData = new FormData(e.currentTarget);
+
+            var formData = new FormData(e.currentTarget);
             var url = '{{ route('order.store') }}';
             $.ajax({
                 type: "POST",
@@ -201,7 +199,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response, jqXHR) {
-                   
+
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
@@ -215,16 +213,15 @@
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    if(jqXHR.responseJSON.errors){
+                    console.log(jqXHR)
+                    if (jqXHR.responseJSON.errors) {
                         var text = jqXHR.responseJSON.errors;
 
                     }
-                    if(jqXHR.responseJSON.errors2){
+                    if (jqXHR.responseJSON.errors2) {
                         var text2 = jqXHR.responseJSON.errors2;
                     }
-                    
-                    console.log(text2)
-                    console.log(text)
+
                     //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
                     $(".createmodal_error").empty()
                     $(".input-modal").addClass('is-valid')
@@ -243,25 +240,27 @@
                         $.each(text, function(key, item) {
                             const index = key.lastIndexOf('.');
                             const after = key.slice(index + 1);
-                            
+
                             $("#" + key + "_errorCREATEMODAL").append("<span class='text-danger'>" +
                                 item + "</span>")
-                            $("#" + after + "errorCREATEMODAL").append("<span class='text-danger'>" +
-                            item + "</span>")
+                            $("#" + after + "errorCREATEMODAL").append(
+                                "<span class='text-danger'>" +
+                                item + "</span>")
 
                             $(`#${key}`).addClass('is-invalid');
                             $(`#valor${after}`).addClass('is-invalid');
-            
+
                         });
                     }
 
-                    if(text2){
-                        $.each(text2,function(key,item){
-                           if($(`#valor${item.id}`).val() > item.stock){
-                               $(`#valor${item.id}`).addClass('is-invalid')
-                               $("#" + item.id + "errorCREATEMODAL").append("<span class='text-danger'>" +
-                            'No hay stock suficiente.' + "</span>")
-                           }
+                    if (text2) {
+                        $.each(text2, function(key, item) {
+                            if ($(`#valor${item.id}`).val() > item.stock) {
+                                $(`#valor${item.id}`).addClass('is-invalid')
+                                $("#" + item.id + "errorCREATEMODAL").append(
+                                    "<span class='text-danger'>" +
+                                    'No hay stock suficiente.' + "</span>")
+                            }
                         })
                     }
                     //////////////////////////////////////
@@ -270,7 +269,7 @@
 
             });
 
-        
+
         }
         //****************************************************************************************************************
 
@@ -279,6 +278,7 @@
         var clp;
         const categorys = @json($category);
         const productsSelected = @json($product); // id y cantidad productos seleccionados
+        var products = new Map()
         $(document).ready(function () {
 
 
@@ -397,7 +397,6 @@
             //al hacer click cambia color botton y borra vista de input number
 
             $(`#bottonproduct${productSelected.id}`).click(function(e) {
-
                 if ($(`#bottonproduct${productSelected.id}`).hasClass(`onselect`)) {
 
                     $(`#valor${productSelected.id}`).removeClass(`d-none`);
@@ -457,7 +456,7 @@
                     $(`#bottonproduct${productSelected.id}`).removeClass(`btn-danger`);
                     $(`#bottonproduct${productSelected.id}`).addClass('btn-success');
                     $(`#valor${productSelected.id}`).removeAttr('name');
-                     $(`#errorvalor${productSelected.id}`).addClass('d-none')
+                    $(`#errorvalor${productSelected.id}`).addClass('d-none')
                     $(`#bottonproduct${productSelected.id}`).html(
                         '<i class="fa-solid fa-plus"></i> Agregar producto');
                     $('.createmodal_error_product').empty();
@@ -475,13 +474,10 @@
                     } 
 
                 }
-
             });
 
             
 
         })
-
-
     </script>
 @endsection
