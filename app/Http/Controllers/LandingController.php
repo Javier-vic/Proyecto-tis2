@@ -487,8 +487,8 @@ class LandingController extends Controller
                     Order::where('id', $responseToJSON->commerceOrder)->delete();
                     return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 }
-            } else {
-                //Acá crear otra vista que sólo te diga que ocurrieron problemas con el sistema de pago y lo intentes de nuevo
+            } else {                
+                return view('Usuario.landing.paymentError');
                 dd('ocurrió un problemón');
             }
         } catch (Exception $e) {
