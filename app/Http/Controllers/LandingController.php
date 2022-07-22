@@ -318,15 +318,15 @@ class LandingController extends Controller
                             ), 400);
                         }
                         $responseToJSON = json_decode($response);
-                        if ($responseToJSON->code) {
+
+                        if (isset($responseToJSON->code)) {
                             if ($responseToJSON->code == 1620) {
                                 return Response::json(array(
                                     'success' => false,
-                                    'message' => 'El correo no existe en nuestros registros',
+                                    'message' => 'El correo no existe, verifiquelo',
                                 ), 400);
                             }
                         }
-                        dd($responseToJSON);
 
                         if (in_array($info['http_code'], array('200'))) {
 
@@ -470,7 +470,7 @@ class LandingController extends Controller
             if (in_array($info['http_code'], array('200'))) {
                 $responseToJSON = json_decode($response);
                 $resultadosOrden = [
-                    'orden_compra' => $responseToJSON->flowOrder,
+                    'orden_compra' => $responseToJSON->commerceOrder,
                     'fecha_compra' => $responseToJSON->requestDate,
                     'estado_compra' => $responseToJSON->status,
                     'correo_comprador' => $responseToJSON->payer,
@@ -484,12 +484,17 @@ class LandingController extends Controller
                     // return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 } else {
                     //CASOS 1, 3 Y 4
-                    Order::where('id', $responseToJSON->commerceOrder)->delete();
+                    if ($responseToJSON->status == 1) {
+                        $resultadosOrden['estado_compra'] = 1;
+                    } else if ($responseToJSON->status == 3) {
+                        $resultadosOrden['estado_compra'] = 3;
+                    } else {
+                        $resultadosOrden['estado_compra'] = 4;
+                    }
                     return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 }
-            } else {                
+            } else {
                 return view('Usuario.landing.paymentError');
-                dd('ocurrió un problemón');
             }
         } catch (Exception $e) {
             echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
