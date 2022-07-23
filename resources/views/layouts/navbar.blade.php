@@ -82,13 +82,8 @@ use App\Http\Controllers\RoleController;
                                 class="me-3 fa-solid fa-list-ul"></i>Productos <i
                                 class="fa-solid fa-caret-down "></i></a>
                         <ul class="collapse list-unstyled" id="submenuCategoryProducts">
-                            <li>
-                                <a href="{{ route('product.index') }}">Listado productos</a>
-                            </li>
-                            <li>
-                                <a href="{{ route('category_product.index') }}">Categorías</a>
-                            </li>
-
+                            <li><a href="{{ route('product.index') }}">Listado productos</a></li>
+                            <li><a href="{{ route('category_product.index') }}">Categorías</a></li>
                         </ul>
                     </li>
                 @endif
@@ -157,10 +152,6 @@ use App\Http\Controllers\RoleController;
                             </span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="Notificaciones">
-
-
-
-
                             <li>
                                 <i class="fa-solid fa-circle-exclamation text-danger fs-3"></i>
                                 <div class="d-inline-block">
