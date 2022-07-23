@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
+use App\Models\products_orders;
 use App\Models\user;
 use App\Models\map;
 use App\Models\image_main;
@@ -23,8 +24,9 @@ class LandingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(request $request)
     {
+
         //OBTIENE TODAS LAS CATEGORÍAS
         $category_products = category_product::all();
         ////////////////////////////////////////////////
@@ -258,6 +260,7 @@ class LandingController extends Controller
                 //SI EL METODO DE PAGO NO ES EFECTIVO
                 if (intval($values['paymentSelected']) != 0) {
                     $order->delete();
+
                     /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
 
                     $token = request()->_token;
@@ -327,7 +330,6 @@ class LandingController extends Controller
                                 ), 400);
                             }
                         }
-
                         if (in_array($info['http_code'], array('200'))) {
 
                             $payUrl = $responseToJSON->url . "?token=" . $responseToJSON->token;
@@ -342,7 +344,7 @@ class LandingController extends Controller
                         } else {
                             return Response::json(array(
                                 'success' => false,
-                                'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o selecciona otro método de pago.',
+                                'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o selecciones otro método de pago.',
 
                             ), 400);
                         }
@@ -483,6 +485,24 @@ class LandingController extends Controller
                     return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
                     // return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 } else {
+
+                    //ESTO ES PARA DEVOLVER AL STOCK  DE LOS PRODUCTOS EN CASO QUE EL PAGO NO SE EFECTUARA...
+                    $products = DB::table('products_orders')
+                        ->select(
+                            'id',
+                            'product_id',
+                            'cantidad'
+                        )
+                        ->where('order_id', $responseToJSON->commerceOrder)
+                        ->get();
+                    foreach ($products as $product_quantity) {
+                        $product = product::find($product_quantity->product_id);
+                        $product_order = DB::table('products_orders')->where('id', $product_quantity->id)->delete();
+                        $product->stock += $product_quantity->cantidad;
+                        $product->save();
+                    }
+                    //////////////////////////////////
+
                     //CASOS 1, 3 Y 4
                     if ($responseToJSON->status == 1) {
                         $resultadosOrden['estado_compra'] = 1;

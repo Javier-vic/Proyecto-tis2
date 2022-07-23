@@ -199,6 +199,7 @@
                 $('#deliveryAddress').html(direccion.split(',')[0])
                 $('#map').addClass('border-success')
                 $('#map').removeClass('border-danger')
+                $('#deliveryPriceContainer').empty()
                 $('#deliveryPriceContainer').append(
                     `<span>Precio delivery : ${datosMapa.delivery_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span>`
                 )
