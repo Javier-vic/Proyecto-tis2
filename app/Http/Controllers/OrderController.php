@@ -209,6 +209,7 @@ class OrderController extends Controller
 
         return view('Mantenedores.order.index');
     }
+
     public function pendingOrdersView()
     {
         $pendingOrders = order::where('order_status', '!=', 'Listo')
@@ -231,6 +232,27 @@ class OrderController extends Controller
             return view('Mantenedores.order.pending', ['pendingOrders' => $pendingOrders]);
         }
     }
+    
+    public function readyOrdersView(){
+        $readyOrders = order::where('order_status','=','Listo')
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at','ASC')
+                        ->get();
+        foreach ($readyOrders as $order){
+            $productsOrder = DB::table('products')
+                ->select('*')
+                ->join('products_orders', 'products.id', '=', 'products_orders.product_id')
+                ->where('products_orders.order_id', '=', $order->id)
+                ->get();
+            $order->listProducts = $productsOrder;
+        }
+        if(request()->ajax()){
+            return $readyOrders;
+        }else{
+            return view('Mantenedores.order.ready',['readyOrders'=>$readyOrders]);
+        }
+    }
+
     public function updateOrderStatus(Request $request){
         try{
             $order = order::find($request->id);
@@ -243,6 +265,7 @@ class OrderController extends Controller
         }
 
     }
+
     /**
      * Display the specified resource.
      *

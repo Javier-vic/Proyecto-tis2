@@ -13,6 +13,7 @@
                 <div class="col-12 col-md-12 col-xl-6 my-2">
                     <div class="text-center">
                         <img src="{{ asset('storage') . '/' . $image->route }}" width="300px" id="idPreImage-{{$key+1}}" class="img-fluid" alt="">
+                        <input type="integer" id="id" name="idImage-{{$key+1}}" value="{{$image->id}}" hidden/>
                     </div>
                     <div class="d-flex my-2 justify-content-center align-content-center">
                         <label for="" class="d-flex">Orden:</label>
@@ -64,47 +65,61 @@
             confirmButtonText: 'Si, guardar!',
             cancelButtonText: 'Cancelar',
             }).then((result)=>{
-                var formData = new FormData(e.target);
-                for(var i = 1; i < 5; i++){
-                    for(var j = 1; j < 5; j++){
-                        if(($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val()) && i!=j){
-                            if(($(`#idImage-${i}`)[0].files[0] && $(`#idImage-${j}`)[0].files[0])){
-                                Swal.fire({
-                                    title: 'Imagenes tienen el mismo orden!',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                })
-                                return;
-                            }
-                            if($(`#idImage-${i}`)[0].files[0] && findByOrder($(`#idOrder-${j}`).val())){
-                                Swal.fire({
-                                    title: 'Imagenes tienen el mismo orden!',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                })
-                                return;
-                            }
-                            if($(`#idImage-${j}`)[0].files[0] && findByOrder($(`#idOrder-${j}`).val())){
-                                Swal.fire({
-                                    title: 'Imagenes tienen el mismo orden!',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                })
-                                return;   
+                if(result.isConfirmed){
+                    var formData = new FormData(e.target);
+                    for(var i = 1; i < 5; i++){
+                        for(var j = 1; j < 5; j++){
+                            if(($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val()) && i!=j){
+                                if(($(`#idImage-${i}`)[0].files[0] && $(`#idImage-${j}`)[0].files[0])){
+                                    Swal.fire({
+                                        title: 'Imagenes tienen el mismo orden!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                    })
+                                    console.log('aqi')
+                                    return;
+                                }
+                                if( ($(`#idImage-${i}`)[0].files[0] ||  $(`#idPreImage-${i}`).attr('src')) && ($(`#idImage-${j}`)[0].files[0] || $(`#idPreImage-${j}`).attr('src')) ){
+                                    Swal.fire({
+                                        title: 'Imagenes tienen el mismo orden!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                    })
+                                    console.log(i+" con "+j)
+                                    return;
+                                }
+                                if( ($(`#idImage-${j}`)[0].files[0] ||  $(`#idPreImage-${j}`).attr('src')) && ($(`#idImage-${i}`)[0].files[0] || $(`#idPreImage-${i}`).attr('src')) ){
+                                    Swal.fire({
+                                        title: 'Imagenes tienen el mismo orden!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                    })
+                                    return;   
+                                }
                             }
                         }
                     }
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('publicity.store')}}",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: 'Cambios guardados.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            backdrop: false,
+                            heightAuto: false,
+                            }).then(()=>{
+                                location.reload();
+                            })
+                        }
+                    });
                 }
-                $.ajax({
-                    type: "POST",
-                    url: "{{route('publicity.store')}}",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        location.reload();
-                    }
-                });
             })
         }
         function findByOrder(order){
@@ -137,12 +152,15 @@
                         data: {"_token": "{{ csrf_token() }}"},
                         dataType: "text",
                         success: function (response) {
-                            Swal.fire(
-                                'Borrado!',
-                                'La imagen ha sido borrada',
-                                'success'
-                            )
-                            location.reload(); 
+                            Swal.fire({
+                                title:'Borrado!',
+                                text:'La imagen ha sido borrada',
+                                icon:'success',
+                                timer: 3000,
+                                }
+                            ).then(()=>{
+                                location.reload(); 
+                            });
                         }
                     });
                 }
