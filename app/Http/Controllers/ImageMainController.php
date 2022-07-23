@@ -42,7 +42,6 @@ class ImageMainController extends Controller
         //image_main::truncate();
         $values = $request->all();
         for($i=1; $i<5; $i++){
-            if(isset($values["idImage-{$i}"]) && !($request->hasFile("image-{$i}"))){
                 $image_main = image_main::find($values["idImage-{$i}"]);
                 $image_main->order = $values["order-{$i}"];
                 $image_main->save();
@@ -61,9 +60,9 @@ class ImageMainController extends Controller
                 $imageMain->route = $request->file("image-{$i}")->store('uploads','public');
                 $imageMain->save();
             }
-        }
         return;
     }
+    
 
     /**
      * Display the specified resource.

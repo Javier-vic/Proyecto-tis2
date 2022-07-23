@@ -42,16 +42,24 @@
                         <span class="text-danger createmodal_error" id="name_product_errorEDITMODAL"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">Nueva contraseña:</label>
-                        <input type="password" class="form-control input-modal" id="passwordEdit" name="password" 
-                            aria-describedby="password_help">
-                        <span class="text-danger createmodal_error" id="password_errorEDITMODAL"></span>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="idChangePassword" name="changePassword" onchange="$('#changePasswordContainer').slideToggle();">
+                            <label class="form-check-label" for="idChangePassword">¿Desea cambiar la contraseña?</label>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="" class="form-label">Confirmar nueva contraseña:</label>
-                        <input type="password" class="form-control input-modal" id="password_confirmEdit" name="password_confirm" 
-                            aria-describedby="password_help">
-                        <span class="text-danger createmodal_error" id="password_confirm_errorEDITMODAL"></span>
+                    <div class="" id="changePasswordContainer" style="display:none;">
+                        <div class="mb-3">
+                            <label for="" class="form-label">Nueva contraseña:</label>
+                            <input type="password" class="form-control input-modal" id="passwordEdit" name="password" 
+                                aria-describedby="password_help">
+                            <span class="text-danger createmodal_error" id="password_errorEDITMODAL"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Confirmar nueva contraseña:</label>
+                            <input type="password" class="form-control input-modal" id="password_confirmEdit" name="password_confirm" 
+                                aria-describedby="password_help">
+                            <span class="text-danger createmodal_error" id="password_confirm_errorEDITMODAL"></span>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Editar</button>
                 </form>

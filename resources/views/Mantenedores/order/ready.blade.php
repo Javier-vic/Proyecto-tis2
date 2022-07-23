@@ -10,6 +10,7 @@
                     <div class="card-title fs-5 text-center d-block">
                         <div class="">
                             Nombre cliente: <span class="fw-bold"> {{$item->name_order}}</span>
+                            
                         </div>
                         <div class="">
                             Fecha: <span class="fw-bold">{{$item->created_at}}</span>
