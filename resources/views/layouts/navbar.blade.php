@@ -58,9 +58,14 @@ use App\Http\Controllers\RoleController;
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role, 3))
                     <li>
-                        <a href="{{ route('order.index') }}"
-                            class="my-3 {{ request()->is('order', 'order/*') ? ' active' : '' }}"><i
-                                class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                        <a href="#submenuOrders" data-bs-toggle="collapse" aria-expanded="false" class="mt-3 dropdown-toggle {{ request()->is('order', 'order/*') ? ' active' : '' }}">
+                            <i class="me-3 fa-solid fa-sack-dollar"></i>Ventas <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="collapse list-unstyled" id="submenuOrders">
+                            <li><a href="{{route('order.index')}}">Listado de ventas</a></li>
+                            <li><a href="{{route('pendingOrdersView')}}">Ventas pendientes</a></li>
+                            <li><a href="{{route('readyOrdersView')}}">Ventas listas</a></li>
+                        </ul>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role, 6))
@@ -79,7 +84,6 @@ use App\Http\Controllers\RoleController;
                         <ul class="collapse list-unstyled" id="submenuCategoryProducts">
                             <li>
                                 <a href="{{ route('product.index') }}">Listado productos</a>
-
                             </li>
                             <li>
                                 <a href="{{ route('category_product.index') }}">Categorías</a>
