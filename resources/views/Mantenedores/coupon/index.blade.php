@@ -2,6 +2,7 @@
 @section('css_extra')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 
     {{-- OCULTA LAS FLECHAS DE LOS INPUT NUMBER --}}
     <style>
@@ -16,7 +17,6 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-
     </style>
     {{--  --}}
 @endsection
@@ -27,9 +27,6 @@
 @section('content')
     <!-- <div id="number">0</div> -->
 
-    <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCupon">
-        Crear cupón
-    </button>
     <div>@include('Mantenedores.coupon.modal.create')</div>
     <table id="myTable" class="responsive display nowrap" style="width: 100%;">
         <thead class="bg-secondary text-white">
@@ -50,6 +47,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
 
@@ -70,6 +68,18 @@
                 url: "{{ route('coupon.index') }}",
                 type: 'GET',
             },
+            dom: 'Bfrtip',
+            buttons: [{
+                text: 'Crear cupón',
+                className: 'btn btn-primary mb-2',
+                action: function(e, dt, node, config) {
+                    $('#agregarCupon').modal('show');
+
+                },
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button')
+                }
+            }],
             columns: [{
                     data: 'code',
                     name: 'code'

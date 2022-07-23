@@ -160,13 +160,12 @@ class LandingController extends Controller
                 $order->pick_up = $values['pick_up'];
                 $order->address = $values['address'];
                 foreach ($productos as $product) {
-
                     array_push($cantidades, $product->cantidad);
                     $totalValue += ($product->price * $product->cantidad);
                     $productToCheck = product::find($product->id);
                     if ($product->cantidad <= $productToCheck->stock) {
-                        $productToCheck->stock = $productToCheck->stock - $product->cantidad;
-                        $productToCheck->save();
+                        // $productToCheck->stock = $productToCheck->stock - $product->cantidad;
+                        // $productToCheck->save();
                     } else {
                         array_push($checkStock, [$product->id, $product->cantidad - $productToCheck->stock]);
                     }
@@ -482,11 +481,8 @@ class LandingController extends Controller
                 //CASO SE COMPLETÓ PAGO CORRECTAMENTE
                 if ($responseToJSON->status == 2) {
                     Order::where('id', $responseToJSON->commerceOrder)->restore();
-                    return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
-                    // return view('Usuario.landing.paymentFailed', $resultadosOrden);
-                } else {
 
-                    //ESTO ES PARA DEVOLVER AL STOCK  DE LOS PRODUCTOS EN CASO QUE EL PAGO NO SE EFECTUARA...
+                    //ESTO ES PARA RESTAR AL STOCK  DE LOS PRODUCTOS SOLO EN EL CASO QUE EL PAGO SE EFECTUÓ CORRECTAMENTE...
                     $products = DB::table('products_orders')
                         ->select(
                             'id',
@@ -497,11 +493,15 @@ class LandingController extends Controller
                         ->get();
                     foreach ($products as $product_quantity) {
                         $product = product::find($product_quantity->product_id);
-                        $product_order = DB::table('products_orders')->where('id', $product_quantity->id)->delete();
-                        $product->stock += $product_quantity->cantidad;
+                        $product->stock -= $product_quantity->cantidad;
                         $product->save();
                     }
                     //////////////////////////////////
+
+                    return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
+                    // return view('Usuario.landing.paymentFailed', $resultadosOrden);
+                } else {
+
 
                     //CASOS 1, 3 Y 4
                     if ($responseToJSON->status == 1) {

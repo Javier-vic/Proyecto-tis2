@@ -149,54 +149,54 @@
                     <h3 class="m-0">Método de pago</h3c>
                         <hr>
                         <div id="payment_methodContainer" class="mb-3" style="overflow-y: scroll; height:350px;">
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2 "
                                 onclick="paymentMethod(event)" id="efectivo_method">
                                 <label class="" for="efectivo_method">Efectivo</label>
                                 <img class=" img-fluid" style="width:50px;height:50px;"
                                     src="{{ asset('storage/images/cashicon.svg') }}" alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="tarjeta_method">Tarjeta débito/crédito
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="khipu_method">
                                 Transferencia vía Khipu
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="onepay_method">
                                 Onepay
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="servipag_method">
                                 Servipag
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="ripley_method">
                                 Ripley checK
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="fpay_method">
                                 Fpay
                                 <img class=" img-fluid"
                                     style="width:50px;height:50px;"src="{{ asset('storage/images/cardicon.svg') }}"
                                     alt="Efectivo">
                             </a>
-                            <a class="check_payment_method btn shadow w-100 d-flex justify-content-between align-items-center hover paymentMethodHover"
+                            <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2"
                                 onclick="paymentMethod(event)" id="mach_method">
                                 Mach
                                 <img class=" img-fluid"
@@ -653,11 +653,12 @@
                         icon: 'success'
                     });
                     if (text) {
+                        $('#couponDescription').empty();
                         $('#coupon').removeClass('is-invalid')
                         $('#coupon').addClass('is-valid')
                         $('#coupon').val(code);
                         $('#couponDescription').append(
-                            `<span class="text-muted">*El cupón aplicará un ${text.couponPercentage}% de dcto al total de tu compra (incluyendo precio del delivery).</span>`
+                            `<span class="text-muted">*El cupón aplicará un ${text.couponPercentage}% de dcto al total de tu compra.</span>`
                         )
                     }
 

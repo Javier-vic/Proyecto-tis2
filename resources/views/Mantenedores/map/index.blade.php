@@ -20,13 +20,13 @@
 
         <div class="d-flex justify-content-center gap-5">
             <div>
-                <h3>Precio delivery</h3>
+                <p class="text-dark m-0 p-0">Precio delivery</p>
                 <span class="text-danger" id="delivery_error"></span>
 
                 <form onsubmit="deliveryPrice(event)" id="formDeliveryPrice" class="d-flex mb-2">
                     <input type="text" name="delivery_price" id="delivery_price" placeholder="$10000"
                         value="{{ $mapa->delivery_price }}">
-                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="submit" class="btn btn-success ms-1">Guardar precio</button>
                 </form>
 
             </div>
