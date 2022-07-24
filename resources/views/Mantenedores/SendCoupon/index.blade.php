@@ -18,18 +18,6 @@
         </div>
     </div>
     
-    <table class="responsive display nowrap " id="myTable" width=100%>
-        <thead class="text-white bg-secondary">
-            <tr>
-                
-                <th>Fecha emitida</th>
-                <th>Cupón</th>
-                <th>Cantidad</th>
-                <th>Tipo cliente</th>
-
-            </tr>
-        </thead>
-    <table>
 
   
 
@@ -120,10 +108,9 @@
 
         const sendCoupon = (e) => {
             e.preventDefault();
-
+            console-log('HOLSSSSSSSSSSSSSSSSSSSSSSSSSSS');
             var formData = new FormData(e.currentTarget);
-            var url = '{{ route('order.store') }}';
-            
+            var url = "{{ route('sendCoupon.store') }}";
             $.ajax({
                 type: "POST",
                 url: url,
@@ -136,7 +123,7 @@
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'success',
-                        title: 'Se ingresó la orden correctamente.',
+                        title: 'Enviaron correctamente los correos.',
                         showConfirmButton: false,
                         timer: 2000,
                         backdrop: false,

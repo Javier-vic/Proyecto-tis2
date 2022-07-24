@@ -2,24 +2,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ingrese la configuracion del rol</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Ingrese publicidad</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 
-                <form action="{{route('sendCoupon.store')}}" method="POST" entype="multipart/form-data" >
+                <form action="{{route('sendCoupon.store')}}" method="POST" enctype="multipart/form-data" >
                     @csrf
 
-                    <div class="mb-4"> 
-                        <label for="name_order" class="form-label">Cupon a enviar :</label>
-                        <select id="mi-select" class="form-control" name="coupon">
-    
-                            <option value="QRE">QER</option>
-    
-    
-                        </select>
-                    </div>
-    
+                    
                     <div class="mb-4 entradas">
                         <label  for="comment" class="form-label">Cantidad de correos por enviar :</label>
                         <input name="cantidad" type="text" class="form-control input-modal" 
@@ -43,7 +34,7 @@
 
                     <div>
                         <label for="" class="form-label" >Cargar afiche</label>
-                        <input type="file" class="form-control input-modal" id="advertising" name="advertising"
+                        <input type="file" class="form-control input-modal" id="foto" name="foto"
                             aria-describedby="name_product_help" accept="image/*">
                         
                     </div>

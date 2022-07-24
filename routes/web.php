@@ -72,6 +72,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
     Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+    Route::get('order/selectMonth', '\App\Http\Controllers\OrderController@selectMonth')->name('order.selectMonth');
+    Route::get('order/filterYearMonth', '\App\Http\Controllers\OrderController@filterYearMonth')->name('order.filterYearMonth');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
@@ -100,8 +102,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-    
-    
+    Route::post('/publicity/couponSend',[SendCouponController::class, 'store'])->name('sendCoupon.store');
+
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);
@@ -145,3 +147,4 @@ Route::resource('landing', LandingController::class);
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
 Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);
+        
