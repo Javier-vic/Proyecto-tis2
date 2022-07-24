@@ -500,7 +500,7 @@ class LandingController extends Controller
                     }
                     //////////////////////////////////
 
-                    return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
+                    return view('Usuario.Landing.paymentConfirmed', $resultadosOrden);
                     // return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 } else {
 
