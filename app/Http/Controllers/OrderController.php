@@ -210,8 +210,6 @@ class OrderController extends Controller
 
             ), 400);
         }
-
-        ), 400);
     }
 
     public function pendingOrdersView()
