@@ -129,7 +129,6 @@ use App\Http\Controllers\RoleController;
 
             </ul>
         </nav>
-
         <!-- Page Content  -->
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light row">
@@ -190,5 +189,4 @@ use App\Http\Controllers\RoleController;
         $("#sidebar").toggleClass("active");
     });
 </script>
-
 </html>

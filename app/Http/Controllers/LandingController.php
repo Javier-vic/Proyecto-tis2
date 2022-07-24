@@ -16,7 +16,7 @@ use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
-
+use Illuminate\Support\Facades\URL;
 class LandingController extends Controller
 {
     /**
@@ -263,7 +263,9 @@ class LandingController extends Controller
                     /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
 
                     $token = request()->_token;
-
+                    $urlConfirmation = URL::to('/')."/landing";
+                    $urlReturn = URL::to('/')."/landing/confirmation";
+                    //$urlConfirmation = $request->segment($index, 'default')
                     $params = array(
                         "apiKey" => "6C7EEDFF-CE18-4A7C-8372-86DAB5D6L117",
                         "token" => $token,
@@ -271,8 +273,8 @@ class LandingController extends Controller
                         "subject" => "Nueva compra",
                         "amount" => intval($totalValue),
                         "email" => $values['mail'],
-                        "urlConfirmation" => "http://127.0.0.1:8000/landing/",
-                        "urlReturn" => "http://127.0.0.1:8000/landing/confirmation/",
+                        "urlConfirmation" => $urlConfirmation,
+                        "urlReturn" => $urlReturn,
                         "paymentMethod" => intval($values['paymentSelected']),
 
                     );
