@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
-use App\Models\products_orders;
 use App\Models\user;
 use App\Models\map;
 use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LandingController extends Controller
 {
@@ -76,6 +76,9 @@ class LandingController extends Controller
         $categoryAvailableNames = $categoryAvailable->pluck('name')->toArray();
         ////////////////////////////////////////////////
         $imagesMain = image_main::orderBy('order')->get();
+
+
+
         return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames', 'imagesMain', 'bestSellers'));
     }
 
@@ -519,6 +522,34 @@ class LandingController extends Controller
         } catch (Exception $e) {
             echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
         }
+    }
+
+    public function transactionVoucher(request $request)
+    {
+
+        $values = request()->except('_token');
+        $idOrden = $values['id'];
+
+        $datosOrden = DB::table('orders')
+            ->select(
+                'id',
+                'name_order',
+                'total',
+                'mail',
+                'payment_method',
+                'created_at',
+                'total'
+            )
+            ->where('id', $idOrden)
+            ->get();
+        $direccionLocal = DB::table('maps')->select('direccion')->get();
+        $direccionLocal = $direccionLocal[0]->direccion;
+
+        $productosComprados = DB::select("SELECT products.name_product, products.price ,products_orders.cantidad FROM products JOIN products_orders on(products.id=products_orders.product_id ) JOIN orders on (orders.id=products_orders.order_id)
+        WHERE orders.id = $idOrden");
+        $pdf = Pdf::loadView('Usuario.Landing.paymentVoucher',  compact('datosOrden', 'productosComprados', 'direccionLocal'));
+        return $pdf->download('boleta.pdf');
+        // return view('Usuario.Landing.paymentVoucher', compact('datosOrden', 'productosComprados', 'direccionLocal'));
     }
 
     public function checkCoupon(request $request)

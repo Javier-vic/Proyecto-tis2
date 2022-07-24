@@ -92,8 +92,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/order/orderDetails', [\App\Http\Controllers\OrderController::class, 'orderDetails'])->name('order.details');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/pending', [OrderController::class, 'pendingOrdersView'])->name('pendingOrdersView');
-    Route::get('/order/ready',[OrderController::class,'readyOrdersView'])->name('readyOrdersView');
-    Route::post('/order/updateOrder',[OrderController::class, 'updateOrderStatus'])->name('updateOrderStatus');
+    Route::get('/order/ready', [OrderController::class, 'readyOrdersView'])->name('readyOrdersView');
+    Route::post('/order/updateOrder', [OrderController::class, 'updateOrderStatus'])->name('updateOrderStatus');
     //POST
     Route::post('/supply/excel', [\App\Http\Controllers\SupplyController::class, 'importExcel'])->name('supply.excel');
     Route::get('/supply/import/', [\App\Http\Controllers\SupplyController::class, 'importExcelView'])->name('supply.import');
@@ -124,6 +124,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
 Route::post('/landing/confirmation/', [LandingController::class, 'transactionConfirmation'])->name('landing.confirmation');
+Route::get('/landing/voucher/', [\App\Http\Controllers\LandingController::class, 'transactionVoucher'])->name('landing.voucher');
 Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
 
 
