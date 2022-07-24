@@ -12,7 +12,7 @@
             @foreach ($images as $key=>$image)
                 <div class="col-12 col-md-12 col-xl-6 my-2">
                     <div class="text-center">
-                        <img src="{{ asset('storage') . '/' . $image->route }}" width="300px" id="idPreImage-{{$key+1}}" class="img-fluid" alt="">
+                        <img src="{{ asset('storage') . '/' . $image->route }}" width="300px" id="idPreImage-{{$key+1}}" class="img-fluid border border-2 rounded border-secondary" alt="">
                         <input type="integer" id="id" name="idImage-{{$key+1}}" value="{{$image->id}}" hidden/>
                     </div>
                     <div class="d-flex my-2 justify-content-center align-content-center">
