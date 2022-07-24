@@ -17,11 +17,12 @@
     @foreach ($datosOrden as $datos)
         <div class="outside-border">
             <h2 style="margin: 0;padding:0;text-align: center;"><b>BOLETA ELECTRÓNICA</b></h2>
-            <h2 style="margin: 0 auto;padding:0; text-align: center;"><b>N° {{ $datos->id }}</b></h2>
+            {{-- <h2 style="margin: 0 auto;padding:0; text-align: center;"><b>N° {{ $datos->id }}</b></h2> --}}
         </div>
-        <h2 style="text-align: center;">S.I.I. - CHILLÁN</h2>
+        {{-- <h2 style="text-align: center;">S.I.I. - CHILLÁN</h2> --}}
         <h2 style="text-align: center;">Ramen Dashi</h2>
 
+        <p><b>N° de orden</b> : {{ $datos->id }}</p>
         <p><b>Emisión</b> : {{ $datos->created_at }}</p>
         <p><b>Dirección</b> : {{ $direccionLocal }}</p>
 
