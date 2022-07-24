@@ -49,12 +49,8 @@ class SendCouponController extends Controller
         $condition = $request->except('_token');
 
         if($request->hasFile('foto')){
-
             $condition['foto'] = $request->file('foto')->store('uploads','public');
-
-
         }
-
         
         switch ($condition['cliente']) {
             case 0:
@@ -76,24 +72,18 @@ class SendCouponController extends Controller
                 echo "i es igual a 2";
                 break;
         }
-    
-        foreach ($customers as $value) {
-           
+        foreach ($customers as $value){
             $correo = new welcomeMail($value,$condition['foto']);
             $email = $value->email;
-
             Mail::to($email)->send($correo);
-         
-        }
-        
+        } 
+            
         if(Storage::delete('public/'.$condition['foto'])){
-
-            return "mensaje enviado";
-        }
-        else {return "error";}
-       
-
-
+        
+                return "mensaje enviado";
+            }
+            else {return "error";}
     }
-
 }
+
+

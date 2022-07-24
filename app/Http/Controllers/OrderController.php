@@ -207,9 +207,9 @@ class OrderController extends Controller
             return Response::json(array(
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
-
             ), 400);
         }
+        return view('Mantenedores.order.index');
     }
 
     public function pendingOrdersView()
