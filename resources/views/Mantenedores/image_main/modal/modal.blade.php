@@ -7,15 +7,15 @@
             </div>
             <div class="modal-body">
                 
-                <form action="{{route('sendCoupon.store')}}" method="POST" enctype="multipart/form-data" >
+                <form onsubmit="sendPublic(event)"  method="POST" enctype="multipart/form-data" >
                     @csrf
 
                     
                     <div class="mb-4 entradas">
                         <label  for="comment" class="form-label">Cantidad de correos por enviar :</label>
-                        <input name="cantidad" type="text" class="form-control input-modal" 
-                            class="form-control" id="sendCoupon" >
-                            <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
+                        <input name="cantidad" id="cantidad" type="text" class="form-control input-modal" 
+                            class="form-control"  aria-describedby="cantidad_help" >
+                            <span class="createmodal_error" id="cantidad_errorCREATEMODAL"></span>
                     </div>
     
     
@@ -24,8 +24,8 @@
                         <select id="mi-select" class="form-control" name="cliente">
     
                             <option value="0">Top mejores cliente</option>
-                            <option value="1">Mejores cliente al azar</option>
-                            <option value="2">Cliente sin compra</option>
+                            <option value="1">Todos los clientes</option>
+                            <option value="2">Cliente sin compras</option>
                             <option value="3">Cliente al azar</option>
     
     
@@ -35,11 +35,26 @@
                     <div>
                         <label for="" class="form-label" >Cargar afiche</label>
                         <input type="file" class="form-control input-modal" id="foto" name="foto"
-                            aria-describedby="name_product_help" accept="image/*">
+                            aria-describedby="foto_help"  accept="image/*">
+                        <span class="text-danger createmodal_error" id="foto_errorCREATEMODAL"></span>
+                            
                         
                     </div>
+
+                    <div class="mt-5 d-flex d-none justify-content-center" id="loadingPublicida">
+
+                        <div class="spinner-border left-50" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    
+
+
+                    </div>
+
+                    
+                    <button type="submit" class=" mt-3 btn btn-primary">Enviar Publicidad</button>
                 
-                    <button type="submit" class=" mt-3 btn btn-primary">Enviar cupón</button>
+                
                 </form>
                 
 
