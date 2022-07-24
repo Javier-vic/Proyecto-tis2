@@ -513,10 +513,10 @@ class LandingController extends Controller
                     } else {
                         $resultadosOrden['estado_compra'] = 4;
                     }
-                    return view('Usuario.landing.paymentFailed', $resultadosOrden);
+                    return view('Usuario.Landing.paymentFailed', $resultadosOrden);
                 }
             } else {
-                return view('Usuario.landing.paymentError');
+                return view('Usuario.Landing.paymentError');
             }
         } catch (Exception $e) {
             echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
