@@ -53,9 +53,11 @@ class OrderController extends Controller
 
 
         $years = DB::table('orders')
-            ->select((DB::raw('YEAR(orders.created_at) year')))
-            ->groupby('year')
-            ->get();
+        ->select((DB::raw('YEAR(orders.created_at) year')))
+        ->groupby('year')
+        ->get();
+    
+
 
 
         ///
@@ -122,7 +124,9 @@ class OrderController extends Controller
         if ($validator->passes()) {
             DB::beginTransaction();
             try {
+
                 $datosOrder = request()->except('_token');
+                dd($datosOrder);
                 $order = new order;
                 $order->name_order = $datosOrder['name_order'];
                 $order->order_status = "Espera";
@@ -140,7 +144,7 @@ class OrderController extends Controller
                 $valores = array();
                 $price = array();
 
-
+                
 
                 foreach ($datosOrder['cantidad'] as $item => $value) {
 
@@ -427,6 +431,20 @@ class OrderController extends Controller
 
 
 
+    public function selectMonth(request $request){
+       
+        $sales = DB::table('orders')
+        ->select(DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
+        ->whereyear('created_at', $request->year)
+        ->groupby('year','month')
+        ->get();
+      
+        return response(json_encode($sales),200);
+
+
+    }
+
+
     public function getview(request $request)
     {
         
@@ -444,6 +462,43 @@ class OrderController extends Controller
             ->get();
 
         return response(json_encode([$productOrders, $order]), 200);
+    }
+
+    public function filterYearMonth(request $request){
+
+        
+        $bestseller = DB::table('products_orders')
+        ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
+        ->leftJoin('orders','products_orders.product_id','orders.id')
+        ->join('products','products_orders.product_id','products.id')
+        ->whereYear('orders.created_at', $request->year)
+        ->whereMonth('orders.created_at', $request->month)
+        ->groupBy('products_orders.product_id', 'products.name_product')
+        ->limit(4)
+        ->orderBy('cantida','DESC')
+        ->get();
+
+        $alert = DB::table('orders')
+        ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('MONTH(orders.created_at) month'))
+        ->whereyear('created_at', $request->year)
+        ->whereMonth('orders.created_at', $request->month)
+        ->groupby('month')
+        ->get();
+
+        $saleYearMonth = DB::table('orders')
+        ->select(DB::raw('COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data` , COALESCE(sum(orders.total), 0) as `ganancias` , count(orders.id) as `data`' ))
+        ->whereYear('orders.created_at', $request->year)
+        ->whereMonth('orders.created_at', $request->month)
+        ->get();
+
+
+        
+        
+        
+
+        
+        return response(json_encode([$bestseller, $alert, $saleYearMonth]),200);
+
     }
 
     public function GetSaleMonth (request $request){
@@ -535,10 +590,29 @@ class OrderController extends Controller
         ->groupby('year','month')
         ->get();
 
+        $bestseller = DB::table('products_orders')
+        ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
+        ->leftJoin('orders','products_orders.product_id','orders.id')
+        ->join('products','products_orders.product_id','products.id')
+        ->whereYear('orders.created_at', $request->year)
+        ->groupBy('products_orders.product_id', 'products.name_product')
+        ->limit(5)
+        ->orderBy('cantida','DESC')
+        ->get();   
+        
+        $alert = DB::table('orders')
+        ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year'))
+        ->whereyear('created_at', $request->year)
+        ->groupby('year')
+        ->get();
+
+
+       
+
      
        
         
-        return response($sales,200);
+        return response(json_encode([$bestseller, $sales,$alert]),200);
     }
 
     ///eliminar

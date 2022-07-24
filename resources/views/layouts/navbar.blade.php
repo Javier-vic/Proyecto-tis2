@@ -32,6 +32,11 @@ use App\Http\Controllers\RoleController;
             </div>
 
             <ul class="list-unstyled ">
+
+                <li>
+                    <a href="{{ route('home') }}"
+                    class="my-3 {{ request()->is('home', 'home/*') ? ' active' : '' }}"><i class="me-3 fa-solid fa-chart-line"></i></i>Dashboard</a>
+                </li>
                 @if (RoleController::havePermits(auth()->user()->id_role, 2))
                     <li>
                         <a href="#submenuSupply" data-bs-toggle="collapse" aria-expanded="false"

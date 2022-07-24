@@ -32,21 +32,7 @@
                 <fieldset  class="form-group border p-3 categoryName mb-4 anyClass"  style="overflow-x: hidden; overflow-y: scroll;">
                   
                     <legend class="h1 text-center ">Productos disponibles</legend>
-                
-                    <div class="mt-5"  >
-        
-                        <div id="listarSeleccionados" class="row list mt-5" height="100px"> 
-                            <h2>Productos seleccionados</h2>
-                        </div>
-        
-                        @foreach ($category as $item)
-                        <div id="listaProductos{{$item->id}}" class="row list mt-3" height="100px"> 
-                            <h2>{{$item->name}}</h2>
-                        </div>
-                        @endforeach
-                       
-                    </div>
-        
+
                     <nav id="navbar-example2" class="navbar navbar-light bg-light px-3">
                         <ul class="nav nav-pills">
         
@@ -57,12 +43,28 @@
                             @endforeach
         
                         </ul>
-                      </nav>
+                    </nav>
+                
+                    <div class="mt-5"  >
+        
+                        <div id="listarSeleccionados" class="row list mt-5" height="100px"> 
+                            <h2 class="row list mt-5 mb-3" >Productos seleccionados</h2>
+                        </div>
+        
+                        @foreach ($category as $item)
+                        <div id="listaProductos{{$item->id}}" class="row list mt-3" height="100px"> 
+                            <h2>{{$item->name}}</h2>
+                        </div>
+                        @endforeach
+                       
+                    </div>
+        
+             
         
                 </fieldset>
         
                 <fieldset class="form-group border p-3 mt-3">
-                    <legend class="w-auto px-2">Datos </legend>
+                    <legend class="w-auto px-2">Datos cliente</legend>
                     <div class="mb-4">
                         <label for="name_order" class="form-label">Nombre cliente :</label>
                         <input type="text" class="form-control input-modal" value="{{ isset($order->name_order) ? $order->name_order : '' }}"

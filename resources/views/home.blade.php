@@ -16,61 +16,135 @@
             max-width: 100px;
             margin: 0 auto;
         }
+
+        .btn-circle {
+    width: 20px;
+    height: 20px;
+    margin-top: 5px;
+    padding: 0px 0.5px 0px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
     </style>
     <section>
+        @if(RoleController::havePermits(auth()->user()->id_role,3))
+            <div class="col-12 mb-4 rounded-pill">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-5  d-none pt-2" style="width:20%" id ="filter-year">
+
+                        <select name="" class="form-select form-select-sm " id="selectYear">
+                            <option value = "1" selected>Seleccione un año</option>
+                            
+            
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-5 d-none pt-2 " style="width:20%" id="filter-month">
+
+                        <select name="" class="form-select form-select-sm" id="selectMonth">
+                            <option value = "1" selected>Seleccione mes</option>
+                            
+            
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-2 pt-2 d-none" id = "delete-filter">
+                    
+                        <button type="button"  id ="id-delete-filter" class=" border-dark border btn bg-transparent btn-circle "><i class="fa-solid fa-x fa-xs "></i>
+                        </button>                    
+    
+                    
+                    </div>
+
+
+                 
+
+                    
+
+                    
+                    <div class="col-2 pt-1" id ="selectFilter">
+                        <button class="btn btn-secondary rounded-pill text-white " data-bs-toggle="modal" data-bs-target="#showFilter">
+                            Filtro graficas  <i class="fa-solid fa-plus"></i>
+                        </button>
+
+                        
+                    </div>
+
+                
+            
+
+
+
+                </div>
+        
+            
+            </div>
+        @endif
+        
         <div class="row">
+
+           
             @if(RoleController::havePermits(auth()->user()->id_role,3))
-                <div class="col-lg-6 col-xl-3 mb-4">
+
+                <div class="col-lg-3 col-xl-3 mb-4">
                     <div class="card bg-primary text-white h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="me-3">
                                     <div id ="titlecantidad"class="h5">Ventas del mes</div>
-                                    <div class="text-lg fw-bold h2 " id="text" ></div>
+                                    <div class="row mt-3 pt-1">
+                                        <div class="col"><i class="fa-regular mt-4 fa-calendar-days fa-2xl"></i></div>
+                                        <div class="text-lg fw-bold h2 col mt-2 me-5" id="text" ></div>
+                                    </div>
+                                   
                                 </div>
-                                <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar feather-xl text-white-50"><i class="fa-regular mt-4 fa-calendar-days fa-2xl"></i></svg>
+                                
                             </div>
                         </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between small">
+                        <div class="card-footer footer d-flex align-items-center justify-content-between small">
                             <button class="btn text-white onselect" id = "bottoncantidad">
                                 Ver ventas del año
                             </button>
-                            <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
                         </div>
+                    
                     </div>
                 </div>
+
                 <div class="col-lg-6 col-xl-3 mb-4">
                     <div class="card bg-warning text-white h-100">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center ">
                                 <div class="me-3">
                                     <div class="text-white-75 h5" id= "titleMoney">Ganancias del mes</div>
-                                    <div class="text-lg fw-bold h2 " id="money"></div>
+                                    
+                                    <div class="mt-4 pt-1 text-center" id ="dateMoney">
+                                        <div class="text-lg fw-bold h2 " id="money"></div>
+                                    </div>
                                 </div>
-                                <svg width="24" height="24" class=" text-white-50"><i class="fa-solid mt-3 fa-dollar-sign fa-2xl"></i></svg>
+                                
                             </div>                    
                         </div>
-                        <div class="card-footer d-flex align-items-center justify-content-between small">
+                        <div class="card-footer d-flex footer align-items-center justify-content-between small">
                             <button class="btn text-white onselect" id = "bottonMoney">
                                 Ver ganancias del año
                             </button>
-                            <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
+                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-lg-6 col-xl-3 mb-4">
-                <div class="card bg-success text-white h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="me-3">
-                                <div class="text-white-75 h5">Insumos por abastecer</div>
-                                <div class="text-lg fw-bold h2" id ="supplies"></div>
-                            </div>
-                            <svg width="24" height="24" class=" text-white-50"><i class="fa-solid fa-boxes-packing fa-2xl mt-3"></i></svg>
-                        </div>
-                    </div>
-                </div>
+            
+
+       
             @endif
 
             @if(RoleController::havePermits(auth()->user()->id_role,2))
@@ -80,16 +154,19 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="me-3">
                                     <div class="text-white-75 h5">Insumos por abastecer</div>
-                                    <div class="text-lg fw-bold h2" id ="supplies"></div>
+                                    <div class="row mt-3 pt-1">
+                                        <div class="col"><i class="fa-solid fa-boxes-packing fa-2xl mt-4"></i></div>
+                                        <div class="text-lg fw-bold h2 mt-2 me-4 col pe-5" id ="supplies"></div>
+                                    </div>
+                                   
                                 </div>
-                                <svg width="24" height="24" class=" text-white-50"><i class="fa-solid fa-boxes-packing fa-2xl mt-3"></i></svg>
+                                
                             </div>
                         </div>
                         <div class="card-footer d-flex align-items-center justify-content-between small">
                             <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#listsupplies">
                                 Ver insumos escasos
                             </button>
-                            <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg><!-- <i class="fas fa-angle-right"></i> Font Awesome fontawesome.com --></div>
                         </div>
                     </div>
                 </div>
@@ -102,18 +179,21 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="me-3">
                                     <div class="text-white-75 h5 ">Productos sin stock</div>
-                                    <div class="text-lg fw-bold h2" id = "product"></div>
+                                    <div class="row mt-3 pt-1">
+                                        <div class="col"><i class="fa-solid fa-bowl-food fa-2xl mt-4"></i></div>
+                                        <div class="text-lg fw-bold h2 col mt-2 me-5 pe-4" id = "product"></div>
+                                    </div>
+                                   
+                                   
                                 </div>
-                                <svg width="24" height="24" class=" text-white-50"><i class="fa-solid fa-bowl-food fa-2xl mt-3"></i></svg>
+                                
                             </div>
-                            <svg width="24" height="24" class=" text-white-50"><i class="fa-solid fa-bowl-food fa-2xl mt-3"></i></svg>
                         </div>
-                    </div>
-                    <div class="card-footer d-flex align-items-center justify-content-between small">
-                        <button class="btn text-white  " data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Ver produtos sin stock
-                        </button>
-                        <div class="text-white"><svg class="svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" viewBox="0 0 256 512" data-fa-i2svg=""><path fill="currentColor" d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"></path></svg></div>
+                        <div class="card-footer d-flex align-items-center justify-content-between small">
+                            <button class="btn text-white  " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Ver produtos sin stock
+                            </button>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -123,37 +203,21 @@
     <div class="row">
 
         <div class="col-md-5 col-xs-5 ms-5 mt-3 rounded shadow bg-white border rounded-3">
-            <h5 class="ms-3 mt-3">Productos más vendidos</h5>
+            <h5 id ="titleBestProduct"class="ms-3 mt-3">Productos más vendidos</h5>
             <canvas style="height:40vh; width:80vw" id="myChart" ></canvas>
         </div>
-
-        <div id = "grafica2" class="col-md-5 col-xs-5 ms-5 mt-3 shadow bg-white border rounded-3 h-100 " >
+     
+        <div id = "grafica2"style="height: 300px" class="col-md-5 col-xs-5 ms-5 mt-3 shadow bg-white border rounded-3 h-100 " >
             <h5 class = "ms-3 mt-3">Ventas mensuales</h5>
 
-
-            <select name="" class="form-select" id="selectYear">
-                        <option selected>Seleccione un año</option>
-                        
-                        @isset($years)
-                        @foreach ($years as &$valor) 
-
-                        <option value="{{$valor->year}}">{{$valor->year}}</option>
-                        
-                        @endforeach
-                            
-                        @endisset  
-    
-            </select>
-
-
-
-            
             <div class="chart-containers">
+            
 
-                <canvas class = "canva"  style="height:75px; width:80px" id="myChart2"></canvas>
+                <canvas class = "canva" width="400" height="400"   id="myChart2"></canvas>
 
             </div>
         </div>
+    
     </div>
 
     <div>
@@ -163,7 +227,7 @@
                 <thead>
                     <tr>
 
-                        <th>nombre</th>
+                        <th>Nombre</th>
                         <th>Correo</th>
                         <th>Celular</th>
                         <th>Gastado</th>
@@ -178,6 +242,7 @@
         </div>
     </div>
 <!-- Modal -->
+
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="listproductlLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -185,10 +250,10 @@
                 <h5 class="modal-title h6" id="exampleModalLabel">Productos sin stock</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+
+            <div class="modal-body" >
                 
-              
-                <table class="table table-light">
+                <table class="table table-light" >
                 <thead>
                     <tr>
 
@@ -203,41 +268,59 @@
                 </table>
                 
             </div>
+
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
             </div>
         </div>
     </div>
-<!-- Modal -->
+
+<!-- Modal listar suplementos-->
     <div class="modal fade" id="listsupplies" tabindex="-1" aria-labelledby="listsuppliesLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title h6" id="exampleModalLabel">Productos sin stock</h5>
+                <h5 class="modal-title h6" id="exampleModalLabel">Insumos por abastecer</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" >
+                <a href="javascript:imprSelec('seleccion')" >Imprimir texto</a>
                 
-              
-                <table class="table table-light">
-                    <thead>
-                        <tr>
+                <div id="seleccion">
 
-                            <th>Suplemento</th>
-                            <th>medida</th>
-                            <th>Cantidad critica</th>
-                            <th>Cantidad</th>
-                        
-                        </tr>
-                    </thead>
-                    <tbody id="listalistSupplies">
+                    <table class="table table-light">
+                        <thead>
+                            <tr>
+    
+                                <th>Suplemento</th>
+                                <th>Medida</th>
+                                <th>Cantidad critica</th>
+                                <th>Cantidad</th>
+                            
+                            </tr>
+                        </thead>
+                        <tbody id="listalistSupplies">
+    
+                            
+                        </tbody>
+                    </table>
 
-                        
-                    </tbody>
-                </table>
+                </div>
+                
                 
             </div>
+            <script language="Javascript">
+                function imprSelec(nombre) {
+                  var ficha = document.getElementById(nombre);
+                  var ventimp = window.open(' ', 'popimpr');
+                  ventimp.document.write( ficha.innerHTML );
+                  ventimp.document.close();
+                  ventimp.print( );
+                  ventimp.close();
+                }
+            </script>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -245,34 +328,39 @@
         </div>
     </div>
 
-   
-<div>
-    <div class="border p-2">
-        
-        <div class="d-inline-block m-1">
-            <div class="text-center">
-                <i class="fa-solid fa-circle-exclamation text-danger fs-1"></i>
-                <div>
-                    <span class="text-danger">
-                        Insumo en cero
-                    </span>
+    <!-- Modal filtros -->
+    <div class="modal fade" id="showFilter" tabindex="-1" aria-labelledby="showFilterLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h6" id="exampleModalLabel">Agregar filtro estadistico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" >
+
+                <div class="form-check form-switch" id= "filterYear">
+                    <input class="form-check-input" type="checkbox" id="boxFilterYear">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Filtro años</label>
                 </div>
+
+                <div class="form-check form-switch" id = "filterMonth">
+                    <input class="form-check-input" type="checkbox" id="boxFilterMonth">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Filtro por año y mes</label>
+                </div>
+                
+                
+                
+            </div>
+          
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
             </div>
         </div>
-    
-        <div class="d-inline-block m-1">
-            <div class="text-center">
-                <i class="fa-solid fa-triangle-exclamation text-warning fs-1"></i>
-                <div>
-                    <span class="text-warning">
-                        insumo bajo en cantidad
-                    </span>
-                </div>
-            </div>
-        </div>
-        
     </div>
-</div>
+
+
 @endsection
 
 
@@ -286,12 +374,18 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+           
+        
+            
+           
             //console.log(@json(RoleController::havePermits(auth()->user()->id_role,1)));
             if(@json(RoleController::havePermits(auth()->user()->id_role,3))){
                 //order
                 GetSaleMonth();
                 getBestSellers();
-                viewGraph();
+                logicFilter()
+                filter();
                 GetBestClient();
                 defaultGraph();
             }
@@ -340,6 +434,7 @@
                     }
                 });
             }
+
             $(`#bottoncantidad`).click(function(e) {
 
                 if ($(`#bottoncantidad`).hasClass(`onselect`)) {
@@ -379,6 +474,116 @@
           
         });
 
+        // filtro -<<
+        function imprSelec(nombre) {
+                  var ficha = document.getElementById(nombre);
+                  var ventimp = window.open(' ', 'popimpr');
+                  ventimp.document.write( ficha.innerHTML );
+                  ventimp.document.close();
+                  ventimp.print( );
+                  ventimp.close();
+        }
+
+
+        function logicFilter(){
+
+            $("#id-delete-filter").click(function (e) { 
+                location.reload();
+                
+            });
+
+            /// Filtro datos
+
+
+            $('#boxFilterYear').on( 'click', function() {
+                if( $(this).is(':checked') ){
+                    // Hacer algo si el checkbox ha sido seleccionado
+                    $("#filter-year").removeClass('d-none');
+                    $("#boxFilterMonth").attr("disabled", true);
+                    $("#delete-filter").removeClass('d-none')
+                    $("#selectYear").val($("#selectYear option:first").val());
+                    $("#delete-filter").removeClass('d-none')
+                    $("#selectFilter").addClass('d-none')
+                   
+                    
+
+                } else {
+                    // Hacer algo si el checkbox ha sido deseleccionado
+                    $("#boxFilterMonth").removeAttr("disabled");
+                    $("#filter-year").addClass('d-none');
+                    $("#delete-filter").addClass('d-none')
+                    $("#selectFilter").removeClass('d-none')
+                }
+            
+            });
+
+            $('#boxFilterMonth').on( 'click', function() {
+                if( $(this).is(':checked') ){
+                    // Hacer algo si el checkbox ha sido seleccionado
+                    
+                    $("#filter-month").removeClass('d-none');
+                    $("#filter-year").removeClass('d-none')
+                    $("#delete-filter").removeClass('d-none')
+                    $("#boxFilterYear").attr("disabled", true);
+                    $("#selectYear").val($("#selectYear option:first").val());
+                    $("#selectFilter").addClass('d-none')
+                    
+                    
+
+                } else {
+                    // Hacer algo si el checkbox ha sido deseleccionado
+                    $("#boxFilterYear").removeAttr("disabled");
+                    $("#delete-filter").addClass('d-none')
+                    $("#filter-month").addClass('d-none');
+                    $("#filter-year").addClass('d-none');
+                    $("#selectFilter").removeClass('d-none')
+                    
+
+                }
+            
+            });
+
+
+        }
+
+
+        function filter(){
+            var month,year
+
+            $("#selectYear").change(function (e) { 
+               // año y mes
+                if(!($("#filter-year").hasClass("d-none")) && !($("#filter-month").hasClass("d-none")))
+               {    
+                    year = $("#selectYear").val();
+                    console.log("año")
+                    selectMonth(year);
+                    
+                   $("#selectMonth").change(function (e) { 
+
+                        month = $("#selectMonth").val();
+
+                        filterYearMonth(year,month)
+                    
+                    });
+               
+               
+               
+                }
+
+                // año
+                if(!($("#filter-year").hasClass("d-none")) && ($("#filter-month").hasClass("d-none")))
+               {
+                    year = $("#selectYear").val();
+                    filterYear(year);
+                    console.log("mes")
+                }
+                
+                
+            });
+
+
+        }
+
         ////////////////////////////////////
         // Grafiva producto mas vendido
         //*////////////////////////////////////
@@ -391,6 +596,7 @@
                 url: "{{ route('order.bestsellers') }}",
                 dataType: "json",
                 success: function(response) {
+
                     resultado = response;
                     
                     resultado.map( products =>{ 
@@ -417,14 +623,84 @@
                         hoverOffset: 4
                     }]
                     },
+               
                 });
                 }
             });
+        }
+
+        function setmonth(){
+
+            //////////***Graficas por años */////////////
+           
+            $('#selectYear').on('change', function() {
+            // create data from form input(s)
+            
+            const x = $(this).val();
+            if(x == 1 ){
+
+                location.reload();
+
+            }
+            let url = '{{ route('order.month') }}';
+            $.ajax({
+               
+                type: "GET",
+                url: url ,
+                data: {
+                    'year': x,
+                },
+                dataType: "json",
+                success: function(response) {
+                    const resultado = response;
+           
+                    console.log(resultado)
+
+
+                    $('#selectMonth').append(
+                        `
+                            <option value="${resultado.years[0].year}">${resultado.years[0].year}</option>
+                           
+                        `
+                    )
+                    
+                  
+                
+            
+
+
+                
+                },error: function(jqXHR, textStatus, errorThrown) {
+                        var toastMixin = Swal.mixin({
+                        toast: true,
+                        icon: 'error',
+                        title: 'error',
+                        position: 'bottom-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        });
+                        toastMixin.fire({
+                            title:  'No se encontraron Datos de meses',
+                            icon: 'error'
+                        }); 
+                    }
+
+            }); //ajax
+            });
+
+            
         }
         
 
         // cantidad de ventas en el mes
         function GetBestClient(){
+
+            
             $.ajax({
                 type: "GET",
                 url: "{{ route('order.getBestClient') }}",
@@ -448,14 +724,26 @@
                 }
             });
         }
+
         function GetSaleMonth() {   
             $.ajax({
                 type: "GET",
                 url: "{{ route('order.GetSaleMonth') }}",
                 dataType: "json",
                 success: function(response) {
-                    console.log(response);
+                    
                     resultado = response;
+                    console.log(resultado.years[0].year);
+
+              
+
+                    $('#selectYear').append(
+                        `
+                            <option value="${resultado.years[0].year}">${resultado.years[0].year}</option>
+                           
+                        `
+                    )
+
                     $('#text').append(
                         `
                             <p class="text-lg text-white fw-bold h2 " id ="cantidad">${resultado.saleMonth[0].data}</p>
@@ -463,25 +751,63 @@
                         `
                     )
 
+                    var money1 = new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(resultado.saleMonth[0].ganancias)
+                    var money2 = new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(resultado.saleYear[0].ganancias)
                     $('#money').append(
                     `
-                        <p class="text-lg text-white fw-bold h2 " id ="money1">$ ${resultado.saleMonth[0].ganancias}</p>
-                        <p id ="money2" class="d-none text-lg text-white fw-bold h2 ">$ ${resultado.saleYear[0].ganancias}</p>
+                        <p class="text-lg text-white fw-bold h2 " id ="money1">${money1}</p>
+                        <p id ="money2" class="d-none text-lg text-white fw-bold h2 ">${money2}</p>
                     `
                     )   
                 }
             });
         }
 
+        // grafica pastel
+        function graftPast(variable,datos){
+
+
+            if (myChart) {
+                myChart.destroy();
+            }
+            const ctx = document.getElementById('myChart');
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: datos,
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: variable,
+                    backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(0, 128, 0)',
+                    'rgb(255, 73, 0  )'
+                    ],
+                    hoverOffset: 4
+                }]
+                },
+        
+            });
+
+            
+        }
+
         let myChart2;
 
-        function viewGraph(){
+        function filterYear(x){
             //////////***Graficas por años */////////////
            
-            $('#selectYear').on('change', function() {
+           
             // create data from form input(s)
             
-            const x = $(this).val();
+            
+            if(x == 1 ){
+
+                location.reload();
+
+            }
             let url = '{{ route('order.month') }}';
             $.ajax({
                
@@ -496,17 +822,56 @@
                     const label = []
                     const datesMoney = new Array(12);
                     const datesSale = new Array(12);
+                    var datos = []
+                    var variable = []
+                    console.log("lolo"+resultado)
                     datesSale.fill(0);
                     datesMoney.fill(0);
+
+                    resultado[0].map( products =>{ 
+                        
+                        variable.push(products.cantida);
+                        datos.push(products.name_product);
+
+                    })
+                
+                    
+                    var money = new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(resultado[2][0].data)
+                    console.log(money)
+                    $(`#cantidad`).addClass('d-none');
+                    $(`#cantidad2`).addClass('d-none');
+                    $(`#bottoncantidad`).addClass('d-none');
+                    $(`#titlecantidad`).html('Ventas del año '+ x);
+                    $('#text').html(resultado[2][0].cantidad);
+                    $('#money').html(money);
+                    $(".footer").addClass('d-none');
+                    $("#text").addClass("pe-5");
+
+
+
+                
+            
+                    $(`#money1`).addClass('d-none');
+                    $(`#money2`).addClass('d-none');
+                    $(`#bottonMoney`).addClass('d-none');
+                    $(`#titleMoney`).html('Ganancias del año '+x);
+
+                    
+
+                 
             
                     
-                    resultado.map( cantidad =>{
+                    resultado[1].map( cantidad =>{
                                 
                         datesMoney[cantidad.month-1] = cantidad.data/1000;
                         datesSale[cantidad.month-1] = cantidad.cantidad;
                     })
-            
-                    const labels = ['enero','febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
+
+                     
+                    
+                    
+                    graftPast(variable,datos)
+                    const labels = ['Enero','Febrero','marzo','Abril','Mayo','Junio','Julio','Agosto', 'Septiembre', 'Octubre', 'Noviembre','Diciembre'];
                     const data = {
                     labels: labels,
                     datasets: [ {
@@ -537,7 +902,8 @@
                             myChart2.destroy();
                     }
 
-                    var ctx = document.getElementById(`myChart2`).getContext('2d');
+                    var ctx = document.getElementById(`myChart2`).getContext('2d')
+                    ctx.height = 300;
                         if (myChart2) {
                             myChart2.destroy();
                         }
@@ -556,7 +922,17 @@
                             }
                             }
                         },
-                });             
+
+                    
+                
+               
+
+                });
+                
+            
+
+
+                
              },error: function(jqXHR, textStatus, errorThrown) {
                     var toastMixin = Swal.mixin({
                     toast: true,
@@ -576,9 +952,154 @@
                         icon: 'error'
                     }); 
                 }
+
             }); //ajax
-            });
+           
         
+        }
+
+        function filterYearMonth(year,month)
+        {
+
+
+            
+            let url = '{{ route('order.filterYearMonth') }}';
+            $.ajax({
+               
+                type: "GET",
+                url: url ,
+                data: {
+                    'year': year,
+                    'month': month,
+                },
+                dataType: "json",
+                success: function(response) {
+                    const resultado = response;
+                    console.log(resultado)
+                    var meses = ["","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                    label = []
+                    date = []
+
+                    resultado[0].map(product =>{
+
+                        date.push(product.cantida);
+                        label.push(product.name_product);
+
+
+
+
+                    })
+                    var money = new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(resultado[2][0].ganancias)
+                    graftPast(date,label)
+
+                    $(`#cantidad`).addClass('d-none');
+                    $(`#cantidad2`).addClass('d-none');
+                    $(`#bottoncantidad`).addClass('d-none');
+                    $(`#titlecantidad`).html('Ventas del '+ meses[7]+' - '+year);
+                    $('#text').html(resultado[2][0].data);
+                    $('#money').html(money);
+                    $(".footer").addClass('d-none');
+                    $("#text").addClass("pe-5");
+                    $("#dateMoney").removeClass("mt-4");
+                    $("#dateMoney").removeClass("pt-1");
+                  
+
+
+
+                
+            
+                    $(`#money1`).addClass('d-none');
+                    $(`#money2`).addClass('d-none');
+                    $(`#bottonMoney`).addClass('d-none');
+                    $(`#titleMoney`).html('Ganancias de '+ meses[7]+' - '+year);
+                    
+                
+                    },error: function(jqXHR, textStatus, errorThrown) {
+                        var toastMixin = Swal.mixin({
+                        toast: true,
+                        icon: 'error',
+                        title: 'error',
+                        position: 'bottom-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        });
+                        toastMixin.fire({
+                            title:  'No se encontraron datos de este años',
+                            icon: 'error'
+                        }); 
+                    }
+
+            }); //ajax
+
+
+        }
+
+        function selectMonth(x){
+
+            console.log(x)
+            let url = '{{ route('order.selectMonth') }}';
+            $.ajax({
+               
+                type: "GET",
+                url: url ,
+                data: {
+                    'year': x,
+                },
+                dataType: "json",
+                success: function(response) {
+                    const resultado = response;
+
+                    var meses = ["","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                    
+                    $("#selectMonth").empty().append('<option selected value="0">Seleccione una mes..</option>');
+                    resultado.map( month =>{
+
+
+                        $('#selectMonth').append(
+                            `
+                                <option value="${month.month}">${meses[month.month]}</option>
+                            
+                            `
+                        )
+
+                        
+                    })
+
+
+
+                
+            
+
+
+                
+                    },error: function(jqXHR, textStatus, errorThrown) {
+                        var toastMixin = Swal.mixin({
+                        toast: true,
+                        icon: 'error',
+                        title: 'error',
+                        position: 'bottom-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        });
+                        toastMixin.fire({
+                            title:  'No se encontraron datos de este años',
+                            icon: 'error'
+                        }); 
+                    }
+
+            }); //ajax
+
+
         }
 
         function defaultGraph(){
@@ -599,12 +1120,13 @@
                 dataType: "json",
                 success: function(response) {
                     const resultado = response;
+                    console.log(resultado)
                     const label = []
                     const datesMoney = new Array(12);
                     const datesSale = new Array(12);
                     datesSale.fill(0);
                     datesMoney.fill(0);
-                    resultado.map( cantidad =>{
+                    resultado[1].map( cantidad =>{
                                 
                         datesMoney[cantidad.month-1] = cantidad.data/1000;
                         datesSale[cantidad.month-1] = cantidad.cantidad;

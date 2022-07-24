@@ -72,6 +72,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
     Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+    Route::get('order/selectMonth', '\App\Http\Controllers\OrderController@selectMonth')->name('order.selectMonth');
+    Route::get('order/filterYearMonth', '\App\Http\Controllers\OrderController@filterYearMonth')->name('order.filterYearMonth');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
