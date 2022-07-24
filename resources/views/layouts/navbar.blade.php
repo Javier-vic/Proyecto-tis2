@@ -183,7 +183,6 @@ use App\Http\Controllers\RoleController;
 
 <script>
     if(@json(RoleController::havePermits(auth()->user()->id_role,2))){
-                //supply
                 $.ajax({
                     type: "GET",
                     url: "{{route('supplyNotification')}}",

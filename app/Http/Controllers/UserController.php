@@ -224,7 +224,26 @@ class UserController extends Controller
             ->join('products', 'products_orders.product_id', '=', 'products.id')
             ->where('products_orders.order_id', '=', $id)
             ->get();
+        // dd($id);
 
         return response(json_encode([$productOrders, $order]), 200);
+    }
+
+    public function findOrder()
+    {
+        return view('Usuario.Landing.findOrder');
+    }
+
+    public function showOrder(request $request){
+
+        $id = $request->get('id');
+        // $order = DB::select('select name_order FROM `orders` WHERE id = ?', [$id]);
+        $order = DB::table('orders')
+        ->select('orders.name_order')
+        ->where('orders.id', '=', $id)
+        ->get();
+        dd($order);
+        return view('Usuario.Landing.findOrder', compact('order'));
+
     }
 }

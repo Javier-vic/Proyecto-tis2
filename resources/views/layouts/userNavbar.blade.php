@@ -150,6 +150,11 @@
                             <i class="fa-solid fa-house-chimney me-2"></i>Local
                         </a>
                     </li>
+                    <li class="nav-item mx-3 ">
+                        <a class="nav-link fw-bold linkHover" aria-current="page" href="{{ route('order.find') }}">
+                        <i class="fa-solid fa-truck-fast me-2"></i>Estado de mi pedido
+                        </a>
+                    </li>
                     @if (auth()->user())
                         <li class="nav-item mx-3 ">
                             <a class="nav-link fw-bold linkHover" aria-current="page"
