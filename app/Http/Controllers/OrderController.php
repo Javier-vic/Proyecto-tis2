@@ -111,8 +111,9 @@ class OrderController extends Controller
             'name_order'          => 'required|string',
             'cantidad' => 'required|array|min:1',
             'cantidad.*' => 'required|gt:0|integer',
-            'address' => 'required'
-
+            'address' => 'required',
+            'payment_method' => 'required',
+            'comment' => 'max:255'
         ];
         $messages = [
             'required'      => 'Este campo es obligatorio',
@@ -135,8 +136,6 @@ class OrderController extends Controller
                 $order->address = $datosOrder['address'];
                 $order->number = $datosOrder['number'];
                 $order->mail = $datosOrder['mail'];
-
-
                 $order->pick_up = $datosOrder['pick_up'];
                 $order->comment = $datosOrder['comment'];
 
@@ -144,8 +143,6 @@ class OrderController extends Controller
                 $cantidad = array();
                 $valores = array();
                 $price = array();
-
-                
 
                 foreach ($datosOrder['cantidad'] as $item => $value) {
 
@@ -215,11 +212,11 @@ class OrderController extends Controller
     public function pendingOrdersView()
     {
         $pendingOrders = order::where('order_status', '!=', 'Listo')
-                        ->where('order_status','!=','Entregado')
-                        ->whereNull('deleted_at') 
-                        ->orderByRaw("FIELD(order_status,'Espera','Cocinando') ASC")     
-                        ->orderBy('created_at','ASC')              
-                        ->get();
+            ->where('order_status', '!=', 'Entregado')
+            ->whereNull('deleted_at')
+            ->orderByRaw("FIELD(order_status,'Espera','Cocinando') ASC")
+            ->orderBy('created_at', 'ASC')
+            ->get();
         foreach ($pendingOrders as $order) {
             $productsOrder = DB::table('products')
                 ->select('*')
@@ -228,19 +225,20 @@ class OrderController extends Controller
                 ->get();
             $order->listProducts = $productsOrder;
         }
-        if(request()->ajax()){
+        if (request()->ajax()) {
             return $pendingOrders;
-        }else{
+        } else {
             return view('Mantenedores.order.pending', ['pendingOrders' => $pendingOrders]);
         }
     }
-    
-    public function readyOrdersView(){
-        $readyOrders = order::where('order_status','=','Listo')
-                        ->whereNull('deleted_at')
-                        ->orderBy('created_at','ASC')
-                        ->get();
-        foreach ($readyOrders as $order){
+
+    public function readyOrdersView()
+    {
+        $readyOrders = order::where('order_status', '=', 'Listo')
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'ASC')
+            ->get();
+        foreach ($readyOrders as $order) {
             $productsOrder = DB::table('products')
                 ->select('*')
                 ->join('products_orders', 'products.id', '=', 'products_orders.product_id')
@@ -248,24 +246,24 @@ class OrderController extends Controller
                 ->get();
             $order->listProducts = $productsOrder;
         }
-        if(request()->ajax()){
+        if (request()->ajax()) {
             return $readyOrders;
-        }else{
-            return view('Mantenedores.order.ready',['readyOrders'=>$readyOrders]);
+        } else {
+            return view('Mantenedores.order.ready', ['readyOrders' => $readyOrders]);
         }
     }
 
-    public function updateOrderStatus(Request $request){
-        try{
+    public function updateOrderStatus(Request $request)
+    {
+        try {
             $order = order::find($request->id);
             $order->order_status = $request->status;
             $order->save();
-            return response('Orden actualizada correctamente',200);
-        }catch(\Throwable $ex){
+            return response('Orden actualizada correctamente', 200);
+        } catch (\Throwable $ex) {
             DB::connection(session()->get('database'))->rollBack();
-            return response('No se pudo realizar la actualizacion de la order',400);
+            return response('No se pudo realizar la actualizacion de la order', 400);
         }
-
     }
 
     /**
