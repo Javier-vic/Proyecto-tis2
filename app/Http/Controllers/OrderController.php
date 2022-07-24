@@ -43,7 +43,7 @@ class OrderController extends Controller
                 ->get())
                 ->addColumn('viewOrder', 'mantenedores.order.datatable.view')
                 ->rawColumns(['viewOrder'])
-                ->addColumn('action', 'mantenedores.order.datatable.action')
+                ->addColumn('action', 'Mantenedores.order.datatable.action')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
@@ -207,10 +207,15 @@ class OrderController extends Controller
 
         ), 400);
     }
+
     public function pendingOrdersView()
     {
-
-        $pendingOrders = order::where('order_status', '!=', 'Listo')->get();
+        $pendingOrders = order::where('order_status', '!=', 'Listo')
+                        ->where('order_status','!=','Entregado')
+                        ->whereNull('deleted_at') 
+                        ->orderByRaw("FIELD(order_status,'Espera','Cocinando') ASC")     
+                        ->orderBy('created_at','ASC')              
+                        ->get();
         foreach ($pendingOrders as $order) {
             $productsOrder = DB::table('products')
                 ->select('*')
@@ -219,8 +224,46 @@ class OrderController extends Controller
                 ->get();
             $order->listProducts = $productsOrder;
         }
-        return view('Mantenedores.order.pending', ['pendingOrders' => $pendingOrders]);
+        if(request()->ajax()){
+            return $pendingOrders;
+        }else{
+            return view('Mantenedores.order.pending', ['pendingOrders' => $pendingOrders]);
+        }
     }
+    
+    public function readyOrdersView(){
+        $readyOrders = order::where('order_status','=','Listo')
+                        ->whereNull('deleted_at')
+                        ->orderBy('created_at','ASC')
+                        ->get();
+        foreach ($readyOrders as $order){
+            $productsOrder = DB::table('products')
+                ->select('*')
+                ->join('products_orders', 'products.id', '=', 'products_orders.product_id')
+                ->where('products_orders.order_id', '=', $order->id)
+                ->get();
+            $order->listProducts = $productsOrder;
+        }
+        if(request()->ajax()){
+            return $readyOrders;
+        }else{
+            return view('Mantenedores.order.ready',['readyOrders'=>$readyOrders]);
+        }
+    }
+
+    public function updateOrderStatus(Request $request){
+        try{
+            $order = order::find($request->id);
+            $order->order_status = $request->status;
+            $order->save();
+            return response('Orden actualizada correctamente',200);
+        }catch(\Throwable $ex){
+            DB::connection(session()->get('database'))->rollBack();
+            return response('No se pudo realizar la actualizacion de la order',400);
+        }
+
+    }
+
     /**
      * Display the specified resource.
      *

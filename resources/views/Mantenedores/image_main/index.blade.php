@@ -12,7 +12,8 @@
             @foreach ($images as $key=>$image)
                 <div class="col-12 col-md-12 col-xl-6 my-2">
                     <div class="text-center">
-                        <img src="{{ asset('storage') . '/' . $image->route }}" width="500px" class="img-fluid" alt="">
+                        <img src="{{ asset('storage') . '/' . $image->route }}" width="300px" id="idPreImage-{{$key+1}}" class="img-fluid" alt="">
+                        <input type="integer" id="id" name="idImage-{{$key+1}}" value="{{$image->id}}" hidden/>
                     </div>
                     <div class="d-flex my-2 justify-content-center align-content-center">
                         <label for="" class="d-flex">Orden:</label>
@@ -22,8 +23,9 @@
                             <option value="3" {{$image->order == 3 ? 'selected': ''}}>3</option>
                             <option value="4" {{$image->order == 4 ? 'selected': ''}}>4</option>
                         </select>
+                        <button class="btn btn-danger ms-2" type="button" onclick="deleteImage({{$image->id}})">Eliminar</button>
                     </div>
-                    <input type="file" class="form-control" name="image-{{$key+1}}">
+                    <input type="file" class="form-control" name="image-{{$key+1}}" id="idImage-{{$key+1}}">
                 </div>  
             @endforeach
             @for ($i = 0; $i < 4-sizeof($images); $i++)
@@ -63,30 +65,105 @@
             confirmButtonText: 'Si, guardar!',
             cancelButtonText: 'Cancelar',
             }).then((result)=>{
-                console.log(e.target);
-                var formData = new FormData(e.target);
-                for(var i = 1; i < 5; i++){
-                    for(var j = 1; j < 5; j++){
-                        if(($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val()) && i!=j && $(`#idImage-${i}`)[0].files[0] && $(`#idImage-${j}`)[0].files[0] ){
-                            Swal.fire({
-                                title: 'Imagenes tienen el mismo orden!',
-                                icon: 'warning',
-                                showCancelButton: true,
-                            })
-                            return;
+                if(result.isConfirmed){
+                    var formData = new FormData(e.target);
+                    for(var i = 1; i < 5; i++){
+                        for(var j = 1; j < 5; j++){
+                            if(($(`#idOrder-${i}`).val() == $(`#idOrder-${j}`).val()) && i!=j){
+                                if(($(`#idImage-${i}`)[0].files[0] && $(`#idImage-${j}`)[0].files[0])){
+                                    Swal.fire({
+                                        title: 'Imagenes tienen el mismo orden!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                    })
+                                    console.log('aqi')
+                                    return;
+                                }
+                                if( ($(`#idImage-${i}`)[0].files[0] ||  $(`#idPreImage-${i}`).attr('src')) && ($(`#idImage-${j}`)[0].files[0] || $(`#idPreImage-${j}`).attr('src')) ){
+                                    Swal.fire({
+                                        title: 'Imagenes tienen el mismo orden!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                    })
+                                    console.log(i+" con "+j)
+                                    return;
+                                }
+                                if( ($(`#idImage-${j}`)[0].files[0] ||  $(`#idPreImage-${j}`).attr('src')) && ($(`#idImage-${i}`)[0].files[0] || $(`#idPreImage-${i}`).attr('src')) ){
+                                    Swal.fire({
+                                        title: 'Imagenes tienen el mismo orden!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                    })
+                                    return;   
+                                }
+                            }
                         }
                     }
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('publicity.store')}}",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: 'Cambios guardados.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            backdrop: false,
+                            heightAuto: false,
+                            }).then(()=>{
+                                location.reload();
+                            })
+                        }
+                    });
                 }
-                $.ajax({
-                    type: "POST",
-                    url: "{{route('publicity.store')}}",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        location.reload();
-                    }
-                });
+            })
+        }
+        function findByOrder(order){
+            var images = @json($images);
+            for(var i = 0; i< images.length; i++){
+                if(images[i].order == Number(order)){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        const deleteImage = (id) => {
+            Swal.fire({
+            title: '¿Estas seguro de eliminar la imagen?',
+            text: 'No se puede revertir',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar!',
+            cancelButtonText: 'Cancelar',
+            }).then((res)=>{
+                var url = '{{ route("publicity.destroy", ":id") }}';
+                url = url.replace(':id', id);
+                if(res.isConfirmed){
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        data: {"_token": "{{ csrf_token() }}"},
+                        dataType: "text",
+                        success: function (response) {
+                            Swal.fire({
+                                title:'Borrado!',
+                                text:'La imagen ha sido borrada',
+                                icon:'success',
+                                timer: 3000,
+                                }
+                            ).then(()=>{
+                                location.reload(); 
+                            });
+                        }
+                    });
+                }
             })
         }
     </script>

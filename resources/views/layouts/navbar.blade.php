@@ -26,9 +26,8 @@ use App\Http\Controllers\RoleController;
             <div class="sidebar-header d-flex justify-content-between">
                 <h3 class="m-0 p-0">{{ auth()->user()->name }}</h3>
                 <a href="{{ route('landing.index') }}" class="m-0 p-0" style="height:50px;width:50px;"><img
-                        src="https://tolivmarket-production.s3.sa-east-1.amazonaws.com/companies/logos/8a17cb17fcb7d1012e47f83078ee24b603fd0fa1d9628ad486d5cb43bacbb81c.jpg"
+                        src="{{ asset('storage/files/Logo.png') }}"
                         alt="" class="img-fluid "></a>
-
             </div>
 
             <ul class="list-unstyled ">
@@ -59,9 +58,14 @@ use App\Http\Controllers\RoleController;
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role, 3))
                     <li>
-                        <a href="{{ route('order.index') }}"
-                            class="my-3 {{ request()->is('order', 'order/*') ? ' active' : '' }}"><i
-                                class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                        <a href="#submenuOrders" data-bs-toggle="collapse" aria-expanded="false" class="mt-3 dropdown-toggle {{ request()->is('order', 'order/*') ? ' active' : '' }}">
+                            <i class="me-3 fa-solid fa-sack-dollar"></i>Ventas <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="collapse list-unstyled" id="submenuOrders">
+                            <li><a href="{{route('order.index')}}">Listado de ventas</a></li>
+                            <li><a href="{{route('pendingOrdersView')}}">Ventas pendientes</a></li>
+                            <li><a href="{{route('readyOrdersView')}}">Ventas listas</a></li>
+                        </ul>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role, 6))
@@ -78,14 +82,8 @@ use App\Http\Controllers\RoleController;
                                 class="me-3 fa-solid fa-list-ul"></i>Productos <i
                                 class="fa-solid fa-caret-down "></i></a>
                         <ul class="collapse list-unstyled" id="submenuCategoryProducts">
-                            <li>
-                                <a href="{{ route('product.index') }}">Listado productos</a>
-
-                            </li>
-                            <li>
-                                <a href="{{ route('category_product.index') }}">Categorías</a>
-                            </li>
-
+                            <li><a href="{{ route('product.index') }}">Listado productos</a></li>
+                            <li><a href="{{ route('category_product.index') }}">Categorías</a></li>
                         </ul>
                     </li>
                 @endif
@@ -154,10 +152,6 @@ use App\Http\Controllers\RoleController;
                             </span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="Notificaciones">
-
-
-
-
                             <li>
                                 <i class="fa-solid fa-circle-exclamation text-danger fs-3"></i>
                                 <div class="d-inline-block">

@@ -62,9 +62,9 @@ class LandingController extends Controller
         ////////////////////////////////////////////////
 
         $bestSellers = DB::table('products_orders')
-            // ->whereNull('products.deleted_at')
             ->select('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id', DB::raw('sum(products_orders.cantidad) as cantidad'))
             ->join('products', 'products_orders.product_id', 'products.id')
+            ->whereNull('products.deleted_at')
             ->groupBy('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id')
             ->limit(3)
             ->orderBy('cantidad', 'DESC')

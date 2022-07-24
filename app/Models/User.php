@@ -27,6 +27,12 @@ class User extends Authenticatable
         'address' => 'required',
         'phone' => 'required|lt:999999999|gt:910000000'
     ];
+    static $rulesWithoutPassword = [
+        'name' => 'required',
+        'email' => 'required|email',
+        'address' => 'required',
+        'phone' => 'required|lt:999999999|gt:910000000'
+    ];
     static $messages = [
         'required' => 'El campo es obligatorio',
         'email' => 'No es un correo electrónico válido.',
