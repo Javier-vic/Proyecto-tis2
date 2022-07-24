@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Redirect;
-
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Arr;
@@ -168,7 +167,6 @@ class SupplyController extends Controller
                 $id_category_supplies = $request->input('id_category_supplies');
                 $supply->category_supply()->associate($id_category_supplies);
                 $supply->update();
-
                 DB::connection(session()->get('database'))->commit();
                 return response('Se editó el insumo con exito.', 200);
             } catch (\Throwable $th) {
@@ -256,5 +254,15 @@ class SupplyController extends Controller
         ->get();
         
         return response::json(array('countSupplies'=>$countSupplies, 'listSupplies' => $listSupplies));
+    }
+
+    public function notificationSupply(){
+        $countSupplies = DB::select('SELECT count(*) as `countsupplies` FROM `supplies` WHERE critical_quantity >= quantity;');
+
+        $criticalSupplies = DB::select('SELECT name_supply FROM `supplies` WHERE critical_quantity >= quantity AND quantity > 0;');
+
+        $missingSupplies = DB::select('SELECT name_supply FROM `supplies` WHERE quantity = 0;');
+        
+        return response::json(array('countSupplies'=>$countSupplies, 'criticalSupplies' => $criticalSupplies, 'missingSupplies'=>$missingSupplies));
     }
 }

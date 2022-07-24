@@ -266,7 +266,9 @@ class LandingController extends Controller
                     /////////////COMIENZO LLAMADA DE PASARELA DE PAGO
 
                     $token = request()->_token;
-
+                    $urlConfirmation = URL::to('/') . "/landing";
+                    $urlReturn = URL::to('/') . "/landing/confirmation";
+                    //$urlConfirmation = $request->segment($index, 'default')
                     $params = array(
                         "apiKey" => "6C7EEDFF-CE18-4A7C-8372-86DAB5D6L117",
                         "token" => $token,
@@ -274,8 +276,8 @@ class LandingController extends Controller
                         "subject" => "Nueva compra",
                         "amount" => intval($totalValue),
                         "email" => $values['mail'],
-                        "urlConfirmation" => "http://127.0.0.1:8000/landing/",
-                        "urlReturn" => "http://127.0.0.1:8000/landing/confirmation/",
+                        "urlConfirmation" => $urlConfirmation,
+                        "urlReturn" => $urlReturn,
                         "paymentMethod" => intval($values['paymentSelected']),
 
                     );
@@ -501,7 +503,7 @@ class LandingController extends Controller
                     }
                     //////////////////////////////////
 
-                    return view('Usuario.landing.paymentConfirmed', $resultadosOrden);
+                    return view('Usuario.Landing.paymentConfirmed', $resultadosOrden);
                     // return view('Usuario.landing.paymentFailed', $resultadosOrden);
                 } else {
 
@@ -514,10 +516,10 @@ class LandingController extends Controller
                     } else {
                         $resultadosOrden['estado_compra'] = 4;
                     }
-                    return view('Usuario.landing.paymentFailed', $resultadosOrden);
+                    return view('Usuario.Landing.paymentFailed', $resultadosOrden);
                 }
             } else {
-                return view('Usuario.landing.paymentError');
+                return view('Usuario.Landing.paymentError');
             }
         } catch (Exception $e) {
             echo 'Error: ' . $e->getCode() . ' - ' . $e->getMessage();
@@ -591,7 +593,7 @@ class LandingController extends Controller
         return view('Usuario.Profile.profile', compact('userData', 'category_products'));
     }
 
-    public function updateUserProfile(request $request, user $user)
+    public function updateUserProfile(request $request, User $user)
     {
         $rules = [
             'name' => 'required',
