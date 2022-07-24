@@ -10,7 +10,7 @@ use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
 use App\Models\products_orders;
-use App\Models\user;
+use App\Models\User;
 use App\Models\map;
 use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
@@ -562,7 +562,7 @@ class LandingController extends Controller
         return view('Usuario.Profile.profile', compact('userData', 'category_products'));
     }
 
-    public function updateUserProfile(request $request, user $user)
+    public function updateUserProfile(request $request, User $user)
     {
         $rules = [
             'name' => 'required',
