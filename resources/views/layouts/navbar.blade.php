@@ -31,6 +31,11 @@ use App\Http\Controllers\RoleController;
             </div>
 
             <ul class="list-unstyled ">
+
+                <li>
+                    <a href="{{ route('home') }}"
+                    class="my-3 {{ request()->is('home', 'home/*') ? ' active' : '' }}"><i class="me-3 fa-solid fa-chart-line"></i></i>Dashboard</a>
+                </li>
                 @if (RoleController::havePermits(auth()->user()->id_role, 2))
                     <li>
                         <a href="#submenuSupply" data-bs-toggle="collapse" aria-expanded="false"
@@ -58,9 +63,14 @@ use App\Http\Controllers\RoleController;
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role, 3))
                     <li>
-                        <a href="{{ route('order.index') }}"
-                            class="my-3 {{ request()->is('order', 'order/*') ? ' active' : '' }}"><i
-                                class="me-3 fa-solid fa-sack-dollar"></i>Ventas</a>
+                        <a href="#submenuOrders" data-bs-toggle="collapse" aria-expanded="false" class="mt-3 dropdown-toggle {{ request()->is('order', 'order/*') ? ' active' : '' }}">
+                            <i class="me-3 fa-solid fa-sack-dollar"></i>Ventas <i class="fa-solid fa-caret-down"></i>
+                        </a>
+                        <ul class="collapse list-unstyled" id="submenuOrders">
+                            <li><a href="{{route('order.index')}}">Listado de ventas</a></li>
+                            <li><a href="{{route('pendingOrdersView')}}">Ventas pendientes</a></li>
+                            <li><a href="{{route('readyOrdersView')}}">Ventas listas</a></li>
+                        </ul>
                     </li>
                 @endif
                 @if (RoleController::havePermits(auth()->user()->id_role, 6))
@@ -77,14 +87,8 @@ use App\Http\Controllers\RoleController;
                                 class="me-3 fa-solid fa-list-ul"></i>Productos <i
                                 class="fa-solid fa-caret-down "></i></a>
                         <ul class="collapse list-unstyled" id="submenuCategoryProducts">
-                            <li>
-                                <a href="{{ route('product.index') }}">Listado productos</a>
-
-                            </li>
-                            <li>
-                                <a href="{{ route('category_product.index') }}">Categorías</a>
-                            </li>
-
+                            <li><a href="{{ route('product.index') }}">Listado productos</a></li>
+                            <li><a href="{{ route('category_product.index') }}">Categorías</a></li>
                         </ul>
                     </li>
                 @endif
@@ -130,7 +134,6 @@ use App\Http\Controllers\RoleController;
 
             </ul>
         </nav>
-
         <!-- Page Content  -->
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-light row">

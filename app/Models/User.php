@@ -27,6 +27,12 @@ class User extends Authenticatable
         'address' => 'required',
         'phone' => 'required|lt:999999999|gt:910000000'
     ];
+    static $rulesWithoutPassword = [
+        'name' => 'required',
+        'email' => 'required|email',
+        'address' => 'required',
+        'phone' => 'required|lt:999999999|gt:910000000'
+    ];
     static $messages = [
         'required' => 'El campo es obligatorio',
         'email' => 'No es un correo electrónico válido.',
@@ -78,6 +84,6 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->belongsToMany(order::class, 'order_user','id_user','id_order');
+        return $this->belongsToMany(order::class, 'order_user',  'id_user', 'id_order');
     }
 }

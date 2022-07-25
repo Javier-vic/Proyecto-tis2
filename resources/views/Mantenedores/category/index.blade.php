@@ -2,17 +2,12 @@
 
 @section('css_extra')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
 @endsection
 @section('titlePage')
     <h2 class="">Categorías de los productos</h2>
 @endsection
 @section('content')
-    <div class="w-100 text-center">
-        <button type="button" class="btn btn-primary mb-5" data-bs-toggle="modal" data-bs-target="#agregarCategoria">
-            Agregar categoría
-        </button>
-    </div>
-
     <!-- <div id="number"></div> -->
 
     <div>
@@ -34,6 +29,7 @@
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
 
@@ -49,11 +45,22 @@
             language: {
                 url: "{{ asset('js/language.json') }}"
             },
-
+            dom: 'Bfrtip',
             ajax: {
                 url: "{{ route('category_product.index') }}",
                 type: 'GET',
             },
+            buttons: [{
+                text: 'Agregar categoría',
+                className: 'btn btn-primary mb-2',
+                action: function(e, dt, node, config) {
+                    $('#agregarCategoria').modal('show');
+
+                },
+                init: function(api, node, config) {
+                    $(node).removeClass('dt-button')
+                }
+            }],
             columns: [{
                     data: 'name',
                     name: 'name'
@@ -254,43 +261,43 @@
                 confirmButtonText: 'Si, Borrar!',
                 cancelButtonText: 'Cancelar',
             }).then((result) => {
-               
-                if (result.isConfirmed) {
-                        Swal.fire({
-                title: ' ¿Desea continuar?',
-                text: "Borrar esta categoría eliminará todos los productos asociados a esta.",
-                icon: 'error',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, Borrar!',
-                cancelButtonText: 'Cancelar',
-            }).then(result=>{
-                url = '{{ route('category_product.destroy', ':category_product') }}';
-                url = url.replace(':category_product', id);
-                if(result.isConfirmed){
-                    $.ajax({
-                        type: "DELETE",
-                        url: url,
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                        },
-                        success: function(response) {
-                            Swal.fire(
-                                'Borrado!',
-                                'La categoría ha sido borrada.',
-                                'success'
-                            )
-                            // document.getElementById("number").innerHTML = table.data().count()-1;
-                            table.ajax.reload();
-                            // $('#editCategoria').modal('hide');
-                            // $('#stockEDITMODAL').val(resultado.stock)
 
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: ' ¿Desea continuar?',
+                        text: "Borrar esta categoría eliminará todos los productos asociados a esta.",
+                        icon: 'error',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Si, Borrar!',
+                        cancelButtonText: 'Cancelar',
+                    }).then(result => {
+                        url = '{{ route('category_product.destroy', ':category_product') }}';
+                        url = url.replace(':category_product', id);
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "DELETE",
+                                url: url,
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                },
+                                success: function(response) {
+                                    Swal.fire(
+                                        'Borrado!',
+                                        'La categoría ha sido borrada.',
+                                        'success'
+                                    )
+                                    // document.getElementById("number").innerHTML = table.data().count()-1;
+                                    table.ajax.reload();
+                                    // $('#editCategoria').modal('hide');
+                                    // $('#stockEDITMODAL').val(resultado.stock)
+
+                                }
+                            });
                         }
-                    });
-                }
-            })
-                 
+                    })
+
                 }
 
             })

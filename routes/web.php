@@ -19,8 +19,6 @@ use App\Http\Controllers\worker;
 use App\Http\Controllers\SendCouponController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
-
 use App\Mail\welcomeMail;
 use App\Models\product;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +35,7 @@ use App\Models\User;
 |
 */
 
-Route::get('/ubicacion', [LandingController::class, 'ubicacion']);
+Route::get('/location', [LandingController::class, 'ubicacion'])->name('location');
 Route::get('/getLocation', [LandingController::class, 'getLocation'])->name('getLocation');
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/login', function () {
@@ -72,6 +70,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
     Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+    Route::get('order/selectMonth', '\App\Http\Controllers\OrderController@selectMonth')->name('order.selectMonth');
+    Route::get('order/filterYearMonth', '\App\Http\Controllers\OrderController@filterYearMonth')->name('order.filterYearMonth');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
@@ -91,6 +91,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     // Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/pending', [OrderController::class, 'pendingOrdersView'])->name('pendingOrdersView');
+    Route::get('/order/ready', [OrderController::class, 'readyOrdersView'])->name('readyOrdersView');
+    Route::post('/order/updateOrder', [OrderController::class, 'updateOrderStatus'])->name('updateOrderStatus');
     //POST
     Route::post('/supply/excel', [\App\Http\Controllers\SupplyController::class, 'importExcel'])->name('supply.excel');
     Route::get('/supply/import/', [\App\Http\Controllers\SupplyController::class, 'importExcelView'])->name('supply.import');
@@ -98,8 +100,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-    
-    
+    Route::post('/publicity/couponSend',[SendCouponController::class, 'store'])->name('sendCoupon.store');
+
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);
@@ -124,6 +126,8 @@ Route::get('/user/orderbyuser', [\App\Http\Controllers\UserController::class, 'o
 Route::get('/user/findOrder', [\App\Http\Controllers\UserController::class, 'findOrder'])->name('order.find');
 Route::get('/user/showOrder', [\App\Http\Controllers\UserController::class, 'showOrder'])->name('show.order');
 Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
+Route::post('/landing/confirmation/', [LandingController::class, 'transactionConfirmation'])->name('landing.confirmation');
+Route::get('/landing/voucher/', [\App\Http\Controllers\LandingController::class, 'transactionVoucher'])->name('landing.voucher');
 Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('delivery.price');
 
 
@@ -144,3 +148,4 @@ Route::resource('landing', LandingController::class);
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
 Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);
+        

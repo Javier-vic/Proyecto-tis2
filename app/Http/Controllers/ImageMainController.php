@@ -42,6 +42,10 @@ class ImageMainController extends Controller
         //image_main::truncate();
         $values = $request->all();
         for($i=1; $i<5; $i++){
+                $image_main = image_main::find($values["idImage-{$i}"]);
+                $image_main->order = $values["order-{$i}"];
+                $image_main->save();
+            }
             if(($request->hasFile("image-{$i}")) && (image_main::where('order',$values["order-{$i}"])->first()==null)){
                 $imageMain = new image_main();
                 $imageMain->order = $values["order-{$i}"];
@@ -49,16 +53,16 @@ class ImageMainController extends Controller
                 $imageMain->save();
             }else if(($request->hasFile("image-{$i}")) && (image_main::where('order',$values["order-{$i}"])->first()!=null)){
                 $oldImage = image_main::where('order',$values["order-{$i}"])->first();
-                Storage::delete('public/' . $oldImage->image);
+                Storage::delete('public/' . $oldImage->route);
                 $oldImage->delete();    
                 $imageMain = new image_main();
                 $imageMain->order = $values["order-{$i}"];
                 $imageMain->route = $request->file("image-{$i}")->store('uploads','public');
                 $imageMain->save();
             }
-        }
         return;
     }
+    
 
     /**
      * Display the specified resource.
@@ -105,6 +109,7 @@ class ImageMainController extends Controller
         //
         $image = image_main::find($id);
         $image->delete();
+        Storage::delete('public/' . $image->route);
         return response('',200);
     }
 }

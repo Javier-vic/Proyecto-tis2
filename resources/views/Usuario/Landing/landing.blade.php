@@ -22,28 +22,31 @@
                     @foreach ($imagesMain as $key => $image)
                         @if ($key == 0)
                             <div class="carousel-item active" data-bs-interval="3000">
-                                <img src="{{ asset('storage') . '/' . $image->route }}" class="d-block w-100"
-                                    alt="..." style="width: 100%; height:100%; max-height:600px;">
+                                <img src="{{ asset('storage') . '/' . $image->route }}" class="d-block w-100" alt="..."
+                                    style="width: 100%; height:100%; max-height:600px;">
                             </div>
                         @else
                             <div class="carousel-item " data-bs-interval="3000">
-                                <img src="{{ asset('storage') . '/' . $image->route }}" class="d-block w-100"
-                                    alt="..." style="width: 100%; height:100%; max-height:600px;">
+                                <img src="{{ asset('storage') . '/' . $image->route }}" class="d-block w-100" alt="..."
+                                    style="width: 100%; height:100%; max-height:600px;">
                             </div>
                         @endif
                     @endforeach
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+            @if (isset($imagesMain))
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            @endif
+
         </div>
     </div>
 
@@ -273,7 +276,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            if (localStorage.getItem('cart').length > 0) return;
+            if (localStorage.getItem('cart')) return;
             else {
                 localStorage.setItem('cart', JSON.stringify([]));
             }

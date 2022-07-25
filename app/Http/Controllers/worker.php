@@ -196,8 +196,11 @@ class worker extends Controller
         //
         $user = User::find($id);
 
-
-        $validator = Validator::make($request->all(),User::$rules,User::$messages);
+        if(isset($request->changePassword)){
+            $validator = Validator::make($request->all(),User::$rules,User::$messages);
+        }else{
+            $validator = Validator::make($request->all(),User::$rulesWithoutPassword,User::$messages);
+        }
         $emailver = DB::table('users')
                         ->where('email','=',$request->email)
                         ->get();
@@ -234,7 +237,9 @@ class worker extends Controller
                 $user->id_role = $request->id_role;
                 $user->phone = $request->phone;
                 $user->address = $request->address;
-                $user->password = Hash::make($request->password);
+                if(isset($request->changePassword)){
+                    $user->password = Hash::make($request->password);
+                }
                 $user->save();
                 return response('Trabajador editado correctamente',200);
             }catch(\Throwable $th){

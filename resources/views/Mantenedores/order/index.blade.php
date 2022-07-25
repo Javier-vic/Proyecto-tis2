@@ -1,8 +1,7 @@
 @extends('layouts.navbar')
 @section('css_extra')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 @endsection
 
 @section('titlePage')
@@ -97,7 +96,6 @@
                 responsive: true,
                 processing: true,
                 searching: true,
-
                 ajax: {
                     url: "{{ route('order.index') }}",
                     type: 'GET',

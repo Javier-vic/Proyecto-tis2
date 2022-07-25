@@ -10,9 +10,7 @@
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div class="container-fluid ">
-        <div class="justify-content-center">
-            <div class="py-4 fs-5">Cantidad de productos: <span id=number></span></div>
-        </div>
+
         <table id="myTable" class="responsive display nowrap" style="width: 100%;">
             <thead class="bg-secondary text-white">
                 <tr class="text-center">
@@ -125,9 +123,7 @@
 
                 },
             ],
-            initComplete: function(settings, json) {
-                document.getElementById("number").innerHTML = table.data().count();
-            },
+
             select: true
         });
 

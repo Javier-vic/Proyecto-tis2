@@ -10,15 +10,18 @@ use Illuminate\Queue\SerializesModels;
 class welcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $subjet = "Informacion de contacto";
+    public $subject = "Descuentos ramen dashi";
+    public $cliente;
+    public $date;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($cliente,$date)
     {
-        //
+        $this->cliente = $cliente; 
+        $this->date = $date;
     }
 
     /**
@@ -28,6 +31,7 @@ class welcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.welcome-mail');
-    }
+        return $this->view('mail.welcome-mail');
+       
+    }       
 }
