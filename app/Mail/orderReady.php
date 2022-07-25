@@ -10,15 +10,19 @@ use Illuminate\Queue\SerializesModels;
 class orderReady extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $subject = "Estado pedido Ramen Dashi";
+    public $cliente;
+    public $date;
     /**
      * Create a new message instance.
      *
      * @return void
      */
     public function __construct($date)
-    {
-        $this->date = $date;
+    {   
+        $this->cliente = $date;
+        
+    
     }
 
     /**
@@ -28,6 +32,6 @@ class orderReady extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.orderReady.');
+        return $this->view('mail.orderReady');
     }
 }

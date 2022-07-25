@@ -8,6 +8,7 @@ use Illuminate\support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use App\Mail\welcomeMail;
+use App\Mail\orderReady;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Models;
@@ -46,13 +47,23 @@ class SendCouponController extends Controller
 
     public function orderReady(Request $request){
 
-        $code = $request->except('_token');
         
+     
+        $order = DB::table('orders')
+        ->select('orders.*')
+        ->where('orders.id', $request->id)
+        ->get();
+        
+       if(isset($order[0]->mail)){
 
-        $correo = new welcomeMail($value);
-        $email = $value->email;
+            $correo = new orderReady($order[0]);
+            
 
-        Mail::to($email)->send($correo);
+            Mail::to($order[0]->mail)->send($correo);
+
+
+       }
+        
 
 
 

@@ -113,8 +113,9 @@
                                 value="{{ isset($order->payment_method) ? $order->payment_method : 'no' }}">
         
                                 <option value="Efectivo">Efectivo</option>
-                                <option value="Credito">Credito</option>
-                                <option value="Debito">Debito</option>
+                                <option value="Tarjera">Tarjera</option>
+                                <option value="Webpay">Webpay</option>
+                                <option value="Transferencia">Transferencia</option>
         
                             </select>
                         </div>
@@ -207,10 +208,11 @@
                         icon: 'success',
                         title: 'Se ingresó la orden correctamente.',
                         showConfirmButton: false,
-                        timer: 2000,
+                        timer: 20000,
                         backdrop: false,
                         heightAuto: false,
                     })
+                    
                     location.reload();
 
                 },
