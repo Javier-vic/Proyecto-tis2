@@ -198,6 +198,7 @@ class OrderController extends Controller
                 }
                 return response('Se ingresó la orden con éxito.', 200);
             } catch (\Throwable $th) {
+                dd($th);
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo realizar el ingreso de la orden.', 400);
             }
