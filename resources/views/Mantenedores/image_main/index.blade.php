@@ -205,16 +205,20 @@
                         backdrop: false,
                         heightAuto: false,
                     })
-
+                    $(".createmodal_error").empty()
+                    $(".input-modal").removeClass('is-invalid');
+                    $(".input-modal").removeClass('is-valid');
                     $('#enviarCupon').modal('hide');
                     $("#loadingPublicida").addClass('d-none');
-                    
-
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    var text = jqXHR.responseJSON;
-                    console.log(text)
-                
+                    var text = JSON.parse(jqXHR.responseText).errors;
+                    console.log(text);
+                    $("#loadingPublicida").addClass('d-none');
+                    $.map(text, function (e,key) {
+                        $(`#${key}_errorCREATEMODAL`).text(e);
+                        $(`#${key}`).addClass('is-invalid');
+                    });
                     Swal.fire({
                         position: 'bottom-end',
                         icon: 'error',
@@ -223,10 +227,7 @@
                         timer: 2000,
                         backdrop: false
                     })
-                 
-
                 }
-
             });
         }
     </script>

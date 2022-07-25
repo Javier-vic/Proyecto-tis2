@@ -9,8 +9,6 @@
                 
                 <form onsubmit="sendPublic(event)"  method="POST" enctype="multipart/form-data" >
                     @csrf
-
-                    
                     <div class="mb-4 entradas">
                         <label  for="comment" class="form-label">Cantidad de correos por enviar :</label>
                         <input name="cantidad" id="cantidad" type="text" class="form-control input-modal" 
@@ -46,22 +44,9 @@
                         <div class="spinner-border left-50" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
-                    
-
-
                     </div>
-
-                    
                     <button type="submit" class=" mt-3 btn btn-primary">Enviar Publicidad</button>
-                
-                
                 </form>
-                
-
-
-
-
-
             </div>
         </div>
     </div>

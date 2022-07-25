@@ -23,43 +23,29 @@
         {{ method_field('PATCH') }}
          <!-- First / Last Name -->
         <div class="row">
-
             <div class="col-md-8">
-
                 <fieldset  class="form-group border p-3 categoryName mb-4 anyClass"  style="overflow-x: hidden; overflow-y: scroll;">
-                  
                     <legend class="h1 text-center ">Productos disponibles</legend>
-
                     <nav id="navbar-example2" class="navbar navbar-light bg-light px-3">
                         <ul class="nav nav-pills">
-        
                             @foreach ($category as $item)
                             <li class="nav-item">
                                 <a class="nav-link" href="#listaProductos{{$item->id}}">{{$item->name}}</a>
                             </li>
                             @endforeach
-        
                         </ul>
                     </nav>
-                
                     <div class="mt-5"  >
-        
                         <div id="listarSeleccionados" class="row list mt-5" height="100px"> 
                             <h2 class="row list mt-5 mb-3" >Productos seleccionados</h2>
                         </div>
-        
                         @foreach ($category as $item)
                         <div id="listaProductos{{$item->id}}" class="row list mt-3" height="100px"> 
                             <h2>{{$item->name}}</h2>
                         </div>
                         @endforeach
-                       
                     </div>
-        
-             
-        
                 </fieldset>
-        
                 <fieldset class="form-group border p-3 mt-3">
                     <legend class="w-auto px-2">Datos cliente</legend>
                     <div class="mb-4">
@@ -68,14 +54,10 @@
                             id="name_order" name="name_order" aria-describedby="name_product_help" >
                         <span class="createmodal_error" id="name_order_errorCREATEMODAL"></span>
                     </div>
-    
-            
                     <div class="mb-4">
                         <label for="name_order" class="form-label">fecha :</label>
                         <input type="text" class="form-control" id="date" name="date" aria-describedby="name_product_help">
                     </div>
-            
-            
                     <div class="mb-4">
                         <label class="form-label">Estado pedido :</label>
                         <select id="order_status" class="form-control" name="order_status">
@@ -86,9 +68,6 @@
             
                         </select>
                     </div>
-            
-            
-            
                     <div class="mb-4">
                         <label for="pick_up" class="form-label">Despacho pedido </label>
                         <select id="mi-select" class="form-control" name="pick_up"
