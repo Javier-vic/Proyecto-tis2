@@ -81,11 +81,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/supply/notification', [SupplyController::class, 'notificationSupply'])->name('supplyNotification');
     Route::get('/product/dashboard', [ProductController::class, 'dashboardProduct'])->name('productDashboard');
     Route::get('/publicity/sendCoupon', [SendCouponController::class, 'index'])->name('sendCoupon.index');
-    Route::get('/publicity/couponSend', function () {
-        $correo = new welcomeMail;
-        Mail::to('apinto@ing.ucsc.cl')->send($correo);
-        return "mensaje enviado";
-    });
+
 
 
 
@@ -103,6 +99,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     Route::post('/publicity/couponSend',[SendCouponController::class, 'store'])->name('sendCoupon.store');
+    Route::post('/publicity/orderReady', [SendCouponController::class, 'orderReady'])->name('send.orderReady');
 
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
