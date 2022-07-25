@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ingrese la configuracion del rol</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Ingrese la configuración de la publicidad</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -23,8 +23,9 @@
                     <div class="mb-4 entradas">
                         <label  for="comment" class="form-label">Cantidad de correos por enviar :</label>
                         <input name="cantidad" type="text" class="form-control input-modal" 
-                            class="form-control" id="sendCoupon" >
-                            <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
+                        aria-describedby="cantidad_help" class="form-control" name ="sendCoupon" id="sendCoupon" >
+                        <span class="text-danger createmodal_error" id="sendCoupon_errorCREATEMODAL"></span>
+                        
                     </div>
     
     
@@ -44,7 +45,12 @@
                     <div>
                         <label for="" class="form-label" >Cargar afiche</label>
                         <input type="file" class="form-control input-modal" id="advertising" name="advertising"
-                            aria-describedby="name_product_help" accept="image/*">
+                            aria-describedby="advertising_help" accept="image/*">
+                            <span class="text-danger createmodal_error" id="advertising_errorCREATEMODAL"></span>
+                            
+                            @error('sendCoupon')
+                             <small><strong>{{$message}}</strong></small>
+                            @enderror
                         
                     </div>
                 
