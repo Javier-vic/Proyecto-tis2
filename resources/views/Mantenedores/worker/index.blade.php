@@ -45,6 +45,16 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script>
+        $(document).ready(function () {
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            console.log(currentMonth)
+            if(currentMonth<10){
+                $("#mes").val(`${currentYear}-0${currentMonth}`);
+            }else{
+                $("#mes").val(`${currentYear}-${currentMonth}`);
+            }
+        });
         const Table = $("#myTable").DataTable({
             processing: true,
             serverSide: true,

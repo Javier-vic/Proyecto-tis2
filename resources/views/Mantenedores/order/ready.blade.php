@@ -63,9 +63,6 @@
                 type: "GET",
                 url: "{{route('readyOrdersView')}}",
                 success: function (response) {
-                    //renderOrders(response);
-                    console.log(response.length)
-                    console.log(countOrders)
                     if(response.length > countOrders || flag){
                         (flag) ? renderOrders(response,true):renderOrders(response);
                         countOrders = response.length;
@@ -122,7 +119,6 @@
             if(!flag){
                 audio.play();
             }
-            console.log('listo');
         }
         function updateOrden(id,status){ 
             Swal.fire({

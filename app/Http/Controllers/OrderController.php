@@ -108,10 +108,10 @@ class OrderController extends Controller
 
 
         $rules = [
-            'name_order'          => 'required|string',
+            'name_order' => 'required|string',
             'cantidad' => 'required|array|min:1',
             'cantidad.*' => 'required|gt:0|integer',
-            'address' => 'required',
+            //'address' => 'required',
             'payment_method' => 'required',
             'comment' => 'max:255'
         ];

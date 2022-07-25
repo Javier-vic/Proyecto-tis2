@@ -70,8 +70,6 @@
                 url: "{{route('pendingOrdersView')}}",
                 success: function (response) {
                     //renderOrders(response);
-                    console.log(response.length)
-                    console.log(countOrders)
                     if(response.length > countOrders || flag){
                         (flag) ? renderOrders(response,true):renderOrders(response);
                         countOrders = response.length;
@@ -124,7 +122,6 @@
                         </div>
                     </div>`)                
             })
-            console.log('listo');
         }
         function updateOrden(id,status){ 
             Swal.fire({
