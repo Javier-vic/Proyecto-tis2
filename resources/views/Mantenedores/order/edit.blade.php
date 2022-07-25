@@ -21,9 +21,6 @@
 
         @csrf
         {{ method_field('PATCH') }}
-
-        {{ $orderData->id }}
-
          <!-- First / Last Name -->
         <div class="row">
 
