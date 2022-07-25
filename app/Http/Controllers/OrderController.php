@@ -313,6 +313,7 @@ class OrderController extends Controller
         ->select('*')
         ->whereNotIn('id', $selectedIds)
         ->where('products.stock', '>', 0)
+        ->whereNull('products.deleted_at')
         ->orderBy('products.id')
         ->get();
 
