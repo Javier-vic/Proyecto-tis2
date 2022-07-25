@@ -163,7 +163,7 @@ class OrderController extends Controller
 
 
                 $size = sizeof($permits);
-
+                dd($permits);
                 //      Calcular el total   ////
                 for ($i = 0; $i < $size; $i++) {
                     $stock = $valores[$i]->stock;
