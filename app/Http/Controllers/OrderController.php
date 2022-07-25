@@ -83,8 +83,8 @@ class OrderController extends Controller
         $product =  $valores = DB::table('products')
             ->select('*')
             ->where('products.stock', '>', 0)
+            ->whereNull('deleted_at')
             ->get();
-
 
         $category =  DB::table('category_products')
         ->select('category_products.name','category_products.id', DB::raw('count(products.id) as `data`' ))
