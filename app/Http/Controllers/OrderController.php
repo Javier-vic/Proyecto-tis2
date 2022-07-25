@@ -196,12 +196,15 @@ class OrderController extends Controller
                     DB::connection(session()->get('database'))->commit();
                    
                 }
+                return view('Mantenedores.order.index');
                 return response('Se ingresó la orden con éxito.', 200);
             } catch (\Throwable $th) {
+                return view('Mantenedores.order.index');
                 DB::connection(session()->get('database'))->rollBack();
                 return response('No se pudo realizar el ingreso de la orden.', 400);
             }
         } else {
+            return view('Mantenedores.order.index');
             return Response::json(array(
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
