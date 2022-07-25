@@ -231,18 +231,25 @@ class UserController extends Controller
 
     public function findOrder()
     {
-        return view('Usuario.Landing.findOrder');
+        $id = 0;
+
+        $order = DB::table('orders')
+        ->select('orders.*')
+        ->where('orders.id', '=', $id)
+        ->get();
+
+        return view('Usuario.Landing.findOrder', compact('order', 'id'));
     }
 
     public function showOrder(request $request){
 
         $id = $request->get('id');
-        // $order = DB::select('select name_order FROM `orders` WHERE id = ?', [$id]);
+
         $order = DB::table('orders')
         ->select('orders.*')
         ->where('orders.id', '=', $id)
         ->get();
-        // dd($order);
+
         return view('Usuario.Landing.findOrder', compact('order', 'id'));
 
     }
