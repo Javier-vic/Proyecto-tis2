@@ -1,5 +1,12 @@
 @extends('layouts.userNavbar')
 
+<style>
+    input,button:focus{
+        outline: none !important;
+        box-shadow: none !important;
+    }
+</style>
+
 @section('content')
 <div>@include('Usuario.Landing.modal.view')</div>
 <div class="container">
@@ -12,10 +19,14 @@
             <div class="text-center my-4">
                 <form action="{{route('show.order')}}" method="get">
                     @csrf
-                    <input type="number" class="" id="id" name="id" value="" >
-                    <button type="" class="border border-danger p-1 px-2">                
-                        <i class="fa-solid fa-magnifying-glass text-danger btn-find-order"></i>
-                    </button>
+
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon1">
+                            <i class="fa-solid fa-magnifying-glass text-danger btn-find-order"></i>
+                        </button>
+                        <input type="text" class="form-control" id="id" name="id" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                    </div>
+
                 </form>
             </div>
             <div id="content-order">               

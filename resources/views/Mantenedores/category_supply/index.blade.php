@@ -65,6 +65,10 @@
                 url: "{{ route('category_supply.index') }}",
                 type: 'GET',
             },
+            columnDefs:[
+                {className:'text-center', targets:'_all'},
+                
+            ],
             dom: "<'row d-flex justify-content-between'<'col-sm-12 col-md-4 d-none d-md-block'l><'col-sm-12 col-md-3 text-right'B>>" +
                 "<'row '<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 col-md-4 d-none d-md-block 'i><'col-sm-12 col-md-7'p>>",

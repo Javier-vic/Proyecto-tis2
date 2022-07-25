@@ -155,7 +155,10 @@ use App\Http\Controllers\RoleController;
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="Notificaciones">
                             <div id="missing_supply"></div>
-                            <div id="critical_supply"></div>                             
+                            <div id="critical_supply"></div>  
+                            <div class="notificaciones">
+                                
+                            </div>                           
                         </ul>
                     </div>
                     
@@ -190,8 +193,15 @@ use App\Http\Controllers\RoleController;
                     type: "GET",
                     url: "{{route('supplyNotification')}}",
                     data: "json",
-                    success: function (response) {      
+                    success: function (response) {  
                         if(response.countSupplies[0].countsupplies == 0){
+                            $('.notificaciones').append(
+                            `
+                            
+                                <span>No hay notificaciones</span>
+                            
+                            `                                                           
+                            );    
                             $(".badge-notification").addClass('d-none')
                         }     
                         $('#countsupplies').text(response.countSupplies[0].countsupplies);
