@@ -261,7 +261,7 @@
         <div class="col mb-3">
             <h5 class="fw-bold">Contacto</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Purén 596, Chillán</a></li>
+                <li class="nav-item mb-2"><a href="https://goo.gl/maps/eLq4QGrxErDtgjUm8" target="_blank" class="nav-link p-0 text-muted">Purén 596, Chillán</a></li>
                 <li class="nav-item mb-2 d-flex">
                     <a href="https://www.facebook.com/ramen.dashi.cl" class="nav-link p-0 text-muted" target="_blank"><i class="ri-facebook-circle-fill fs-1"></i></a>
                     <a href="https://www.instagram.com/ramen.dashi" target="_blank" class="nav-link p-0 text-muted ms-2"><i class="ri-instagram-fill fs-1"></i></a>
