@@ -21,7 +21,7 @@
                 <table role="presentation" style="width:70%;border-collapse:collapse;text-align:left;">
                     <tr>
                         <td align="center" style="padding:40px 0 30px 0;"width="10%" style="height:100;display:block;">
-                            <a href="https://www.facebook.com/ramen.dashi.cl/"><img src="{{ $message->embed(Storage::path("public/img-png/logo.jpg"))}}" width="400" style="height:auto;display:block;border:0;"></a>
+                            <a href="https://www.facebook.com/ramen.dashi.cl/"><img src="{{ $message->embed(Storage::path("public/img-png/logo.jpg"))}}" width="350" style="height:auto;display:block;border:0;"></a>
                             <h1>Hola {{$cliente->name_order}}  </h1>
                             @if($cliente->order_status == 'Listo')
                                 <h3>Queremos infomarte que tu pedido ya se encuentra listo </h3>

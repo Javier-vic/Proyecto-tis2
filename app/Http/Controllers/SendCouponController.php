@@ -53,6 +53,7 @@ class SendCouponController extends Controller
         ->select('orders.*')
         ->where('orders.id', $request->id)
         ->get();
+        
        if(isset($order[0]->mail)){
 
             $correo = new orderReady($order[0]);
