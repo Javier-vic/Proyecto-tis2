@@ -19,8 +19,6 @@ use App\Http\Controllers\worker;
 use App\Http\Controllers\SendCouponController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
-
 use App\Mail\welcomeMail;
 use App\Models\product;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +35,7 @@ use App\Models\User;
 |
 */
 
-Route::get('/ubicacion', [LandingController::class, 'ubicacion']);
+Route::get('/location', [LandingController::class, 'ubicacion'])->name('location');
 Route::get('/getLocation', [LandingController::class, 'getLocation'])->name('getLocation');
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/login', function () {

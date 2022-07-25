@@ -107,7 +107,6 @@
                                 <hr>
                             </li>
                             <li class="nav-item mx-3">
-
                                 <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3"
                                     href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -132,7 +131,6 @@
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover"
                         aria-current="page" href="/landing/cart" onclick="checkCart(event)"><i
                             class="fa-solid fa-cart-shopping"></i><span class="cartQuantity"></span></a>
-
                 </li>
             </ul>
             {{-- FIN NAVBAR CELULAR --}}
@@ -145,7 +143,7 @@
                             aria-current="page" href="/"><i class="fa-solid fa-utensils me-2"></i>Menú</a>
                     </li>
                     <li class="nav-item mx-3 ">
-                        <a class="nav-link fw-bold linkHover" aria-current="page" href="#">
+                        <a class="nav-link fw-bold linkHover" aria-current="page" href="{{route('location')}}">
                             <i class="fa-solid fa-house-chimney me-2"></i>Local
                         </a>
                     </li>

@@ -67,7 +67,6 @@
             },
             columnDefs:[
                 {className:'text-center', targets:'_all'},
-                
             ],
             dom: 'Bfrtip',
             buttons: [
