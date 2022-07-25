@@ -75,6 +75,10 @@
                 url: "{{ route('supply.index') }}",
                 type: 'GET',
             },
+            columnDefs:[
+                {className:'text-center', targets:'_all'},
+                
+            ],
             buttons: [{
                     text: 'Agregar insumo',
                     className: 'btn btn-primary mb-2',
