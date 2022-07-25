@@ -55,6 +55,12 @@
             language: {
                 url: "{{ asset('js/language.json') }}"
             },
+            columnDefs: [{
+                    className: "text-center",
+                    targets: "_all"
+                },
+
+            ],
             dom: 'Bfrtip',
             ajax: {
                 url: "{{ route('product.index') }}",
@@ -119,7 +125,7 @@
                     data: 'action',
                     name: 'action',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
 
                 },
             ],
