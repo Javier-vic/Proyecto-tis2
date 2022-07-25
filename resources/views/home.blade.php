@@ -127,7 +127,7 @@
                                 <div class="me-3">
                                     <div class="text-white-75 h5" id= "titleMoney">Ganancias del mes</div>
                                     
-                                    <div class="mt-4 pt-1 text-center" id ="dateMoney">
+                                    <div class="mt-4 pt-1 pe-5 text-center" id ="dateMoney">
                                         <div class="text-lg fw-bold h2 " id="money"></div>
                                     </div>
                                 </div>
@@ -824,7 +824,7 @@
                     const datesSale = new Array(12);
                     var datos = []
                     var variable = []
-                    console.log("lolo"+resultado)
+                    console.log(resultado)
                     datesSale.fill(0);
                     datesMoney.fill(0);
 
@@ -846,6 +846,8 @@
                     $('#money').html(money);
                     $(".footer").addClass('d-none');
                     $("#text").addClass("pe-5");
+                    $("#money").addClass("pe-5");
+                    
 
 
 
@@ -975,7 +977,7 @@
                 dataType: "json",
                 success: function(response) {
                     const resultado = response;
-                    console.log(resultado)
+             
                     var meses = ["","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
                     label = []
                     date = []
@@ -989,6 +991,7 @@
 
 
                     })
+               
                     var money = new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(resultado[2][0].ganancias)
                     graftPast(date,label)
 
@@ -1002,6 +1005,8 @@
                     $("#text").addClass("pe-5");
                     $("#dateMoney").removeClass("mt-4");
                     $("#dateMoney").removeClass("pt-1");
+                    $("#grafica2").addClass('d-none');
+                    $("#money").addClass("pe-5");
                   
 
 

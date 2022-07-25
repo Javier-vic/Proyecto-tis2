@@ -487,14 +487,16 @@ class OrderController extends Controller
         
         $bestseller = DB::table('products_orders')
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
-        ->leftJoin('orders','products_orders.product_id','orders.id')
         ->join('products','products_orders.product_id','products.id')
-        ->whereYear('orders.created_at', $request->year)
-        ->whereMonth('orders.created_at', $request->month)
+        ->join('orders','products_orders.order_id','orders.id')
         ->groupBy('products_orders.product_id', 'products.name_product')
-        ->limit(4)
+        ->whereyear('orders.created_at', $request->year)
+        ->whereMonth('orders.created_at', $request->month)
+        ->limit(5)
         ->orderBy('cantida','DESC')
-        ->get();
+        ->get(); 
+
+  
 
         $alert = DB::table('orders')
         ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('MONTH(orders.created_at) month'))
@@ -608,16 +610,20 @@ class OrderController extends Controller
         ->groupby('year','month')
         ->get();
 
+        
         $bestseller = DB::table('products_orders')
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
-        ->leftJoin('orders','products_orders.product_id','orders.id')
         ->join('products','products_orders.product_id','products.id')
-        ->whereYear('orders.created_at', $request->year)
+        ->join('orders','products_orders.order_id','orders.id')
         ->groupBy('products_orders.product_id', 'products.name_product')
+        ->whereyear('orders.created_at', $request->year)
         ->limit(5)
         ->orderBy('cantida','DESC')
-        ->get();   
-        
+        ->get(); 
+
+
+
+
         $alert = DB::table('orders')
         ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year'))
         ->whereyear('created_at', $request->year)
