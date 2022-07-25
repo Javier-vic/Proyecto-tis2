@@ -125,6 +125,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/user/orderDetails', [\App\Http\Controllers\UserController::class, 'orderDetails'])->name('order.details');
 Route::get('/user/orderbyuser', [\App\Http\Controllers\UserController::class, 'orderbyuser'])->name('order.history');
+Route::get('/user/findOrder', [\App\Http\Controllers\UserController::class, 'findOrder'])->name('order.find');
+Route::get('/user/showOrder', [\App\Http\Controllers\UserController::class, 'showOrder'])->name('show.order');
 Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
 Route::post('/landing/confirmation/', [LandingController::class, 'transactionConfirmation'])->name('landing.confirmation');
 Route::get('/landing/voucher/', [\App\Http\Controllers\LandingController::class, 'transactionVoucher'])->name('landing.voucher');
