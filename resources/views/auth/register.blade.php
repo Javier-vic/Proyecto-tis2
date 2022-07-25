@@ -22,8 +22,6 @@
 
                     </div>
                 </div>
-
-
                 <div class="row mb-3 ">
                     <div class="col-md-6 mx-auto  @if (isset($user)) d-none @endif"">
                         <label for="email" class="">{{ __('Correo electrónico') }}</label>
@@ -36,7 +34,6 @@
 
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="col-md-6 mx-auto ">
                         <label for="email" class="">{{ __('Dirección') }}</label>
