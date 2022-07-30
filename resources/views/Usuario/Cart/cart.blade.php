@@ -256,6 +256,10 @@
 @section('js_after')
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
+        $('#addAddressModal').on('shown.bs.modal', function() {
+        map.resize();
+        });
+        
         $(document).ready(function() {
             if (localStorage.getItem('cart')) {
                 if (localStorage.getItem('cart').length > 0) fullfillCart();
