@@ -96,7 +96,7 @@
                         @if (sizeof($bestSellers) > 0)
                             <div>
                                 <h2 id="{{ str_replace(' ', '', 'masVendido') }}"
-                                    class="mb-5 invisible intersectionObserver masvendidoIndicator">a
+                                    class="mb-5 invisible intersectionObserver masvendidoIndicator">
                                 </h2>
                                 <h2 id="" class="mb-4 masvendidoIndicator">Más vendidos</h2>
                                 <div class="my-2 row ">

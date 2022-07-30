@@ -22,7 +22,7 @@
         @csrf
         {{ method_field('PATCH') }}
 
-        {{ $orderData->id }}
+       
 
          <!-- First / Last Name -->
         <div class="row">
@@ -35,27 +35,29 @@
 
                     <nav id="navbar-example2" class="navbar navbar-light bg-light px-3">
                         <ul class="nav nav-pills">
-        
+
                             @foreach ($category as $item)
                             <li class="nav-item">
                                 <a class="nav-link" href="#listaProductos{{$item->id}}">{{$item->name}}</a>
                             </li>
                             @endforeach
+
+                           
         
                         </ul>
                     </nav>
                 
                     <div class="mt-5"  >
         
-                        <div id="listarSeleccionados" class="row list mt-5" height="100px"> 
-                            <h2 class="row list mt-5 mb-3" >Productos seleccionados</h2>
+                        <div id="listarSeleccionados" class="row list  rounded shadow mt-3" height="100px"> 
+                            <h2 class="row list mt-5 mb-3" >Productos seleccionados <hr></h2>
                         </div>
         
-                        @foreach ($category as $item)
-                        <div id="listaProductos{{$item->id}}" class="row list mt-3" height="100px"> 
-                            <h2>{{$item->name}}</h2>
-                        </div>
-                        @endforeach
+                       @foreach ($category as $item)
+                            <div id="listaProductos{{$item->id}}" class="row list  rounded shadow mt-3" height="100px"> 
+                                <h2 class="mt-3 ms-2 rounded-pill">{{$item->name}} <hr></h2>
+                            </div>
+                            @endforeach
                        
                     </div>
         
@@ -66,34 +68,18 @@
                 <fieldset class="form-group border p-3 mt-3">
                     <legend class="w-auto px-2">Datos cliente</legend>
                     <div class="mb-4">
-                        <label for="name_order" class="form-label">Nombre cliente :</label>
+                        <label for="name_order" class="form-label">  <i class="fa-solid fa-user me-2"></i> Nombre cliente :</label>
                         <input type="text" class="form-control input-modal" value="{{ isset($order->name_order) ? $order->name_order : '' }}"
                             id="name_order" name="name_order" aria-describedby="name_product_help" >
                         <span class="createmodal_error" id="name_order_errorCREATEMODAL"></span>
                     </div>
     
             
-                    <div class="mb-4">
-                        <label for="name_order" class="form-label">fecha :</label>
-                        <input type="text" class="form-control" id="date" name="date" aria-describedby="name_product_help">
-                    </div>
+           
             
             
                     <div class="mb-4">
-                        <label class="form-label">Estado pedido :</label>
-                        <select id="order_status" class="form-control" name="order_status">
-                            <option value="Espera">Espera</option>
-                            <option value="Cocinando">Cocinando</option>
-                            <option value="Listo">Listo</option>
-                            <option value="Entregado">Entregado</option>
-            
-                        </select>
-                    </div>
-            
-            
-            
-                    <div class="mb-4">
-                        <label for="pick_up" class="form-label">Despacho pedido </label>
+                        <label for="pick_up" class="form-label"><i class="fa-solid fa-truck me-2"></i>Despacho pedido </label>
                         <select id="mi-select" class="form-control" name="pick_up"
                             value="{{ isset($order->pick_up) ? $order->pick_up : '' }}">
             
@@ -104,19 +90,19 @@
                     </div>
             
                     <div class="mb-4 entradas">
-                        <label for="" class="form-label">Número de celular </label>
+                        <label for="" class="form-label"><i class="fa-solid fa-phone me-2"></i> Número de celular </label>
                         <input type="text" class="form-control input-modal" class="form-control" id="number" name="number">
                         <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
                     </div>
             
                     <div class="mb-4 entradas">
-                        <label for="" class="form-label">Email </label>
+                        <label for="" class="form-label"><i class="fa-solid fa-envelope me-2"></i>Email </label>
                         <input type="text" class="form-control input-modal" class="form-control" id="mail" name="mail">
                         <span class="createmodal_error" id="mail_errorCREATEMODAL"></span>
                     </div>
             
                     <div class="mb-4 entradas">
-                        <label for="" class="form-label">Direccion </label>
+                        <label for="" class="form-label"><i class="fa-solid fa-map-location-dot me-2"></i>Direccion </label>
                         <input type="text" class="form-control input-modal" class="form-control" id="address" name="address">
                         <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
                     </div>
@@ -132,7 +118,7 @@
                     </div>
             
                     <div class="mb-4">
-                        <label for="comment" class="form-label">Comentarios :</label>
+                        <label for="comment" class="form-label"><i class="fa-solid fa-comment me-2"></i>Comentarios :</label>
                         <input type="text" class="form-control" value="{{ isset($orderData->comment) ? $orderData->comment : '' }}"
                             class="form-control" id="comment" name="comment">
                     </div>
@@ -318,7 +304,7 @@
         console.log(productSelected.cantidad)
             $('#listarSeleccionados').append(
                 `
-                <div class="card col-2 mx-2" style="width: 13rem;">
+                <div class="card col-2 mx-3 my-3 shadow" style="width: 12rem;">
                     
 
                     <div id = "datos-product${productSelected.id}">
@@ -541,7 +527,7 @@
             var textEdit = productSelected.description
             $(`#listaProductos${productSelected.id_category_product}`).append(
                 `
-                    <div class="card col-2 mx-2 mt-2" style="width: 12rem;">
+                    <div class="card col-2 mx-3 my-3 shadow" style="width: 12rem;">
                         <div>
 
                             

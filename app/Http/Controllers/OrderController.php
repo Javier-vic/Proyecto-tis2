@@ -38,7 +38,8 @@ class OrderController extends Controller
                     'orders.total'
 
                 )
-                ->orderByDesc('id')
+                ->orderBy('orders.id','asc')
+                ->whereNull('deleted_at')
                 ->get())
                 ->addColumn('viewOrder', 'Mantenedores.order.datatable.view')
                 ->rawColumns(['viewOrder'])
@@ -503,6 +504,7 @@ class OrderController extends Controller
         $sales = DB::table('orders')
         ->select(DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
         ->whereyear('created_at', $request->year)
+        ->whereNull('orders.deleted_at')
         ->groupby('year','month')
         ->get();
       
@@ -657,6 +659,7 @@ class OrderController extends Controller
         ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year, MONTH(orders.created_at) month'))
         ->whereyear('created_at', $request->year)
         ->groupby('year','month')
+        ->whereNull('orders.deleted_at')
         ->get();
 
         
@@ -664,6 +667,7 @@ class OrderController extends Controller
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
         ->join('products','products_orders.product_id','products.id')
         ->join('orders','products_orders.order_id','orders.id')
+        ->whereNull('orders.deleted_at')
         ->groupBy('products_orders.product_id', 'products.name_product')
         ->whereyear('orders.created_at', $request->year)
         ->limit(5)
@@ -676,6 +680,7 @@ class OrderController extends Controller
         $alert = DB::table('orders')
         ->select(DB::raw('sum(orders.total) as `data`, count(orders.id) as `cantidad`'), DB::raw('YEAR(orders.created_at) year'))
         ->whereyear('created_at', $request->year)
+        ->whereNull('orders.deleted_at')
         ->groupby('year')
         ->get();
 
@@ -696,6 +701,7 @@ class OrderController extends Controller
         $bestseller = DB::table('products_orders')
         ->select('products_orders.product_id','products.name_product' , DB::raw('sum(products_orders.cantidad) as cantida'))
         ->join('products','products_orders.product_id','products.id')
+        ->whereNull('orders.deleted_at')
         ->groupBy('products_orders.product_id', 'products.name_product')
         ->limit(5)
         ->orderBy('cantida','DESC')
@@ -714,6 +720,7 @@ class OrderController extends Controller
         ->select( 'users.name', 'users.email','users.phone', DB::raw('COALESCE(sum(orders.total), 0)  as gastado'), DB::raw('count(orders.id) as cantidad'))
         ->leftjoin('order_user','orders.id','order_user.id_order')
         ->rightjoin('users','order_user.id_user','users.id')
+        ->whereNull('orders.deleted_at')
         ->where('users.id_role' , 2)
         ->limit(5)
         ->groupby('users.name', 'users.email','users.phone')

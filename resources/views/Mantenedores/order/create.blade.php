@@ -34,11 +34,11 @@
                 <div class="col-md-8 ">
                     
                     <!-- First / Last Name -->
-                    <fieldset  class="form-group border p-3 categoryName mb-4 anyClass"  style="overflow-x: hidden; overflow-y: scroll;">
+                    <fieldset  class="form-group border p-3 mx-3 categoryName mb-4 anyClass rounded"  style=" width = 100%; overflow-x: hidden; overflow-y: scroll;">
                         <legend class="h1 text-center ">Productos disponibles</legend>
 
 
-                        <nav id="navbar-example2" class="navbar navbar-light bg-light px-3">
+                        <nav id="navbar-example2" class="navbar navbar-light rounded-pill shadow bg-light px-3">
                             <ul class="nav nav-pills">
 
                                 @foreach ($category as $item)
@@ -53,8 +53,8 @@
                         <div class="mt-5"  >
 
                             @foreach ($category as $item)
-                            <div id="listaProductos{{$item->id}}" class="row list mt-3" height="100px"> 
-                                <h2>{{$item->name}}</h2>
+                            <div id="listaProductos{{$item->id}}" class="row list  rounded shadow mt-3" height="100px"> 
+                                <h2 class="mt-3 ms-2 rounded-pill">{{$item->name}} <hr></h2>
                             </div>
                             @endforeach
                            
@@ -64,9 +64,9 @@
                     </fieldset>
 
                     <fieldset class="form-group border p-3 mt-3">
-                        <legend class="w-auto px-2">Datos cliente </legend>
+                        <legend class="w-auto h1 text-center mb-5 px-2"> Datos cliente </legend>
                         <div class="mb-4">
-                            <label for="name_order" class="form-label">Nombre cliente :</label>
+                            <label for="name_order" class="form-label"> <i class="fa-solid fa-user me-2"></i> Nombre cliente :</label>
                             <input type="text" class="form-control input-modal" value="{{ isset($order->name_order) ? $order->name_order : '' }}"
                                 id="name_order" name="name_order" aria-describedby="name_product_help" >
                             <span class="createmodal_error" id="name_order_errorCREATEMODAL"></span>
@@ -74,7 +74,7 @@
         
         
                         <div class="mb-4">
-                            <label for="name_order" class="form-label">Despacho pedido :</label>
+                            <label for="name_order" class="form-label"><i class="fa-solid fa-truck me-2"></i>Despacho pedido :</label>
                             <select id="mi-select" class="form-control" name="pick_up"
                                 value="{{ isset($order->pick_up) ? $order->pick_up : '' }}">
         
@@ -85,21 +85,21 @@
                         </div>
         
                         <div class="mb-4 entradas">
-                            <label for="comment" class="form-label">Direccion :</label>
+                            <label for="comment" class="form-label"><i class="fa-solid fa-map-location-dot me-2"></i>Direccion :</label>
                             <input type="text" class="form-control input-modal" value="{{ isset($order->address) ? $order->address : '' }}"
                                 class="form-control" id="address" name="address" >
                                 <span class="createmodal_error" id="address_errorCREATEMODAL"></span>
                         </div>
         
                         <div class="mb-4 entradas">
-                            <label for="comment" class="form-label">Número de celular :</label>
+                            <label for="comment" class="form-label"><i class="fa-solid fa-phone me-2"></i> Número de celular :</label>
                             <input type="text" class="form-control input-modal" value=""
                                 class="form-control" id="number" name="number" >
                                 <span class="createmodal_error" id="number_errorCREATEMODAL"></span>
                         </div>
         
                         <div class="mb-4 entradas">
-                            <label for="comment" class="form-label">Email :</label>
+                            <label for="comment" class="form-label"><i class="fa-solid fa-envelope me-2"></i> Email :</label>
                             <input type="text" class="form-control input-modal" value=""
                                 class="form-control" id="mail" name="mail" >
                                 <span class="createmodal_error" id="mail_errorCREATEMODAL"></span>
@@ -123,7 +123,7 @@
         
         
                         <div class="mb-4">
-                            <label for="comment" class="form-label">Comentario :</label>
+                            <label for="comment" class="form-label"><i class="fa-solid fa-comment me-2"></i>Comentario :</label>
                             <input type="text" class="form-control" value="{{ isset($order->comment) ? $order->comment : '' }}"
                                 class="form-control" id="comment" name="comment">
                         </div>
@@ -131,11 +131,19 @@
                 </div>
 
 
-                <div class="col-4 anyClass py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top shadow" style="widht=100%" >
+                <div class="col-4 anyClass py-3 px-1 align-self-start sticky-top d-none d-md-block rounded sticky-margin-top shadow " style="widht=100%" >
                    
                     <div class="bg-black text-end rounded-pill pe-4">  <p id ="total" class="h1 text-white">$ 0</p> </div>
                     
+                    <div class="text-white mt-4 mx-3 px-2" id = "text-order" >
+                        <img src="https://cdn.picpng.com/fork/silverware-plate-fork-spoon-52667.png" alt=""
+                            class="img-fluid opacity-50 mb-2" width="500" height="350">
+                        <p class="text-muted m-0">Aún no has seleccionado ningún producto.</p>
+                        <p class="text-muted m-0">Selecciona alguno produto!</p>
+                    </div>
+
                     <div id = "listSelect" >
+                       
 
 
 
@@ -321,6 +329,7 @@
             }
 
             total = 0;
+            $("#text-order").removeClass("d-none");
             $("#buttom-order").addClass("d-none");
             $(`#total`).html("$ "+total);
             
@@ -332,7 +341,7 @@
             var textEdit = productSelected.description
             $(`#listaProductos${productSelected.id_category_product}`).append(
                 `
-                    <div class="card col-2 mx-2 mt-2" style="width: 12rem;">
+                    <div class="card col-2 mx-3 my-3 shadow" style="width: 12rem;">
                         <div>
 
                             
@@ -412,6 +421,7 @@
                     $(`#valor${productSelected.id}`).attr('name', `cantidad[${productSelected.id}]`);
                     $(`#bottonproduct${productSelected.id}`).html('<i class="fa-solid fa-trash"></i>  Eliminar Producto');
                     $("#buttom-order").removeClass("d-none");
+                    $("#text-order").addClass("d-none");
 
                     var valor =  new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(productSelected.price)
                     $('#listSelect').append
@@ -474,6 +484,7 @@
                     
                     if ($('#listSelect').find('div').length <= 0 ) {
                         $("#buttom-order").addClass("d-none");
+                        $("#text-order").removeClass("d-none");
 
                     } 
 
