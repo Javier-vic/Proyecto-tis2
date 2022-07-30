@@ -146,7 +146,7 @@
             </div>
             <div class="bg-white shadow p-3 mt-5 col-md-6">
                 <div>
-                    <h3 class="m-0">Método de pago</h3c>
+                    <h3 class="m-0">Método de pago</h3>
                         <hr>
                         <div id="payment_methodContainer" class="mb-3" style="overflow-y: scroll; height:350px;">
                             <a class="check_payment_method btn shadow-sm w-100 d-flex justify-content-between align-items-center hover paymentMethodHover mb-2 "
@@ -307,7 +307,107 @@
         });
 
 
+        function makeOrder(formData ){
+            let url = '{{ route('landing.store') }}';
+            $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(response, jqXHR) {
+                        console.log(response);
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'success',
+                            title: 'Se creó la orden correctamente.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            backdrop: false,
+                            heightAuto: false,
+                        })
+                        //QUITA LAS CLASES Y ELEMENTOS DE INVALID
+                        $("input-modal").removeClass('is-invalid');
+                        $("input-modal").removeClass('is-valid');
+                        $(".createmodal_error").empty()
+                        //////////////////////////////////////   
+                        if (response.urlCompra) {
+                            setTimeout(() => {
+                                localStorage.clear()
+                                window.location.replace(response.urlCompra);
 
+                            }, 1000);
+                        } else {
+                            setTimeout(() => {
+                                localStorage.clear()
+                                window.location.reload()
+
+                            }, 2000);
+                        }
+
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        var text = jqXHR.responseJSON;
+                        console.log(document.getElementById("paymentSelected").value)
+                        console.log(errorThrown)
+                        //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
+                        $(".createmodal_error").empty()
+                        $(".input-modal").addClass('is-valid')
+                        $(".input-modal").removeClass('is-invalid')
+                        //////////////////////////////////////////
+                        Swal.fire({
+                            position: 'bottom-end',
+                            icon: 'error',
+                            title: text.message,
+                            showConfirmButton: false,
+                            timer: 2000,
+                            backdrop: false
+                        })
+                        // AGREGA LAS CLASES Y ELEMENTOS DE INVALID
+                        if (text) {
+                            $.each(text.errors, function(key, item) {
+                                $("#" + key + "_error").append(
+                                    "<span class='text-danger'>" +
+                                    item + "</span>")
+                                $(`#${key}`).addClass('is-invalid');
+                            });
+
+                            ////////////////////////////////////
+                            //DESPLIEGA QUE NO HAY SUFICIENTE STOCK PARA CADA PRODUCTO 
+                            if (!text.stock) {
+                                let cart = localStorage.getItem('cart');
+                                cart = JSON.parse(cart);
+                                (cart)
+
+                                $.each(text.errors, function(key, item) {
+                                    $(`#product${item[0]}_error`).empty()
+                                    $("#product" + item[0] + "_error").append(
+                                        "<span class='text-danger'> No hay stock suficiente para este producto tienes " +
+                                        item[1] +
+                                        " unidades extra aproximadamente</span>")
+                                    cart.map(product => {
+                                        if (product.id === item[0]) {
+                                            product.stock = product.cantidad - item[
+                                                1]
+                                        }
+                                    })
+                                    localStorage.setItem('cart', JSON.stringify(cart));
+
+                                });
+
+
+                            }
+
+                        }
+
+
+                    }
+
+                });
+
+        }
         function fullfillCart() {
             $("#cartContainer").empty();
             let productos = JSON.parse(localStorage.getItem('cart'));
@@ -505,104 +605,29 @@
 
             let formData = new FormData(e.currentTarget);
             formData.append('cantidad', cart);
-            let url = '{{ route('landing.store') }}';
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(response, jqXHR) {
-                    console.log(response);
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'Se creó la orden correctamente.',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false,
-                        heightAuto: false,
-                    })
-                    //QUITA LAS CLASES Y ELEMENTOS DE INVALID
-                    $("input-modal").removeClass('is-invalid');
-                    $("input-modal").removeClass('is-valid');
-                    $(".createmodal_error").empty()
-                    //////////////////////////////////////   
-                    if (response.urlCompra) {
-                        setTimeout(() => {
-                            localStorage.clear()
-                            window.location.replace(response.urlCompra);
+            if(document.getElementById("paymentSelected").value == 0){
 
-                        }, 1000);
-                    } else {
-                        setTimeout(() => {
-                            localStorage.clear()
-                            window.location.reload()
-
-                        }, 2000);
+                Swal.fire({
+                    title: '¿Está seguro de realizar la compra en efectivo?',
+                    text: "¡Usted no podrá revertir el método de pago una vez realizada la compra!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, Realizar compra',
+                    cancelButtonText: 'Cancelar'
+                    
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                     
+                        makeOrder(formData)
                     }
-
-
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    var text = jqXHR.responseJSON;
-                    console.log(jqXHR)
-                    console.log(errorThrown)
-                    //LIMPIA LAS CLASES Y ELEMENTOS DE INVALID
-                    $(".createmodal_error").empty()
-                    $(".input-modal").addClass('is-valid')
-                    $(".input-modal").removeClass('is-invalid')
-                    //////////////////////////////////////////
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'error',
-                        title: text.message,
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false
                     })
-                    // AGREGA LAS CLASES Y ELEMENTOS DE INVALID
-                    if (text) {
-                        $.each(text.errors, function(key, item) {
-                            $("#" + key + "_error").append(
-                                "<span class='text-danger'>" +
-                                item + "</span>")
-                            $(`#${key}`).addClass('is-invalid');
-                        });
-
-                        ////////////////////////////////////
-                        //DESPLIEGA QUE NO HAY SUFICIENTE STOCK PARA CADA PRODUCTO 
-                        if (!text.stock) {
-                            let cart = localStorage.getItem('cart');
-                            cart = JSON.parse(cart);
-                            (cart)
-
-                            $.each(text.errors, function(key, item) {
-                                $(`#product${item[0]}_error`).empty()
-                                $("#product" + item[0] + "_error").append(
-                                    "<span class='text-danger'> No hay stock suficiente para este producto tienes " +
-                                    item[1] +
-                                    " unidades extra aproximadamente</span>")
-                                cart.map(product => {
-                                    if (product.id === item[0]) {
-                                        product.stock = product.cantidad - item[
-                                            1]
-                                    }
-                                })
-                                localStorage.setItem('cart', JSON.stringify(cart));
-
-                            });
-
-
-                        }
-
-                    }
-
-
-                }
-
-            });
+                
+            }
+            else{
+                makeOrder(formData)
+            }
         }
 
         const checkInput = (e) => {
