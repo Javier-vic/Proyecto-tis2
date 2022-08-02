@@ -50,6 +50,23 @@
     <script type="text/javascript" src="{{ asset('js/moment.min.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
+
+        function sendStatus(id,status){
+            console.log('gola')
+            $.ajax({
+                type: "post",
+                url: "{{route('send.orderReady')}}",
+                data: {id: id,status:status},
+                success: function (response) {
+                    
+                
+                }
+            });
+
+
+        }
+
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -64,14 +81,14 @@
             countOrders = @json($pendingOrders).length;
             const loop = setInterval(()=>queryOrders(), 3000);
         });
+
+
         function queryOrders(flag=false){
             $.ajax({
                 type: "GET",
                 url: "{{route('pendingOrdersView')}}",
                 success: function (response) {
                     //renderOrders(response);
-                    console.log(response.length)
-                    console.log(countOrders)
                     if(response.length > countOrders || flag){
                         (flag) ? renderOrders(response,true):renderOrders(response);
                         countOrders = response.length;
@@ -101,6 +118,8 @@
                     updOrder = `<div class="row my-2">
                                     <button class="btn btn-success w-auto mx-auto" onclick="updateOrden(${order.id},'Listo')">Actualizar a listo</button>
                                 </div>`
+                
+                 
                 }
                 $("#containerOrders").append(
                     `<div class="col-xl-4 col-md-6 col-12 mt-2">
@@ -124,7 +143,6 @@
                         </div>
                     </div>`)                
             })
-            console.log('listo');
         }
         function updateOrden(id,status){ 
             Swal.fire({
@@ -144,6 +162,7 @@
                         data: {id: id, status:status},
                         success: function (response) {
                             queryOrders(true);
+                            sendStatus(id,status)
                         }
                     });
                 }

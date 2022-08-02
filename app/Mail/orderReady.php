@@ -7,10 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class welcomeMail extends Mailable
+class orderReady extends Mailable
 {
     use Queueable, SerializesModels;
-    public $subject = "Descuentos ramen dashi";
+    public $subject = "Estado pedido Ramen Dashi";
     public $cliente;
     public $date;
     /**
@@ -18,10 +18,11 @@ class welcomeMail extends Mailable
      *
      * @return void
      */
-    public function __construct($cliente,$date)
-    {
-        $this->cliente = $cliente; 
-        $this->date = $date;
+    public function __construct($date)
+    {   
+        $this->cliente = $date;
+        
+    
     }
 
     /**
@@ -31,7 +32,6 @@ class welcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.welcome-mail');
-       
-    }       
+        return $this->view('mail.orderReady');
+    }
 }

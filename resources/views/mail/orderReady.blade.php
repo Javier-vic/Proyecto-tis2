@@ -20,19 +20,24 @@
                     
                 <table role="presentation" style="width:70%;border-collapse:collapse;text-align:left;">
                     <tr>
-                        <td align="center" style="padding:40px 0 30px 0;"width="100%" style="height:10%;display:block;">
-                   
-                            <h1>Hola {{$cliente->name}}</h1>
-                            <h4>Queremos darte nustras mejores ofertas en ramen dashi</h4>
+                        <td align="center" style="padding:40px 0 30px 0;"width="10%" style="height:100;display:block;">
+                            <a href="https://www.facebook.com/ramen.dashi.cl/"><img src="{{ $message->embed(Storage::path("public/img-png/logo.jpg"))}}" width="350" style="height:auto;display:block;border:0;"></a>
+                            <h1>Hola {{$cliente->name_order}}  </h1>
+                            @if($cliente->order_status == 'Listo')
+                                <h3>Queremos infomarte que tu pedido ya se encuentra listo </h3>
+                            
+                                @elseif ($cliente->order_status == 'Cocinando')
+                                    <h3>Queremos infomarte que tu pedido ya esta en preparacion </h3>
+                                @else
+
+                            @endif
+                         
+                            
                             
                         
                         </td>
                     </tr>
-                    <tr>
-                        <td align="center" style="padding:40px 0 30px 0;">
-                            <img src="{{ $message->embed(Storage::path("public/".$date))}}" width="100%" style="height:600px;display:block;">
-                        </td>
-                    </tr>
+                
 
                     <tr margin-bottom:100px>
 

@@ -19,8 +19,6 @@ use App\Http\Controllers\worker;
 use App\Http\Controllers\SendCouponController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
-
 use App\Mail\welcomeMail;
 use App\Models\product;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +35,7 @@ use App\Models\User;
 |
 */
 
-Route::get('/ubicacion', [LandingController::class, 'ubicacion']);
+Route::get('/location', [LandingController::class, 'ubicacion'])->name('location');
 Route::get('/getLocation', [LandingController::class, 'getLocation'])->name('getLocation');
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/login', function () {
@@ -72,6 +70,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     Route::get('/order/getMonthOrder', '\App\Http\Controllers\OrderController@getMonthOrder')->name('order.month');
     Route::get('order/getbestsellers', '\App\Http\Controllers\OrderController@getbestsellers')->name('order.bestsellers');
+    Route::get('order/selectMonth', '\App\Http\Controllers\OrderController@selectMonth')->name('order.selectMonth');
+    Route::get('order/filterYearMonth', '\App\Http\Controllers\OrderController@filterYearMonth')->name('order.filterYearMonth');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
@@ -103,6 +103,8 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
     Route::post('/publicity/couponSend', [SendCouponController::class, 'store'])->name('sendCoupon.store');
     Route::post('/map/saveStatus', [\App\Http\Controllers\MapController::class, 'saveLocalStatus'])->name('map.saveStatus');
+    Route::post('/publicity/couponSend', [SendCouponController::class, 'store'])->name('sendCoupon.store');
+    Route::post('/publicity/orderReady', [SendCouponController::class, 'orderReady'])->name('send.orderReady');
 
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
@@ -125,6 +127,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/user/orderDetails', [\App\Http\Controllers\UserController::class, 'orderDetails'])->name('order.details');
 Route::get('/user/orderbyuser', [\App\Http\Controllers\UserController::class, 'orderbyuser'])->name('order.history');
+Route::get('/user/findOrder', [\App\Http\Controllers\UserController::class, 'findOrder'])->name('order.find');
+Route::get('/user/showOrder', [\App\Http\Controllers\UserController::class, 'showOrder'])->name('show.order');
 Route::get('/landing/cart/', [LandingController::class, 'userCart'])->name('user.cart');
 Route::post('/landing/confirmation/', [LandingController::class, 'transactionConfirmation'])->name('landing.confirmation');
 Route::get('/landing/voucher/', [\App\Http\Controllers\LandingController::class, 'transactionVoucher'])->name('landing.voucher');

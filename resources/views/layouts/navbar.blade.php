@@ -32,8 +32,14 @@ use App\Http\Controllers\RoleController;
             <ul class="list-unstyled ">
 
                 <li>
-                    <a href="{{ route('home') }}" class="my-3 {{ request()->is('home', 'home/*') ? ' active' : '' }}"><i
+                    <<<<<<< HEAD <a href="{{ route('home') }}"
+                        class="my-3 {{ request()->is('home', 'home/*') ? ' active' : '' }}"><i
                             class="me-3 fa-solid fa-chart-line"></i></i>Dashboard</a>
+                        =======
+                        <a href="{{ route('home') }}"
+                            class="my-3 {{ request()->is('home', 'home/*') ? ' active' : '' }}"><i
+                                class="me-3 fa-solid fa-chart-line"></i></i>Dashboard</a>
+                        >>>>>>> main
                 </li>
                 @if (RoleController::havePermits(auth()->user()->id_role, 2))
                     <li>
@@ -165,21 +171,28 @@ use App\Http\Controllers\RoleController;
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="Notificaciones">
                             <div id="missing_supply"></div>
-                            <div id="critical_supply"></div>
-                        </ul>
+                            <<<<<<< HEAD <div id="critical_supply">
                     </div>
+                    =======
+                    <div id="critical_supply"></div>
+                    <div class="notificaciones">
 
-                    <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Cerrar sesion
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
+                    </div>
+                    >>>>>>> main
+                    </ul>
                 </div>
-            </nav>
-            @yield('content')
+
+                <a class="btn btn-danger align-self-center   w-auto " href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Cerrar sesion
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
         </div>
+        </nav>
+        @yield('content')
+    </div>
     </div>
 
 </body>
@@ -196,85 +209,59 @@ use App\Http\Controllers\RoleController;
 
 <script>
     if (@json(RoleController::havePermits(auth()->user()->id_role, 2))) {
-        //supply
-        $.ajax({
-                    type: "GET",
-                    url: "{{ route('supplyNotification') }}",
-                    data: "json",
-                    success: function(response) {
-                            if (response.countSupplies[0].countsupplies == 0) {
-                                $(".badge-notification").addClass('d-none')
-                            }
-                            $('#countsupplies').text(response.countSupplies[0].countsupplies);
-                            $('#critical_supply').empty();
-                            response.criticalSupplies.map(supplies => {
-                                        $('#critical_supply').append(
-                                                `
-
-    if (@json(RoleController::havePermits(auth()->user()->id_role, 2))) {
         $.ajax({
             type: "GET",
             url: "{{ route('supplyNotification') }}",
             data: "json",
             success: function(response) {
                 if (response.countSupplies[0].countsupplies == 0) {
+                    $('.notificaciones').append(
+                        `
+                            
+                                <span>No hay notificaciones</span>
+                            
+                            `
+                    );
                     $(".badge-notification").addClass('d-none')
                 }
                 $('#countsupplies').text(response.countSupplies[0].countsupplies);
                 $('#critical_supply').empty();
                 response.criticalSupplies.map(supplies => {
                     $('#critical_supply').append(
-                        ` >>>
-                                                >>>
-                                                >
-                                                Stashed changes <
-                                                li class = "dropdown-item" >
-                                                <
-                                                i class =
-                                                "fa-solid fa-triangle-exclamation text-warning fs-3 d-inline-block" > <
-                                                /i> <
-                                                div class = "d-inline-block" >
-                                                <
-                                                a href = "/supply" >
-                                                <
-                                                span class = "text-warning" > $ {
-                                                    supplies.name_supply
-                                                }
-                                                en cantidad critica < /span> < /
-                                                a > <
-                                                /div> < /
-                                                li >
-
-                                                `
+                        `
+                                    <li class="dropdown-item">                                   
+                                        <i class="fa-solid fa-triangle-exclamation text-warning fs-3 d-inline-block" ></i>
+                                        <div class="d-inline-block">                                        
+                                            <a href="/supply">
+                                                <span class="text-warning">${supplies.name_supply} en cantidad critica</span>
+                                            </a>                                       
+                                        </div>
+                                    </li>
+                                    
+                                `
 
                     )
                 })
                 $('#missing_supply').empty();
                 response.missingSupplies.map(supplies => {
                     $('#missing_supply').append(
-                        ` <
-                                                li class = "dropdown-item" >
-                                                <
-                                                i class =
-                                                "d-inline-block fa-solid fa-circle-exclamation text-danger fs-3" > <
-                                                /i> <
-                                                div class = "d-inline-block" >
-                                                <
-                                                a href = "/supply" >
-                                                <
-                                                span class = "text-danger aa" > $ {
-                                                    supplies.name_supply
-                                                }
-                                                en cero < /span> < /
-                                                a > <
-                                                /div> < /
-                                                li >
-                                                `
+                        `
+                                    <li class="dropdown-item">
+                                        <i class="d-inline-block fa-solid fa-circle-exclamation text-danger fs-3"></i>
+                                        <div class="d-inline-block">
+                                            <a href="/supply" >
+                                                <span class="text-danger aa">${supplies.name_supply} en cero</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                `
 
                     )
                 })
             }
         });
+    }
+    });
     }
 </script>
 
