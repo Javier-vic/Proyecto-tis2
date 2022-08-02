@@ -79,6 +79,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/supply/notification', [SupplyController::class, 'notificationSupply'])->name('supplyNotification');
     Route::get('/product/dashboard', [ProductController::class, 'dashboardProduct'])->name('productDashboard');
     Route::get('/publicity/sendCoupon', [SendCouponController::class, 'index'])->name('sendCoupon.index');
+    Route::get('/map/status', [MapController::class, 'localStatus'])->name('map.status');
     Route::get('/publicity/couponSend', function () {
         $correo = new welcomeMail;
         Mail::to('apinto@ing.ucsc.cl')->send($correo);
@@ -100,8 +101,9 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-    
-    
+    Route::post('/publicity/couponSend', [SendCouponController::class, 'store'])->name('sendCoupon.store');
+    Route::post('/map/saveStatus', [\App\Http\Controllers\MapController::class, 'saveLocalStatus'])->name('map.saveStatus');
+
     //RESOURCE
     Route::resource('category_supply', CategorySupplyController::class);
     Route::resource('supply', SupplyController::class);

@@ -166,6 +166,54 @@ class MapController extends Controller
         }
     }
 
+    public function localStatus(request $request)
+    {
+        $localStatus = DB::table('local_status')
+            ->where('id', 1)
+            ->get();
+
+        return view('Mantenedores.local_status.index', compact('localStatus'));
+    }
+
+    public function saveLocalStatus(request $request)
+    {
+
+        $rules = [
+            'opening'          => 'required',
+            'closing'          => 'required',
+        ];
+        $messages = [
+            'required'      => 'Este campo es obligatorio',
+
+        ];;
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->passes()) {
+            DB::beginTransaction();
+            $values = request()->except('_token');
+            try {
+                DB::table('local_status')
+                    ->where('id', 1)
+                    ->update([
+                        'opening' => $values['opening'],
+                        'closing' => $values['closing']
+                    ]);
+                DB::connection(session()->get('database'))->commit();
+                return response('Se editó el horario de atención correctamente.', 200);
+            } catch (\Throwable $th) {
+
+                DB::connection(session()->get('database'))->rollBack();
+                return response('No se pudo editar horario de atención.', 400);
+            }
+        } else {
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 400);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
+use URL;
 
 class LandingController extends Controller
 {
@@ -31,6 +32,10 @@ class LandingController extends Controller
         $category_products = category_product::all();
         ////////////////////////////////////////////////
 
+        //OBTIENE EL ESTADO DEL LOCAL : ABIERTO/CERRADO
+        $localStatus = DB::table('local_status')
+            ->select('*')
+            ->get();
         //OBTIENE LOS PRODUCTOS Y ASOCIADOS A SU CATEGORÍA
         $productAvailable = DB::table('products')
             ->whereNull('products.deleted_at')
@@ -79,7 +84,7 @@ class LandingController extends Controller
 
 
 
-        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames', 'imagesMain', 'bestSellers'));
+        return view('Usuario.Landing.landing', compact('category_products', 'categoryAvailable', 'productAvailable', 'categoryAvailableNames', 'imagesMain', 'bestSellers', 'localStatus'));
     }
 
     /**
@@ -663,6 +668,10 @@ class LandingController extends Controller
     public function userCart(request $request)
     {
         $mapa = map::first();
-        return view('Usuario.Cart.cart', compact('mapa'));
+        $localStatus = DB::table('local_status')
+            ->select('*')
+            ->get();
+
+        return view('Usuario.Cart.cart', compact('mapa', 'localStatus'));
     }
 }

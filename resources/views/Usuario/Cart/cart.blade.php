@@ -257,12 +257,19 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            if (localStorage.getItem('cart')) {
-                if (localStorage.getItem('cart').length > 0) fullfillCart();
+            if (checkLocalStatus()) {
+                if (localStorage.getItem('cart')) {
+                    if (localStorage.getItem('cart').length > 0) fullfillCart();
+                } else {
+                    localStorage.setItem('cart', JSON.stringify([]));
+                    window.location.href = "/";
+                }
             } else {
-                localStorage.setItem('cart', JSON.stringify([]));
                 window.location.href = "/";
             }
+
+
+
 
 
             //REVISA CUAL RADIO ESTÁ SELECCIONADO ( DELIVERY O RETIRO EN SUCURSAL)
@@ -302,11 +309,22 @@
                 }
             });
 
-
-
         });
+        const localStatus = @json($localStatus);
+        const checkLocalStatus = () => {
+            let currentTime = new Date().toLocaleTimeString()
 
+            let openingTime = localStatus[0].opening
+            let closingTime = localStatus[0].closing
 
+            if (currentTime < closingTime && currentTime > openingTime) {
+
+                return true;
+            } else {
+                return false;
+            }
+
+        }
 
         function fullfillCart() {
             $("#cartContainer").empty();

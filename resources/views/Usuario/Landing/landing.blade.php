@@ -34,22 +34,32 @@
                     @endforeach
                 </div>
             </div>
-            @if (isset($imagesMain))
+            @if (!isset($imagesMain))
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
                     data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                    <span class="visually-hidden">Siguiente</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
                     data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                    <span class="visually-hidden">Anterior</span>
                 </button>
             @endif
 
         </div>
     </div>
+    <div>
+        <div class="alert alert-danger" role="alert">
+            @foreach ($localStatus as $data)
+                <h2>La tienda se encuentra <b>cerrada</b> en estos momentos pero puedes encontrarnos de Lunes a Viernes
+                    desde
+                    <b>{{ $data->opening }}</b> hasta <b>{{ $data->closing }} hrs</b>
+                </h2>
+            @endforeach
 
+        </div>
+    </div>
     <div class="mt-5 p-0">
         <div class="input-group ">
             <span class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -154,6 +164,7 @@
                                 <h2 class="categoryName mb-4 {{ strtolower($category->name) }}Indicator"
                                     id="{{ $category->name }}Nombre">
                                     {{ $category->name }}
+
                                 </h2>
 
                                 <section>
@@ -266,6 +277,7 @@
 
         </div>
     </div>
+
     {{--  --}}
     {{-- END TÚ PEDIDO --}}
     </div>
@@ -280,10 +292,16 @@
             else {
                 localStorage.setItem('cart', JSON.stringify([]));
             }
+
+            if (!checkLocalStatus()) {
+
+            }
+
         });
         const categoryAvailable = @json($categoryAvailable);
         const productsAvailable = @json($productAvailable);
         const bestSellers = @json($bestSellers);
+        const localStatus = @json($localStatus);
         const searchFilter = (e) => {
             input = e.target.value
             filter = input.toLowerCase();
@@ -521,7 +539,7 @@
 
             $('#continuePayment').empty()
             $('#continuePayment').append(
-                `<a onclick="checkCart(event)" href="/cart" class="btn bgColor text-white buttonHover m-0 text-start d-flex justify-content-between">Ir a pagar<span class="text-white">$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span></a>`
+                `<a onclick="checkCart(event)" href="/cart" class="btn bgColor text-white buttonHover m-0 text-start d-flex justify-content-between cartStatus">Ir a pagar<span class="text-white">$ ${total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</span></a>`
             )
         }
 
@@ -580,6 +598,21 @@
             categorias.map(categoria => {
                 observer.observe(categoria)
             })
+        }
+
+        const checkLocalStatus = () => {
+            let currentTime = new Date().toLocaleTimeString()
+            console.log(localStatus)
+            let openingTime = localStatus[0].opening
+            let closingTime = localStatus[0].closing
+
+            if (currentTime < closingTime && currentTime > openingTime) {
+
+                return true;
+            } else {
+                return false;
+            }
+
         }
     </script>
 @endsection
