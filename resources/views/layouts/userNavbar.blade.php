@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ramendashi</title>
+    <title>Ramendahi</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
         .linkHover:hover {
             color: rgb(254, 0, 0) !important;
@@ -108,6 +107,7 @@
                                 <hr>
                             </li>
                             <li class="nav-item mx-3">
+
                                 <a class=" nav-link fw-bold ropdown-item d-inline d-lg-block linkHover d-flex align-self-center p-0 mt-3 mb-3"
                                     href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -132,6 +132,7 @@
                     <a class="nav-link fw-bold px-3  bgColor text-white d-inline d-lg-block buttonHover "
                         aria-current="page" href="/landing/cart" onclick="checkCart(event)"><i
                             class="fa-solid fa-cart-shopping"></i><span class="cartQuantity"></span></a>
+
                 </li>
             </ul>
             {{-- FIN NAVBAR CELULAR --}}
@@ -144,12 +145,9 @@
                             aria-current="page" href="/"><i class="fa-solid fa-utensils me-2"></i>Menú</a>
                     </li>
                     <li class="nav-item mx-3 ">
-                        <<<<<<< HEAD <<<<<<< Updated upstream <a class="nav-link fw-bold linkHover" aria-current="page"
+                        <<<<<<< Updated upstream <a class="nav-link fw-bold linkHover" aria-current="page"
                             href="#">
-                            =======
-                            <a class="nav-link fw-bold linkHover" aria-current="page" href="{{ route('location') }}">
-                                >>>>>>> main
-                                <i class="fa-solid fa-house-chimney me-2"></i>Local
+                            <i class="fa-solid fa-house-chimney me-2"></i>Local
                             </a>
                     </li>
                     =======
@@ -162,31 +160,23 @@
                             <i class="fa-solid fa-truck-fast me-2"></i>Estado de mi pedido
                         </a>
                     </li>
-                    <<<<<<< HEAD>>>>>>> Stashed changes
-                        =======
+                    >>>>>>> Stashed changes
+                    @if (auth()->user())
                         <li class="nav-item mx-3 ">
-                            <a class="nav-link fw-bold linkHover" aria-current="page" href="{{ route('order.find') }}">
-                                <i class="fa-solid fa-truck-fast me-2"></i>Estado de mi pedido
+                            <a class="nav-link fw-bold linkHover" aria-current="page"
+                                href="{{ route('order.history') }}">
+                                <i class="fa-solid fa-receipt me-2"></i>Mis pedidos
                             </a>
                         </li>
-                        >>>>>>> main
-                        @if (auth()->user())
+                    @endif
+                    @auth
+                        @if (auth()->user()->id_role != 2)
                             <li class="nav-item mx-3 ">
-                                <a class="nav-link fw-bold linkHover" aria-current="page"
-                                    href="{{ route('order.history') }}">
-                                    <i class="fa-solid fa-receipt me-2"></i>Mis pedidos
-                                </a>
+                                <a class="nav-link fw-bold linkHover" aria-current="page" href="{{ route('home') }}"><i
+                                        class="fa-solid fa-chart-line me-2"></i>Funcionarios</a>
                             </li>
                         @endif
-                        @auth
-                            @if (auth()->user()->id_role != 2)
-                                <li class="nav-item mx-3 ">
-                                    <a class="nav-link fw-bold linkHover" aria-current="page"
-                                        href="{{ route('home') }}"><i
-                                            class="fa-solid fa-chart-line me-2"></i>Funcionarios</a>
-                                </li>
-                            @endif
-                        @endauth
+                    @endauth
 
 
                 </ul>
@@ -250,44 +240,19 @@
             </a>
         </div>
 
-        <div class="col mb-3">
 
-        </div>
         <div class="col mb-3">
-            {{-- <h5>Section</h5>
+            <h5>Section</h5>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="/login" class="nav-link p-0 text-muted">Ingresar</a></li>
                 <li class="nav-item mb-2"><a href="/user" class="nav-link p-0 text-muted">Regístrate</a></li>
                 <li class="nav-item mb-2"><a href="/password/reset" class="nav-link p-0 text-muted">Recuperar
                         contraseña</a></li>
-            </ul> --}}
-        </div>
-        <div class="col mb-3">
-            <h5 class="fw-bold">Mi cuenta</h5>
-            <ul class="nav flex-column">
-                <<<<<<< HEAD <li class="nav-item mb-2"><a href="https://goo.gl/maps/eLq4QGrxErDtgjUm8"
-                        target="_blank" class="nav-link p-0 text-muted">Purén 596, Chillán</a></li>
-                    <li class="nav-item mb-2 d-flex">
-                        <a href="https://www.facebook.com/ramen.dashi.cl" class="nav-link p-0 text-muted"
-                            target="_blank"><i class="ri-facebook-circle-fill fs-1"></i></a>
-                        <a href="https://www.instagram.com/ramen.dashi" target="_blank"
-                            class="nav-link p-0 text-muted ms-2"><i class="ri-instagram-fill fs-1"></i></a>
-                        <a href="https://wa.me/56937785214" target="_blank" class="nav-link p-0 text-muted ms-2"><i
-                                class="ri-whatsapp-fill fs-1"></i></a>
-                    </li>
             </ul>
         </div>
 
-        =======
-        <li class="nav-item mb-2"><a href="/login" class="nav-link p-0 text-muted">Ingresar</a></li>
-        <li class="nav-item mb-2"><a href="/user" class="nav-link p-0 text-muted">Regístrate</a></li>
-        <li class="nav-item mb-2"><a href="/password/reset" class="nav-link p-0 text-muted">Recuperar contraseña</a>
-        </li>
-        </ul>
-        </div>
-
         <div class="col mb-3">
-            <h5 class="fw-bold">Contacto</h5>
+            <h5>Section</h5>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="https://goo.gl/maps/eLq4QGrxErDtgjUm8" target="_blank"
                         class="nav-link p-0 text-muted">Purén 596, Chillán</a></li>
@@ -301,7 +266,7 @@
                 </li>
             </ul>
         </div>
-        >>>>>>> main
+
     </footer>
 </body>
 <script src="{{ asset('js/app.js') }}"></script>

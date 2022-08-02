@@ -2,7 +2,7 @@
 
 @section('content')
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <div class="row" id="containerOrders">
+    <div class="row">
         @foreach ($readyOrders as $item)
         <div class="col-xl-4 col-md-6 col-12 mt-2">
             <div class="card border-success border-2">
@@ -63,6 +63,9 @@
                 type: "GET",
                 url: "{{route('readyOrdersView')}}",
                 success: function (response) {
+                    //renderOrders(response);
+                    console.log(response.length)
+                    console.log(countOrders)
                     if(response.length > countOrders || flag){
                         (flag) ? renderOrders(response,true):renderOrders(response);
                         countOrders = response.length;
@@ -73,18 +76,30 @@
         function renderOrders(data,flag){
             $("#containerOrders").empty();
             data.map((order)=>{
-                console.log(order)
                 var products="";
-                var style = "border-success border-2";
-                var updOrder= ` <div class="text-center text-white rounded bg-success p-2 w-50 mx-auto fs-5 mt-4 mb-2">
-                                    ${order.order_status} 
-                                </div>
-                                <div class="row my-2">
-                                    <button class="btn btn-primary w-auto mx-auto" onclick="updateOrden(${order.id},'Entregado')">Orden entregada</button>
-                                </div>`;
+                var style = "";
+                var updOrder= "";
                 order.listProducts.map((product)=>{
                     products += `<li class="list-group-item">${product.name_product} - cantidad : ${product.cantidad}</li>`
                 })
+                if(order.order_status=='Espera'){
+                    style = 'border-danger border-2';
+                    updOrder = `<div class="text-center text-white rounded bg-danger p-2 w-50 mx-auto fs-5 mt-4 mb-2">
+                                    ${order.order_status} 
+                                </div>
+                                <div class="row my-2">
+                                    <button class="btn btn-success w-auto mx-auto" onclick="updateOrden(${order.id},'Cocinando')">Tomar orden</button>
+                                </div>`
+                }
+                if(order.order_status=='Cocinando'){
+                    style = 'border-warning border-2';
+                    updOrder = `<div class="text-center text-white rounded bg-warning p-2 w-50 mx-auto fs-5 mt-4 mb-2">
+                                    ${order.order_status} 
+                                </div>
+                                <div class="row my-2">
+                                    <button class="btn btn-success w-auto mx-auto" onclick="updateOrden(${order.id},'Listo')">Actualizar a listo</button>
+                                </div>`
+                }
                 $("#containerOrders").append(
                     `<div class="col-xl-4 col-md-6 col-12 mt-2">
                         <div class="card ${style}">
@@ -107,6 +122,7 @@
             if(!flag){
                 audio.play();
             }
+            console.log('listo');
         }
         function updateOrden(id,status){ 
             Swal.fire({

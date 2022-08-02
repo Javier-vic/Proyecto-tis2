@@ -6,19 +6,6 @@
 
 @section('content')
 
-    <div class="">
-        @include('Mantenedores.image_main.modal.modal')
-    </div>
-
-
-    <div class="row my-4">
-        <div class="col d-flex justify-content-center">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enviarCupon"> <i class="fa-regular fa-envelope fa-lg me-1"></i> Enviar Publicidad</button>
-        </div>
-    </div>
-
-
-
     <form onsubmit="submitImages(event);" method="POST" id="formSubmitImages" enctype="multipart/form-data">
         @csrf
         <div class="row">
@@ -178,57 +165,6 @@
                     });
                 }
             })
-        }
-
-
-
-        const sendPublic = (e) => {
-            
-            e.preventDefault();
-            var formData = new FormData(e.currentTarget);
-            var url = '{{ route('sendCoupon.store') }}';
-            $("#loadingPublicida").removeClass('d-none');        
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(response, jqXHR) {
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'success',
-                        title: 'Se envio la publicidad correctamente.',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false,
-                        heightAuto: false,
-                    })
-                    $(".createmodal_error").empty()
-                    $(".input-modal").removeClass('is-invalid');
-                    $(".input-modal").removeClass('is-valid');
-                    $('#enviarCupon').modal('hide');
-                    $("#loadingPublicida").addClass('d-none');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    var text = JSON.parse(jqXHR.responseText).errors;
-                    console.log(text);
-                    $("#loadingPublicida").addClass('d-none');
-                    $.map(text, function (e,key) {
-                        $(`#${key}_errorCREATEMODAL`).text(e);
-                        $(`#${key}`).addClass('is-invalid');
-                    });
-                    Swal.fire({
-                        position: 'bottom-end',
-                        icon: 'error',
-                        title: "No se pudo realizar envio.",
-                        showConfirmButton: false,
-                        timer: 2000,
-                        backdrop: false
-                    })
-                }
-            });
         }
     </script>
 @endsection
