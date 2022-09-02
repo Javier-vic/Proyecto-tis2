@@ -73,7 +73,6 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('order/selectMonth', '\App\Http\Controllers\OrderController@selectMonth')->name('order.selectMonth');
     Route::get('order/filterYearMonth', '\App\Http\Controllers\OrderController@filterYearMonth')->name('order.filterYearMonth');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
-    Route::get('/order/orderbyuser', [\App\Http\Controllers\OrderController::class, 'orderbyuser'])->name('order.history');
     Route::get('/order/getBestClient', [\App\Http\Controllers\OrderController::class, 'getBestClient'])->name('order.getBestClient');
     Route::get('/supply/dashboard', [SupplyController::class, 'dashboardSupply'])->name('supplyDashboard');
     Route::get('/supply/notification', [SupplyController::class, 'notificationSupply'])->name('supplyNotification');
@@ -81,9 +80,6 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::get('/publicity/sendCoupon', [SendCouponController::class, 'index'])->name('sendCoupon.index');
 
 
-
-
-    Route::get('/order/orderview', [\App\Http\Controllers\OrderController::class, 'getview'])->name('order.view');
     // Route::get('/worker/asist/{user}',[worker::class,'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/worker/asist/{user}', [worker::class, 'getAsistByWorker'])->name('Asist.ByWorker');
     Route::get('/order/pending', [OrderController::class, 'pendingOrdersView'])->name('pendingOrdersView');
@@ -96,7 +92,7 @@ Route::middleware(['auth', 'verifyrole'])->group(function () {
     Route::post('/order/addproduct', [\App\Http\Controllers\OrderController::class, 'addproduct'])->name('order.addproduct');
     Route::post('/order/selectproduct', [\App\Http\Controllers\OrderController::class, 'selectproduct'])->name('order.selectproduct');
     Route::post('/product/productModalEditStore/{product}', [ProductController::class, 'productModalEditStore'])->name('product.modal.edit.store');
-    Route::post('/publicity/couponSend',[SendCouponController::class, 'store'])->name('sendCoupon.store');
+    Route::post('/publicity/couponSend', [SendCouponController::class, 'store'])->name('sendCoupon.store');
     Route::post('/publicity/orderReady', [SendCouponController::class, 'orderReady'])->name('send.orderReady');
 
     //RESOURCE
@@ -131,7 +127,8 @@ Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('d
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
 //DEBEN ESTAR EN MIDDLEWARE
-Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
+Route::patch('/landing/update/{user}', [\App\Http\Controllers\LandingController::class, 'updateUserProfile'])->name('user.update.profile');
+// Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
 Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -145,4 +142,3 @@ Route::resource('landing', LandingController::class);
 //RUTAS PARA EL INICIO DE SESIÓN CON GOOGLE
 Route::get('/login/google', [GoogleController::class, 'HandleGoogleLogin'])->name('login.google');
 Route::get('/google/callback', [GoogleController::class, 'HandleGoogleCallback']);
-        
