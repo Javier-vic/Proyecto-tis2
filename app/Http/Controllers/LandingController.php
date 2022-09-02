@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\order;
 use App\Models\coupon;
 use App\Models\product;
-use App\Models\user;
+use App\Models\User;
 use App\Models\map;
 use App\Models\image_main;
 use Illuminate\Support\Facades\Hash;
