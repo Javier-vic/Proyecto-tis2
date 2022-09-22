@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
 use URL;
+
 class LandingController extends Controller
 {
     /**
@@ -64,7 +65,9 @@ class LandingController extends Controller
         $bestSellers = DB::table('products_orders')
             ->select('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id', DB::raw('sum(products_orders.cantidad) as cantidad'))
             ->join('products', 'products_orders.product_id', 'products.id')
+            ->join('orders', 'products_orders.order_id', 'orders.id')
             ->whereNull('products.deleted_at')
+            ->whereNull('orders.deleted_at')
             ->groupBy('products_orders.product_id', 'products.name_product', 'products.description', 'products.image_product', 'products.price', 'products.stock', 'products.id')
             ->limit(3)
             ->orderBy('cantidad', 'DESC')
@@ -348,7 +351,7 @@ class LandingController extends Controller
                         } else {
                             return Response::json(array(
                                 'success' => false,
-                                'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o selecciones otro método de pago.',
+                                'message' => 'Ocurrió un error al intentar pagar , intentalo nuevamente o seleccione otro método de pago.',
 
                             ), 400);
                         }

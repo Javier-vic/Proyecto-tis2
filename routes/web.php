@@ -127,8 +127,7 @@ Route::post('/delivery/price', [MapController::class, 'deliveryPrice'])->name('d
 //RUTAS PARA LA VISTA DE USUARIOS
 Route::post('/login/check', [UserController::class, 'login'])->name('user.login');
 //DEBEN ESTAR EN MIDDLEWARE
-Route::patch('/landing/update/{user}', [\App\Http\Controllers\LandingController::class, 'updateUserProfile'])->name('user.update.profile');
-// Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
+Route::patch('/landing/update/{user}', [LandingController::class, 'updateUserProfile'])->name('user.update.profile');
 Route::get('/landing/check/coupon', [LandingController::class, 'checkCoupon'])->name('landing.check.coupon');
 
 ////////////////////////////////////////////////////////////////////////////////////////
