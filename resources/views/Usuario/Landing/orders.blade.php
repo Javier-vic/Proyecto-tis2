@@ -49,6 +49,7 @@
                                 @else
                                     <h2 class="fw-bold">Retiro</h2>
                                 @endif
+                                <h2 class="text-muted">{{$order->id}}</h2>
                             </div>   
                             
                             <!-- INFORMACION EXTRA -->

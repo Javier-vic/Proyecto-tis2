@@ -192,6 +192,7 @@ class UserController extends Controller
             ->join('order_user', 'orders.id', '=', 'order_user.id_order')
             ->select('orders.*')
             ->where('order_user.id_user', '=', $user)
+            ->whereNotNull('orders.deleted_at')
             ->get();
 
         $orderItems = DB::table('products_orders')
