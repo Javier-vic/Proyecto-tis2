@@ -45,11 +45,11 @@
                             <!-- DIRECCION O RETIRO -->
                             <div class="my-2 mx-1">
                                 @if ($order->pick_up == 'si')
-                                    <h2 class="fw-bold">{{$order->address}}</h2>
+                                    <h2 class="fw-bold d-inline-block">{{$order->address}}</h2>
                                 @else
-                                    <h2 class="fw-bold">Retiro</h2>
+                                    <h2 class="fw-bold d-inline-block">Retiro</h2>
                                 @endif
-                                <h2 class="text-muted">{{$order->id}}</h2>
+                                <h4 class="text-muted d-inline-block">#{{$order->id}}</h4>
                             </div>   
                             
                             <!-- INFORMACION EXTRA -->
